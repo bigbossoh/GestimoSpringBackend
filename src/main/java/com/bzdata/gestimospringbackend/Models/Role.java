@@ -16,8 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Role extends AbstractEntity{
-    String role_name;
-    String description_role;
+    String roleName;
+    String descriptionRole;
     @OneToMany(mappedBy = "urole")
     List<Utilisateur> utilisateurs;
 }
