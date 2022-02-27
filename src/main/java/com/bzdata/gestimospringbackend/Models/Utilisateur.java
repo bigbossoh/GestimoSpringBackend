@@ -33,11 +33,14 @@ public class Utilisateur extends AbstractEntity {
     private String numeroPieceIdentite;
     private LocalDate dateDebutPiece;
     private LocalDate dateFinPiece;
-    private String Nationalité;
-    private String Genre;
+    private String nationalité;
+    private String genre;
     private boolean isActivated;
     private String username;
     private String password;
+
+
+
     @ManyToOne
     AgenceImmobiliere agence;
 
