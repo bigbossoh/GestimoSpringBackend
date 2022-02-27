@@ -1,5 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-public class AgenceResponseDTO {
+public class AgenceRequestDto {
     
 }

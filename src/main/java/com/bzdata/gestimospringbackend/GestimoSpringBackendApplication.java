@@ -9,5 +9,4 @@ public class GestimoSpringBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
     }
-
 }

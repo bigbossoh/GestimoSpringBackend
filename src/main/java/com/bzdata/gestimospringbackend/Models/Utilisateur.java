@@ -46,5 +46,6 @@ public class Utilisateur extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     Role urole;
+    @ManyToOne
     Utilisateur userCreate;
 }
