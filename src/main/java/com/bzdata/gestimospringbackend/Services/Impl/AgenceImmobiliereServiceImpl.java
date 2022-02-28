@@ -1,15 +1,15 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
-import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
-import com.bzdata.gestimospringbackend.Models.Role;
-import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
+import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
+import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
 import com.bzdata.gestimospringbackend.validator.AgenceDtoValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
 
 
 @Service
@@ -29,8 +32,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     private final AgenceImmobiliereRepository agenceImmobiliereRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final VerificationTokenRepository verificationTokenRepository;
     private  final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MailContentBuilder mailContentBuilder;
+    private final MailService mailService;
     @Override
     public AgenceResponseDto save(AgenceRequestDto dto) {
         log.info("We are going to create  a new agence {}",dto);
@@ -55,17 +61,43 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                 newUtilisateur.setUrole(newRole.get());
             }
             newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
-            utilisateurRepository.save(newUtilisateur);
+            Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
+            String token=generateVerificationToken(saveUser);
+            String message=mailContentBuilder.build("Merci de vous être enregistré a Gestimoweb, Cliquer sur le lien " +
+                    "ci-dessous pour activer votre account: "+ ACTIVATION_EMAIL+"/"+token+"\n");
+            mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",saveUser.getEmail(),message));
             return AgenceResponseDto.fromEntity(saveAgence);
         }
+
         else {
                 log.error("This user is already exist");
             return null;
             }
 
+    }
+    private String generateVerificationToken(Utilisateur utilisateur){
+        String token= UUID.randomUUID().toString();
+        VerificationToken verificationToken= new VerificationToken();
+        verificationToken.setToken(token);
+        verificationToken.setUtilisateur(utilisateur);
+        verificationTokenRepository.save(verificationToken);
+        return token;
+    }
+    @Override
+    public void verifyAccount(String token){
+        Optional<VerificationToken> verificationTokenOptional=verificationTokenRepository.findByToken(token);
+        verificationTokenOptional.orElseThrow(()->new GestimoWebExceptionGlobal("Invalid Token"));
+        feachUserAndEnable(verificationTokenOptional.get());
+    }
+    @Override
+    public void feachUserAndEnable(VerificationToken verificationToken){
+        String email=verificationToken.getUtilisateur().getEmail();
+        Utilisateur utilisateur=utilisateurRepository.findUtilisateurByEmail(email).orElseThrow(()->
+                new GestimoWebExceptionGlobal("Utilisateur avec l'username "+email+" n'exise pas."));
+        utilisateur.setActivated(true);
+        utilisateurRepository.save(utilisateur);
 
     }
-
     @Override
     public AgenceResponseDto findById(Long id) {
         return null;
