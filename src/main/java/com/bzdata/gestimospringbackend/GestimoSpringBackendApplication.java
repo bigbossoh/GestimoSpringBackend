@@ -46,9 +46,9 @@ public class GestimoSpringBackendApplication {
             // Creation des Constants
             // ROLES
             Optional<Role> roles = null;
-            roles = roleRepository.findRoleByRoleName("SUPERVISER");
+            roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (!roles.isPresent()) {
-                roleRepository.save(new Role("SUPERVISER", "Role de superviseur", null));
+                roleRepository.save(new Role("SUPERVISEUR", "Role de superviseur", null));
             }
             roles = null;
             roles = roleRepository.findRoleByRoleName("GERANT");
@@ -66,7 +66,7 @@ public class GestimoSpringBackendApplication {
                 roleRepository.save(new Role("LOCATAIRE", "Role de LOCATAIRE", null));
             }
             roles = null;
-            roles = roleRepository.findRoleByRoleName("SUPERVISER");
+            roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (roles.isPresent()) {
                 Optional<Utilisateur>userPrincipal=utilisateurRepository.findUtilisateurByEmail("superviseur@superviseur.com");
              if (!userPrincipal.isPresent()) {

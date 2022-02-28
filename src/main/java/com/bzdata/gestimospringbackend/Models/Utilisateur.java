@@ -3,10 +3,7 @@ package com.bzdata.gestimospringbackend.Models;
 import java.time.LocalDate;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Getter
 @Setter
@@ -42,6 +40,7 @@ public class Utilisateur extends AbstractEntity {
 
 
     @ManyToOne
+            //(cascade = CascadeType.PERSIST)
     AgenceImmobiliere agence;
 
     @OneToMany(mappedBy = "createur")

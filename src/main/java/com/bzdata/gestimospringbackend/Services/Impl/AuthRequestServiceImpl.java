@@ -34,7 +34,7 @@ public class AuthRequestServiceImpl implements AuthRequestService {
     @Override
     public AuthResponseDto authenticate(AuthRequestDto dto) {
 
-             log.info("We are going to login a new user {}",dto);
+             log.info("We are going to login into the system {}",dto);
     List<String> errors= AuthRequestDtoValidator.validate(dto);
         if(!errors.isEmpty()){
             log.error("Les informations fournies par l'utilisateur ne sont pas valide {}",errors);
