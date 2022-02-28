@@ -14,6 +14,7 @@ import com.bzdata.gestimospringbackend.validator.AgenceDtoValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +35,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     private final UtilisateurRepository utilisateurRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private  final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
     private final MailContentBuilder mailContentBuilder;
     private final MailService mailService;
     @Override
@@ -54,7 +55,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setNom(dto.getNomAgence());
             newUtilisateur.setEmail(dto.getEmailAgence());
             newUtilisateur.setMobile(dto.getTelAgence());
-            newUtilisateur.setPassword(bCryptPasswordEncoder.encode("gerant"));
+            newUtilisateur.setPassword(passwordEncoder.encode("gerant"));
             newUtilisateur.setAgence(saveAgence);
             Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
             if (newRole.isPresent()) {
