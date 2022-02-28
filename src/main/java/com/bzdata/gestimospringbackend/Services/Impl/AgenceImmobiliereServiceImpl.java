@@ -1,7 +1,19 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import com.bzdata.gestimospringbackend.DTOs.*;
-import com.bzdata.gestimospringbackend.Models.*;
+import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
+import com.bzdata.gestimospringbackend.Models.NotificationEmail;
+import com.bzdata.gestimospringbackend.Models.Role;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Models.VerificationToken;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
@@ -11,18 +23,13 @@ import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
 import com.bzdata.gestimospringbackend.validator.AgenceDtoValidator;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service

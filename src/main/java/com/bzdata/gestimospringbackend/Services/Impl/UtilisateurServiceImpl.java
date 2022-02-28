@@ -1,25 +1,23 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
-@Slf4j
 @RequiredArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
     private final UtilisateurRepository utilisateurRepository;
-    private final RoleRepository rolesRepository;
     public final PasswordEncoder passwordEncoderUser;
     @Override
     public UtilisateurRequestDto save(UtilisateurRequestDto dto) {

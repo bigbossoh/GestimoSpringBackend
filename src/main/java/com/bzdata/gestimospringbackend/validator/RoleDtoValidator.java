@@ -1,11 +1,11 @@
 package com.bzdata.gestimospringbackend.validator;
 
-import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
+
+import org.springframework.util.StringUtils;
 
 public class RoleDtoValidator {
     public static List<String> validate(RoleRequestDto dto) {
