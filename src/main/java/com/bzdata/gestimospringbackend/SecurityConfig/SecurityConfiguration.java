@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(
                         "/**/login",
                 "/**/utilisateurs/singup",
-                        "/**/agences/singup")
+                        "/**/agences/singup","/swagger-ui/**","/v3/api-docs/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
