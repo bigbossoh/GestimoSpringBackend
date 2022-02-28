@@ -18,7 +18,7 @@ public class AgenceRequestDto {
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;
-    UtilisateurResponseDto uilisateurResponseDto;
+    UtilisateurRequestDto utilisateurRequestDto;
 
     public static AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere) {
         if (agenceImmobiliere == null) {
@@ -34,6 +34,7 @@ public class AgenceRequestDto {
                 .regimeFiscaleAgence(agenceImmobiliere.getRegimeFiscaleAgence())
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
+                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(agenceImmobiliere.getCreateur()))
                 .build();
     }
     public static AgenceImmobiliere toEntity(AgenceRequestDto dto){
@@ -50,6 +51,7 @@ public class AgenceRequestDto {
         newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
         newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
         newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
+        newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
         return newAgenceImmobiliere;
     }
 }
