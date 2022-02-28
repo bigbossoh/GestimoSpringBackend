@@ -33,9 +33,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .csrf().disable()
                 .authorizeRequests().antMatchers(
                         "/**/login",
-                "/**/utilisateurs/singup",
-                        "/**/agences/singup","/swagger-ui/**","/v3/api-docs/**")
+                "/**/utilisateurs/singup","/swagger-ui/**","/v3/api-docs/**")
                 .permitAll()
+                .antMatchers("/**/agences/signup").hasAuthority("SUPERVISEUR")
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);

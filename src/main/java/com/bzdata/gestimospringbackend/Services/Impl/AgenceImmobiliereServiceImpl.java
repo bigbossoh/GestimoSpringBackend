@@ -40,21 +40,30 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             throw new InvalidEntityException("Certain attributs de l'object agence immobiliere sont null.",
                     ErrorCodes.AGENCE_NOT_VALID,errors);
         }
-        AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(dto));
-        log.info("We are going to create  a new utilisateur gerant {}",dto.getUtilisateurRequestDto());
-        Utilisateur newUtilisateur=new Utilisateur();
-        newUtilisateur.setNom(dto.getNomAgence());
-        newUtilisateur.setEmail(dto.getEmailAgence());
-        newUtilisateur.setMobile(dto.getTelAgence());
-        newUtilisateur.setPassword(bCryptPasswordEncoder.encode("gerant"));
-        newUtilisateur.setAgence(AgenceRequestDto.toEntity(dto));
-        Optional<Role> newRole=roleRepository.findRoleByRoleName("GERANT");
-        if(newRole.isPresent()){
-        newUtilisateur.setUrole(newRole.get());
+        Optional<Utilisateur> utilisateurByEmail = utilisateurRepository.findUtilisateurByEmail(dto.getEmailAgence());
+        if(!utilisateurByEmail.isPresent()) {
+            AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(dto));
+            log.info("We are going to create  a new utilisateur gerant by the logged user {}",dto.getUtilisateurCreateur());
+            Utilisateur newUtilisateur = new Utilisateur();
+            newUtilisateur.setNom(dto.getNomAgence());
+            newUtilisateur.setEmail(dto.getEmailAgence());
+            newUtilisateur.setMobile(dto.getTelAgence());
+            newUtilisateur.setPassword(bCryptPasswordEncoder.encode("gerant"));
+            newUtilisateur.setAgence(saveAgence);
+            Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
+            if (newRole.isPresent()) {
+                newUtilisateur.setUrole(newRole.get());
+            }
+            newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
+            utilisateurRepository.save(newUtilisateur);
+            return AgenceResponseDto.fromEntity(saveAgence);
         }
-        newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
-        utilisateurRepository.save(newUtilisateur);
-        return AgenceResponseDto.fromEntity(saveAgence);
+        else {
+                log.error("This user is already exist");
+            return null;
+            }
+
+
     }
 
     @Override
