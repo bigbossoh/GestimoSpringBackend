@@ -1,24 +1,25 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthResponseDto;
 import com.bzdata.gestimospringbackend.Models.auth.ExtentedUser;
-import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;
 import com.bzdata.gestimospringbackend.Services.AuthRequestService;
+import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;
 import com.bzdata.gestimospringbackend.Utils.JwtUtil;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.validator.AuthRequestDtoValidator;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @Transactional
