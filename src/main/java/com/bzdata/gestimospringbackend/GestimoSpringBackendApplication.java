@@ -3,12 +3,18 @@ package com.bzdata.gestimospringbackend;
 import java.util.List;
 import java.util.Optional;
 
+import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Pays;
+import com.bzdata.gestimospringbackend.Models.Quartier;
 import com.bzdata.gestimospringbackend.Models.Role;
+import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.PaysRepository;
+import com.bzdata.gestimospringbackend.repository.QuartierRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
+import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
 
@@ -44,8 +50,11 @@ public class GestimoSpringBackendApplication {
     }
 
     @Bean
-    public CommandLineRunner chargerDonnees(RoleRepository roleRepository, UtilisateurRepository utilisateurRepository,
-            PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository) {
+    public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
+            RoleRepository roleRepository,
+            UtilisateurRepository utilisateurRepository,
+            PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
+            CommuneRepository communeRepository) {
         String mdp = passwordEncoder.encode("superviseur");
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
@@ -74,6 +83,43 @@ public class GestimoSpringBackendApplication {
                 ville1.setNomVille("Bouaké");
                 villeRepository.save(ville1);
             });
+            // CREATION DES COMMUNES
+            List<Ville> lesVilles = villeRepository.findAll();
+            lesVilles.forEach(v -> {
+                if (v.getAbrvVille().contains("ABJ")) {
+                    Commune commune1 = new Commune();
+                    commune1.setAbrvCommune("KOUM");
+                    commune1.setNomCommune("Koumassi");
+                    commune1.setVille(v);
+                    communeRepository.save(commune1);
+
+                    Commune commune = new Commune();
+                    commune.setAbrvCommune("YOP");
+                    commune.setNomCommune("Yopougon");
+                    commune.setVille(v);
+                    communeRepository.save(commune);
+                }
+            });
+            // CREATIONS DES QUARTIERS
+            for (int index = 0; index < 1; index++) {
+                Quartier quartier = new Quartier();
+                Optional<Commune> maCommune = communeRepository.findById(1L);
+                if (maCommune.isPresent()) {
+                    quartier.setAbrvQuartier("PROD");
+                    quartier.setNomQuartier("Prodomo");
+                    quartier.setCommune(maCommune.get());
+                    quartierRepository.save(quartier);
+                }
+            }
+            // GESTION DES SITES
+            Optional<Quartier> monQuartier = quartierRepository.findById(1L);
+            if (monQuartier.isPresent()) {
+                Site site = new Site();
+                site.setAbrSite("PROD1");
+                site.setNomSite("Prodomo1");
+                site.setQuartier(monQuartier.get());
+                siteRepository.save(site);
+            }
             // ROLES
             Optional<Role> roles = null;
             roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
