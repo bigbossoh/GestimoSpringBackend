@@ -4,6 +4,6 @@ import com.bzdata.gestimospringbackend.Models.Quartier;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface QuartierRepository extends JpaRepository<Long,Quartier> {
+public interface QuartierRepository extends JpaRepository<Quartier,Long> {
     
 }
