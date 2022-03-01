@@ -4,6 +4,6 @@ import com.bzdata.gestimospringbackend.Models.Commune;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CommuneRepository extends JpaRepository<Long,Commune>{
+public interface CommuneRepository extends JpaRepository<Commune,Long>{
     
 }
