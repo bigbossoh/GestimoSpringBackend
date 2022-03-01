@@ -37,14 +37,12 @@ public class GestimoSpringBackendApplication {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public CommandLineRunner chargerDonnees(RoleRepository roleRepository, UtilisateurRepository utilisateurRepository,
             PasswordEncoder passwordEncoder) {
         String mdp = passwordEncoder.encode("superviseur");
         Utilisateur utilisateur = new Utilisateur();
         return (args) -> {
-
             // Creation des Constants
             // ROLES
             Optional<Role> roles = null;
