@@ -10,7 +10,7 @@ public interface AgenceImmobilierService {
 
     AgenceResponseDto save(AgenceRequestDto dto);
 
-    AgenceResponseDto findById(Long id);
+    AgenceResponseDto findAgenceById(Long id);
 
     List<AgenceResponseDto> listOfAgenceImmobilier();
 

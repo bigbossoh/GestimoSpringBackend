@@ -107,8 +107,16 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     }
     @Override
-    public AgenceResponseDto findById(Long id) {
-        return null;
+    public AgenceResponseDto findAgenceById(Long id) {
+        log.info("We are going to get back the Agence Immobilière en fonction de l'ID {} du bien", id);
+        if(id==null){
+            log.error("you are provided a null ID for the Agence");
+            return null;
+        }
+        return agenceImmobiliereRepository.findById(id)
+                .map(AgenceResponseDto::fromEntity)
+                .orElseThrow(()->new InvalidEntityException("Aucune agence has been found with ID "+id,
+                        ErrorCodes.AGENCE_NOT_FOUND));
     }
 
     @Override
