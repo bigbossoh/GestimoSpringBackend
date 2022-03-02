@@ -14,7 +14,9 @@ public interface AgenceImmobilierService {
 
     List<AgenceResponseDto> listOfAgenceImmobilier();
 
-    void delete(Long id);
+    List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc();
+
+    void deleteAgence(Long id);
 
     AgenceResponseDto findAgenceByEmail(String email);
 

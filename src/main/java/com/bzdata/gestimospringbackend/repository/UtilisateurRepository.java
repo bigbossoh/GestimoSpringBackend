@@ -10,4 +10,5 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur,Long> {
     @Override
     Optional<Utilisateur> findById(Long aLong);
     Optional<Utilisateur> findUtilisateurByEmail(String email);
+
 }
