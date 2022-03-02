@@ -5,6 +5,8 @@ import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
@@ -15,9 +17,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
-import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
-import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.exceptions.*;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.StringUtils;
 
 
 @Service
@@ -121,16 +122,57 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     @Override
     public List<AgenceResponseDto> listOfAgenceImmobilier() {
-        return null;
+
+        log.info("We are going to take back all agences");
+
+        return agenceImmobiliereRepository.findAll().stream()
+                .map(AgenceResponseDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void delete(Long id) {
+    public List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc() {
+        log.info("We are going to take back all the agences order by agence name");
+
+        return agenceImmobiliereRepository.findAllByOrderByNomAgenceAsc().stream()
+                .map(AgenceResponseDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAgence(Long id) {
+        log.info("We are going to delete a Agence with the ID {}", id);
+        if (id==null){
+            log.error("you are provided a null ID for the agence");
+        }
+        boolean exist=agenceImmobiliereRepository.existsById(id);
+        if (!exist)
+        {
+            throw new EntityNotFoundException("Aucune Agence avec l'ID = " + id + " "
+                    + "n' ete trouve dans la BDD",  ErrorCodes.AGENCE_NOT_FOUND);
+
+        }
+        List<Utilisateur> utilisateurs=utilisateurRepository.findAll();
+        Stream<AgenceImmobiliere> agenceImmobiliereStream = utilisateurs.stream()
+                .filter(user -> user.getUserCreate().getId() == id).map(Utilisateur::getAgence);
+        if (agenceImmobiliereStream.findAny().isPresent()) {
+            throw new InvalidOperationException("Impossible de supprimer une agence qui a des utilisateurs déjà crées",
+                    ErrorCodes.AGENCE_ALREADY_IN_USE);
+        }
+        agenceImmobiliereRepository.deleteById(id);
 
     }
 
     @Override
     public AgenceResponseDto findAgenceByEmail(String email) {
-        return null;
+        log.info("We are going to get back the Agence by email {}",email);
+        if (!StringUtils.hasLength(email)){
+            log.error("you are not provided a email  get back the Agence.");
+            return  null;
+        }
+        return agenceImmobiliereRepository.findAgenceImmobiliereByEmailAgence(email)
+                .map(AgenceResponseDto::fromEntity)
+                .orElseThrow(()->new InvalidEntityException("Aucun bien immobilier has been found with Code "+email,
+                        ErrorCodes.AGENCE_NOT_FOUND));
     }
 }
