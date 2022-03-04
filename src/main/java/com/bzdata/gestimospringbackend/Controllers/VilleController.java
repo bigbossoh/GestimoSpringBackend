@@ -55,15 +55,15 @@ public class VilleController {
         return ResponseEntity.ok(villeService.findAll());
     }
 
-    // GET PAYS BY ID
-    @Operation(summary = "Trouver un pays par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    // GET VILLE BY ID
+    @Operation(summary = "Trouver une ville par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<VilleDto> findByID(@PathVariable("id") Long id) {
         log.info("Find by ID{}", id);
         return ResponseEntity.ok(villeService.findById(id));
     }
 
-    // GET PAYS BY NAME
+    // GET VILLE BY NAME
     @Operation(summary = "Trouver une ville par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
     public ResponseEntity<VilleDto> findByName(@PathVariable("name") String name) {
@@ -71,11 +71,19 @@ public class VilleController {
         return ResponseEntity.ok(villeService.findByName(name));
     }
 
-    // GET PAYS BY NAME
-    @Operation(summary = "Trouver une ville par son nom", security = @SecurityRequirement(name = "bearerAuth"))
+    // GET VILLE BY PAYS
+    @Operation(summary = "Trouver une ville par son Pays", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByPays")
     public ResponseEntity<List<VilleDto>> findByPays(@RequestBody PaysDto paysDto) {
         log.info("Find Ville By nom {}", paysDto);
         return ResponseEntity.ok(villeService.findAllByPays(paysDto));
+    }
+
+    // GET VILLE BY PAYS
+    @Operation(summary = "Trouver une ville par l'Id du pays", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findByIdPays/{id}")
+    public ResponseEntity<List<VilleDto>> findByIdPays(@PathVariable("id") Long id) {
+        log.info("Find Ville By Id Pays {}", id);
+        return ResponseEntity.ok(villeService.findAllByIdPays(id));
     }
 }

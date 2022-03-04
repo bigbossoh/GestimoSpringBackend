@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.PaysDto;
+import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Services.PaysService;
+import com.bzdata.gestimospringbackend.Services.VilleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaysServiceImpl implements PaysService {
     final PaysRepository paysRepository;
+    final VilleService villeService;
 
     @Override
     public PaysDto save(PaysDto dto) {
@@ -49,6 +52,11 @@ public class PaysServiceImpl implements PaysService {
         log.info("We are going to delete a Pays with the ID {}", id);
         if (id == null) {
             log.error("you are provided a null ID for the Pays");
+            return false;
+        }
+        List<VilleDto> villePays = villeService.findAllByIdPays(id);
+        if (villePays.size() != 0) {
+            log.error("Pays Contains Ville");
             return false;
         }
         boolean exist = paysRepository.existsById(id);

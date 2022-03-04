@@ -17,4 +17,6 @@ public interface VilleService {
     VilleDto findByName(String nom);
 
     List<VilleDto> findAllByPays(PaysDto paysDto);
+
+    List<VilleDto> findAllByIdPays(Long id);
 }
