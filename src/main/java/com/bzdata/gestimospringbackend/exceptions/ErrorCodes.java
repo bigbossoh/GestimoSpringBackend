@@ -10,7 +10,9 @@ public enum ErrorCodes {
     BAD_CREDENTIALS(13003),
     ROLE_NOT_FOUND(3000),
     ROLE_NOT_VALID(3001),
-    ROLE_ALREADY_IN_USE(3002),
+    ROLE_ALREADY_IN_USE(3002), 
+    PAYS_NOT_VALID(4000), 
+    PAYS_NOT_FOUND(4001),
     ;
 
     private int code;

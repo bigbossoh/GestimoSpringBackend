@@ -9,5 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PaysRepository extends JpaRepository<Pays,Long>{
 
     Optional<Pays> findByAbrvPays(String string);
+
+    Optional<Pays> findByNomPays(String nom);
  
 }
