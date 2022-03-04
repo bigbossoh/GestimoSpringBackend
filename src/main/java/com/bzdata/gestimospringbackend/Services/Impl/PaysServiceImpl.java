@@ -36,8 +36,8 @@ public class PaysServiceImpl implements PaysService {
         log.info("We are going to create  a new agence {}", dto);
         List<String> errors = PaysDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("l'agence immobilière n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object agence immobiliere sont null.",
+            log.error("le Pays n'est pas valide {}", errors);
+            throw new InvalidEntityException("Certain attributs de l'object Pays sont null.",
                     ErrorCodes.PAYS_NOT_VALID, errors);
         }
         Pays pays = paysRepository.save(PaysDto.toEntity(dto));
@@ -54,7 +54,7 @@ public class PaysServiceImpl implements PaysService {
         boolean exist = paysRepository.existsById(id);
         if (!exist) {
             throw new EntityNotFoundException("Aucune Pays avec l'ID = " + id + " "
-                    + "n' ete trouve dans la BDD", ErrorCodes.AGENCE_NOT_FOUND);
+                    + "n' ete trouve dans la BDD", ErrorCodes.PAYS_NOT_FOUND);
         }
         paysRepository.deleteById(id);
         return true;
@@ -64,21 +64,20 @@ public class PaysServiceImpl implements PaysService {
     public List<PaysDto> findAll() {
 
         return paysRepository.findAll(Sort.by(Direction.ASC, "nomPays")).stream()
-        .map(PaysDto::fromEntity)
-        .collect(Collectors.toList());
+                .map(PaysDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
     public PaysDto findById(Long id) {
         log.info("We are going to get back the Pays By {}", id);
-        if (id==null) {
+        if (id == null) {
             log.error("you are not provided a Pays.");
             return null;
         }
         return paysRepository.findById(id).map(PaysDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Pays has been found with Code " + id,
-                        ErrorCodes.PAYS_NOT_FOUND)
-        );
+                        ErrorCodes.PAYS_NOT_FOUND));
     }
 
     @Override

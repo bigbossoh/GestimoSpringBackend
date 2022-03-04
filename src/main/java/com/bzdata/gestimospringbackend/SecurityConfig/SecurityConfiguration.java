@@ -30,10 +30,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.addFilterBefore(corsFilter(), SessionManagementFilter.class)
-        .csrf().disable()
+                .csrf().disable()
                 .authorizeRequests().antMatchers(
-                        "/**/login","/**/accountVerification/**","/**/pays/**",
-                "/**/utilisateurs/singup","/swagger-ui/**","/v3/api-docs/**")
+                        "/**/login", "/**/accountVerification/**", "/**/pays/**", "/**/ville/**",
+                        "/**/utilisateurs/singup", "/swagger-ui/**", "/v3/api-docs/**")
                 .permitAll()
                 .antMatchers("/**/agences/signup").hasAuthority("SUPERVISEUR")
                 .anyRequest().authenticated()
@@ -46,19 +46,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(applicationUserDetailsService)
-                .passwordEncoder(bCryptPasswordEncoder)
-        ;
+                .passwordEncoder(bCryptPasswordEncoder);
     }
+
     @Bean
     protected AuthenticationManager custumAuthenticationManager() throws Exception {
         return authenticationManagerBean();
     }
+
     @Bean
     public CorsFilter corsFilter() {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         final CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        // Don't do this in production, use a proper list  of allowed origins
+        // Don't do this in production, use a proper list of allowed origins
         config.setAllowedOriginPatterns(Collections.singletonList("*"));
         config.setAllowedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Authorization"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH"));
