@@ -23,7 +23,6 @@ import lombok.experimental.FieldDefaults;
 public class Immeuble extends Bienimmobilier {
     int nbrEtage;
     @OneToMany(mappedBy = "immeuble")
-    List<Studio>studios;
-    @OneToMany(mappedBy = "immeubleApp")
-    List<Appartement> appartements;
+    List<Etage> etages;
+
 }

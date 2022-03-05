@@ -19,5 +19,5 @@ import lombok.experimental.FieldDefaults;
 public class Studio extends AbstractEntity {
     String descStudio;
     @ManyToOne
-    Etage etage;
+    Etage etageStudio;
 }
