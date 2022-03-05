@@ -1,14 +1,14 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.bzdata.gestimospringbackend.DTOs.SiteDto;
+import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.SiteService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.repository.QuartierRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.validator.SiteDtoValidator;
 
@@ -16,11 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -29,9 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SiteServiceImpl implements SiteService {
     final SiteRepository siteRepository;
+    final QuartierRepository quartierRepository;
 
     @Override
-    public SiteDto save(SiteDto dto) {
+    public SiteResponseDto save(SiteRequestDto dto) {
         log.info("We are going to create  a new site {}", dto);
         List<String> errors = SiteDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -39,8 +42,12 @@ public class SiteServiceImpl implements SiteService {
             throw new InvalidEntityException("Certain attributs de l'object site sont null.",
                     ErrorCodes.SITE_NOT_VALID, errors);
         }
-        Site site = siteRepository.save(SiteDto.toEntity(dto));
-        return SiteDto.fromEntity(site);
+        dto.setQuartierDto(quartierRepository.findById(dto.getQuartierDto().getId()).map(QuartierDto::fromEntity).orElseThrow(
+                () -> new InvalidEntityException("Aucun Pays has been found with Code " + dto.getQuartierDto().getId(),
+                        ErrorCodes.SITE_NOT_FOUND)
+        ));
+        Site site = siteRepository.save(SiteRequestDto.toEntity(dto));
+        return SiteResponseDto.fromEntity(site);
     }
 
     @Override
@@ -60,32 +67,32 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public List<SiteDto> findAll() {
+    public List<SiteResponseDto> findAll() {
         return siteRepository.findAll(Sort.by(Sort.Direction.ASC, "nomSite")).stream()
-                .map(SiteDto::fromEntity)
+                .map(SiteResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public SiteDto findById(Long id) {
-        log.info("We are going to get back the Site By ID {}", id);
-        if (id == null) {
+    public SiteResponseDto findById(Long id) {
+        log.info("We are going to get back the Site By ID : {}", id);
+        if (id==null) {
             log.error("you are not provided a Site.");
             return null;
         }
-        return siteRepository.findById(id).map(SiteDto::fromEntity).orElseThrow(
+        return siteRepository.findById(id).map(SiteResponseDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Pays has been found with Code " + id,
                         ErrorCodes.SITE_NOT_FOUND));
     }
 
     @Override
-    public SiteDto findByName(String nom) {
+    public SiteResponseDto findByName(String nom) {
         log.info("We are going to get back the Site By {}", nom);
         if (!StringUtils.hasLength(nom)) {
             log.error("you are not provided a Site.");
             return null;
         }
-        return siteRepository.findByNomSite(nom).map(SiteDto::fromEntity).orElseThrow(
+        return siteRepository.findByNomSite(nom).map(SiteResponseDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Site has been found with name " + nom,
                         ErrorCodes.SITE_NOT_FOUND));
     }

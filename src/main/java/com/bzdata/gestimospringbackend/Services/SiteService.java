@@ -1,12 +1,13 @@
 package com.bzdata.gestimospringbackend.Services;
-import com.bzdata.gestimospringbackend.DTOs.SiteDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
 
 import java.util.List;
 
 public interface SiteService {
-    SiteDto save(SiteDto dto);
+    SiteResponseDto save(SiteRequestDto dto);
     boolean delete(Long id);
-    List<SiteDto> findAll();
-    SiteDto findById(Long id);
-    SiteDto  findByName(String nom);
+    List<SiteResponseDto> findAll();
+    SiteResponseDto findById(Long id);
+    SiteResponseDto findByName(String nom);
 }

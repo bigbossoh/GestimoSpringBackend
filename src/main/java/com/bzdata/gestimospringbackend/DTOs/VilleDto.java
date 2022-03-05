@@ -15,7 +15,7 @@ public class VilleDto {
     Long id;
     String abrvVille;
     String nomVille;
-    PaysDto pays;
+    PaysDto paysDto;
 
     public static VilleDto fromEntity(Ville ville) {
         if (ville == null) {
@@ -25,7 +25,7 @@ public class VilleDto {
                 .id(ville.getId())
                 .abrvVille(ville.getAbrvVille())
                 .nomVille(ville.getNomVille())
-                .pays(PaysDto.fromEntity(ville.getPays()))
+                .paysDto(PaysDto.fromEntity(ville.getPays()))
                 .build();
     }
 
@@ -38,7 +38,7 @@ public class VilleDto {
         v.setId(dto.getId());
         v.setAbrvVille(dto.getAbrvVille());
         v.setNomVille(dto.getNomVille());
-        v.setPays(PaysDto.toEntity(dto.getPays()));
+        v.setPays(PaysDto.toEntity(dto.getPaysDto()));
         return v;
 
     }

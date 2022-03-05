@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -122,8 +123,21 @@ public class GestimoSpringBackendApplication {
             Optional<Quartier> monQuartier = quartierRepository.findById(1L);
             if (monQuartier.isPresent()) {
                 Site site = new Site();
-                site.setAbrSite("PROD1");
-                site.setNomSite("Prodomo1");
+                site.setAbrSite(StringUtils.deleteWhitespace(monQuartier.get()
+                        .getCommune().getVille().getPays().getAbrvPays())
+                        +"-"+
+                        StringUtils.deleteWhitespace(monQuartier.get().getCommune().getVille().getAbrvVille())
+                        +"-"+StringUtils.deleteWhitespace(monQuartier.get()
+                        .getCommune().getAbrvCommune())
+                        +"-"+StringUtils.deleteWhitespace(monQuartier.get().getAbrvQuartier())
+                );
+                site.setNomSite(
+                        monQuartier.get()
+                                .getCommune().getVille().getPays().getNomPays()
+                                +"-"+monQuartier.get().getCommune().getVille().getNomVille()
+                                +"-"+monQuartier.get().getCommune().getNomCommune()
+                                +"-"+monQuartier.get().getNomQuartier()
+                );
                 site.setQuartier(monQuartier.get());
                 siteRepository.save(site);
             }
