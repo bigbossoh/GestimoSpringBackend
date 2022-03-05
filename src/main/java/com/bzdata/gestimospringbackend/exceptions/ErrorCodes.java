@@ -10,16 +10,24 @@ public enum ErrorCodes {
     BAD_CREDENTIALS(13003),
     ROLE_NOT_FOUND(3000),
     ROLE_NOT_VALID(3001),
-    ROLE_ALREADY_IN_USE(3002), 
-    PAYS_NOT_VALID(4000), 
+    ROLE_ALREADY_IN_USE(3002),
+    PAYS_NOT_VALID(4000),
     PAYS_NOT_FOUND(4001),
+<<<<<<< HEAD
     SITE_NOT_FOUND(5000),
     SITE_NOT_VALID(5001),
     SITE_ALREADY_IN_USE(5002),
+=======
+    VILLE_NOT_VALID(5000),
+    VILLE_NOT_FOUND(5001),
+    COMMUNE_NOT_VALID(7000),
+    COMMUNE_NOT_FOUND(7001),
+>>>>>>> adfde5ecb40755b32726bcba4816218c67547b3e
     ;
 
     private int code;
-     ErrorCodes(int code) {
+
+    ErrorCodes(int code) {
         this.code = code;
     }
 

@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.PaysDto;
+import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Services.PaysService;
+import com.bzdata.gestimospringbackend.Services.VilleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -30,14 +32,15 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaysServiceImpl implements PaysService {
     final PaysRepository paysRepository;
+    final VilleService villeService;
 
     @Override
     public PaysDto save(PaysDto dto) {
         log.info("We are going to create  a new agence {}", dto);
         List<String> errors = PaysDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("l'agence immobilière n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object agence immobiliere sont null.",
+            log.error("le Pays n'est pas valide {}", errors);
+            throw new InvalidEntityException("Certain attributs de l'object Pays sont null.",
                     ErrorCodes.PAYS_NOT_VALID, errors);
         }
         Pays pays = paysRepository.save(PaysDto.toEntity(dto));
@@ -51,10 +54,15 @@ public class PaysServiceImpl implements PaysService {
             log.error("you are provided a null ID for the Pays");
             return false;
         }
+        List<VilleDto> villePays = villeService.findAllByIdPays(id);
+        if (villePays.size() != 0) {
+            log.error("Pays Contains Ville");
+            return false;
+        }
         boolean exist = paysRepository.existsById(id);
         if (!exist) {
             throw new EntityNotFoundException("Aucune Pays avec l'ID = " + id + " "
-                    + "n' ete trouve dans la BDD", ErrorCodes.AGENCE_NOT_FOUND);
+                    + "n' ete trouve dans la BDD", ErrorCodes.PAYS_NOT_FOUND);
         }
         paysRepository.deleteById(id);
         return true;
@@ -64,21 +72,20 @@ public class PaysServiceImpl implements PaysService {
     public List<PaysDto> findAll() {
 
         return paysRepository.findAll(Sort.by(Direction.ASC, "nomPays")).stream()
-        .map(PaysDto::fromEntity)
-        .collect(Collectors.toList());
+                .map(PaysDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
     public PaysDto findById(Long id) {
         log.info("We are going to get back the Pays By {}", id);
-        if (id==null) {
+        if (id == null) {
             log.error("you are not provided a Pays.");
             return null;
         }
         return paysRepository.findById(id).map(PaysDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Pays has been found with Code " + id,
-                        ErrorCodes.PAYS_NOT_FOUND)
-        );
+                        ErrorCodes.PAYS_NOT_FOUND));
     }
 
     @Override

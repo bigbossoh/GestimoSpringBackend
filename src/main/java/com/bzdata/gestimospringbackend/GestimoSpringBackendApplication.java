@@ -69,24 +69,31 @@ public class GestimoSpringBackendApplication {
                 paysRepository.save(pays);
             }
             // CREATION VILLES
-            List<Pays> lesPays = paysRepository.findAll();
-            lesPays.forEach(p -> {
-                Ville ville = new Ville();
-                ville.setAbrvVille("ABJ");
-                ville.setPays(p);
-                ville.setNomVille("Abidjan");
-                villeRepository.save(ville);
 
-                Ville ville1 = new Ville();
-                ville1.setAbrvVille("BKE");
-                ville1.setPays(p);
-                ville1.setNomVille("Bouaké");
-                villeRepository.save(ville1);
-            });
+            Optional<Pays> p = paysRepository.findById(1L);
+            if (p.isPresent()) {
+                Optional<Ville> v = villeRepository.findById(1L);
+                if (!v.isPresent()) {
+                    Ville ville = new Ville();
+                    ville.setAbrvVille("ABJ");
+                    ville.setPays(p.get());
+                    ville.setNomVille("Abidjan");
+                    villeRepository.save(ville);
+
+                    Ville ville1 = new Ville();
+                    ville1.setAbrvVille("BKE");
+                    ville1.setPays(p.get());
+                    ville1.setNomVille("Bouaké");
+                    villeRepository.save(ville1);
+                }
+
+            }
+
             // CREATION DES COMMUNES
             List<Ville> lesVilles = villeRepository.findAll();
             lesVilles.forEach(v -> {
                 if (v.getAbrvVille().contains("ABJ")) {
+
                     Commune commune1 = new Commune();
                     commune1.setAbrvCommune("KOUM");
                     commune1.setNomCommune("Koumassi");
