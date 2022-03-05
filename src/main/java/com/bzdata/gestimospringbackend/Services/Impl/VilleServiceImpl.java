@@ -118,7 +118,7 @@ public class VilleServiceImpl implements VilleService {
             return null;
         }
         Optional<Pays> p = paysRepository.findById(id);
-        if (p.isEmpty()) {
+        if (!p.isPresent()) {
             log.error("Pays not found for the Ville.");
             return null;
         }

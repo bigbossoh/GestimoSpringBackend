@@ -116,7 +116,7 @@ public class CommuneServiceImpl implements CommuneService {
             return null;
         }
         Optional<Ville> v = villeRepository.findById(id);
-        if (v.isEmpty()) {
+        if (!v.isPresent()) {
             log.error("Commune not found for the Ville.");
             return null;
         }
