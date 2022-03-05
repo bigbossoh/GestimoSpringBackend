@@ -13,7 +13,7 @@ public class QuartierValidator {
 
         if (dto == null) {
             errors.add("Veuillez renseigner le nom du Quartier");
-            errors.add("Veuillez renseigner l'abréviation de la commune");
+            errors.add("Veuillez renseigner l'abréviation du Quartier");
             return errors;
         }
         if (!StringUtils.hasLength(dto.getNomQuartier())) {
