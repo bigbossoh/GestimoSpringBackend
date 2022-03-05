@@ -22,7 +22,11 @@ import lombok.experimental.FieldDefaults;
 @DiscriminatorValue("Immeuble")
 public class Immeuble extends Bienimmobilier {
     int nbrEtage;
+    int nbrePieceImmeuble;
+    String abrvNomImmeuble;
+    String descriptionImmeuble;
+    int numeroImmeuble;
+    boolean isGarrage;
     @OneToMany(mappedBy = "immeuble")
     List<Etage> etages;
-
 }

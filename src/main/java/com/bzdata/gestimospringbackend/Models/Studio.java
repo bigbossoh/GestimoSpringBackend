@@ -18,6 +18,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Studio extends AbstractEntity {
     String descStudio;
+    int numeroStudio;
+    String abrvNomStudio;
+    String nomStudio;
     @ManyToOne
     Etage etageStudio;
 }
