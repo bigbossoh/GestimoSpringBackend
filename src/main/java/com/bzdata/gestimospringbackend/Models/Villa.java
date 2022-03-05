@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("Villa")
-public class Villa  extends BienImmobilier{
+public class Villa  extends Bienimmobilier {
     int nbrChambreVilla;
     int nbrDoucheVilla;
     int nbrSalonVilla;

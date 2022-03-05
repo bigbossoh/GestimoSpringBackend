@@ -13,6 +13,9 @@ public enum ErrorCodes {
     ROLE_ALREADY_IN_USE(3002), 
     PAYS_NOT_VALID(4000), 
     PAYS_NOT_FOUND(4001),
+    SITE_NOT_FOUND(5000),
+    SITE_NOT_VALID(5001),
+    SITE_ALREADY_IN_USE(5002),
     ;
 
     private int code;

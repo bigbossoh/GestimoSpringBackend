@@ -17,6 +17,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("Magasin")
-public class Magasin extends BienImmobilier{
-    double superficieMagasin;
+public class Magasin extends Bienimmobilier {
+    boolean isUnderBuilding;
+
 }
