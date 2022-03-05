@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
+
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,6 +14,7 @@ public class QuartierDto {
     String abrvQuartier;
     String nomQuartier;
     CommuneDto communeDto;
+    private Long idAgence;
 
     public static QuartierDto fromEntity(Quartier quartier) {
         if (quartier == null) {
@@ -23,6 +25,7 @@ public class QuartierDto {
                 .abrvQuartier(quartier.getAbrvQuartier())
                 .nomQuartier(quartier.getNomQuartier())
                 .communeDto(CommuneDto.fromEntity(quartier.getCommune()))
+                .idAgence(quartier.getIdAgence())
                 .build();
     }
 
@@ -34,6 +37,7 @@ public class QuartierDto {
         quartier.setId(dto.getId());
         quartier.setAbrvQuartier(dto.getAbrvQuartier());
         quartier.setNomQuartier(dto.getNomQuartier());
+        quartier.setIdAgence(dto.getIdAgence());
         quartier.setCommune(CommuneDto.toEntity(dto.getCommuneDto()));
         return quartier;
 

@@ -19,6 +19,8 @@ public class AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long idAgence;
     @CreatedDate
     @Column(name = "creationDate", nullable = false, updatable = false)
     private Instant creationDate;

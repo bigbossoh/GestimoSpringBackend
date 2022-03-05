@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AgenceResponseDto {
     private Long id;
+    private Long idAgence;
     String nomAgence;
     String telAgence;
     String compteContribuable;
@@ -36,6 +37,7 @@ public class AgenceResponseDto {
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
                 .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(agenceImmobiliere.getCreateur()))
+                .idAgence(agenceImmobiliere.getIdAgence())
                 .build();
     }
 
@@ -53,6 +55,7 @@ public class AgenceResponseDto {
         newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
         newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
         newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
+        newAgenceImmobiliere.setIdAgence(dto.getIdAgence());
         newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
         return newAgenceImmobiliere;
     }

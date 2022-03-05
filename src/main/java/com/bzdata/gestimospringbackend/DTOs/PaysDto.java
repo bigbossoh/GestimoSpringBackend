@@ -14,6 +14,7 @@ public class PaysDto {
     Long id;
     String abrvPays;
     String nomPays;
+    private Long idAgence;
 
     public static PaysDto fromEntity(Pays pays) {
         if (pays == null) {
@@ -23,6 +24,7 @@ public class PaysDto {
                 .id(pays.getId())
                 .abrvPays(pays.getAbrvPays())
                 .nomPays(pays.getNomPays())
+                .idAgence(pays.getIdAgence())
                 .build();
     }
 
@@ -34,6 +36,7 @@ public class PaysDto {
         pays.setAbrvPays(dto.getAbrvPays());
         pays.setId(dto.getId());
         pays.setNomPays(dto.getNomPays());
+        pays.setIdAgence(dto.getIdAgence());
         return pays;
     }
 }

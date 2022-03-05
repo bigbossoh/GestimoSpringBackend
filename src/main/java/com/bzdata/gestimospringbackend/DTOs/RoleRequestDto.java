@@ -14,6 +14,8 @@ public class RoleRequestDto {
     Long id;
     String roleName;
     String descriptionRole;
+    private Long idAgence;
+
     public static RoleRequestDto fromEntity(Role role) {
         if (role == null) {
             return null;
@@ -22,15 +24,18 @@ public class RoleRequestDto {
                 .id(role.getId())
                 .descriptionRole(role.getDescriptionRole())
                 .roleName(role.getRoleName())
+                .idAgence(role.getIdAgence())
                 .build();
     }
-    public static Role toEntity(RoleRequestDto dto){
-        if(dto==null){
+
+    public static Role toEntity(RoleRequestDto dto) {
+        if (dto == null) {
             return null;
         }
-        Role newRole=new Role();
+        Role newRole = new Role();
         newRole.setId(dto.getId());
         newRole.setRoleName(dto.getRoleName());
+        newRole.setIdAgence(dto.getIdAgence());
         newRole.setDescriptionRole(dto.getDescriptionRole());
 
         return newRole;

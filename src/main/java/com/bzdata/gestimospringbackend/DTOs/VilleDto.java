@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 
 public class VilleDto {
     Long id;
+    private Long idAgence;
     String abrvVille;
     String nomVille;
     PaysDto paysDto;
@@ -23,6 +24,7 @@ public class VilleDto {
         }
         return VilleDto.builder()
                 .id(ville.getId())
+                .idAgence(ville.getIdAgence())
                 .abrvVille(ville.getAbrvVille())
                 .nomVille(ville.getNomVille())
                 .paysDto(PaysDto.fromEntity(ville.getPays()))
@@ -36,6 +38,7 @@ public class VilleDto {
         }
         Ville v = new Ville();
         v.setId(dto.getId());
+        v.setIdAgence(dto.getIdAgence());
         v.setAbrvVille(dto.getAbrvVille());
         v.setNomVille(dto.getNomVille());
         v.setPays(PaysDto.toEntity(dto.getPaysDto()));

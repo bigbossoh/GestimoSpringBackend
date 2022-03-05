@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
+
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AgenceRequestDto {
     private Long id;
+    private Long idAgence;
     String nomAgence;
     String telAgence;
     String compteContribuable;
@@ -35,14 +37,17 @@ public class AgenceRequestDto {
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
                 .utilisateurCreateur(UtilisateurRequestDto.fromEntity(agenceImmobiliere.getCreateur()))
+                .idAgence(agenceImmobiliere.getIdAgence())
                 .build();
     }
-    public static AgenceImmobiliere toEntity(AgenceRequestDto dto){
-        if(dto==null){
+
+    public static AgenceImmobiliere toEntity(AgenceRequestDto dto) {
+        if (dto == null) {
             return null;
         }
-        AgenceImmobiliere newAgenceImmobiliere=new AgenceImmobiliere();
+        AgenceImmobiliere newAgenceImmobiliere = new AgenceImmobiliere();
         newAgenceImmobiliere.setId(dto.getId());
+        newAgenceImmobiliere.setIdAgence(dto.getId());
         newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
         newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
         newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());

@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+
 @Data
 @Builder
 public class UtilisateurRequestDto {
     private Long id;
+    private Long idAgence;
     private String nom;
     private String prenom;
     private String email;
@@ -27,12 +29,14 @@ public class UtilisateurRequestDto {
     AgenceRequestDto agenceDto;
     RoleRequestDto roleRequestDto;
     UtilisateurRequestDto userCreateDto;
+
     public static UtilisateurRequestDto fromEntity(Utilisateur utilisateur) {
         if (utilisateur == null) {
             return null;
         }
         return UtilisateurRequestDto.builder()
                 .id(utilisateur.getId())
+                .idAgence(utilisateur.getIdAgence())
                 .nom(utilisateur.getNom())
                 .prenom(utilisateur.getPrenom())
                 .email(utilisateur.getEmail())
@@ -53,12 +57,13 @@ public class UtilisateurRequestDto {
                 .userCreateDto(UtilisateurRequestDto.fromEntity(utilisateur.getUserCreate()))
                 .build();
     }
-    public static Utilisateur toEntity(UtilisateurRequestDto dto){
-        if(dto==null){
+
+    public static Utilisateur toEntity(UtilisateurRequestDto dto) {
+        if (dto == null) {
             return null;
         }
 
-        Utilisateur newUtilisateur=new Utilisateur();
+        Utilisateur newUtilisateur = new Utilisateur();
 
         newUtilisateur.setId(dto.getId());
         newUtilisateur.setNom(dto.getNom());
@@ -76,11 +81,12 @@ public class UtilisateurRequestDto {
         newUtilisateur.setActivated(dto.isActivated());
         newUtilisateur.setUsername(dto.getUsername());
         newUtilisateur.setPassword(dto.getPassword());
+        newUtilisateur.setIdAgence(dto.getIdAgence());
         newUtilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
         newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
         newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUserCreateDto()));
 
         return newUtilisateur;
     }
-    
+
 }
