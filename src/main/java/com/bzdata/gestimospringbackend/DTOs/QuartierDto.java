@@ -1,7 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
-
 import com.bzdata.gestimospringbackend.Models.Quartier;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
@@ -40,4 +38,5 @@ public class QuartierDto {
         return quartier;
 
     }
+
 }

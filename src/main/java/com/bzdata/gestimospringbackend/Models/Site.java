@@ -22,5 +22,5 @@ public class Site extends AbstractEntity{
     @ManyToOne
     Quartier quartier;
     @OneToMany(mappedBy = "site")
-    List<BienImmobilier>bienImmobiliers;
+    List<Bienimmobilier> bienImmobiliers;
 }
