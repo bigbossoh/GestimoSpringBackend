@@ -21,6 +21,6 @@ import lombok.experimental.FieldDefaults;
 public class Magasin extends Bienimmobilier {
     boolean isUnderBuilding;
     @ManyToOne
-    Etage etage;
+    Etage etageMagasin;
 
 }

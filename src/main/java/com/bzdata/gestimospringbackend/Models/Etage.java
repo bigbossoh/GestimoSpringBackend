@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -18,11 +19,13 @@ public class Etage extends AbstractEntity{
     private String nomEtage;
     private String AbrvEtage;
     private int numEtage;
-    @OneToMany(mappedBy = "etage")
+    @OneToMany(mappedBy = "etageAppartement")
     private List<Appartement> appartements;
-    @OneToMany(mappedBy = "etage")
+    @OneToMany(mappedBy = "etageStudio")
     private List<Studio> studios;
-    @OneToMany(mappedBy = "etage")
+    @OneToMany(mappedBy = "etageMagasin")
     private List<Magasin> magasins;
+    @ManyToOne
+    private Immeuble immeuble;
 
 }
