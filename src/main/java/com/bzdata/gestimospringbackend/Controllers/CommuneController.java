@@ -5,7 +5,6 @@ import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
-import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Services.CommuneService;
 
 import org.springframework.http.ResponseEntity;
@@ -69,12 +68,17 @@ public class CommuneController {
         return ResponseEntity.ok(communeService.findByName(name));
     }
 
-    @Operation(summary = "Trouver une commune par sa Ville", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findByVille")
-    public ResponseEntity<List<CommuneDto>> findByPays(@RequestBody VilleDto villeDto) {
-        log.info("Find Ville By nom {}", villeDto);
-        return ResponseEntity.ok(communeService.findAllByVille(villeDto));
-    }
+    /*
+     * @Operation(summary = "Trouver une commune par sa Ville", security
+     * = @SecurityRequirement(name = "bearerAuth"))
+     * 
+     * @GetMapping("/findByVille")
+     * public ResponseEntity<List<CommuneDto>> findByPays(@RequestBody VilleDto
+     * villeDto) {
+     * log.info("Find Ville By nom {}", villeDto);
+     * return ResponseEntity.ok(communeService.findAllByVille(villeDto));
+     * }
+     */
 
     @Operation(summary = "Trouver une commune par l'Id de la Ville", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdVille/{id}")

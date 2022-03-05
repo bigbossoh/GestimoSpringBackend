@@ -1,13 +1,12 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.PaysDto;
-import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Services.PaysService;
-import com.bzdata.gestimospringbackend.Services.VilleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -32,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaysServiceImpl implements PaysService {
     final PaysRepository paysRepository;
-    final VilleService villeService;
+    // final VilleService villeService;
 
     @Override
     public PaysDto save(PaysDto dto) {
@@ -54,15 +53,17 @@ public class PaysServiceImpl implements PaysService {
             log.error("you are provided a null ID for the Pays");
             return false;
         }
-        List<VilleDto> villePays = villeService.findAllByIdPays(id);
-        if (villePays.size() != 0) {
-            log.error("Pays Contains Ville");
-            return false;
-        }
+
         boolean exist = paysRepository.existsById(id);
         if (!exist) {
             throw new EntityNotFoundException("Aucune Pays avec l'ID = " + id + " "
                     + "n' ete trouve dans la BDD", ErrorCodes.PAYS_NOT_FOUND);
+        }
+        Optional<Pays> pays = paysRepository.findById(id);
+        if (pays.isPresent()) {
+            if (pays.get().getVilles().size() != 0) {
+                throw new EntityNotFoundException("Il estist des ville dans ce Pays", ErrorCodes.PAYS_ALREADY_IN_USE);
+            }
         }
         paysRepository.deleteById(id);
         return true;

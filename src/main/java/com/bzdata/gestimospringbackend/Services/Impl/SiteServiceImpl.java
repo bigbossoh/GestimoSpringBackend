@@ -11,18 +11,18 @@ import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.QuartierRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.validator.SiteDtoValidator;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 @Slf4j
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 public class SiteServiceImpl implements SiteService {
     final SiteRepository siteRepository;
     final QuartierRepository quartierRepository;
+
     @Override
     public SiteResponseDto save(SiteRequestDto dto) {
         log.info("We are going to create  a new site {}", dto);
@@ -81,8 +82,7 @@ public class SiteServiceImpl implements SiteService {
         }
         return siteRepository.findById(id).map(SiteResponseDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Pays has been found with Code " + id,
-                        ErrorCodes.SITE_NOT_FOUND)
-        );
+                        ErrorCodes.SITE_NOT_FOUND));
     }
 
     @Override
