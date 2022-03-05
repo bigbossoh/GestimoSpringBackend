@@ -21,5 +21,5 @@ public class Appartement extends AbstractEntity{
     int nbrPiece;
 
     @ManyToOne
-    Immeuble immeubleApp;
+    Etage etage;
 }

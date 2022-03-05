@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Models;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,5 +20,7 @@ import lombok.experimental.FieldDefaults;
 @DiscriminatorValue("Magasin")
 public class Magasin extends Bienimmobilier {
     boolean isUnderBuilding;
+    @ManyToOne
+    Etage etage;
 
 }
