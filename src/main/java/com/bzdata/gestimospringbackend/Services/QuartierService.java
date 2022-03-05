@@ -15,5 +15,5 @@ public interface QuartierService {
 
     QuartierDto findByName(String nom);
 
-    List<QuartierDto> findAllByIdVille(Long id);
+    List<QuartierDto> findAllByIdCommune(Long id);
 }
