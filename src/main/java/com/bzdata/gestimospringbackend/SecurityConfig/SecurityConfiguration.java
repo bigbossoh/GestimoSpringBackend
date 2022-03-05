@@ -32,13 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .csrf().disable()
                 .authorizeRequests().antMatchers(
-<<<<<<< HEAD
-                        "/**/login","/**/accountVerification/**","/**/pays/**","/**/sites/**",
-                "/**/utilisateurs/singup","/swagger-ui/**","/v3/api-docs/**")
-=======
-                        "/**/login", "/**/accountVerification/**", "/**/pays/**", "/**/ville/**", "/**/commune/**",
+                        "/**/login", "/**/accountVerification/**", "/**/pays/**", "/**/sites/**","/**/ville/**", "/**/commune/**",
                         "/**/utilisateurs/singup", "/swagger-ui/**", "/v3/api-docs/**")
->>>>>>> adfde5ecb40755b32726bcba4816218c67547b3e
+
                 .permitAll()
                 .antMatchers("/**/agences/signup").hasAuthority("SUPERVISEUR")
                 .anyRequest().authenticated()
