@@ -15,6 +15,8 @@ public enum ErrorCodes {
     PAYS_NOT_FOUND(4001),
     VILLE_NOT_VALID(5000),
     VILLE_NOT_FOUND(5001),
+    COMMUNE_NOT_VALID(7000),
+    COMMUNE_NOT_FOUND(7001),
     ;
 
     private int code;
