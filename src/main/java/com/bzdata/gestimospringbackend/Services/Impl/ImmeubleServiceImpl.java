@@ -13,7 +13,7 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
-import com.bzdata.gestimospringbackend.validator.ImmeubleValidator;
+import com.bzdata.gestimospringbackend.validator.ImmeubleDtoValidator;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -38,7 +38,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     @Override
     public ImmeubleDto save(ImmeubleDto dto) {
         log.info("We are going to create  a new Immeuble {}", dto);
-        List<String> errors = ImmeubleValidator.validate(dto);
+        List<String> errors = ImmeubleDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("l'Immeuble n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Immeuble sont null.",

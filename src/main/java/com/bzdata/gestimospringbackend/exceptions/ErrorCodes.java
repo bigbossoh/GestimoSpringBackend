@@ -27,6 +27,10 @@ public enum ErrorCodes {
     IMMEUBLE_NOT_FOUND(9001),
     IMMEUBLE_ALREADY_IN_USE(9002),
 
+    ETAGE_NOT_VALID(9003),
+    ETAGE_NOT_FOUND(9004),
+    ETAGE_ALREADY_IN_USE(9005),
+
     ;
 
     private int code;

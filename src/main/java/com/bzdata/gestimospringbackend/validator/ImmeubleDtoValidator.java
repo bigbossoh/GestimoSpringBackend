@@ -7,7 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 
 import org.springframework.util.StringUtils;
 
-public class ImmeubleValidator {
+public class ImmeubleDtoValidator {
     public static List<String> validate(ImmeubleDto dto) {
         List<String> errors = new ArrayList<>();
 

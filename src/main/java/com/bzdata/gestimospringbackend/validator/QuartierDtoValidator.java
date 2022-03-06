@@ -7,7 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
 
 import org.springframework.util.StringUtils;
 
-public class QuartierValidator {
+public class QuartierDtoValidator {
     public static List<String> validate(QuartierDto dto) {
         List<String> errors = new ArrayList<>();
 
