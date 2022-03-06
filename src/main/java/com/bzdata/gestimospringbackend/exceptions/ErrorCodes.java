@@ -31,6 +31,10 @@ public enum ErrorCodes {
     ETAGE_NOT_FOUND(9004),
     ETAGE_ALREADY_IN_USE(9005),
 
+    STUDIO_NOT_VALID(9006),
+    STUDIO_NOT_FOUND(9007),
+    STUDIO_ALREADY_IN_USE(9008),
+
     ;
 
     private int code;
