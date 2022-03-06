@@ -55,7 +55,7 @@ public class StudioController {
     @Operation(summary = "Trouver un Studio par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<StudioDto> findByID(@PathVariable("id") Long id) {
-        log.info("Find Immeuble by ID{}", id);
+        log.info("Find Appartement by ID{}", id);
         return ResponseEntity.ok(studioService.findById(id));
     }
 
@@ -69,7 +69,7 @@ public class StudioController {
     @Operation(summary = "Trouver une Studio par l'Id de l'étage", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdEtage/{id}")
     public ResponseEntity<List<StudioDto>> findByIdPays(@PathVariable("id") Long id) {
-        log.info("Find Studuo By Id Pays {}", id);
+        log.info("Find Studio By Id Pays {}", id);
         return ResponseEntity.ok(studioService.findAllByIdEtage(id));
     }
 }
