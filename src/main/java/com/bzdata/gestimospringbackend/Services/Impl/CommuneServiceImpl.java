@@ -42,7 +42,7 @@ public class CommuneServiceImpl implements CommuneService {
         List<String> errors = CommuneValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("la Commune n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object Communeœœœœœœœœœœœœœœœœœœ sont null.",
+            throw new InvalidEntityException("Certain attributs de l'object Commune sont null.",
                     ErrorCodes.COMMUNE_NOT_VALID, errors);
         }
         Commune commune = communeRepository.save(CommuneDto.toEntity(dto));

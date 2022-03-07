@@ -1,9 +1,9 @@
 package com.bzdata.gestimospringbackend.validator;
-import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 
 public class SiteDtoValidator {
     public static List<String> validate(SiteRequestDto dto) {
@@ -14,7 +14,7 @@ public class SiteDtoValidator {
             errors.add("Veuillez renseigner un quartier");
             return errors;
         }
-        if(dto.getQuartierDto()==null || dto.getQuartierDto().getId()==null){
+        if (dto.getQuartierDto() == null || dto.getQuartierDto().getId() == null) {
             errors.add("Veuillez renseigner un quartier");
         }
 

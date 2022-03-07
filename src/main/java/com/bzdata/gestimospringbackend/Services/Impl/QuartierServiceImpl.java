@@ -15,7 +15,7 @@ import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.QuartierRepository;
-import com.bzdata.gestimospringbackend.validator.QuartierValidator;
+import com.bzdata.gestimospringbackend.validator.QuartierDtoValidator;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -41,7 +41,7 @@ public class QuartierServiceImpl implements QuartierService {
     @Override
     public QuartierDto save(QuartierDto dto) {
         log.info("We are going to create  a new Quartier {}", dto);
-        List<String> errors = QuartierValidator.validate(dto);
+        List<String> errors = QuartierDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("le Quartier n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
