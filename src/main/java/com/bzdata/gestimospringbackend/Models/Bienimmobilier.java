@@ -28,11 +28,12 @@ import lombok.experimental.FieldDefaults;
 public abstract class Bienimmobilier extends AbstractEntity {
     String numBien;
     String statutBien;
-    String denominationBien;
+    boolean isArchived= false;
+    String abrvBienimmobilier;
+    String description;
     String nomBien;
-    String etatBien;
     double superficieBien;
-    boolean isOccupied;
+    boolean isOccupied= false;
     @ManyToOne
     Site site;
 }
