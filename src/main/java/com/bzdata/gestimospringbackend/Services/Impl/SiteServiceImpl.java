@@ -43,7 +43,7 @@ public class SiteServiceImpl implements SiteService {
                     ErrorCodes.SITE_NOT_VALID, errors);
         }
         dto.setQuartierDto(quartierRepository.findById(dto.getQuartierDto().getId()).map(QuartierDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException("Aucun Pays has been found with Code " + dto.getQuartierDto().getId(),
+                () -> new InvalidEntityException("Aucun Quartier has been found with Code " + dto.getQuartierDto().getId(),
                         ErrorCodes.SITE_NOT_FOUND)
         ));
         Site site = siteRepository.save(SiteRequestDto.toEntity(dto));

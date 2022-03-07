@@ -47,7 +47,7 @@ public class SiteController {
         return ResponseEntity.ok(siteService.delete(id));
     }
 
-    // TOUT LES PAYS
+    // TOUT LES SITE
     @Operation(summary = "Liste de tous les Sites", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 

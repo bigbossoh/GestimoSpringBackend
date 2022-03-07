@@ -20,8 +20,11 @@ import lombok.experimental.FieldDefaults;
 @DiscriminatorValue("Villa")
 public class Villa  extends Bienimmobilier {
     int nbrChambreVilla;
-    int nbrDoucheVilla;
+    int nbrePiece;
     int nbrSalonVilla;
-    int nbrToiletteVilla;
-    boolean garageVilla;
+    int nbrSalleEauVilla;
+    String nomVilla;
+    String abrvVilla;
+    boolean garageVilla= false;
+    int nbreVoitureGarageVilla;
 }
