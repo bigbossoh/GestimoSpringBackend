@@ -36,4 +36,6 @@ public abstract class Bienimmobilier extends AbstractEntity {
     boolean isOccupied= false;
     @ManyToOne
     Site site;
+    @ManyToOne
+    Utilisateur utilisateur;
 }
