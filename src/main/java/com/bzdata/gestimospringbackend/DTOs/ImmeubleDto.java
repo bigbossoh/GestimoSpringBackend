@@ -37,10 +37,10 @@ public class ImmeubleDto {
         return ImmeubleDto.builder()
                 .id(immeuble.getId())
                 .abrvNomImmeuble(immeuble.getAbrvNomImmeuble())
-                .denominationBien(immeuble.getDenominationBien())
+                // .denominationBien(immeuble.getDenominationBien())
                 .descriptionImmeuble(immeuble.getDescriptionImmeuble())
-                .denominationBien(immeuble.getDenominationBien())
-                .etatBien(immeuble.getEtatBien())
+                // .denominationBien(immeuble.getDenominationBien())
+                // .etatBien(immeuble.getEtatBien())
                 .isGarrage(immeuble.isGarrage())
                 .isOccupied(immeuble.isOccupied())
                 .nbrEtage(immeuble.getNbrEtage())
@@ -58,9 +58,9 @@ public class ImmeubleDto {
         }
         Immeuble immeuble = new Immeuble();
         immeuble.setAbrvNomImmeuble(dto.getAbrvNomImmeuble());
-        immeuble.setDenominationBien(dto.getDenominationBien());
+        // immeuble.setDenominationBien(dto.getDenominationBien());
         immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
-        immeuble.setEtatBien(dto.getEtatBien());
+        // immeuble.setEtatBien(dto.getEtatBien());
         immeuble.setGarrage(dto.isGarrage());
         immeuble.setId(dto.getId());
         immeuble.setNbrEtage(dto.getNbrEtage());
