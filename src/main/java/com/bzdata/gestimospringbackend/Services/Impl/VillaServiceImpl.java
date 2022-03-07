@@ -1,13 +1,13 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
-import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.Villa;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
+import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VillaRepository;
 import com.bzdata.gestimospringbackend.validator.VillaDtoValidator;
 import lombok.AccessLevel;
@@ -32,6 +32,7 @@ public class VillaServiceImpl implements VillaService {
 
     final VillaRepository villaRepository;
     final SiteRepository siteRepository;
+    final UtilisateurRepository utilisateurRepository;
     @Override
     public VillaDto save(VillaDto dto) {
         log.info("We are going to create  a new Villa {}", dto);
@@ -44,30 +45,39 @@ public class VillaServiceImpl implements VillaService {
         SiteResponseDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteResponseDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
                         ErrorCodes.SITE_NOT_FOUND));
-        dto.setSiteRequestDto(siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteRequestDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
-                        ErrorCodes.SITE_NOT_FOUND)));
+        UtilisateurRequestDto utilisateurRequestDto=utilisateurRepository.findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+                        .orElseThrow(()-> new InvalidEntityException("Aucun Utilisateur has been found with code "+ dto.getUtilisateurRequestDto().getId(),
+                                ErrorCodes.UTILISATEUR_NOT_FOUND));
+        if(utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("PROPRIETAIRE")){
+            dto.setSiteRequestDto(siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteRequestDto::fromEntity).orElseThrow(
+                    () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
+                            ErrorCodes.SITE_NOT_FOUND)));
 
-        Long numBien=0L;
-        if (!StringUtils.hasLength(countNberOfRecordVilla().toString())) {
-            numBien=1L;
-            dto.setNumBien(numBien.toString());
-        }else {
-            numBien=countNberOfRecordVilla()+1;
-            dto.setNumBien(numBien.toString());
+            long numBien=0L;
+            if (!StringUtils.hasLength(countNberOfRecordVilla().toString())) {
+                numBien=1L;
+            }else {
+                numBien=countNberOfRecordVilla()+1;
+            }
+            dto.setNumBien(Long.toString(numBien));
+            if (!StringUtils.hasLength(dto.getNomVilla())) {
+                dto.setAbrvVilla("villa-"+dto.getNumBien());
+                dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
+            }else {
+                dto.setAbrvVilla("villa-"+dto.getNomVilla()+"-"+dto.getNumBien());
+                dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNomVilla()+"-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
+            }
+            dto.setAbrvBienimmobilier((recoverySite.getAbrSite()+"-"+dto.getAbrvVilla()).toUpperCase(Locale.ROOT));
+
+
+            Villa villa= villaRepository.save(VillaDto.toEntity(dto));
+            return VillaDto.fromEntity(villa);
+        }else{
+            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+                    +utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
-        if (!StringUtils.hasLength(dto.getNomVilla())) {
-            dto.setAbrvVilla("villa-"+dto.getNumBien());
-            dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
-        }else {
-            dto.setAbrvVilla("villa-"+dto.getNomVilla()+"-"+dto.getNumBien());
-            dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNomVilla()+"-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
-        }
-        dto.setAbrvBienimmobilier((recoverySite.getAbrSite()+"-"+dto.getAbrvVilla()).toUpperCase(Locale.ROOT));
 
-
-        Villa villa= villaRepository.save(VillaDto.toEntity(dto));
-        return VillaDto.fromEntity(villa);
     }
 
     @Override

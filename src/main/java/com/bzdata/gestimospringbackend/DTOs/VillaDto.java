@@ -28,6 +28,7 @@ public class VillaDto {
     double superficieBien;
     boolean isOccupied;
     SiteRequestDto siteRequestDto;
+    UtilisateurRequestDto utilisateurRequestDto;
 
     public static VillaDto fromEntity(Villa villa) {
         if (villa == null) {
@@ -53,6 +54,7 @@ public class VillaDto {
                 .statutBien(villa.getStatutBien())
                 .numBien(villa.getNumBien())
                 .siteRequestDto(SiteRequestDto.fromEntity(villa.getSite()))
+                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(villa.getUtilisateur()))
                 .build();
     }
 
@@ -81,6 +83,7 @@ public class VillaDto {
         v.setStatutBien(dto.getStatutBien());
         v.setNumBien(dto.getNumBien());
         v.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
+        v.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
         return v;
 
     }
