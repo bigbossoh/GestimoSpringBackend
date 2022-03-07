@@ -16,10 +16,16 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Appartement extends AbstractEntity{
+public class Appartement extends AbstractEntity {
     boolean meubleApp;
-    int nbrPiece;
-
+    int nbrPieceApp;
+    int nbreChambreApp;
+    int nbreSalonApp;
+    int nbreSalleEauApp;
+    boolean isResidence;
+    int numeroApp;
+    String abrvNomApp;
+    String nomApp;
     @ManyToOne
     Etage etageAppartement;
 }

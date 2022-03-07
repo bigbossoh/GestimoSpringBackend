@@ -36,7 +36,7 @@ public class CommuneController {
     @Operation(summary = "Suppression d'une Commune avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
-        log.info("We are going to save a new Ville {}", id);
+        log.info("We are going to delete a Ville {}", id);
         return ResponseEntity.ok(communeService.delete(id));
     }
 
