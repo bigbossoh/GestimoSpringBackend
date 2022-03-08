@@ -19,7 +19,7 @@ public class VillaDto {
     String abrvVilla;
     boolean garageVilla;
     int nbreVoitureGarageVilla;
-    String numBien;
+    Long numBien;
     String statutBien;
     boolean isArchived;
     String abrvBienimmobilier;

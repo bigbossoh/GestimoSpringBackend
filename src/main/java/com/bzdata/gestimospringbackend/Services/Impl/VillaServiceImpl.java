@@ -3,8 +3,8 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.Villa;
 import com.bzdata.gestimospringbackend.Services.VillaService;
+import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.LongSummaryStatistics;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,13 +54,13 @@ public class VillaServiceImpl implements VillaService {
                     () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
                             ErrorCodes.SITE_NOT_FOUND)));
 
-            long numBien=0L;
-            if (!StringUtils.hasLength(countNberOfRecordVilla().toString())) {
+            Long numBien= 0L;
+            if (villaRepository.count()==0) {
                 numBien=1L;
             }else {
-                numBien=countNberOfRecordVilla()+1;
+                numBien=maxOfNumBien()+1;
             }
-            dto.setNumBien(Long.toString(numBien));
+            dto.setNumBien(numBien);
             if (!StringUtils.hasLength(dto.getNomVilla())) {
                 dto.setAbrvVilla("villa-"+dto.getNumBien());
                 dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
@@ -82,12 +83,28 @@ public class VillaServiceImpl implements VillaService {
 
     @Override
     public boolean delete(Long id) {
-        return false;
+        log.info("We are going to delete a Villa with the ID {}", id);
+        if (id == null) {
+            log.error("you are provided a null ID for the Villa");
+            return false;
+        }
+        boolean exist = villaRepository.existsById(id);
+        if (!exist) {
+            throw new EntityNotFoundException("Aucune Studio avec l'ID = " + id + " "
+                    + "n' ete trouve dans la BDD", ErrorCodes.STUDIO_NOT_FOUND);
+        }
+        //TODO
+        villaRepository.deleteById(id);
+        return true;
+
     }
 
     @Override
-    public Long countNberOfRecordVilla() {
-        return villaRepository.count();
+    public Long maxOfNumBien() {
+
+        LongSummaryStatistics collectMaxNumBien = villaRepository.findAll().stream().collect(Collectors.summarizingLong(Villa::getNumBien));
+        log.info(" countNberOfRecordVilla {}",collectMaxNumBien.getMax());
+        return collectMaxNumBien.getMax();
     }
 
     @Override
@@ -99,12 +116,26 @@ public class VillaServiceImpl implements VillaService {
 
     @Override
     public VillaDto findById(Long id) {
-        return null;
+        log.info("We are going to get back the Villa By {}", id);
+        if (id == null) {
+            log.error("you are not provided a Villa.");
+            return null;
+        }
+        return villaRepository.findById(id).map(VillaDto::fromEntity).orElseThrow(
+                () -> new InvalidEntityException("Aucun Studio has been found with Code " + id,
+                        ErrorCodes.VILLA_NOT_FOUND));
     }
 
     @Override
     public VillaDto findByName(String nom) {
-        return null;
+        log.info("We are going to get back the Villa By {}", nom);
+        if (!StringUtils.hasLength(nom)) {
+            log.error("you are not provided a Studio.");
+            return null;
+        }
+        return villaRepository.findByNomVilla(nom).map(VillaDto::fromEntity).orElseThrow(
+                () -> new InvalidEntityException("Aucun Villa has been found with name " + nom,
+                        ErrorCodes.VILLA_NOT_FOUND));
     }
 
     @Override
@@ -114,6 +145,8 @@ public class VillaServiceImpl implements VillaService {
 
     @Override
     public List<VillaDto> findAllByIdSite(Long id) {
+
         return null;
     }
+
 }
