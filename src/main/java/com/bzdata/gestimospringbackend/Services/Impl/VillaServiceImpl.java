@@ -128,14 +128,15 @@ public class VillaServiceImpl implements VillaService {
 
     @Override
     public VillaDto findByName(String nom) {
-        log.info("We are going to get back the Villa By {}", nom);
-        if (!StringUtils.hasLength(nom)) {
-            log.error("you are not provided a Studio.");
-            return null;
-        }
-        return villaRepository.findByNomVilla(nom).map(VillaDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException("Aucun Villa has been found with name " + nom,
-                        ErrorCodes.VILLA_NOT_FOUND));
+//        log.info("We are going to get back the Villa By {}", nom);
+//        if (!StringUtils.hasLength(nom)) {
+//            log.error("you are not provided a Studio.");
+//            return null;
+//        }
+//        return villaRepository.findByNomVilla(nom).map(VillaDto::fromEntity).orElseThrow(
+//                () -> new InvalidEntityException("Aucun Villa has been found with name " + nom,
+//                        ErrorCodes.VILLA_NOT_FOUND));
+        return null;
     }
 
     @Override
