@@ -1,13 +1,7 @@
 package com.bzdata.gestimospringbackend.repository;
-
-import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
-
-import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Villa;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
 
 
 public interface VillaRepository extends JpaRepository<Villa,Long> {
@@ -16,6 +10,6 @@ public interface VillaRepository extends JpaRepository<Villa,Long> {
 //
 //    @Query(value = "SELECT max(nbrePiece) FROM Villa")
 //    public Long max();
-    Optional<Villa> findByNomVilla(String nom);
-    List<Villa> findBySiteRequestDto(Site site);
+//    Optional<Villa> findByNomVilla(String nom);
+//    List<Villa> findBySiteRequestDto(Site site);
 }
