@@ -26,7 +26,7 @@ import lombok.experimental.FieldDefaults;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "typeBienImmobilier", discriminatorType = DiscriminatorType.STRING)
 public abstract class Bienimmobilier extends AbstractEntity {
-    String numBien;
+    Long numBien;
     String statutBien;
     boolean isArchived= false;
     String abrvBienimmobilier;

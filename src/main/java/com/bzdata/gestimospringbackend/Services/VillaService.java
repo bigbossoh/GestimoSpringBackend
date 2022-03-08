@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface VillaService {
@@ -10,7 +11,7 @@ public interface VillaService {
 
     boolean delete(Long id);
 
-    Long countNberOfRecordVilla();
+    Long maxOfNumBien();
 
     List<VillaDto> findAll();
 
