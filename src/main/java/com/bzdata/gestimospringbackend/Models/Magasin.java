@@ -20,6 +20,10 @@ import lombok.experimental.FieldDefaults;
 @DiscriminatorValue("Magasin")
 public class Magasin extends Bienimmobilier {
     boolean isUnderBuilding;
+    String abrvNommagasin;
+    int nmbrPieceMagasin;
+    String nomMagasin;
+    Long numeroMagasin;
     @ManyToOne
     Etage etageMagasin;
 
