@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -37,10 +36,8 @@ public class Utilisateur extends AbstractEntity {
     private String username;
     private String password;
 
-
-
     @ManyToOne
-            //(cascade = CascadeType.PERSIST)
+    // (cascade = CascadeType.PERSIST)
     AgenceImmobiliere agence;
 
     @OneToMany(mappedBy = "createur")
@@ -50,4 +47,6 @@ public class Utilisateur extends AbstractEntity {
     Role urole;
     @ManyToOne
     Utilisateur userCreate;
+    @OneToMany(mappedBy = "utilisateurOperation")
+    List<Operation> operationUser;
 }
