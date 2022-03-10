@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -20,12 +21,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MontantLoyerBail extends AbstractEntity {
     double montantLoyer;
-    Date debutLoyer;
-    Date finLoyer;
+    LocalDate debutLoyer;
+    LocalDate finLoyer;
     boolean statusLoyer;
     double tauxLoyer;
     double montantAugmentation;
-
     @ManyToOne
     BailLocation bailLocation;
 
