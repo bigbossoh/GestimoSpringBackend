@@ -1,9 +1,9 @@
 package com.bzdata.gestimospringbackend.Services;
+
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 public interface VillaService {
 
