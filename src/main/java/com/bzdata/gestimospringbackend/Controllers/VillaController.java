@@ -1,22 +1,25 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
-import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
+import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Services.VillaService;
-import com.bzdata.gestimospringbackend.Services.VilleService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
 
 @RestController
 @RequestMapping(APP_ROOT + "/villa")
@@ -33,11 +36,12 @@ public class VillaController {
         log.info("We are going to save a new Villa {}", dto);
         return ResponseEntity.ok(villaService.save(dto));
     }
+
     // TOUT LES VILLA
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<VillaDto>>findAll(){
+    public ResponseEntity<List<VillaDto>> findAll() {
         return ResponseEntity.ok(villaService.findAll());
     }
 }

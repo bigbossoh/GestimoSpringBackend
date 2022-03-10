@@ -1,8 +1,16 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import com.bzdata.gestimospringbackend.DTOs.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.LongSummaryStatistics;
+import java.util.stream.Collectors;
+
+import com.bzdata.gestimospringbackend.DTOs.EtageDto;
+import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Magasin;
-import com.bzdata.gestimospringbackend.Models.Villa;
 import com.bzdata.gestimospringbackend.Services.MagasinService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -12,19 +20,16 @@ import com.bzdata.gestimospringbackend.repository.MagasinRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.MagasinDtoValidator;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.LongSummaryStatistics;
-import java.util.stream.Collectors;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -47,47 +52,58 @@ public class MagasinServiceImpl implements MagasinService {
             throw new InvalidEntityException("Certain attributs de l'object Magasin sont null.",
                     ErrorCodes.MAGASIN_NOT_VALID, errors);
         }
-        SiteResponseDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteResponseDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
-                        ErrorCodes.SITE_NOT_FOUND));
-        UtilisateurRequestDto utilisateurRequestDto=utilisateurRepository.findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
-                .orElseThrow(()-> new InvalidEntityException("Aucun Utilisateur has been found with code "+ dto.getUtilisateurRequestDto().getId(),
+        SiteResponseDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId())
+                .map(SiteResponseDto::fromEntity).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
+                                ErrorCodes.SITE_NOT_FOUND));
+        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
+                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if(utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("PROPRIETAIRE")){
-            dto.setSiteRequestDto(siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteRequestDto::fromEntity).orElseThrow(
-                    () -> new InvalidEntityException("Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
-                            ErrorCodes.SITE_NOT_FOUND)));
+        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("PROPRIETAIRE")) {
+            dto.setSiteRequestDto(siteRepository.findById(dto.getSiteRequestDto().getId())
+                    .map(SiteRequestDto::fromEntity).orElseThrow(
+                            () -> new InvalidEntityException(
+                                    "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
+                                    ErrorCodes.SITE_NOT_FOUND)));
 
-            Long numBien= 0L;
-            if (magasinRepository.count()==0) {
-                numBien=1L;
-            }else {
-                numBien=maxOfNumBienMagasin()+1;
+            Long numBien = 0L;
+            if (magasinRepository.count() == 0) {
+                numBien = 1L;
+            } else {
+                numBien = maxOfNumBienMagasin() + 1;
             }
             dto.setNumBien(numBien);
             if (!StringUtils.hasLength(dto.getNomMagasin())) {
-                dto.setAbrvNomMagasin("magasin-"+dto.getNumBien());
-                dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
-            }else {
-                dto.setAbrvNomMagasin("villa-"+dto.getNomMagasin()+"-"+dto.getNumBien());
-                dto.setNomBien((recoverySite.getNomSite()+"-villa-"+dto.getNomMagasin()+"-"+dto.getNumBien()).toUpperCase(Locale.ROOT));
+                dto.setAbrvNomMagasin("magasin-" + dto.getNumBien());
+                dto.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNumBien()).toUpperCase(Locale.ROOT));
+            } else {
+                dto.setAbrvNomMagasin("villa-" + dto.getNomMagasin() + "-" + dto.getNumBien());
+                dto.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomMagasin() + "-" + dto.getNumBien())
+                        .toUpperCase(Locale.ROOT));
             }
-            dto.setAbrvBienimmobilier((recoverySite.getAbrSite()+"-"+dto.getAbrvNomMagasin()).toUpperCase(Locale.ROOT));
-//            if(dto.getEtageMagasinDto().getId().equals(null) || dto.getEtageMagasinDto()==null ){
-//             //   dto.setEtageMagasinDto(null);
-//            }else{
-            if(dto.getEtageMagasinDto()!=null){
-                EtageDto etageDto = etageRepository.findById(dto.getEtageMagasinDto().getId()).map(EtageDto::fromEntity).orElseThrow(
-                        () -> new InvalidEntityException("Aucun etage has been found with Code " + dto.getEtageMagasinDto().getId(),
-                                ErrorCodes.ETAGE_NOT_FOUND));
+            dto.setAbrvBienimmobilier(
+                    (recoverySite.getAbrSite() + "-" + dto.getAbrvNomMagasin()).toUpperCase(Locale.ROOT));
+            // if(dto.getEtageMagasinDto().getId().equals(null) ||
+            // dto.getEtageMagasinDto()==null ){
+            // // dto.setEtageMagasinDto(null);
+            // }else{
+            if (dto.getEtageMagasinDto() != null) {
+                EtageDto etageDto = etageRepository.findById(dto.getEtageMagasinDto().getId()).map(EtageDto::fromEntity)
+                        .orElseThrow(
+                                () -> new InvalidEntityException(
+                                        "Aucun etage has been found with Code " + dto.getEtageMagasinDto().getId(),
+                                        ErrorCodes.ETAGE_NOT_FOUND));
                 dto.setEtageMagasinDto(etageDto);
             }
 
-            Magasin magasin= magasinRepository.save(MagasinDto.toEntity(dto));
+            Magasin magasin = magasinRepository.save(MagasinDto.toEntity(dto));
             return MagasinDto.fromEntity(magasin);
-        }else{
+        } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    +utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
     }
@@ -104,7 +120,7 @@ public class MagasinServiceImpl implements MagasinService {
             throw new EntityNotFoundException("Aucune Magasin avec l'ID = " + id + " "
                     + "n' ete trouve dans la BDD", ErrorCodes.MAGASIN_NOT_FOUND);
         }
-        //TODO
+        // TODO
         magasinRepository.deleteById(id);
         return true;
     }
