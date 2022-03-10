@@ -27,6 +27,6 @@ public class MontantLoyerBail extends AbstractEntity {
     double montantAugmentation;
 
     @ManyToOne
-    BailLocation bailLocataire;
+    BailLocation bailLocation;
 
 }
