@@ -90,7 +90,7 @@ public class VillaServiceImpl implements VillaService {
         }
         boolean exist = villaRepository.existsById(id);
         if (!exist) {
-            throw new EntityNotFoundException("Aucune Studio avec l'ID = " + id + " "
+            throw new EntityNotFoundException("Aucune Villa avec l'ID = " + id + " "
                     + "n' ete trouve dans la BDD", ErrorCodes.STUDIO_NOT_FOUND);
         }
         //TODO

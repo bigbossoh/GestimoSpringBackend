@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Models;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 import lombok.AccessLevel;
@@ -19,12 +20,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("Magasin")
 public class Magasin extends Bienimmobilier {
-    boolean isUnderBuilding;
-    String abrvNommagasin;
+    boolean isUnderBuildingMagasin;
     int nmbrPieceMagasin;
     String nomMagasin;
-    Long numeroMagasin;
-    @ManyToOne
+    String abrvNomMagasin;
+    @ManyToOne(fetch = FetchType.LAZY)
     Etage etageMagasin;
 
 }
