@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Models;
 
 import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -17,12 +18,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-
+@DiscriminatorValue("BailLocation")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailLocation extends Operation {
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;
+    boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
     @OneToMany(mappedBy = "bailLocataire")
