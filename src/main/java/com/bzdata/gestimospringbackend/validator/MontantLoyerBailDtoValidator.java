@@ -1,8 +1,6 @@
 package com.bzdata.gestimospringbackend.validator;
 
 import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
-import com.bzdata.gestimospringbackend.DTOs.PaysDto;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,7 @@ public class MontantLoyerBailDtoValidator {
             errors.add("Veuillez renseigner le montant du loyer");
         }
         if (dto.getDebutLoyer()==null) {
-            errors.add("Veuillez renseigner la date d'affection du prix du loyer");
+            errors.add("Veuillez renseigner la date d'affection du nouveau montant du loyer");
         }
         if (dto.getBailLocation()==null || dto.getBailLocation().getId()==null) {
             errors.add("Veuillez renseigner le bail de location.");
