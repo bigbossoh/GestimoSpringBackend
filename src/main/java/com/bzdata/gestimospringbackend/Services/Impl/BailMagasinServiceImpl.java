@@ -4,12 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Services.BailMagasinService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
+import com.bzdata.gestimospringbackend.repository.MagasinRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.BailMagasinDtoValidator;
 
 import org.springframework.data.domain.Sort;
@@ -30,6 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailMagasinServiceImpl implements BailMagasinService {
     final BailLocationRepository bailLocationRepository;
+    final UtilisateurRepository utilisateurRepository;
+    final MagasinRepository magasinRepository;
 
     @Override
     public BailMagasinDto save(BailMagasinDto dto) {
@@ -40,8 +46,28 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
-        BailLocation magasinBail = bailLocationRepository.save(BailMagasinDto.toEntity(dto));
-        return BailMagasinDto.fromEntity(magasinBail);
+
+        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
+                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("LOCATAIRE")) {
+
+            MagasinDto magasinDto = magasinRepository.findById(dto.getMagasinDto().getId()).map(MagasinDto::fromEntity)
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Magasin has been found with code " + dto.getMagasinDto().getId(),
+                            ErrorCodes.MAGASIN_NOT_FOUND));
+            dto.setMagasinDto(magasinDto);
+            dto.setUtilisateurRequestDto(utilisateurRequestDto);
+            BailLocation magasinBail = bailLocationRepository.save(BailMagasinDto.toEntity(dto));
+            return BailMagasinDto.fromEntity(magasinBail);
+        } else {
+            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
+        }
+
     }
 
     @Override
