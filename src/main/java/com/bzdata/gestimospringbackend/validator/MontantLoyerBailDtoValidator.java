@@ -14,7 +14,7 @@ public class MontantLoyerBailDtoValidator {
             errors.add("Veuillez renseigner la date d'affection du prix du loyer");
             return errors;
         }
-        if (dto.getMontantLoyer() ==Double.parseDouble(null)) {
+        if (dto.getNouveauMontantLoyer() ==0) {
             errors.add("Veuillez renseigner le montant du loyer");
         }
         if (dto.getDebutLoyer()==null) {

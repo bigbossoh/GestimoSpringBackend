@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -22,8 +23,8 @@ public class BailVillaDto {
     double montantCautionBail;
     int nbreMoisCautionBail;
 
-    Date dateDebut;
-    Date dateFin;
+    LocalDate dateDebut;
+    LocalDate dateFin;
     VillaDto villaDto;
     UtilisateurRequestDto utilisateurRequestDto;
 
