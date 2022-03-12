@@ -1,14 +1,14 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.util.Date;
+
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Magasin;
 import com.bzdata.gestimospringbackend.Models.Villa;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Date;
 
 @Data
 @Builder

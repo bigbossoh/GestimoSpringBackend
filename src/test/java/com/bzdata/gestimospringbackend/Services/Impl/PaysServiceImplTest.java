@@ -18,9 +18,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 
 @ExtendWith(MockitoExtension.class)
-public class SiteServiceImplTest {
+public class PaysServiceImplTest {
 
     private PaysServiceImpl underTest;
+
     @Mock
     private PaysRepository paysRepository;
 
