@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import static org.mockito.Mockito.verify;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -84,7 +83,7 @@ public class BailVillaServiceImplTest {
     @DisplayName("Test si l'ajout des Baux passe bien")
     void weCanSaveBailVill() {
         // GIVEN
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        // SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
 
         // AgenceImmobiliere agence=new AgenceImmobiliere("SEVE INVEST", "1011555",
         // "CC/CC 200021", 368555000L, "astaire@gamil", "SARL", "15000", "SEVE", null,
@@ -106,13 +105,15 @@ public class BailVillaServiceImplTest {
         bailLocation.setArchiveBail(false);
 
         bailLocation.setBienImmobilierOperation(villa);
-        try {
-            bailLocation.setDateDebut(format.parse("10/05/2022"));
-            bailLocation.setDateFin(format.parse("10/05/2024"));
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        /*
+         * try {
+         * bailLocation.setDateDebut(format.parse("10/05/2022"));
+         * bailLocation.setDateFin(format.parse("10/05/2024"));
+         * } catch (ParseException e) {
+         * // TODO Auto-generated catch block
+         * e.printStackTrace();
+         * }
+         */
 
         bailLocation.setDesignationBail("Bail de Villa Test");
         bailLocation.setEnCoursBail(true);
