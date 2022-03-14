@@ -1,9 +1,8 @@
 package com.bzdata.gestimospringbackend.Services;
 
-import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
-import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
-
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 
 public interface MontantLoyerBailService {
 

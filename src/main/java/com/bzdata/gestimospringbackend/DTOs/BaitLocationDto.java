@@ -1,13 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
-import com.bzdata.gestimospringbackend.Models.Charges;
-import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
-
-import javax.persistence.OneToMany;
 import java.util.Date;
-import java.util.List;
 
 public class BaitLocationDto {
     String designationBail;
@@ -19,6 +12,6 @@ public class BaitLocationDto {
 
     Date dateDebut;
     Date dateFin;
-    //BienimmobilierDto bienimmobilierDto;
+    // BienimmobilierDto bienimmobilierDto;
     UtilisateurRequestDto utilisateurRequestDto;
 }

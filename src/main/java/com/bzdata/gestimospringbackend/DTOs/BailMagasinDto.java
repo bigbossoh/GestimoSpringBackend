@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Magasin;
