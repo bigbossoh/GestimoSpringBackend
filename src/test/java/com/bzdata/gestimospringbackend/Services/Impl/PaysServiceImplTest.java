@@ -27,7 +27,6 @@ public class PaysServiceImplTest {
 
     @BeforeEach
     void setUp() {
-
         underTest = new PaysServiceImpl(paysRepository);
     }
 
@@ -68,7 +67,7 @@ public class PaysServiceImplTest {
         // THEN
         ArgumentCaptor<Pays> pCaptor = ArgumentCaptor.forClass(Pays.class);
         verify(paysRepository).save(pCaptor.capture());
-
         assertThat(pays.getAbrvPays()).isEqualTo(pCaptor.getValue().getAbrvPays());
     }
+
 }
