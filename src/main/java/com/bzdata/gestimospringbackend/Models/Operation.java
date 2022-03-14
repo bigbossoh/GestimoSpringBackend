@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.DiscriminatorColumn;
@@ -29,8 +30,8 @@ import lombok.experimental.FieldDefaults;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "typeOperation", discriminatorType = DiscriminatorType.STRING)
 public abstract class Operation extends AbstractEntity {
-    Date dateDebut;
-    Date dateFin;
+    LocalDate dateDebut;
+    LocalDate dateFin;
     @ManyToOne
     Utilisateur utilisateurOperation;
     @ManyToOne

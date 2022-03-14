@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -22,8 +23,8 @@ public class BailMagasinDto {
     double montantCautionBail;
     int nbreMoisCautionBail;
 
-    Date dateDebut;
-    Date dateFin;
+    LocalDate dateDebut;
+    LocalDate dateFin;
     MagasinDto magasinDto;
     UtilisateurRequestDto utilisateurRequestDto;
 

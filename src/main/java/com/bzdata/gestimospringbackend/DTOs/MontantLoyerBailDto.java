@@ -13,7 +13,8 @@ import java.time.LocalDate;
 public class MontantLoyerBailDto {
     Long id;
     Long idAgence;
-    double montantLoyer;
+    double ancienMontantLoyer;
+    double nouveauMontantLoyer;
     LocalDate debutLoyer;
     LocalDate finLoyer;
     boolean statusLoyer;
@@ -28,7 +29,8 @@ public class MontantLoyerBailDto {
         return MontantLoyerBailDto.builder()
                 .id(montantLoyerBail.getId())
                 .idAgence(montantLoyerBail.getIdAgence())
-                .montantLoyer(montantLoyerBail.getMontantLoyer())
+                .ancienMontantLoyer(montantLoyerBail.getAncienMontantLoyer())
+                .nouveauMontantLoyer(montantLoyerBail.getNouveauMontantLoyer())
                 .debutLoyer(montantLoyerBail.getDebutLoyer())
                 .finLoyer(montantLoyerBail.getFinLoyer())
                 .statusLoyer(montantLoyerBail.isStatusLoyer())
@@ -45,7 +47,8 @@ public class MontantLoyerBailDto {
         MontantLoyerBail m = new MontantLoyerBail();
         m.setId(dto.getId());
         m.setIdAgence(dto.getIdAgence());
-        m.setMontantLoyer(dto.getMontantLoyer());
+        m.setAncienMontantLoyer(dto.getAncienMontantLoyer());
+        m.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
         m.setDebutLoyer(dto.getDebutLoyer());
         m.setFinLoyer(dto.getFinLoyer());
         m.setStatusLoyer(dto.isStatusLoyer());

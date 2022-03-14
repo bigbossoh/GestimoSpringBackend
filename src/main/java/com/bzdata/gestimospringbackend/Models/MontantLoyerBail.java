@@ -19,7 +19,8 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MontantLoyerBail extends AbstractEntity {
-    double montantLoyer;
+    double ancienMontantLoyer;
+    double nouveauMontantLoyer;
     LocalDate debutLoyer;
     LocalDate finLoyer;
     boolean statusLoyer;

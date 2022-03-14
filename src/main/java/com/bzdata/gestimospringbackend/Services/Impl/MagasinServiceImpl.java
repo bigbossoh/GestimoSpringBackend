@@ -78,10 +78,10 @@ public class MagasinServiceImpl implements MagasinService {
             dto.setNumBien(numBien);
             if (!StringUtils.hasLength(dto.getNomMagasin())) {
                 dto.setAbrvNomMagasin("magasin-" + dto.getNumBien());
-                dto.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNumBien()).toUpperCase(Locale.ROOT));
+                dto.setNomBien((recoverySite.getNomSite() + "-magasin-" + dto.getNumBien()).toUpperCase(Locale.ROOT));
             } else {
-                dto.setAbrvNomMagasin("villa-" + dto.getNomMagasin() + "-" + dto.getNumBien());
-                dto.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomMagasin() + "-" + dto.getNumBien())
+                dto.setAbrvNomMagasin("magasin-" + dto.getNomMagasin() + "-" + dto.getNumBien());
+                dto.setNomBien((recoverySite.getNomSite() + "-magasin-" + dto.getNomMagasin() + "-" + dto.getNumBien())
                         .toUpperCase(Locale.ROOT));
             }
             dto.setAbrvBienimmobilier(
