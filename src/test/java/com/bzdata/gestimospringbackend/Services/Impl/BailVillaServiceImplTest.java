@@ -1,8 +1,6 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import static org.mockito.Mockito.verify;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Role;
@@ -110,7 +108,7 @@ public class BailVillaServiceImplTest {
          * bailLocation.setDateDebut(format.parse("10/05/2022"));
          * bailLocation.setDateFin(format.parse("10/05/2024"));
          * } catch (ParseException e) {
-         * // TODO Auto-generated catch block
+         * 
          * e.printStackTrace();
          * }
          */

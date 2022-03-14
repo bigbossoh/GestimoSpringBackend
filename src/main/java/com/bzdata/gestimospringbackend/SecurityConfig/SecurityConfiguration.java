@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/**/login", "/**/accountVerification/**", "/**/pays/**", "/**/sites/**", "/**/ville/**",
                         "/**/commune/**", "/**/quartier/**", "/**/villa/**", "/**/magasin/**",
                         "/**/immeuble/**", "/**/commune/**", "/**/quartier/**", "/**/etage/**",
-                        "/**/montantloyerbail/**", "/**/bailsudio/**",
+                        "/**/montantloyerbail/**", "/**/bailsudio/**", "/**/bailappartement/**",
                         "/**/studio/**", "/**/appartement/**", "/**/bailmagasin/**", "/**/bailvilla/**",
                         "/**/utilisateurs/singup", "/swagger-ui/**", "/v3/api-docs/**")
 

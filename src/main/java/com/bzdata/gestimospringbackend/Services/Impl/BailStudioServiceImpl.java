@@ -121,13 +121,13 @@ public class BailStudioServiceImpl implements BailStudioService {
 
     @Override
     public List<BailStudioDto> findAllByIdBienImmobilier(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public List<BailStudioDto> findAllByIdLocataire(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 

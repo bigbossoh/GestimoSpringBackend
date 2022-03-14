@@ -120,7 +120,7 @@ public class MagasinServiceImpl implements MagasinService {
             throw new EntityNotFoundException("Aucune Magasin avec l'ID = " + id + " "
                     + "n' ete trouve dans la BDD", ErrorCodes.MAGASIN_NOT_FOUND);
         }
-        // TODO
+
         magasinRepository.deleteById(id);
         return true;
     }
