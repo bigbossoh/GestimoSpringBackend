@@ -64,7 +64,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
         MontantLoyerBail montantLoyerBail = montantLoyerBailRepository.save(MontantLoyerBailDto.toEntity(dto));
 
         if (shoulddoUpdate) {
-            // TODO
+
             // UPDATE THE PREVIOUS PRICE SET IT THE FALSE IN STATUS FIELD AND PROVIDE THE
             // END DATE
             log.info("cool");

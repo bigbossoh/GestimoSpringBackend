@@ -1,7 +1,10 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,4 +31,6 @@ public class Appartement extends AbstractEntity {
     String nomApp;
     @ManyToOne
     Etage etageAppartement;
+    @OneToMany(mappedBy = "appartementBail")
+    List<Operation> operationsApp;
 }

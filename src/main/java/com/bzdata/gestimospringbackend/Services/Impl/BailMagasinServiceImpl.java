@@ -120,13 +120,13 @@ public class BailMagasinServiceImpl implements BailMagasinService {
 
     @Override
     public List<BailMagasinDto> findAllByIdBienImmobilier(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public List<BailMagasinDto> findAllByIdLocataire(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 

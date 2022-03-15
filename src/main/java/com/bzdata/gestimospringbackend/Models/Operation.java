@@ -35,4 +35,8 @@ public abstract class Operation extends AbstractEntity {
     Utilisateur utilisateurOperation;
     @ManyToOne
     Bienimmobilier bienImmobilierOperation;
+    @ManyToOne
+    Studio studioBail;
+    @ManyToOne
+    Appartement appartementBail;
 }
