@@ -35,7 +35,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
         log.info("We are going to create  a new Montant loyer bail {}", dto);
         List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("la Villa n'est pas valide {}", errors);
+            log.error("le montant loyer bail n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Montant loyer bail sont null.",
                     ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
         }

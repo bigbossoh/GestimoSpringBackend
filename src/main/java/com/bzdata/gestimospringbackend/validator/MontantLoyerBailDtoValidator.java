@@ -17,9 +17,9 @@ public class MontantLoyerBailDtoValidator {
         if (dto.getNouveauMontantLoyer() ==0) {
             errors.add("Veuillez renseigner le montant du loyer");
         }
-        if (dto.getDebutLoyer()==null) {
-            errors.add("Veuillez renseigner la date d'affection du nouveau montant du loyer");
-        }
+//        if (dto.getDebutLoyer()==null) {
+//            errors.add("Veuillez renseigner la date d'affection du nouveau montant du loyer");
+//        }
         if (dto.getBailLocation()==null || dto.getBailLocation().getId()==null) {
             errors.add("Veuillez renseigner le bail de location.");
         }

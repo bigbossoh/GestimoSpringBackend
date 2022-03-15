@@ -28,9 +28,9 @@ public class BailLocation extends Operation {
     double montantCautionBail;
     int nbreMoisCautionBail;
     @OneToMany(mappedBy = "bailLocation")
-    List<MontantLoyerBail> montantLoyerBails;
+    List<MontantLoyerBail> montantLoyerBail;
     @OneToMany(mappedBy = "bailLocataireCharge")
     List<Charges> charges;
     @OneToMany(mappedBy = "bailLocationAppelLoyer")
-    List<AppelLoyer> appeldableBAppelLoyers;
+    List<AppelLoyer> listAppelsLoyers;
 }
