@@ -42,7 +42,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
         log.info("We are going to create  a new Bail Magasin {}", dto);
         List<String> errors = BailMagasinDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
-            log.error("le Studio n'est pas valide {}", errors);
+            log.error("le bail magasin n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
