@@ -33,6 +33,6 @@ L’application doit permettre de :
 ## Architecture technique
 ![My Image](/assests/images/Architecture.PNG)
 ## Diagramme de classes des entités
-![My Image](/assests/images/Class Diagram Gestimo.asta)
+![My Image](/assests/images/class diagram.PNG)
 
 
