@@ -31,8 +31,8 @@ L’application doit permettre de :
 - La couche Web basée sur MVC coté Serveur en utilisant Thymeleaf.
 3. La sécurité est basée sur Spring Security d’authentification
 ## Architecture technique
-![My Image](/assests/images/Architecture.PNG)
+![architecture](/assests/images/Architecture.PNG)
 ## Diagramme de classes des entités
-![My Image](/assests/images/class diagram.PNG)
+![class diagram](/assests/images/classdiagram.PNG)
 
 
