@@ -24,13 +24,15 @@ L’application doit permettre de :
 - Consulter les paiements de loyers par locataires, immeuble, adresse
 -Modifier  
 ## Exigences Techniques
-* Les données sont stockées dans une base de données MySQL
-* L’application se compose de trois couches :
+1. Les données sont stockées dans une base de données MySQL
+2. L’application se compose de trois couches :
 - La couche DAO qui est basée sur Spring Data, JPA, Hibernate et JDBC.
 - La couche Métier
 - La couche Web basée sur MVC coté Serveur en utilisant Thymeleaf.
-* La sécurité est basée sur Spring Security d’authentification
+3. La sécurité est basée sur Spring Security d’authentification
 ## Architecture technique
+![My Image](/assests/images/Architecture.PNG)
 ## Diagramme de classes des entités
+![My Image](/assests/images/Architecture.PNG)
 
 
