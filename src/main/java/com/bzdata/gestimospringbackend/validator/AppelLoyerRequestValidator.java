@@ -1,11 +1,9 @@
 package com.bzdata.gestimospringbackend.validator;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 
 public class AppelLoyerRequestValidator {
     public static List<String> validate(AppelLoyerRequestDto dto) {

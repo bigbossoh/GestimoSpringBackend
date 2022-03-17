@@ -1,6 +1,13 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.YearMonth;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -11,24 +18,15 @@ import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
-import com.bzdata.gestimospringbackend.validator.AppartementDtoValidator;
-import com.bzdata.gestimospringbackend.validator.AppelLoyerDtoValidator;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
-import com.bzdata.gestimospringbackend.validator.MontantLoyerBailDtoValidator;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.YearMonth;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -58,11 +56,11 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                         dto.getIdBailLocation(),
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
-        List<MontantLoyerBail> ListMontantLoyerCours= montantLoyerBailRepository.findMontantLoyerBailbyStatusAndBailId(bailLocation);
+     //   List<MontantLoyerBail> ListMontantLoyerCours= montantLoyerBailRepository.findMontantLoyerBailbyStatusAndBailId(bailLocation);
         LocalDate dateDebut=bailLocation.getDateDebut();
         LocalDate dateFin=bailLocation.getDateFin();
         YearMonth ym1 = YearMonth.of(dateDebut.getYear(),dateDebut.getMonth());
-         List<AppelLoyer> AppelLoyerList= new ArrayList<>();
+         List<AppelLoyer> appelLoyerList= new ArrayList<>();
         for(int k = 1; k<=(ChronoUnit.MONTHS.between(dateDebut, dateFin)+1); k++){
             AppelLoyer appelLoyer=new AppelLoyer();
             YearMonth period = ym1.plus(Period.ofMonths(k));
@@ -88,15 +86,15 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             appelLoyer.setMontantBailLPeriode(montantBail);
             appelLoyer.setBailLocationAppelLoyer(bailLocation);
            // appelLoyerRepository.save(appelLoyer);
-            AppelLoyerList.add(appelLoyer);
+            appelLoyerList.add(appelLoyer);
         }
 //        List<Book> bookList = new ArrayList<>();
 //        for (int i = 0; i < bookCount; i++) {
 //            bookList.add(new Book("Book " + i, "Author " + i));
 //        }
 //
-        appelLoyerRepository.saveAll(AppelLoyerList);
-        return AppelLoyerList
+        appelLoyerRepository.saveAll(appelLoyerList);
+        return appelLoyerList
                 .stream()
                 .map(AppelLoyer::getPeriodeAppelLoyer)
                 .collect(Collectors.toList());

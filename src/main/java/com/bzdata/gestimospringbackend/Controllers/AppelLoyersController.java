@@ -1,23 +1,24 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
-import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
+import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Services.AppartementService;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
 
 @RestController
 @RequestMapping(APP_ROOT + "/appelloyer")
