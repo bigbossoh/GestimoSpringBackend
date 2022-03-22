@@ -186,7 +186,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurRequestDto findByEmail(String email) {
+    public UtilisateurRequestDto findUtilisateurByEmail(String email) {
         return utilisateurRepository.findUtilisateurByEmail(email)
                 .map(UtilisateurRequestDto::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException(

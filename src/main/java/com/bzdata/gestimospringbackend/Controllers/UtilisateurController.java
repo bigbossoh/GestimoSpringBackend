@@ -53,7 +53,7 @@ public class UtilisateurController {
 
     @GetMapping("/getutilisateurbyemail/{email}")
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByEmail(@PathVariable("email") String email) {
-        return ResponseEntity.ok(utilisateurService.findByEmail(email));
+        return ResponseEntity.ok(utilisateurService.findUtilisateurByEmail(email));
     }
 
     @GetMapping("/all")
