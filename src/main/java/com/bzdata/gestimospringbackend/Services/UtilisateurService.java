@@ -10,7 +10,7 @@ public interface UtilisateurService {
     UtilisateurRequestDto saveProprietaire(UtilisateurRequestDto dto);
     UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto);
     UtilisateurRequestDto findById(Long id);
-    UtilisateurRequestDto findByEmail(String email);
+    UtilisateurRequestDto findUtilisateurByEmail(String email);
     List<UtilisateurRequestDto> listOfAllUtilisateurOrderbyName();
     List<UtilisateurRequestDto> listOfAllUtilisateurLocataireOrderbyName();
     List<UtilisateurRequestDto> listOfAllUtilisateurProprietaireOrderbyName();
