@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @Builder
-//@FieldDefaults(level = AccessLevel.PRIVATE)
+// @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerDto {
     private Long id;
     private Long idAgence;
@@ -21,26 +21,30 @@ public class AppelLoyerDto {
     private int anneeAppelLoyer;
     private int moisChiffreAppelLoyer;
     private String descAppelLoyer;
+    private double soldeAppelLoyer;
+    private boolean isSolderAppelLoyer;
     private double montantBailLPeriode;
     private BailLocation bailLocationAppelLoyer;
 
-    public static AppelLoyerDto fromEntity(AppelLoyer AppelLoyer) {
-        if (AppelLoyer == null) {
+    public static AppelLoyerDto fromEntity(AppelLoyer appelLoyer) {
+        if (appelLoyer == null) {
             return null;
         }
         return AppelLoyerDto.builder()
-                .id(AppelLoyer.getId())
-                .idAgence(AppelLoyer.getIdAgence())
-                .periodeAppelLoyer(AppelLoyer.getPeriodeAppelLoyer())
-                .statusAppelLoyer(AppelLoyer.getStatusAppelLoyer())
-                .datePaiementPrevuAppelLoyer(AppelLoyer.getDatePaiementPrevuAppelLoyer())
-                .dateDebutMoisAppelLoyer(AppelLoyer.getDateDebutMoisAppelLoyer())
-                .dateFinMoisAppelLoyer(AppelLoyer.getDateFinMoisAppelLoyer())
-                .anneeAppelLoyer(AppelLoyer.getAnneeAppelLoyer())
-                .moisChiffreAppelLoyer(AppelLoyer.getMoisChiffreAppelLoyer())
-                .descAppelLoyer(AppelLoyer.getDescAppelLoyer())
-                .montantBailLPeriode(AppelLoyer.getMontantBailLPeriode())
-                .bailLocationAppelLoyer(AppelLoyer.getBailLocationAppelLoyer())
+                .id(appelLoyer.getId())
+                .idAgence(appelLoyer.getIdAgence())
+                .periodeAppelLoyer(appelLoyer.getPeriodeAppelLoyer())
+                .statusAppelLoyer(appelLoyer.getStatusAppelLoyer())
+                .datePaiementPrevuAppelLoyer(appelLoyer.getDatePaiementPrevuAppelLoyer())
+                .dateDebutMoisAppelLoyer(appelLoyer.getDateDebutMoisAppelLoyer())
+                .dateFinMoisAppelLoyer(appelLoyer.getDateFinMoisAppelLoyer())
+                .anneeAppelLoyer(appelLoyer.getAnneeAppelLoyer())
+                .moisChiffreAppelLoyer(appelLoyer.getMoisChiffreAppelLoyer())
+                .descAppelLoyer(appelLoyer.getDescAppelLoyer())
+                .montantBailLPeriode(appelLoyer.getMontantBailLPeriode())
+                .bailLocationAppelLoyer(appelLoyer.getBailLocationAppelLoyer())
+                .soldeAppelLoyer(appelLoyer.getSoldeAppelLoyer())
+                .isSolderAppelLoyer(appelLoyer.isSolderAppelLoyer())
                 .build();
     }
 
@@ -61,7 +65,8 @@ public class AppelLoyerDto {
         a.setDescAppelLoyer(dto.getDescAppelLoyer());
         a.setMontantBailLPeriode(dto.getMontantBailLPeriode());
         a.setBailLocationAppelLoyer(dto.getBailLocationAppelLoyer());
+        a.setSoldeAppelLoyer(dto.getSoldeAppelLoyer());
+        a.setSolderAppelLoyer(dto.isSolderAppelLoyer);
         return a;
     }
 }
-

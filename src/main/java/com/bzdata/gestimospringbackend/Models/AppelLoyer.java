@@ -27,6 +27,8 @@ public class AppelLoyer extends AbstractEntity {
     int moisChiffreAppelLoyer;
     String descAppelLoyer;
     double montantBailLPeriode;
+    double soldeAppelLoyer;
+    boolean isSolderAppelLoyer;
     @ManyToOne
     BailLocation bailLocationAppelLoyer;
 
