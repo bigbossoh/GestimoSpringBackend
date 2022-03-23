@@ -1,4 +1,5 @@
-﻿# Description du project Gestimo 
+[![forthebadge](https://forthebadge.com/images/badges/cc-0.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/uses-brains.svg)](https://forthebadge.com)[![forthebadge](https://forthebadge.com/images/badges/made-with-java.svg)](https://forthebadge.com)
+# Description du project Gestimo 
 On souhaite créer une application web qui permet de gérer des locations des bien immobiliers.
 Un propriétaire possède un ou plusieurs biens immobiliers (Villa, immeuble, appartement, studio)
 Un locataire peut louer un bien immobilier sur une période donnée et paie un loyer qui est susceptible d’évoluer dans le temps. 
@@ -22,7 +23,10 @@ L’application doit permettre de :
 - Effectuer des appels de loyers
 - Effectuer un paiement de loyer
 - Consulter les paiements de loyers par locataires, immeuble, adresse
--Modifier  
+-Modifier 
+## Authors
+
+Our code squad : Michel Bossoh & Nasaire Zrango
 ## Exigences Techniques
 1. Les données sont stockées dans une base de données MySQL
 2. L’application se compose de trois couches :
