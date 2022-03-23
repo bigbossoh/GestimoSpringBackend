@@ -49,4 +49,6 @@ public class Utilisateur extends AbstractEntity {
     Utilisateur userCreate;
     @OneToMany(mappedBy = "utilisateurOperation")
     List<Operation> operationUser;
+    @OneToMany(mappedBy = "utilisateurEncaissement")
+    List<Encaissement> encaissementsUtilisateur;
 }

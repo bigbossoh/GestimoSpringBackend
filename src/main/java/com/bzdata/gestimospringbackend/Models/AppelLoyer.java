@@ -1,8 +1,11 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -29,7 +32,10 @@ public class AppelLoyer extends AbstractEntity {
     double montantBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
+
     @ManyToOne
     BailLocation bailLocationAppelLoyer;
+    @OneToMany(mappedBy = "appelLoyerEncaissement")
+    List<Encaissement> encaissementsAppelLoyer;
 
 }
