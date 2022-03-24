@@ -28,7 +28,13 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-
+/**
+ * Cette classe permet la creation du service
+ * d'appel de loyer
+ *
+ * @version 1.1
+ * @Author Michel Bossoh
+ */
 @Service
 @Slf4j
 @Transactional
@@ -36,11 +42,24 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerServiceImpl implements AppelLoyerService {
 
+    /**
+     * Auto injection
+     */
+
     final MontantLoyerBailRepository montantLoyerBailRepository;
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerRepository appelLoyerRepository;
 
-
+    /**
+     * Cette methode est utilisé pour enregister tous les appels loyers
+     * de l'utilisateur durant la periode de contrat
+     *
+     * @param dto de l appelLoyrRequestDtio il comprend :
+     *            Long idAgence;
+     *            Long idBailLocation;
+     *            double montantLoyerEnCours;
+     * @return une liste de periodes ou les loyers sont appeler
+     */
 
     @Override
     public List<String> save(AppelLoyerRequestDto dto) {
@@ -56,18 +75,18 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                         dto.getIdBailLocation(),
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
-     //   List<MontantLoyerBail> ListMontantLoyerCours= montantLoyerBailRepository.findMontantLoyerBailbyStatusAndBailId(bailLocation);
-        LocalDate dateDebut=bailLocation.getDateDebut();
-        LocalDate dateFin=bailLocation.getDateFin();
-        YearMonth ym1 = YearMonth.of(dateDebut.getYear(),dateDebut.getMonth());
-         List<AppelLoyer> appelLoyerList= new ArrayList<>();
-        for(int k = 1; k<=(ChronoUnit.MONTHS.between(dateDebut, dateFin)+1); k++){
-            AppelLoyer appelLoyer=new AppelLoyer();
+
+        LocalDate dateDebut = bailLocation.getDateDebut();
+        LocalDate dateFin = bailLocation.getDateFin();
+        YearMonth ym1 = YearMonth.of(dateDebut.getYear(), dateDebut.getMonth());
+        List<AppelLoyer> appelLoyerList = new ArrayList<>();
+        for (int k = 1; k <= (ChronoUnit.MONTHS.between(dateDebut, dateFin) + 1); k++) {
+            AppelLoyer appelLoyer = new AppelLoyer();
             YearMonth period = ym1.plus(Period.ofMonths(k));
-            LocalDate initial=LocalDate.of(period.getYear(), period.getMonth(), 1);
-            LocalDate start=initial.withDayOfMonth(1);
-            LocalDate datePaiementPrevu=initial.withDayOfMonth(10);
-            LocalDate end=initial.withDayOfMonth(initial.lengthOfMonth());
+            LocalDate initial = LocalDate.of(period.getYear(), period.getMonth(), 1);
+            LocalDate start = initial.withDayOfMonth(1);
+            LocalDate datePaiementPrevu = initial.withDayOfMonth(10);
+            LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
             appelLoyer.setIdAgence(dto.getIdAgence());
             appelLoyer.setPeriodeAppelLoyer(period.toString());
             appelLoyer.setStatusAppelLoyer("Impayé");
@@ -82,17 +101,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                     .filter(st -> st.isStatusLoyer() == true)
                     .map(MontantLoyerBail::getNouveauMontantLoyer)
                     .findFirst().orElse(0.0);
-            log.info("montantBail {}" ,montantBail);
+            log.info("montantBail {}", montantBail);
             appelLoyer.setMontantBailLPeriode(montantBail);
             appelLoyer.setBailLocationAppelLoyer(bailLocation);
-           // appelLoyerRepository.save(appelLoyer);
             appelLoyerList.add(appelLoyer);
         }
-//        List<Book> bookList = new ArrayList<>();
-//        for (int i = 0; i < bookCount; i++) {
-//            bookList.add(new Book("Book " + i, "Author " + i));
-//        }
-//
+
         appelLoyerRepository.saveAll(appelLoyerList);
         return appelLoyerList
                 .stream()

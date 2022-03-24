@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -53,10 +54,11 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
             dto.setMontantAugmentation((dto.getNouveauMontantLoyer() - dto.getAncienMontantLoyer()));
             dto.setDebutLoyer(bailLocation.getDateDebut());
         } else {
+            Optional<MontantLoyerBail> firstMontantLoyerBail = byBailLocation.stream().findFirst();
             shoulddoUpdate = true;
-            if (dto.getAncienMontantLoyer() != 0) {
-                dto.setTauxLoyer((dto.getNouveauMontantLoyer() - dto.getAncienMontantLoyer()) * 100
-                        / dto.getAncienMontantLoyer());
+            if (firstMontantLoyerBail.get().getAncienMontantLoyer() != 0) {
+                dto.setTauxLoyer((dto.getNouveauMontantLoyer() - firstMontantLoyerBail.get().getAncienMontantLoyer() ) * 100
+                        / firstMontantLoyerBail.get().getAncienMontantLoyer() );
             }
             dto.setMontantAugmentation((dto.getNouveauMontantLoyer() - dto.getAncienMontantLoyer()));
             dto.setDebutLoyer(bailLocation.getDateDebut());
