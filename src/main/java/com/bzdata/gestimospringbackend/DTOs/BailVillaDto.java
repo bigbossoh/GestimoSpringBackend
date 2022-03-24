@@ -5,12 +5,10 @@ import java.time.LocalDate;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Villa;
 
-import com.bzdata.gestimospringbackend.repository.VillaRepository;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @Builder
