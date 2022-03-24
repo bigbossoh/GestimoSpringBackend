@@ -1,13 +1,11 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailVillaService;
+import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -15,17 +13,18 @@ import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VillaRepository;
 import com.bzdata.gestimospringbackend.validator.BailVillaDtoValidator;
-
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -37,9 +36,12 @@ public class BailVillaServiceImpl implements BailVillaService {
     final BailLocationRepository bailLocationRepository;
     final UtilisateurRepository utilisateurRepository;
     final VillaRepository villaRepository;
+    final MontantLoyerBailService montantLoyerBailService;
+    final AppelLoyerService appelLoyerService;
+
 
     @Override
-    public BailVillaDto save(BailVillaDto dto) {
+    public BailVillaDto saveNewBailVilla(BailVillaDto dto) {
         log.info("We are going to create  a new Bail Villa {}", dto);
         List<String> errors = BailVillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -62,6 +64,31 @@ public class BailVillaServiceImpl implements BailVillaService {
             dto.setVillaDto(villaDto);
             dto.setUtilisateurRequestDto(utilisateurRequestDto);
             BailLocation villaBail = bailLocationRepository.save(BailVillaDto.toEntity(dto));
+            /**
+             * Mise a jour du status de l'object Villa
+             */
+            villaDto.setOccupied(true);
+            villaDto.setStatutBien("Occupied");
+            villaRepository.save(VillaDto.toEntity(villaDto));
+            /**
+             * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
+             */
+            MontantLoyerBail montantLoyerBail= new MontantLoyerBail();
+            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
+            montantLoyerBail.setBailLocation(villaBail);
+            montantLoyerBail.setIdAgence(villaBail.getIdAgence());
+            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            /**
+             *Creation de l'appel loyer
+             */
+            AppelLoyerRequestDto appelLoyerRequestDto= new AppelLoyerRequestDto();
+
+            appelLoyerRequestDto.setIdBailLocation(villaBail.getId());
+            appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
+            appelLoyerRequestDto.setIdAgence(villaBail.getIdAgence());
+
+            appelLoyerService.save(appelLoyerRequestDto);
+
             return BailVillaDto.fromEntity(villaBail);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
@@ -73,7 +100,7 @@ public class BailVillaServiceImpl implements BailVillaService {
 
     @Override
     public boolean delete(Long id) {
-        log.info("We are going to delete a Bail with the ID {}", id);
+        log.info("We are going to delete a Bail of villa with the ID {}", id);
         if (id == null) {
             log.error("you are provided a null ID for the Bail");
             return false;

@@ -14,6 +14,7 @@ public class BailVillaDtoValidator {
         if (dto == null) {
             errors.add("Veuillez renseigner le nom");
             errors.add("Veuillez renseigner l'abréviation ");
+            errors.add("Veuillez renseigner le montant du bail");
             return errors;
         }
         if (!StringUtils.hasLength(dto.getAbrvCodeBail())) {
@@ -21,6 +22,9 @@ public class BailVillaDtoValidator {
         }
         if (!StringUtils.hasLength(dto.getDesignationBail())) {
             errors.add("Veuillez renseigner la désignation");
+        }
+        if (dto.getNouveauMontantLoyer()==0) {
+            errors.add("Veuillez renseigner le montant du bail");
         }
         return errors;
     }

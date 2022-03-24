@@ -5,7 +5,7 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 
 public interface BailVillaService {
-    BailVillaDto save(BailVillaDto dto);
+    BailVillaDto saveNewBailVilla(BailVillaDto dto);
 
     boolean delete(Long id);
 

@@ -44,7 +44,7 @@ public class BailVillaController {
     @Operation(summary = "Creation et mise à jour d'un Bail Villa", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<BailVillaDto> save(@RequestBody BailVillaDto dto) {
         log.info("We are going to save a new Bail Magasin {}", dto);
-        return ResponseEntity.ok(bailVillaService.save(dto));
+        return ResponseEntity.ok(bailVillaService.saveNewBailVilla(dto));
     }
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))

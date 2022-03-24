@@ -5,23 +5,26 @@ import java.time.LocalDate;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Villa;
 
+import com.bzdata.gestimospringbackend.repository.VillaRepository;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailVillaDto {
     Long id;
+    Long idAgence;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;
     boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
-
+    double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
     VillaDto villaDto;
@@ -34,6 +37,7 @@ public class BailVillaDto {
         return BailVillaDto.builder()
                 .abrvCodeBail(bailLocation.getAbrvCodeBail())
                 .archiveBail(bailLocation.isArchiveBail())
+                .idAgence(bailLocation.getIdAgence())
                 .dateDebut(bailLocation.getDateDebut())
                 .dateFin(bailLocation.getDateFin())
                 .designationBail(bailLocation.getDesignationBail())
@@ -46,22 +50,23 @@ public class BailVillaDto {
                 .build();
     }
 
-    public static BailLocation toEntity(BailVillaDto bailMagasinDto) {
-        if (bailMagasinDto == null) {
+    public static BailLocation toEntity(BailVillaDto bailVillaDto) {
+        if (bailVillaDto == null) {
             return null;
         }
         BailLocation bailLocation = new BailLocation();
-        bailLocation.setAbrvCodeBail(bailMagasinDto.getAbrvCodeBail());
+        bailLocation.setAbrvCodeBail(bailVillaDto.getAbrvCodeBail());
         bailLocation.setArchiveBail(bailLocation.isArchiveBail());
-        bailLocation.setBienImmobilierOperation(VillaDto.toEntity(bailMagasinDto.getVillaDto()));
-        bailLocation.setDateDebut(bailMagasinDto.getDateDebut());
-        bailLocation.setDateFin(bailMagasinDto.getDateFin());
-        bailLocation.setDesignationBail(bailMagasinDto.getDesignationBail());
-        bailLocation.setEnCoursBail(bailMagasinDto.isEnCoursBail());
-        bailLocation.setId(bailMagasinDto.getId());
-        bailLocation.setMontantCautionBail(bailMagasinDto.getMontantCautionBail());
-        bailLocation.setNbreMoisCautionBail(bailMagasinDto.getNbreMoisCautionBail());
-        bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailMagasinDto.getUtilisateurRequestDto()));
+        bailLocation.setBienImmobilierOperation(VillaDto.toEntity(bailVillaDto.getVillaDto()));
+        bailLocation.setIdAgence(bailVillaDto.getIdAgence());
+        bailLocation.setDateDebut(bailVillaDto.getDateDebut());
+        bailLocation.setDateFin(bailVillaDto.getDateFin());
+        bailLocation.setDesignationBail(bailVillaDto.getDesignationBail());
+        bailLocation.setEnCoursBail(bailVillaDto.isEnCoursBail());
+        bailLocation.setId(bailVillaDto.getId());
+        bailLocation.setMontantCautionBail(bailVillaDto.getMontantCautionBail());
+        bailLocation.setNbreMoisCautionBail(bailVillaDto.getNbreMoisCautionBail());
+        bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailVillaDto.getUtilisateurRequestDto()));
 
         return bailLocation;
     }

@@ -75,12 +75,14 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             String message=mailContentBuilder.build("Merci de vous être enregistré a Gestimoweb, Cliquer sur le lien " +
                     "ci-dessous pour activer votre account: "+ ACTIVATION_EMAIL+"/"+token+"\n");
             mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",saveUser.getEmail(),message));
+            log.info("We are same a geran user and Agence also !!!");
             return AgenceResponseDto.fromEntity(saveAgence);
         }
 
         else {
                 log.error("This user is already exist");
-            return null;
+            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmailAgence(),
+                    ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
             }
 
     }

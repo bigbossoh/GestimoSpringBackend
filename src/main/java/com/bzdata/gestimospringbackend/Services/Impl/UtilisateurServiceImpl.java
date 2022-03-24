@@ -73,7 +73,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return UtilisateurRequestDto.fromEntity(saveLocataire);
         } else {
             log.error("We cannot save this locataire because this user is already exist");
-            return null;
+            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmail(),
+                    ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
         }
     }
 
@@ -134,7 +135,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return UtilisateurRequestDto.fromEntity(saveProprietaire);
         } else {
             log.error("We cannot save this propriétaire because this user is already exist");
-            return null;
+            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmail(),
+                    ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
         }
     }
 
@@ -168,7 +170,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return UtilisateurRequestDto.fromEntity(saveGerant);
         } else {
             log.error("We cannot save this gerant because this user is already exist");
-            return null;
+            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmail(),
+                    ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
         }
     }
 
