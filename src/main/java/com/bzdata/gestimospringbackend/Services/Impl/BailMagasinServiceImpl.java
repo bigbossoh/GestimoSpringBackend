@@ -3,11 +3,12 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
-import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailMagasinService;
+import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -33,13 +34,16 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailMagasinServiceImpl implements BailMagasinService {
+
     final BailLocationRepository bailLocationRepository;
     final UtilisateurRepository utilisateurRepository;
     final MagasinRepository magasinRepository;
+    final MontantLoyerBailService montantLoyerBailService;
+    final AppelLoyerService appelLoyerService;
 
     @Override
     public BailMagasinDto save(BailMagasinDto dto) {
-        log.info("We are going to create  a new Bail Magasin {}", dto);
+        log.info("We are going to create  a new Bail Magasin in the service layer {}", dto);
         List<String> errors = BailMagasinDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("le bail magasin n'est pas valide {}", errors);
@@ -61,6 +65,30 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             dto.setMagasinDto(magasinDto);
             dto.setUtilisateurRequestDto(utilisateurRequestDto);
             BailLocation magasinBail = bailLocationRepository.save(BailMagasinDto.toEntity(dto));
+            /**
+             * Mise a jour du status de l'object Magasin
+             */
+            magasinDto.setOccupied(true);
+            magasinDto.setStatutBien("Occupied");
+            magasinRepository.save(MagasinDto.toEntity(magasinDto));
+            /**
+             * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
+             */
+            MontantLoyerBail montantLoyerBail= new MontantLoyerBail();
+            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
+            montantLoyerBail.setBailLocation(magasinBail);
+            montantLoyerBail.setIdAgence(magasinBail.getIdAgence());
+            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            /**
+             *Creation de l'appel loyer
+             */
+            AppelLoyerRequestDto appelLoyerRequestDto= new AppelLoyerRequestDto();
+
+            appelLoyerRequestDto.setIdBailLocation(magasinBail.getId());
+            appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
+            appelLoyerRequestDto.setIdAgence(magasinBail.getIdAgence());
+
+            appelLoyerService.save(appelLoyerRequestDto);
             return BailMagasinDto.fromEntity(magasinBail);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "

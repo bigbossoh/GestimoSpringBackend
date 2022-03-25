@@ -15,13 +15,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailMagasinDto {
     Long id;
+    Long idAgence;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;
     boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
-
+    double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
     MagasinDto magasinDto;
@@ -33,6 +34,7 @@ public class BailMagasinDto {
         }
         return BailMagasinDto.builder()
                 .abrvCodeBail(bailLocation.getAbrvCodeBail())
+                .idAgence(bailLocation.getIdAgence())
                 .archiveBail(bailLocation.isArchiveBail())
                 .dateDebut(bailLocation.getDateDebut())
                 .dateFin(bailLocation.getDateFin())
@@ -52,6 +54,7 @@ public class BailMagasinDto {
         }
         BailLocation bailLocation = new BailLocation();
         bailLocation.setAbrvCodeBail(bailMagasinDto.getAbrvCodeBail());
+        bailLocation.setIdAgence(bailMagasinDto.getIdAgence());
         bailLocation.setArchiveBail(bailLocation.isArchiveBail());
         bailLocation.setBienImmobilierOperation(MagasinDto.toEntity(bailMagasinDto.getMagasinDto()));
         bailLocation.setDateDebut(bailMagasinDto.getDateDebut());

@@ -44,6 +44,10 @@ public class EtageServiceImpl implements EtageService {
             throw new InvalidEntityException("Certain attributs de l'object Etage sont null.",
                     ErrorCodes.ETAGE_NOT_VALID, errors);
         }
+        /**
+         * Set the Immeuble object from its Id
+         */
+        dto.setImmeubleDto(immeubleService.findById(dto.getImmeubleDto().getId()));
         Etage etage = etageRepository.save(EtageDto.toEntity(dto));
         return EtageDto.fromEntity(etage);
     }

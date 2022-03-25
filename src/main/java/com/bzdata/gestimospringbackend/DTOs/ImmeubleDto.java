@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class ImmeubleDto {
     Long id;
     Long numBien;
+    Long idAgence;
     String statutBien;
     String denominationBien;
     String nomBien;
@@ -22,6 +23,7 @@ public class ImmeubleDto {
     boolean isOccupied;
 
     SiteRequestDto siteRequestDto;
+    UtilisateurRequestDto utilisateurRequestDto;
 
     int nbrEtage;
     int nbrePieceImmeuble;
@@ -41,6 +43,7 @@ public class ImmeubleDto {
                 .descriptionImmeuble(immeuble.getDescriptionImmeuble())
                 // .denominationBien(immeuble.getDenominationBien())
                 // .etatBien(immeuble.getEtatBien())
+                .idAgence(immeuble.getIdAgence())
                 .isGarrage(immeuble.isGarrage())
                 .isOccupied(immeuble.isOccupied())
                 .nbrEtage(immeuble.getNbrEtage())
@@ -49,6 +52,7 @@ public class ImmeubleDto {
                 .numBien(immeuble.getNumBien())
                 .numeroImmeuble(immeuble.getNumeroImmeuble())
                 .siteRequestDto(SiteRequestDto.fromEntity(immeuble.getSite()))
+                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(immeuble.getUtilisateur()))
                 .build();
     }
 
@@ -61,6 +65,7 @@ public class ImmeubleDto {
         // immeuble.setDenominationBien(dto.getDenominationBien());
         immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
         // immeuble.setEtatBien(dto.getEtatBien());
+        immeuble.setIdAgence(dto.getIdAgence());
         immeuble.setGarrage(dto.isGarrage());
         immeuble.setId(dto.getId());
         immeuble.setNbrEtage(dto.getNbrEtage());
@@ -72,6 +77,7 @@ public class ImmeubleDto {
         immeuble.setStatutBien(dto.getStatutBien());
         immeuble.setSuperficieBien(dto.getSuperficieBien());
         immeuble.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
+        immeuble.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
 
         return immeuble;
     }
