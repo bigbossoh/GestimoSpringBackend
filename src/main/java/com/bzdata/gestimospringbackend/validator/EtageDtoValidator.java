@@ -13,6 +13,9 @@ public class EtageDtoValidator {
 
         if (dto == null) {
             errors.add("VCertain champs sont vide");
+            errors.add("Veuillez selectionner un immeuble");
+            errors.add("Veuillez renseigner l'abreviation");
+            errors.add("Veuillez renseigner le nom");
 
             return errors;
         }
@@ -21,6 +24,9 @@ public class EtageDtoValidator {
         }
         if (!StringUtils.hasLength(dto.getNomEtage())) {
             errors.add("Veuillez renseigner le nom");
+        }
+        if(dto.getImmeubleDto()==null || dto.getImmeubleDto().getId()==null){
+            errors.add("Veuillez selectionner un immeuble");
         }
         return errors;
     }

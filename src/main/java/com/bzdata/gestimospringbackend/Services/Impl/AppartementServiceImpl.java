@@ -108,6 +108,10 @@ public class AppartementServiceImpl implements AppartementService {
             throw new InvalidEntityException("Certain attributs de l'object Appartement sont null.",
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
+        /**
+         * Set the Etage object from its Id
+         */
+        dto.setEtageDto(etageService.findById(dto.getEtageDto().getId()));
         Appartement appartement = appartementRepository.save(AppartementDto.toEntity(dto));
         return AppartementDto.fromEntity(appartement);
     }

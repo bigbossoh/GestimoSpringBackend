@@ -5,7 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
+import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
 import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 import com.bzdata.gestimospringbackend.Services.SiteService;
@@ -13,6 +15,8 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
+import com.bzdata.gestimospringbackend.repository.SiteRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.ImmeubleDtoValidator;
 
 import org.springframework.data.domain.Sort;
@@ -33,19 +37,52 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ImmeubleServiceImpl implements ImmeubleService {
     final SiteService siteService;
+    final SiteRepository siteRepository;
     final ImmeubleRepository immeubleRepository;
+    final UtilisateurRepository utilisateurRepository;
 
     @Override
     public ImmeubleDto save(ImmeubleDto dto) {
-        log.info("We are going to create  a new Immeuble {}", dto);
+        log.info("We are going to create  a new Immeuble from layer service implemebtation {}", dto);
         List<String> errors = ImmeubleDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("l'Immeuble n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Immeuble sont null.",
                     ErrorCodes.IMMEUBLE_NOT_VALID, errors);
         }
-        Immeuble immeuble = immeubleRepository.save(ImmeubleDto.toEntity(dto));
-        return ImmeubleDto.fromEntity(immeuble);
+        /**
+         * Recherche du Site
+         */
+        SiteRequestDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteRequestDto::fromEntity).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
+                        ErrorCodes.SITE_NOT_FOUND));
+
+        /**
+         *  Recherche du proprietaire
+         */
+        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
+                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("PROPRIETAIRE")) {
+
+            dto.setSiteRequestDto(recoverySite);
+            dto.setUtilisateurRequestDto(utilisateurRequestDto);
+            //TODO
+            /**
+             * set abreviation et nom de l'immeuble
+             */
+            Immeuble immeuble = immeubleRepository.save(ImmeubleDto.toEntity(dto));
+            return ImmeubleDto.fromEntity(immeuble);
+        }
+        else{
+            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
+        }
+
     }
 
     @Override
