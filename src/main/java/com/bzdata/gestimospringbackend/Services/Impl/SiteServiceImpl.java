@@ -23,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service
 @Slf4j
 @Transactional
@@ -42,10 +41,11 @@ public class SiteServiceImpl implements SiteService {
             throw new InvalidEntityException("Certain attributs de l'object site sont null.",
                     ErrorCodes.SITE_NOT_VALID, errors);
         }
-        dto.setQuartierDto(quartierRepository.findById(dto.getQuartierDto().getId()).map(QuartierDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException("Aucun Quartier has been found with Code " + dto.getQuartierDto().getId(),
-                        ErrorCodes.SITE_NOT_FOUND)
-        ));
+        dto.setQuartierDto(
+                quartierRepository.findById(dto.getQuartierDto().getId()).map(QuartierDto::fromEntity).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Quartier has been found with Code " + dto.getQuartierDto().getId(),
+                                ErrorCodes.SITE_NOT_FOUND)));
         Site site = siteRepository.save(SiteRequestDto.toEntity(dto));
         return SiteResponseDto.fromEntity(site);
     }
@@ -76,7 +76,7 @@ public class SiteServiceImpl implements SiteService {
     @Override
     public SiteResponseDto findById(Long id) {
         log.info("We are going to get back the Site By ID : {}", id);
-        if (id==null) {
+        if (id == null) {
             log.error("you are not provided a Site.");
             return null;
         }

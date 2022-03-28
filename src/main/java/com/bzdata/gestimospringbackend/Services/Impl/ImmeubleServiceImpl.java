@@ -53,13 +53,14 @@ public class ImmeubleServiceImpl implements ImmeubleService {
         /**
          * Recherche du Site
          */
-        SiteRequestDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId()).map(SiteRequestDto::fromEntity).orElseThrow(
-                () -> new InvalidEntityException(
-                        "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
-                        ErrorCodes.SITE_NOT_FOUND));
+        SiteRequestDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId())
+                .map(SiteRequestDto::fromEntity).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
+                                ErrorCodes.SITE_NOT_FOUND));
 
         /**
-         *  Recherche du proprietaire
+         * Recherche du proprietaire
          */
         UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
                 .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
@@ -70,14 +71,13 @@ public class ImmeubleServiceImpl implements ImmeubleService {
 
             dto.setSiteRequestDto(recoverySite);
             dto.setUtilisateurRequestDto(utilisateurRequestDto);
-            //TODO
+            // TODO
             /**
              * set abreviation et nom de l'immeuble
              */
             Immeuble immeuble = immeubleRepository.save(ImmeubleDto.toEntity(dto));
             return ImmeubleDto.fromEntity(immeuble);
-        }
-        else{
+        } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
