@@ -34,8 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(
                         "/**/login", "/**/accountVerification/**", "/**/pays/**", "/**/sites/**", "/**/ville/**",
                         "/**/commune/**", "/**/quartier/**", "/**/villa/**", "/**/magasin/**",
-                        "/**/immeuble/**", "/**/commune/**", "/**/quartier/**", "/**/etage/**","/**/appelloyer/**",
-                        "/**/montantloyerbail/**",
+                        "/**/immeuble/**", "/**/commune/**", "/**/quartier/**", "/**/etage/**", "/**/appelloyer/**",
+                        "/**/montantloyerbail/**", "/**/especeencaissement/**",
                         "/**/studio/**", "/**/appartement/**", "/**/bailmagasin/**", "/**/bailvilla/**",
                         "/**/utilisateurs/singup", "/swagger-ui/**", "/v3/api-docs/**")
 
