@@ -54,7 +54,7 @@ public class VilleServiceImpl implements VilleService {
         if (oldVille.isEmpty()) {
             Ville ville = new Ville();
             PaysDto paysDto = paysService.findById(dto.getIdPays());
-            ville.setAbrvVille(dto.getAbrvVille());
+            ville.setAbrvVille(paysDto.getAbrvPays() + "-" + dto.getAbrvVille());
             ville.setNomVille(dto.getNomVille());
             ville.setPays(PaysDto.toEntity(paysDto));
             Ville villeSave = villeRepository.save(ville);
@@ -62,7 +62,7 @@ public class VilleServiceImpl implements VilleService {
         } else {
 
             PaysDto paysDto = paysService.findById(dto.getIdPays());
-            oldVille.get().setAbrvVille(dto.getAbrvVille());
+            oldVille.get().setAbrvVille(paysDto.getAbrvPays() + "-" + dto.getAbrvVille());
             oldVille.get().setNomVille(dto.getNomVille());
             oldVille.get().setPays(PaysDto.toEntity(paysDto));
             Ville villeSave = villeRepository.save(oldVille.get());

@@ -35,6 +35,8 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
     @Override
     public EspeceEncaissementDto save(EspeceEncaissementDto dto) {
         EspeceEncaissement especeEncaissement = new EspeceEncaissement();
+        double soldeLoyer = 0;
+
         log.info("Nous allons faire un encaiisement par especes {}", dto);
         List<String> errors = EspeceEncaissementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -55,42 +57,51 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         // especeEncaissement.set
 
         EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
+        // calcul des soldes
+        soldeLoyer = appelLoyer.getMontantBailLPeriode() - dto.getMontantEncaissement();
+        appelLoyer.setSoldeAppelLoyer(soldeLoyer);
+        if (soldeLoyer == 0) {
+            appelLoyer.setSolderAppelLoyer(true);
+        } else {
+            appelLoyer.setSolderAppelLoyer(false);
+        }
+        appelLoyerRepository.save(appelLoyer);
         return EspeceEncaissementDto.fromEntity(especeEncaissementSave);
     }
 
     @Override
     public boolean delete(Long id) {
-        // TODO Auto-generated method stub
+
         return false;
     }
 
     @Override
     public List<EspeceEncaissementDto> findAll() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public EspeceEncaissementDto findById(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public EspeceEncaissementDto findByName(String nom) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public List<EspeceEncaissementDto> findAllByIdBienImmobilier(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
     @Override
     public List<EspeceEncaissementDto> findAllByIdLocataire(Long id) {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
