@@ -25,7 +25,7 @@ public class EtageDtoValidator {
         if (!StringUtils.hasLength(dto.getNomEtage())) {
             errors.add("Veuillez renseigner le nom");
         }
-        if(dto.getImmeubleDto()==null || dto.getImmeubleDto().getId()==null){
+        if (dto.getIdImmeuble() == null) {
             errors.add("Veuillez selectionner un immeuble");
         }
         return errors;

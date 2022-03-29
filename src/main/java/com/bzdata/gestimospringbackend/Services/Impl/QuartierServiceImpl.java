@@ -40,6 +40,7 @@ public class QuartierServiceImpl implements QuartierService {
 
     @Override
     public QuartierDto save(QuartierDto dto) {
+        Quartier quartier = new Quartier();
         log.info("We are going to create  a new Quartier {}", dto);
         List<String> errors = QuartierDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -47,8 +48,14 @@ public class QuartierServiceImpl implements QuartierService {
             throw new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
                     ErrorCodes.QUARTIER_NOT_VALID, errors);
         }
-        Quartier quartier = quartierRepository.save(QuartierDto.toEntity(dto));
-        return QuartierDto.fromEntity(quartier);
+        Commune commune = communeRepository.findById(dto.getIdCommune())
+                .orElseThrow(() -> new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
+                        ErrorCodes.COMMUNE_NOT_FOUND, errors));
+        quartier.setAbrvQuartier(dto.getAbrvQuartier());
+        quartier.setNomQuartier(dto.getNomQuartier());
+        quartier.setCommune(commune);
+        Quartier quartierSave = quartierRepository.save(quartier);
+        return QuartierDto.fromEntity(quartierSave);
     }
 
     @Override
@@ -58,13 +65,6 @@ public class QuartierServiceImpl implements QuartierService {
             log.error("you are provided a null ID for the Quartier");
             return false;
         }
-        /*
-         * List<VilleDto> villePays = villeService.findAllByIdPays(id);
-         * if (villePays.size() != 0) {
-         * log.error("Pays Contains Ville");
-         * return false;
-         * }
-         */
         boolean exist = communeRepository.existsById(id);
         if (!exist) {
             throw new EntityNotFoundException("Aucun Quartier avec l'ID = " + id + " "
@@ -123,7 +123,7 @@ public class QuartierServiceImpl implements QuartierService {
             log.error("Commune not found for the Quiartier.");
             return null;
         }
-        return quartierRepository.findByCommune(CommuneDto.toEntity(CommuneDto.fromEntity(c.get()))).stream()
+        return quartierRepository.findByCommune(c.get()).stream()
                 .map(QuartierDto::fromEntity)
                 .collect(Collectors.toList());
     }

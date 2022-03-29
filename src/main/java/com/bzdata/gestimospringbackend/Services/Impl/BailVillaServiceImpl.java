@@ -3,6 +3,8 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Models.Villa;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailVillaService;
 import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
@@ -39,9 +41,9 @@ public class BailVillaServiceImpl implements BailVillaService {
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
 
-
     @Override
     public BailVillaDto saveNewBailVilla(BailVillaDto dto) {
+        BailLocation bailLocationVilla = new BailLocation();
         log.info("We are going to create  a new Bail Villa {}", dto);
         List<String> errors = BailVillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -50,49 +52,57 @@ public class BailVillaServiceImpl implements BailVillaService {
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
 
-        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("LOCATAIRE")) {
+        if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
 
-            VillaDto villaDto = villaRepository.findById(dto.getVillaDto().getId()).map(VillaDto::fromEntity)
+            Villa villa = villaRepository.findById(dto.getIdVilla())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucune Villa has been found with code " + dto.getVillaDto().getId(),
+                            "Aucune Villa has been found with code " + dto.getIdVilla(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            dto.setVillaDto(villaDto);
-            dto.setUtilisateurRequestDto(utilisateurRequestDto);
-            BailLocation villaBail = bailLocationRepository.save(BailVillaDto.toEntity(dto));
-            /**
-             * Mise a jour du status de l'object Villa
-             */
-            villaDto.setOccupied(true);
-            villaDto.setStatutBien("Occupied");
-            villaRepository.save(VillaDto.toEntity(villaDto));
+            bailLocationVilla.setVillaBail(villa);
+            bailLocationVilla.setUtilisateurOperation(utilisateur);
+            bailLocationVilla.setAbrvCodeBail(dto.getAbrvCodeBail());
+            bailLocationVilla.setArchiveBail(false);
+            bailLocationVilla.setDateDebut(dto.getDateDebut());
+            bailLocationVilla.setDateFin(dto.getDateFin());
+            bailLocationVilla.setDesignationBail(dto.getDesignationBail());
+            bailLocationVilla.setEnCoursBail(true);
+            bailLocationVilla.setMontantCautionBail(dto.getMontantCautionBail());
+            bailLocationVilla.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
+            bailLocationVilla.setVillaBail(villa);
+
+            BailLocation villaBailSave = bailLocationRepository.save(bailLocationVilla);
+
+            villa.setOccupied(true);
+            villa.setStatutBien("Occupied");
+            villaRepository.save(villa);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
              */
-            MontantLoyerBail montantLoyerBail= new MontantLoyerBail();
+            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
-            montantLoyerBail.setBailLocation(villaBail);
-            montantLoyerBail.setIdAgence(villaBail.getIdAgence());
+            montantLoyerBail.setBailLocation(villaBailSave);
+            montantLoyerBail.setIdAgence(villaBailSave.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
             /**
-             *Creation de l'appel loyer
+             * Creation de l'appel loyer
              */
-            AppelLoyerRequestDto appelLoyerRequestDto= new AppelLoyerRequestDto();
+            AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
 
-            appelLoyerRequestDto.setIdBailLocation(villaBail.getId());
+            appelLoyerRequestDto.setIdBailLocation(villaBailSave.getId());
             appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
-            appelLoyerRequestDto.setIdAgence(villaBail.getIdAgence());
+            appelLoyerRequestDto.setIdAgence(villaBailSave.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
 
-            return BailVillaDto.fromEntity(villaBail);
+            return BailVillaDto.fromEntity(villaBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
 

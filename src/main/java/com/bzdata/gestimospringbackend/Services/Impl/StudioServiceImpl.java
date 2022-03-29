@@ -3,14 +3,14 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 import com.bzdata.gestimospringbackend.DTOs.StudioDto;
+import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Studio;
-import com.bzdata.gestimospringbackend.Services.EtageService;
 import com.bzdata.gestimospringbackend.Services.StudioService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.repository.StudioRepository;
 import com.bzdata.gestimospringbackend.validator.StudioDtoValidator;
 
@@ -32,10 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StudioServiceImpl implements StudioService {
     final StudioRepository studioRepository;
-    final EtageService etageService;
+    // final EtageService etageService;
+    final EtageRepository etageRepository;
 
     @Override
     public StudioDto save(StudioDto dto) {
+        Studio studio = new Studio();
         log.info("We are going to create  a new Studio {}", dto);
         List<String> errors = StudioDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -43,8 +45,16 @@ public class StudioServiceImpl implements StudioService {
             throw new InvalidEntityException("Certain attributs de l'object Studio sont null.",
                     ErrorCodes.STUDIO_NOT_VALID, errors);
         }
-        Studio studio = studioRepository.save(StudioDto.toEntity(dto));
-        return StudioDto.fromEntity(studio);
+        Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
+                "Aucun étage trouvé",
+                ErrorCodes.ETAGE_NOT_FOUND, errors));
+        studio.setAbrvNomStudio(dto.getAbrvNomStudio());
+        studio.setEtageStudio(etage);
+        studio.setNomStudio(dto.getNomStudio());
+        studio.setNumeroStudio(dto.getNumeroStudio());
+        studio.setDescStudio(dto.getDescStudio());
+        Studio studioSave = studioRepository.save(studio);
+        return StudioDto.fromEntity(studioSave);
     }
 
     @Override
@@ -102,12 +112,14 @@ public class StudioServiceImpl implements StudioService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        EtageDto etage = etageService.findById(id);
+        Etage etage = etageRepository.findById(id).orElseThrow(() -> new InvalidEntityException(
+                "Aucun étage trouvé",
+                ErrorCodes.ETAGE_NOT_FOUND));
         if (etage == null) {
             log.error("Studio not found for the Etage.");
             return null;
         }
-        return studioRepository.findByEtageStudio(EtageDto.toEntity(etage)).stream()
+        return studioRepository.findByEtageStudio(etage).stream()
                 .map(StudioDto::fromEntity)
                 .collect(Collectors.toList());
     }

@@ -26,10 +26,10 @@ public class ImmeubleDtoValidator {
         // if (!StringUtils.hasLength(dto.getEtatBien())) {
         // errors.add("Veuillez renseigner l'état.");
         // }
-        if (dto.getSiteRequestDto() == null || dto.getSiteRequestDto().getId() == null) {
+        if (dto.getIdSite() == null) {
             errors.add("Veuillez selectionner le site de l'immeuble");
         }
-        if (dto.getUtilisateurRequestDto() == null || dto.getUtilisateurRequestDto().getId() == null) {
+        if (dto.getIdUtilisateur() == null) {
             errors.add("Veuillez selectionner un utilisateur");
         }
         return errors;

@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -15,19 +14,19 @@ public class MagasinDto {
     Long idAgence;
     Long numBien;
     String statutBien;
-    boolean isArchived= false;
+    boolean isArchived;
     String abrvBienimmobilier;
     String description;
     String nomBien;
     double superficieBien;
-    boolean isOccupied= false;
-    boolean isUnderBuildingMagasin= false;
+    boolean isOccupied;
+    boolean isUnderBuildingMagasin;
     String abrvNomMagasin;
     int nmbrPieceMagasin;
     String nomMagasin;
-    EtageDto etageMagasinDto;
-    SiteRequestDto siteRequestDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idEtage;
+    Long idSite;
+    Long idUtilisateur;
 
     public static MagasinDto fromEntity(Magasin magasin) {
         if (magasin == null) {
@@ -49,35 +48,36 @@ public class MagasinDto {
                 .abrvNomMagasin(magasin.getAbrvNomMagasin())
                 .nmbrPieceMagasin(magasin.getNmbrPieceMagasin())
                 .nomMagasin(magasin.getNomMagasin())
-                .etageMagasinDto(EtageDto.fromEntity(magasin.getEtageMagasin()))
-                .siteRequestDto(SiteRequestDto.fromEntity(magasin.getSite()))
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(magasin.getUtilisateur()))
+                .idEtage(magasin.getEtageMagasin().getId())
+                .idSite(magasin.getSite().getId())
+                .idUtilisateur(magasin.getUtilisateur().getId())
                 .build();
     }
-    public static Magasin toEntity(MagasinDto dto) {
 
-        if (dto == null) {
-            return null;
-        }
-        Magasin m = new Magasin();
-        m.setId(dto.getId());
-        m.setIdAgence(dto.getIdAgence());
-        m.setNumBien(dto.getNumBien());
-        m.setStatutBien(dto.getStatutBien());
-        m.setArchived(dto.isArchived());
-        m.setAbrvBienimmobilier(dto.getAbrvBienimmobilier());
-        m.setDescription(dto.getDescription());
-        m.setNomBien(dto.getNomBien());
-        m.setSuperficieBien(dto.getSuperficieBien());
-        m.setOccupied(dto.isOccupied());
-        m.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
-        m.setAbrvNomMagasin(dto.getAbrvNomMagasin());
-        m.setNmbrPieceMagasin(dto.getNmbrPieceMagasin());
-        m.setNomMagasin(dto.getNomMagasin());
-       m.setEtageMagasin(EtageDto.toEntity(dto.getEtageMagasinDto()));
-       m.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
-       m.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
-        return m;
+    // public static Magasin toEntity(MagasinDto dto) {
 
-    }
+    // if (dto == null) {
+    // return null;
+    // }
+    // Magasin m = new Magasin();
+    // m.setId(dto.getId());
+    // m.setIdAgence(dto.getIdAgence());
+    // m.setNumBien(dto.getNumBien());
+    // m.setStatutBien(dto.getStatutBien());
+    // m.setArchived(dto.isArchived());
+    // m.setAbrvBienimmobilier(dto.getAbrvBienimmobilier());
+    // m.setDescription(dto.getDescription());
+    // m.setNomBien(dto.getNomBien());
+    // m.setSuperficieBien(dto.getSuperficieBien());
+    // m.setOccupied(dto.isOccupied());
+    // m.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
+    // m.setAbrvNomMagasin(dto.getAbrvNomMagasin());
+    // m.setNmbrPieceMagasin(dto.getNmbrPieceMagasin());
+    // m.setNomMagasin(dto.getNomMagasin());
+    // m.setEtageMagasin(EtageDto.toEntity(dto.getEtageMagasinDto()));
+    // m.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
+    // m.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
+    // return m;
+
+    // }
 }

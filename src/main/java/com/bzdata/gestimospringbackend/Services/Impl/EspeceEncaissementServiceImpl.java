@@ -2,7 +2,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.EspeceEncaissementDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
@@ -35,6 +34,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
 
     @Override
     public EspeceEncaissementDto save(EspeceEncaissementDto dto) {
+        EspeceEncaissement especeEncaissement = new EspeceEncaissement();
         log.info("Nous allons faire un encaiisement par especes {}", dto);
         List<String> errors = EspeceEncaissementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -46,11 +46,15 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
                 .orElseThrow(() -> new InvalidEntityException(
                         "Aucun Appel n'a été trouvé avec l'Id " + dto.getIdAppelLoyerEncaissement(),
                         ErrorCodes.APPELLOYER_NOT_FOUND));
-        dto.setAppelLoyerDto(AppelLoyerDto.fromEntity(appelLoyer));
-
         UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdAppelLoyerEncaissement());
-        dto.setUtilisateurDto(utilisateurRequestDto);
-        EspeceEncaissement especeEncaissementSave = encaissementRepository.save(EspeceEncaissementDto.toEntity(dto));
+
+        especeEncaissement.setAppelLoyerEncaissement(appelLoyer);
+        especeEncaissement.setDateEncaissement(dto.getDateEncaissement());
+        especeEncaissement.setMontantEncaissement(dto.getMontantEncaissement());
+        especeEncaissement.setUtilisateurEncaissement(UtilisateurRequestDto.toEntity(utilisateurRequestDto));
+        // especeEncaissement.set
+
+        EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
         return EspeceEncaissementDto.fromEntity(especeEncaissementSave);
     }
 

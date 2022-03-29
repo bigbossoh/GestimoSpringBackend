@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.DTOs;
 import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Villa;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,8 +24,8 @@ public class BailVillaDto {
     double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
-    VillaDto villaDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idVilla;
+    Long idUtilisateur;
 
     public static BailVillaDto fromEntity(BailLocation bailLocation) {
         if (bailLocation == null) {
@@ -41,31 +40,31 @@ public class BailVillaDto {
                 .designationBail(bailLocation.getDesignationBail())
                 .enCoursBail(bailLocation.isEnCoursBail())
                 .id(bailLocation.getId())
-                .villaDto(VillaDto.fromEntity((Villa) bailLocation.getBienImmobilierOperation()))
+                .idVilla(bailLocation.getVillaBail().getId())
                 .montantCautionBail(bailLocation.getMontantCautionBail())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(bailLocation.getUtilisateurOperation()))
+                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
                 .build();
     }
 
-    public static BailLocation toEntity(BailVillaDto bailVillaDto) {
-        if (bailVillaDto == null) {
-            return null;
-        }
-        BailLocation bailLocation = new BailLocation();
-        bailLocation.setAbrvCodeBail(bailVillaDto.getAbrvCodeBail());
-        bailLocation.setArchiveBail(bailLocation.isArchiveBail());
-        bailLocation.setBienImmobilierOperation(VillaDto.toEntity(bailVillaDto.getVillaDto()));
-        bailLocation.setIdAgence(bailVillaDto.getIdAgence());
-        bailLocation.setDateDebut(bailVillaDto.getDateDebut());
-        bailLocation.setDateFin(bailVillaDto.getDateFin());
-        bailLocation.setDesignationBail(bailVillaDto.getDesignationBail());
-        bailLocation.setEnCoursBail(bailVillaDto.isEnCoursBail());
-        bailLocation.setId(bailVillaDto.getId());
-        bailLocation.setMontantCautionBail(bailVillaDto.getMontantCautionBail());
-        bailLocation.setNbreMoisCautionBail(bailVillaDto.getNbreMoisCautionBail());
-        bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailVillaDto.getUtilisateurRequestDto()));
+    // public static BailLocation toEntity(BailVillaDto bailVillaDto) {
+    // if (bailVillaDto == null) {
+    // return null;
+    // }
+    // BailLocation bailLocation = new BailLocation();
+    // bailLocation.setAbrvCodeBail(bailVillaDto.getAbrvCodeBail());
+    // bailLocation.setArchiveBail(bailLocation.isArchiveBail());
+    // bailLocation.setBienImmobilierOperation(VillaDto.toEntity(bailVillaDto.getVillaDto()));
+    // bailLocation.setIdAgence(bailVillaDto.getIdAgence());
+    // bailLocation.setDateDebut(bailVillaDto.getDateDebut());
+    // bailLocation.setDateFin(bailVillaDto.getDateFin());
+    // bailLocation.setDesignationBail(bailVillaDto.getDesignationBail());
+    // bailLocation.setEnCoursBail(bailVillaDto.isEnCoursBail());
+    // bailLocation.setId(bailVillaDto.getId());
+    // bailLocation.setMontantCautionBail(bailVillaDto.getMontantCautionBail());
+    // bailLocation.setNbreMoisCautionBail(bailVillaDto.getNbreMoisCautionBail());
+    // bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailVillaDto.getUtilisateurRequestDto()));
 
-        return bailLocation;
-    }
+    // return bailLocation;
+    // }
 }

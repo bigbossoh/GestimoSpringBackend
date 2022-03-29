@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
-import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
+import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Services.AppartementService;
-import com.bzdata.gestimospringbackend.Services.EtageService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
+import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.validator.AppartementDtoValidator;
 
 import org.springframework.data.domain.Sort;
@@ -32,7 +32,8 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppartementServiceImpl implements AppartementService {
     public final AppartementRepository appartementRepository;
-    final EtageService etageService;
+
+    final EtageRepository etageRepository;
 
     @Override
     public boolean delete(Long id) {
@@ -89,18 +90,17 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        EtageDto etage = etageService.findById(id);
-        if (etage == null) {
-            log.error("Appartement not found for the Etage.");
-            return null;
-        }
-        return appartementRepository.findByEtageAppartement(EtageDto.toEntity(etage)).stream()
+        Etage etage = etageRepository.findById(id).orElseThrow(() -> new InvalidEntityException(
+                "Aucun Appartement has been found with id " + id,
+                ErrorCodes.APPARTEMENT_NOT_FOUND));
+        return appartementRepository.findByEtageAppartement(etage).stream()
                 .map(AppartementDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
     public AppartementDto save(AppartementDto dto) {
+        Appartement appartement = new Appartement();
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -108,12 +108,22 @@ public class AppartementServiceImpl implements AppartementService {
             throw new InvalidEntityException("Certain attributs de l'object Appartement sont null.",
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
-        /**
-         * Set the Etage object from its Id
-         */
-        dto.setEtageDto(etageService.findById(dto.getEtageDto().getId()));
-        Appartement appartement = appartementRepository.save(AppartementDto.toEntity(dto));
-        return AppartementDto.fromEntity(appartement);
+        Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
+                "Aucun Etage has been found with id " + dto.getIdEtage(),
+                ErrorCodes.APPARTEMENT_NOT_FOUND));
+        appartement.setAbrvNomApp(dto.getAbrvNomApp());
+        appartement.setEtageAppartement(etage);
+        appartement.setMeubleApp(dto.isMeubleApp());
+        appartement.setNbrPieceApp(dto.getNbrPieceApp());
+        appartement.setNbreChambreApp(dto.getNbreChambreApp());
+        appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
+        appartement.setNbreSalonApp(dto.getNbreSalonApp());
+        appartement.setNomApp(dto.getNomApp());
+        appartement.setNumeroApp(dto.getNumeroApp());
+        appartement.setResidence(dto.isResidence());
+
+        Appartement appartementSave = appartementRepository.save(appartement);
+        return AppartementDto.fromEntity(appartementSave);
     }
 
 }

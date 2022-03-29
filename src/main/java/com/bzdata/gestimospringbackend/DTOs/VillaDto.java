@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
+
 import com.bzdata.gestimospringbackend.Models.Villa;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,8 +28,8 @@ public class VillaDto {
     String nomBien;
     double superficieBien;
     boolean isOccupied;
-    SiteRequestDto siteRequestDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idSite;
+    Long idUtilisateur;
 
     public static VillaDto fromEntity(Villa villa) {
         if (villa == null) {
@@ -53,38 +54,38 @@ public class VillaDto {
                 .abrvBienimmobilier(villa.getAbrvBienimmobilier())
                 .statutBien(villa.getStatutBien())
                 .numBien(villa.getNumBien())
-                .siteRequestDto(SiteRequestDto.fromEntity(villa.getSite()))
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(villa.getUtilisateur()))
+                .idSite(villa.getSite().getId())
+                .idUtilisateur(villa.getUtilisateur().getId())
                 .build();
     }
 
-    public static Villa toEntity(VillaDto dto) {
+    // public static Villa toEntity(VillaDto dto) {
 
-        if (dto == null) {
-            return null;
-        }
-        Villa v = new Villa();
-        v.setId(dto.getId());
-        v.setIdAgence(dto.getIdAgence());
-        v.setNbrChambreVilla(dto.getNbrChambreVilla());
-        v.setNomBien(dto.getNomBien());
-        v.setSuperficieBien(dto.getSuperficieBien());
-        v.setNbrePiece(dto.getNbrePiece());
-        v.setNbrSalonVilla(dto.getNbrSalonVilla());
-        v.setOccupied(dto.isOccupied());
-        v.setArchived(dto.isArchived());
-        v.setGarageVilla(dto.isGarageVilla());
-        v.setNbreVoitureGarageVilla(dto.getNbreVoitureGarageVilla());
-        v.setAbrvVilla(dto.getAbrvVilla());
-        v.setNomVilla(dto.getNomVilla());
-        v.setNbrSalleEauVilla(dto.getNbrSalleEauVilla());
-        v.setDescription(dto.getDescription());
-        v.setAbrvBienimmobilier(dto.getAbrvBienimmobilier());
-        v.setStatutBien(dto.getStatutBien());
-        v.setNumBien(dto.getNumBien());
-        v.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
-        v.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
-        return v;
+    // if (dto == null) {
+    // return null;
+    // }
+    // Villa v = new Villa();
+    // v.setId(dto.getId());
+    // v.setIdAgence(dto.getIdAgence());
+    // v.setNbrChambreVilla(dto.getNbrChambreVilla());
+    // v.setNomBien(dto.getNomBien());
+    // v.setSuperficieBien(dto.getSuperficieBien());
+    // v.setNbrePiece(dto.getNbrePiece());
+    // v.setNbrSalonVilla(dto.getNbrSalonVilla());
+    // v.setOccupied(dto.isOccupied());
+    // v.setArchived(dto.isArchived());
+    // v.setGarageVilla(dto.isGarageVilla());
+    // v.setNbreVoitureGarageVilla(dto.getNbreVoitureGarageVilla());
+    // v.setAbrvVilla(dto.getAbrvVilla());
+    // v.setNomVilla(dto.getNomVilla());
+    // v.setNbrSalleEauVilla(dto.getNbrSalleEauVilla());
+    // v.setDescription(dto.getDescription());
+    // v.setAbrvBienimmobilier(dto.getAbrvBienimmobilier());
+    // v.setStatutBien(dto.getStatutBien());
+    // v.setNumBien(dto.getNumBien());
+    // v.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
+    // v.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
+    // return v;
 
-    }
+    // }
 }

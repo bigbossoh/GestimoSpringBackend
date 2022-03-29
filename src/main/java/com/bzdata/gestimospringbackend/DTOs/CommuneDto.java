@@ -12,10 +12,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommuneDto {
     Long id;
-    private Long idAgence;
+    Long idAgence;
     String abrvCommune;
     String nomCommune;
-    VilleDto villeDto;
+    Long idVille;
 
     public static CommuneDto fromEntity(Commune commune) {
         if (commune == null) {
@@ -26,19 +26,6 @@ public class CommuneDto {
                 .abrvCommune(commune.getAbrvCommune())
                 .nomCommune(commune.getNomCommune())
                 .idAgence(commune.getIdAgence())
-                .villeDto(VilleDto.fromEntity(commune.getVille())).build();
-    }
-
-    public static Commune toEntity(CommuneDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Commune commune = new Commune();
-        commune.setId(dto.getId());
-        commune.setAbrvCommune(dto.getAbrvCommune());
-        commune.setNomCommune(dto.getNomCommune());
-        commune.setIdAgence(dto.getIdAgence());
-        commune.setVille(VilleDto.toEntity(dto.getVilleDto()));
-        return commune;
+                .idVille(commune.getVille().getId()).build();
     }
 }

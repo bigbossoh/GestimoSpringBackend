@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
@@ -35,12 +36,13 @@ import lombok.extern.slf4j.Slf4j;
 public class VilleServiceImpl implements VilleService {
 
     final VilleRepository villeRepository;
-    // final PaysRepository paysRepository;
+
     final CommuneService communeService;
     final PaysService paysService;
 
     @Override
     public VilleDto save(VilleDto dto) {
+
         log.info("We are going to create  a new Ville {}", dto);
         List<String> errors = VilleDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -48,8 +50,25 @@ public class VilleServiceImpl implements VilleService {
             throw new InvalidEntityException("Certain attributs de l'object Ville sont null.",
                     ErrorCodes.VILLE_NOT_VALID, errors);
         }
-        Ville ville = villeRepository.save(VilleDto.toEntity(dto));
-        return VilleDto.fromEntity(ville);
+        Optional<Ville> oldVille = villeRepository.findById(dto.getId());
+        if (oldVille.isEmpty()) {
+            Ville ville = new Ville();
+            PaysDto paysDto = paysService.findById(dto.getIdPays());
+            ville.setAbrvVille(dto.getAbrvVille());
+            ville.setNomVille(dto.getNomVille());
+            ville.setPays(PaysDto.toEntity(paysDto));
+            Ville villeSave = villeRepository.save(ville);
+            return VilleDto.fromEntity(villeSave);
+        } else {
+
+            PaysDto paysDto = paysService.findById(dto.getIdPays());
+            oldVille.get().setAbrvVille(dto.getAbrvVille());
+            oldVille.get().setNomVille(dto.getNomVille());
+            oldVille.get().setPays(PaysDto.toEntity(paysDto));
+            Ville villeSave = villeRepository.save(oldVille.get());
+            return VilleDto.fromEntity(villeSave);
+        }
+
     }
 
     @Override

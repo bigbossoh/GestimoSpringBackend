@@ -38,6 +38,7 @@ public class CommuneServiceImpl implements CommuneService {
 
     @Override
     public CommuneDto save(CommuneDto dto) {
+        Commune commune = new Commune();
         log.info("We are going to create  a new Commune {}", dto);
         List<String> errors = CommuneValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -45,8 +46,14 @@ public class CommuneServiceImpl implements CommuneService {
             throw new InvalidEntityException("Certain attributs de l'object Commune sont null.",
                     ErrorCodes.COMMUNE_NOT_VALID, errors);
         }
-        Commune commune = communeRepository.save(CommuneDto.toEntity(dto));
-        return CommuneDto.fromEntity(commune);
+        Ville ville = villeRepository.findById(dto.getIdVille())
+                .orElseThrow(
+                        () -> new InvalidEntityException("Impossible de trouver la ville", ErrorCodes.VILLE_NOT_FOUND));
+        commune.setAbrvCommune(dto.getAbrvCommune());
+        commune.setNomCommune(dto.getNomCommune());
+        commune.setVille(ville);
+        Commune communeSave = communeRepository.save(commune);
+        return CommuneDto.fromEntity(communeSave);
     }
 
     @Override
@@ -103,7 +110,8 @@ public class CommuneServiceImpl implements CommuneService {
             log.error("you are not provided a Ville.");
             return null;
         }
-        return communeRepository.findByVille(VilleDto.toEntity(villeDto)).stream().map(CommuneDto::fromEntity)
+
+        return communeRepository.findByVille(villeDto.getId()).stream().map(CommuneDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
@@ -120,7 +128,7 @@ public class CommuneServiceImpl implements CommuneService {
             log.error("Commune not found for the Ville.");
             return null;
         }
-        return communeRepository.findByVille(VilleDto.toEntity(VilleDto.fromEntity(v.get()))).stream()
+        return communeRepository.findByVille(id).stream()
                 .map(CommuneDto::fromEntity)
                 .collect(Collectors.toList());
     }

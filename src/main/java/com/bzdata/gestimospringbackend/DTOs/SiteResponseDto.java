@@ -14,7 +14,7 @@ public class SiteResponseDto {
     private Long idAgence;
     String abrSite;
     String nomSite;
-    QuartierDto quartierDto;
+    Long idQuartier;
 
     public static SiteResponseDto fromEntity(Site site) {
         if (site == null) {
@@ -37,20 +37,20 @@ public class SiteResponseDto {
                         + "-" + site.getQuartier().getCommune().getVille().getNomVille()
                         + "-" + site.getQuartier().getCommune().getNomCommune()
                         + "-" + site.getQuartier().getNomQuartier())
-                .quartierDto(QuartierDto.fromEntity(site.getQuartier()))
+                .idQuartier(site.getQuartier().getId())
                 .build();
     }
 
-    public static Site toEntity(SiteResponseDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Site site = new Site();
-        site.setId(dto.getId());
-        site.setAbrSite(dto.getAbrSite());
-        site.setNomSite(dto.getNomSite());
-        site.setIdAgence(dto.getIdAgence());
-        site.setQuartier(QuartierDto.toEntity(dto.getQuartierDto()));
-        return site;
-    }
+    // public static Site toEntity(SiteResponseDto dto) {
+    // if (dto == null) {
+    // return null;
+    // }
+    // Site site = new Site();
+    // site.setId(dto.getId());
+    // site.setAbrSite(dto.getAbrSite());
+    // site.setNomSite(dto.getNomSite());
+    // site.setIdAgence(dto.getIdAgence());
+    // site.setQuartier(QuartierDto.toEntity(dto.getQuartierDto()));
+    // return site;
+    // }
 }
