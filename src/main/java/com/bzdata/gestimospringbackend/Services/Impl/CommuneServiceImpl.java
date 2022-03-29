@@ -38,7 +38,8 @@ public class CommuneServiceImpl implements CommuneService {
 
     @Override
     public CommuneDto save(CommuneDto dto) {
-        Commune commune = new Commune();
+        Optional<Commune> oldCommune = communeRepository.findById(dto.getId());
+
         log.info("We are going to create  a new Commune {}", dto);
         List<String> errors = CommuneValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -46,14 +47,30 @@ public class CommuneServiceImpl implements CommuneService {
             throw new InvalidEntityException("Certain attributs de l'object Commune sont null.",
                     ErrorCodes.COMMUNE_NOT_VALID, errors);
         }
-        Ville ville = villeRepository.findById(dto.getIdVille())
-                .orElseThrow(
-                        () -> new InvalidEntityException("Impossible de trouver la ville", ErrorCodes.VILLE_NOT_FOUND));
-        commune.setAbrvCommune(dto.getAbrvCommune());
-        commune.setNomCommune(dto.getNomCommune());
-        commune.setVille(ville);
-        Commune communeSave = communeRepository.save(commune);
-        return CommuneDto.fromEntity(communeSave);
+        if (oldCommune.isPresent()) {
+
+            Ville ville = villeRepository.findById(dto.getIdVille())
+                    .orElseThrow(
+                            () -> new InvalidEntityException("Impossible de trouver la ville",
+                                    ErrorCodes.VILLE_NOT_FOUND));
+            oldCommune.get().setAbrvCommune(ville.getAbrvVille() + "-" + dto.getAbrvCommune());
+            oldCommune.get().setNomCommune(dto.getNomCommune());
+            oldCommune.get().setVille(ville);
+            Commune communeSave = communeRepository.save(oldCommune.get());
+            return CommuneDto.fromEntity(communeSave);
+        } else {
+            Commune commune = new Commune();
+            Ville ville = villeRepository.findById(dto.getIdVille())
+                    .orElseThrow(
+                            () -> new InvalidEntityException("Impossible de trouver la ville",
+                                    ErrorCodes.VILLE_NOT_FOUND));
+            commune.setAbrvCommune(ville.getAbrvVille() + "-" + dto.getAbrvCommune());
+            commune.setNomCommune(dto.getNomCommune());
+            commune.setVille(ville);
+            Commune communeSave = communeRepository.save(commune);
+            return CommuneDto.fromEntity(communeSave);
+        }
+
     }
 
     @Override

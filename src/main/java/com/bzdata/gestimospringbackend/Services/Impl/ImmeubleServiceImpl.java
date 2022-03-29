@@ -41,7 +41,10 @@ public class ImmeubleServiceImpl implements ImmeubleService {
 
     @Override
     public ImmeubleDto save(ImmeubleDto dto) {
-        Immeuble immeuble = new Immeuble();
+
+        int numeroDubien = immeubleRepository.getMaxNumImmeuble();
+
+        Optional<Immeuble> oldimmeuble = immeubleRepository.findById(dto.getId());
         log.info("We are going to create  a new Immeuble from layer service implemebtation {}", dto);
         List<String> errors = ImmeubleDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -66,13 +69,45 @@ public class ImmeubleServiceImpl implements ImmeubleService {
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("PROPRIETAIRE")) {
+            if (oldimmeuble.isPresent()) {
+                oldimmeuble.get().setSite(site);
+                oldimmeuble.get().setUtilisateur(utilisateur);
+                // oldimmeuble.get()
+                // .setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + (numeroDubien + 1));
+                oldimmeuble.get().setGarrage(dto.isGarrage());
+                // oldimmeuble.get().setArchived(dto.i);
+                oldimmeuble.get().setDescription(dto.getDescriptionImmeuble());
+                // immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + (numeroDubien +
+                // 1));
+                oldimmeuble.get().setNbrEtage(dto.getNbrEtage());
+                oldimmeuble.get().setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
+                oldimmeuble.get().setNomBien(dto.getNomBien());
+                // oldimmeuble.get().setNumBien(n);// a changer
+                oldimmeuble.get().setNumeroImmeuble(dto.getNumeroImmeuble());
+                oldimmeuble.get().setOccupied(dto.isOccupied());
+                oldimmeuble.get().setStatutBien(dto.getStatutBien());
+                oldimmeuble.get().setSuperficieBien(dto.getSuperficieBien());
 
+                Immeuble immeubleSave = immeubleRepository.save(oldimmeuble.get());
+                return ImmeubleDto.fromEntity(immeubleSave);
+            }
+            Immeuble immeuble = new Immeuble();
             immeuble.setSite(site);
             immeuble.setUtilisateur(utilisateur);
-            // TODO
-            /**
-             * set abreviation et nom de l'immeuble
-             */
+            immeuble.setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
+            immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
+            immeuble.setGarrage(dto.isGarrage());
+            // immeuble.setArchived(immeuble.isArchived());
+            immeuble.setDescription(dto.getDescriptionImmeuble());
+            immeuble.setNbrEtage(dto.getNbrEtage());
+            immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
+            immeuble.setNomBien(dto.getNomBien());
+            // immeuble.setNumBien(n);// a changer
+            immeuble.setNumeroImmeuble(numeroDubien + 1);
+            immeuble.setOccupied(false);
+            immeuble.setStatutBien(dto.getStatutBien());
+            immeuble.setSuperficieBien(dto.getSuperficieBien());
+
             Immeuble immeubleSave = immeubleRepository.save(immeuble);
             return ImmeubleDto.fromEntity(immeubleSave);
         } else {
@@ -80,7 +115,6 @@ public class ImmeubleServiceImpl implements ImmeubleService {
                     + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
-
     }
 
     @Override

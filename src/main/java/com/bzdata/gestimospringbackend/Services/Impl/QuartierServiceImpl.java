@@ -40,7 +40,7 @@ public class QuartierServiceImpl implements QuartierService {
 
     @Override
     public QuartierDto save(QuartierDto dto) {
-        Quartier quartier = new Quartier();
+
         log.info("We are going to create  a new Quartier {}", dto);
         List<String> errors = QuartierDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -48,14 +48,29 @@ public class QuartierServiceImpl implements QuartierService {
             throw new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
                     ErrorCodes.QUARTIER_NOT_VALID, errors);
         }
-        Commune commune = communeRepository.findById(dto.getIdCommune())
-                .orElseThrow(() -> new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
-                        ErrorCodes.COMMUNE_NOT_FOUND, errors));
-        quartier.setAbrvQuartier(dto.getAbrvQuartier());
-        quartier.setNomQuartier(dto.getNomQuartier());
-        quartier.setCommune(commune);
-        Quartier quartierSave = quartierRepository.save(quartier);
-        return QuartierDto.fromEntity(quartierSave);
+        Optional<Quartier> oldQuatier = quartierRepository.findById(dto.getId());
+        if (oldQuatier.isEmpty()) {
+            Quartier quartier = new Quartier();
+            Commune commune = communeRepository.findById(dto.getIdCommune())
+                    .orElseThrow(() -> new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
+                            ErrorCodes.COMMUNE_NOT_FOUND, errors));
+            quartier.setAbrvQuartier(commune.getAbrvCommune() + "-" + dto.getAbrvQuartier());
+            quartier.setNomQuartier(dto.getNomQuartier());
+            quartier.setCommune(commune);
+            Quartier quartierSave = quartierRepository.save(quartier);
+            return QuartierDto.fromEntity(quartierSave);
+        } else {
+
+            Commune commune = communeRepository.findById(dto.getIdCommune())
+                    .orElseThrow(() -> new InvalidEntityException("Certain attributs de l'object Quartier sont null.",
+                            ErrorCodes.COMMUNE_NOT_FOUND, errors));
+            oldQuatier.get().setAbrvQuartier(commune.getAbrvCommune() + "-" + dto.getAbrvQuartier());
+            oldQuatier.get().setNomQuartier(dto.getNomQuartier());
+            oldQuatier.get().setCommune(commune);
+            Quartier quartierSave = quartierRepository.save(oldQuatier.get());
+            return QuartierDto.fromEntity(quartierSave);
+        }
+
     }
 
     @Override

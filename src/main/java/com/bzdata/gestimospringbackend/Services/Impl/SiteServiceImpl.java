@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
@@ -36,7 +37,8 @@ public class SiteServiceImpl implements SiteService {
 
     @Override
     public SiteResponseDto save(SiteRequestDto dto) {
-        Site site = new Site();
+        Optional<Site> oldSite = siteRepository.findById(dto.getId());
+
         log.info("We are going to create  a new site {}", dto);
         List<String> errors = SiteDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -44,16 +46,30 @@ public class SiteServiceImpl implements SiteService {
             throw new InvalidEntityException("Certain attributs de l'object site sont null.",
                     ErrorCodes.SITE_NOT_VALID, errors);
         }
+        if (oldSite.isPresent()) {
 
-        Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
-                () -> new InvalidEntityException(
-                        "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
-                        ErrorCodes.SITE_NOT_FOUND));
-        site.setAbrSite(dto.getAbrSite());
-        site.setNomSite(dto.getNomSite());
-        site.setQuartier(quartier);
-        Site siteSave = siteRepository.save(site);
-        return SiteResponseDto.fromEntity(siteSave);
+            Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                    () -> new InvalidEntityException(
+                            "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                            ErrorCodes.SITE_NOT_FOUND));
+            oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+            oldSite.get().setNomSite(dto.getNomSite());
+            oldSite.get().setQuartier(quartier);
+            Site siteSave = siteRepository.save(oldSite.get());
+            return SiteResponseDto.fromEntity(siteSave);
+        } else {
+            Site site = new Site();
+            Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                    () -> new InvalidEntityException(
+                            "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                            ErrorCodes.SITE_NOT_FOUND));
+            site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+            site.setNomSite(dto.getNomSite());
+            site.setQuartier(quartier);
+            Site siteSave = siteRepository.save(site);
+            return SiteResponseDto.fromEntity(siteSave);
+        }
+
     }
 
     @Override
