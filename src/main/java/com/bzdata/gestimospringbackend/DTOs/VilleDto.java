@@ -16,7 +16,7 @@ public class VilleDto {
     Long idAgence;
     String abrvVille;
     String nomVille;
-    PaysDto paysDto;
+    Long idPays;
 
     public static VilleDto fromEntity(Ville ville) {
         if (ville == null) {
@@ -27,22 +27,7 @@ public class VilleDto {
                 .idAgence(ville.getIdAgence())
                 .abrvVille(ville.getAbrvVille())
                 .nomVille(ville.getNomVille())
-                .paysDto(PaysDto.fromEntity(ville.getPays()))
+                .idPays(ville.getPays().getId())
                 .build();
-    }
-
-    public static Ville toEntity(VilleDto dto) {
-
-        if (dto == null) {
-            return null;
-        }
-        Ville v = new Ville();
-        v.setId(dto.getId());
-        v.setIdAgence(dto.getIdAgence());
-        v.setAbrvVille(dto.getAbrvVille());
-        v.setNomVille(dto.getNomVille());
-        v.setPays(PaysDto.toEntity(dto.getPaysDto()));
-        return v;
-
     }
 }

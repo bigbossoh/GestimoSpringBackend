@@ -22,8 +22,8 @@ public class ImmeubleDto {
     double superficieBien;
     boolean isOccupied;
 
-    SiteRequestDto siteRequestDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idSite;
+    Long idUtilisateur;
 
     int nbrEtage;
     int nbrePieceImmeuble;
@@ -51,34 +51,34 @@ public class ImmeubleDto {
                 .nomBien(immeuble.getNomBien())
                 .numBien(immeuble.getNumBien())
                 .numeroImmeuble(immeuble.getNumeroImmeuble())
-                .siteRequestDto(SiteRequestDto.fromEntity(immeuble.getSite()))
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(immeuble.getUtilisateur()))
+                .idSite(immeuble.getSite().getId())
+                .idUtilisateur(immeuble.getUtilisateur().getId())
                 .build();
     }
 
-    public static Immeuble toEntity(ImmeubleDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Immeuble immeuble = new Immeuble();
-        immeuble.setAbrvNomImmeuble(dto.getAbrvNomImmeuble());
-        // immeuble.setDenominationBien(dto.getDenominationBien());
-        immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
-        // immeuble.setEtatBien(dto.getEtatBien());
-        immeuble.setIdAgence(dto.getIdAgence());
-        immeuble.setGarrage(dto.isGarrage());
-        immeuble.setId(dto.getId());
-        immeuble.setNbrEtage(dto.getNbrEtage());
-        immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-        immeuble.setNomBien(dto.getNomBien());
-        immeuble.setNumBien(dto.getNumBien());
-        immeuble.setNumeroImmeuble(dto.getNumeroImmeuble());
-        immeuble.setOccupied(dto.isOccupied());
-        immeuble.setStatutBien(dto.getStatutBien());
-        immeuble.setSuperficieBien(dto.getSuperficieBien());
-        immeuble.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
-        immeuble.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
+    // public static Immeuble toEntity(ImmeubleDto dto) {
+    // if (dto == null) {
+    // return null;
+    // }
+    // Immeuble immeuble = new Immeuble();
+    // immeuble.setAbrvNomImmeuble(dto.getAbrvNomImmeuble());
+    // // immeuble.setDenominationBien(dto.getDenominationBien());
+    // immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
+    // // immeuble.setEtatBien(dto.getEtatBien());
+    // immeuble.setIdAgence(dto.getIdAgence());
+    // immeuble.setGarrage(dto.isGarrage());
+    // immeuble.setId(dto.getId());
+    // immeuble.setNbrEtage(dto.getNbrEtage());
+    // immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
+    // immeuble.setNomBien(dto.getNomBien());
+    // immeuble.setNumBien(dto.getNumBien());
+    // immeuble.setNumeroImmeuble(dto.getNumeroImmeuble());
+    // immeuble.setOccupied(dto.isOccupied());
+    // immeuble.setStatutBien(dto.getStatutBien());
+    // immeuble.setSuperficieBien(dto.getSuperficieBien());
+    // immeuble.setSite(SiteRequestDto.toEntity(dto.getSiteRequestDto()));
+    // immeuble.setUtilisateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
 
-        return immeuble;
-    }
+    // return immeuble;
+    // }
 }

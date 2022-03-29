@@ -21,7 +21,7 @@ public class AppartementDto {
     int numeroApp;
     String abrvNomApp;
     String nomApp;
-    EtageDto etageDto;
+    Long idEtage;
 
     public static AppartementDto fromEntity(Appartement appartement) {
         if (appartement == null) {
@@ -30,7 +30,7 @@ public class AppartementDto {
         return AppartementDto.builder()
                 .id(appartement.getId())
                 .abrvNomApp(appartement.getAbrvNomApp())
-                .etageDto(EtageDto.fromEntity(appartement.getEtageAppartement()))
+                .idEtage(appartement.getEtageAppartement().getId())
                 .isResidence(appartement.isResidence())
                 .meubleApp(appartement.isMeubleApp())
                 .nbrPieceApp(appartement.getNbrPieceApp())
@@ -42,22 +42,22 @@ public class AppartementDto {
                 .build();
     }
 
-    public static Appartement toEntity(AppartementDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Appartement appartement = new Appartement();
-        appartement.setAbrvNomApp(dto.getAbrvNomApp());
-        appartement.setEtageAppartement(EtageDto.toEntity(dto.getEtageDto()));
-        appartement.setId(dto.getId());
-        appartement.setMeubleApp(dto.isMeubleApp());
-        appartement.setNbrPieceApp(dto.getNbrPieceApp());
-        appartement.setNbreChambreApp(dto.getNbreChambreApp());
-        appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
-        appartement.setNumeroApp(dto.getNumeroApp());
-        appartement.setNomApp(dto.getNomApp());
-        appartement.setResidence(dto.isResidence());
+    // public static Appartement toEntity(AppartementDto dto) {
+    // if (dto == null) {
+    // return null;
+    // }
+    // Appartement appartement = new Appartement();
+    // appartement.setAbrvNomApp(dto.getAbrvNomApp());
+    // appartement.setEtageAppartement(EtageDto.toEntity(dto.getEtageDto()));
+    // appartement.setId(dto.getId());
+    // appartement.setMeubleApp(dto.isMeubleApp());
+    // appartement.setNbrPieceApp(dto.getNbrPieceApp());
+    // appartement.setNbreChambreApp(dto.getNbreChambreApp());
+    // appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
+    // appartement.setNumeroApp(dto.getNumeroApp());
+    // appartement.setNomApp(dto.getNomApp());
+    // appartement.setResidence(dto.isResidence());
 
-        return appartement;
-    }
+    // return appartement;
+    // }
 }

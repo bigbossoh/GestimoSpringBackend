@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.validator;
+
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 
 import java.util.ArrayList;
@@ -15,13 +16,13 @@ public class VillaDtoValidator {
             return errors;
         }
 
-        if(dto.getIdAgence()==null){
+        if (dto.getIdAgence() == null) {
             errors.add("Veuillez renseignez l'Id de l'agence");
         }
-        if(dto.getSiteRequestDto()==null || dto.getSiteRequestDto().getId()==null){
+        if (dto.getIdSite() == null) {
             errors.add("Veuillez selectionner une le site");
         }
-        if(dto.getUtilisateurRequestDto()==null || dto.getUtilisateurRequestDto().getId()==null){
+        if (dto.getIdUtilisateur() == null) {
             errors.add("Veuillez selectionner un utilisateur");
         }
 
@@ -29,4 +30,3 @@ public class VillaDtoValidator {
     }
 
 }
-

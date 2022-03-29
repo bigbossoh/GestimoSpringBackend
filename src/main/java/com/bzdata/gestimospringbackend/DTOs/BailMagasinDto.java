@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.DTOs;
 import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Magasin;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -25,8 +24,8 @@ public class BailMagasinDto {
     double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
-    MagasinDto magasinDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idMagasin;
+    Long idUtilisateur;
 
     public static BailMagasinDto fromEntity(BailLocation bailLocation) {
         if (bailLocation == null) {
@@ -41,31 +40,29 @@ public class BailMagasinDto {
                 .designationBail(bailLocation.getDesignationBail())
                 .enCoursBail(bailLocation.isEnCoursBail())
                 .id(bailLocation.getId())
-                .magasinDto(MagasinDto.fromEntity((Magasin) bailLocation.getBienImmobilierOperation()))
-                .montantCautionBail(bailLocation.getMontantCautionBail())
+                .idMagasin(bailLocation.getMagasinBail().getId())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(bailLocation.getUtilisateurOperation()))
+                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
                 .build();
     }
+    // public static BailLocation toEntity(BailMagasinDto bailMagasinDto) {
+    // if (bailMagasinDto == null) {
+    // return null;
+    // }
+    // BailLocation bailLocation = new BailLocation();
+    // bailLocation.setAbrvCodeBail(bailMagasinDto.getAbrvCodeBail());
+    // bailLocation.setIdAgence(bailMagasinDto.getIdAgence());
+    // bailLocation.setArchiveBail(bailLocation.isArchiveBail());
+    // bailLocation.setBienImmobilierOperation(MagasinDto.toEntity(bailMagasinDto.getMagasinDto()));
+    // bailLocation.setDateDebut(bailMagasinDto.getDateDebut());
+    // bailLocation.setDateFin(bailMagasinDto.getDateFin());
+    // bailLocation.setDesignationBail(bailMagasinDto.getDesignationBail());
+    // bailLocation.setEnCoursBail(bailMagasinDto.isEnCoursBail());
+    // bailLocation.setId(bailMagasinDto.getId());
+    // bailLocation.setMontantCautionBail(bailMagasinDto.getMontantCautionBail());
+    // bailLocation.setNbreMoisCautionBail(bailMagasinDto.getNbreMoisCautionBail());
+    // bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailMagasinDto.getUtilisateurRequestDto()));
 
-    public static BailLocation toEntity(BailMagasinDto bailMagasinDto) {
-        if (bailMagasinDto == null) {
-            return null;
-        }
-        BailLocation bailLocation = new BailLocation();
-        bailLocation.setAbrvCodeBail(bailMagasinDto.getAbrvCodeBail());
-        bailLocation.setIdAgence(bailMagasinDto.getIdAgence());
-        bailLocation.setArchiveBail(bailLocation.isArchiveBail());
-        bailLocation.setBienImmobilierOperation(MagasinDto.toEntity(bailMagasinDto.getMagasinDto()));
-        bailLocation.setDateDebut(bailMagasinDto.getDateDebut());
-        bailLocation.setDateFin(bailMagasinDto.getDateFin());
-        bailLocation.setDesignationBail(bailMagasinDto.getDesignationBail());
-        bailLocation.setEnCoursBail(bailMagasinDto.isEnCoursBail());
-        bailLocation.setId(bailMagasinDto.getId());
-        bailLocation.setMontantCautionBail(bailMagasinDto.getMontantCautionBail());
-        bailLocation.setNbreMoisCautionBail(bailMagasinDto.getNbreMoisCautionBail());
-        bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailMagasinDto.getUtilisateurRequestDto()));
-
-        return bailLocation;
-    }
+    // return bailLocation;
+    // }
 }

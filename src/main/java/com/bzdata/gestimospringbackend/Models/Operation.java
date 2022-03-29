@@ -39,4 +39,8 @@ public abstract class Operation extends AbstractEntity {
     Studio studioBail;
     @ManyToOne
     Appartement appartementBail;
+    @ManyToOne
+    Magasin magasinBail;
+    @ManyToOne
+    Villa villaBail;
 }

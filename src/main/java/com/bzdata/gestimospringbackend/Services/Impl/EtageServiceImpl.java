@@ -5,14 +5,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.EtageDto;
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.Models.Etage;
+import com.bzdata.gestimospringbackend.Models.Immeuble;
 import com.bzdata.gestimospringbackend.Services.EtageService;
-import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
+import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.validator.EtageDtoValidator;
 
 import org.springframework.data.domain.Sort;
@@ -33,10 +33,12 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageServiceImpl implements EtageService {
     final EtageRepository etageRepository;
-    final ImmeubleService immeubleService;
+
+    final ImmeubleRepository immeubleRepository;
 
     @Override
     public EtageDto save(EtageDto dto) {
+        Etage etage = new Etage();
         log.info("We are going to create  a new Etage {}", dto);
         List<String> errors = EtageDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -44,12 +46,17 @@ public class EtageServiceImpl implements EtageService {
             throw new InvalidEntityException("Certain attributs de l'object Etage sont null.",
                     ErrorCodes.ETAGE_NOT_VALID, errors);
         }
-        /**
-         * Set the Immeuble object from its Id
-         */
-        dto.setImmeubleDto(immeubleService.findById(dto.getImmeubleDto().getId()));
-        Etage etage = etageRepository.save(EtageDto.toEntity(dto));
-        return EtageDto.fromEntity(etage);
+        Immeuble immeuble = immeubleRepository.findById(dto.getIdImmeuble())
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Impossible de trouver l'immeuble.",
+                        ErrorCodes.IMMEUBLE_NOT_FOUND, errors));
+        etage.setAbrvEtage(dto.getAbrvEtage());
+        etage.setNomEtage(dto.getNomEtage());
+        etage.setNumEtage(dto.getNumEtage());
+        etage.setImmeuble(immeuble);
+
+        Etage etageSave = etageRepository.save(etage);
+        return EtageDto.fromEntity(etageSave);
     }
 
     @Override
@@ -115,12 +122,12 @@ public class EtageServiceImpl implements EtageService {
             log.error("you are not provided a Etage.");
             return null;
         }
-        ImmeubleDto immeubleDto = immeubleService.findById(id);
-        if (immeubleDto == null) {
-            log.error("Etage not found for the Immeuble.");
-            return null;
-        }
-        return etageRepository.findByImmeuble(ImmeubleDto.toEntity(immeubleDto)).stream()
+        Immeuble immeuble = immeubleRepository.findById(id)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Impossible de trouver l'immeuble.",
+                        ErrorCodes.IMMEUBLE_NOT_FOUND));
+
+        return etageRepository.findByImmeuble(immeuble).stream()
                 .map(EtageDto::fromEntity)
                 .collect(Collectors.toList());
     }

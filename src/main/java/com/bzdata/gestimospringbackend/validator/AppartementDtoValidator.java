@@ -24,7 +24,7 @@ public class AppartementDtoValidator {
         if (!StringUtils.hasLength(dto.getNomApp())) {
             errors.add("Veuillez renseigner le nom.");
         }
-        if(dto.getEtageDto()==null || dto.getEtageDto().getId()==null){
+        if (dto.getIdEtage() == null) {
             errors.add("Veuillez selectionner un etage");
         }
 

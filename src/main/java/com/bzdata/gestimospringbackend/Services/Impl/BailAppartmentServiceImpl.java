@@ -3,10 +3,10 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.BailAppartementService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -39,6 +39,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
 
     @Override
     public BailAppartementDto save(BailAppartementDto dto) {
+        BailLocation bailLocation = new BailLocation();
         log.info("We are going to create  a new Bail Appartement {}", dto);
         List<String> errors = BailAppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -47,25 +48,34 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
 
-        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("LOCATAIRE")) {
+        if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
 
-            AppartementDto appartementDto = appartementRepository.findById(dto.getAppartementDto().getId())
-                    .map(AppartementDto::fromEntity)
+            Appartement appartementBail = appartementRepository.findById(dto.getIdAppartement())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucun Appartement has been found with code " + dto.getAppartementDto().getId(),
+                            "Aucun Appartement has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            dto.setAppartementDto(appartementDto);
-            dto.setUtilisateurRequestDto(utilisateurRequestDto);
-            BailLocation appartementBail = bailLocationRepository.save(BailAppartementDto.toEntity(dto));
-            return BailAppartementDto.fromEntity(appartementBail);
+
+            bailLocation.setAppartementBail(appartementBail);
+            bailLocation.setUtilisateurOperation(utilisateur);
+            bailLocation.setArchiveBail(false);
+            bailLocation.setDateDebut(dto.getDateDebut());
+            bailLocation.setDateFin(dto.getDateFin());
+            bailLocation.setDesignationBail(dto.getDesignationBail());
+            bailLocation.setEnCoursBail(true);
+            bailLocation.setMontantCautionBail(dto.getMontantCautionBail());
+            bailLocation.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
+            bailLocation.setUtilisateurOperation(utilisateur);
+
+            BailLocation appartementBailSave = bailLocationRepository.save(bailLocation);
+            return BailAppartementDto.fromEntity(appartementBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
     }

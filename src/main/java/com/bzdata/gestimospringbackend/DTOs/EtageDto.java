@@ -19,7 +19,7 @@ public class EtageDto {
     String nomEtage;
     String AbrvEtage;
     int numEtage;
-    ImmeubleDto immeubleDto;
+    Long idImmeuble;
 
     public static EtageDto fromEntity(Etage etage) {
         if (etage == null) {
@@ -30,20 +30,20 @@ public class EtageDto {
                 .AbrvEtage(etage.getAbrvEtage())
                 .nomEtage(etage.getNomEtage())
                 .numEtage(etage.getNumEtage())
-                .immeubleDto(ImmeubleDto.fromEntity(etage.getImmeuble()))
+                .idImmeuble(etage.getImmeuble().getId())
                 .build();
     }
 
-    public static Etage toEntity(EtageDto etageDto) {
-        if (etageDto == null) {
-            return null;
-        }
-        Etage etage = new Etage();
-        etage.setId(etageDto.getId());
-        etage.setAbrvEtage(etageDto.getAbrvEtage());
-        etage.setNomEtage(etageDto.getNomEtage());
-        etage.setNumEtage(etageDto.getNumEtage());
-        etage.setImmeuble(ImmeubleDto.toEntity(etageDto.getImmeubleDto()));
-        return etage;
-    }
+    // public static Etage toEntity(EtageDto etageDto) {
+    // if (etageDto == null) {
+    // return null;
+    // }
+    // Etage etage = new Etage();
+    // etage.setId(etageDto.getId());
+    // etage.setAbrvEtage(etageDto.getAbrvEtage());
+    // etage.setNomEtage(etageDto.getNomEtage());
+    // etage.setNumEtage(etageDto.getNumEtage());
+    // etage.setImmeuble(ImmeubleDto.toEntity(etageDto.getImmeubleDto()));
+    // return etage;
+    // }
 }

@@ -5,12 +5,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
-import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
+import com.bzdata.gestimospringbackend.Models.Site;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.ImmeubleService;
-import com.bzdata.gestimospringbackend.Services.SiteService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -36,13 +34,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ImmeubleServiceImpl implements ImmeubleService {
-    final SiteService siteService;
+
     final SiteRepository siteRepository;
     final ImmeubleRepository immeubleRepository;
     final UtilisateurRepository utilisateurRepository;
 
     @Override
     public ImmeubleDto save(ImmeubleDto dto) {
+        Immeuble immeuble = new Immeuble();
         log.info("We are going to create  a new Immeuble from layer service implemebtation {}", dto);
         List<String> errors = ImmeubleDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -53,33 +52,32 @@ public class ImmeubleServiceImpl implements ImmeubleService {
         /**
          * Recherche du Site
          */
-        SiteRequestDto recoverySite = siteRepository.findById(dto.getSiteRequestDto().getId())
-                .map(SiteRequestDto::fromEntity).orElseThrow(
-                        () -> new InvalidEntityException(
-                                "Aucun Site has been found with Code " + dto.getSiteRequestDto().getId(),
-                                ErrorCodes.SITE_NOT_FOUND));
+        Site site = siteRepository.findById(dto.getIdSite()).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Site has been found with Code " + dto.getIdSite(),
+                        ErrorCodes.SITE_NOT_FOUND));
 
         /**
          * Recherche du proprietaire
          */
-        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("PROPRIETAIRE")) {
+        if (utilisateur.getUrole().getRoleName().equals("PROPRIETAIRE")) {
 
-            dto.setSiteRequestDto(recoverySite);
-            dto.setUtilisateurRequestDto(utilisateurRequestDto);
+            immeuble.setSite(site);
+            immeuble.setUtilisateur(utilisateur);
             // TODO
             /**
              * set abreviation et nom de l'immeuble
              */
-            Immeuble immeuble = immeubleRepository.save(ImmeubleDto.toEntity(dto));
-            return ImmeubleDto.fromEntity(immeuble);
+            Immeuble immeubleSave = immeubleRepository.save(immeuble);
+            return ImmeubleDto.fromEntity(immeubleSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
 
@@ -147,12 +145,15 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             log.error("you are not provided a Immeuble.");
             return null;
         }
-        SiteResponseDto site = siteService.findById(id);
+        Site site = siteRepository.findById(id).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Site has been found with Code " + id,
+                        ErrorCodes.SITE_NOT_FOUND));
         if (site == null) {
             log.error("Immeuble not found for the Site.");
             return null;
         }
-        return immeubleRepository.findBySite(SiteResponseDto.toEntity(site)).stream()
+        return immeubleRepository.findBySite(site).stream()
                 .map(ImmeubleDto::fromEntity)
                 .collect(Collectors.toList());
     }

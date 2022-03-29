@@ -14,7 +14,7 @@ public class SiteDtoValidator {
             errors.add("Veuillez renseigner un quartier");
             return errors;
         }
-        if (dto.getQuartierDto() == null || dto.getQuartierDto().getId() == null) {
+        if (dto.getIdQuartier() == null) {
             errors.add("Veuillez renseigner un quartier");
         }
 

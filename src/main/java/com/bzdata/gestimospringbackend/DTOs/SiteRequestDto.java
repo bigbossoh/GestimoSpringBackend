@@ -15,8 +15,10 @@ import lombok.experimental.FieldDefaults;
 public class SiteRequestDto {
 
     Long id;
-    QuartierDto quartierDto;
-    private Long idAgence;
+    Long idQuartier;
+    Long idAgence;
+    String abrSite;
+    String nomSite;
 
     public static SiteRequestDto fromEntity(Site site) {
         if (site == null) {
@@ -24,33 +26,36 @@ public class SiteRequestDto {
         }
         return SiteRequestDto.builder()
                 .id(site.getId())
-                .quartierDto(QuartierDto.fromEntity(site.getQuartier()))
+                .idQuartier(site.getQuartier().getId())
                 .idAgence(site.getIdAgence())
+                .abrSite(site.getAbrSite())
+                .nomSite(site.getNomSite())
                 .build();
     }
 
-    public static Site toEntity(SiteRequestDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Site site = new Site();
-        site.setId(dto.getId());
-        site.setIdAgence(dto.getIdAgence());
-        site.setAbrSite(org.apache.commons.lang3.StringUtils
-                .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getVilleDto().getPaysDto().getAbrvPays())
-                + "-"
-                + org.apache.commons.lang3.StringUtils
-                        .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getVilleDto().getAbrvVille())
-                + "-"
-                + org.apache.commons.lang3.StringUtils
-                        .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getAbrvCommune())
-                + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(dto.getQuartierDto().getAbrvQuartier()));
-        site.setNomSite(
-                dto.getQuartierDto().getCommuneDto().getVilleDto().getPaysDto().getNomPays()
-                        + "-" + dto.getQuartierDto().getCommuneDto().getVilleDto().getNomVille()
-                        + "-" + dto.getQuartierDto().getCommuneDto().getNomCommune()
-                        + "-" + dto.getQuartierDto().getNomQuartier());
-        site.setQuartier(QuartierDto.toEntity(dto.getQuartierDto()));
-        return site;
-    }
+    // public static Site toEntity(SiteRequestDto dto) {
+    // if (dto == null) {
+    // return null;
+    // }
+    // Site site = new Site();
+    // site.setId(dto.getId());
+    // site.setIdAgence(dto.getIdAgence());
+    // site.setAbrSite(org.apache.commons.lang3.StringUtils
+    // .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getVilleDto().getPaysDto().getAbrvPays())
+    // + "-"
+    // + org.apache.commons.lang3.StringUtils
+    // .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getVilleDto().getAbrvVille())
+    // + "-"
+    // + org.apache.commons.lang3.StringUtils
+    // .deleteWhitespace(dto.getQuartierDto().getCommuneDto().getAbrvCommune())
+    // + "-" +
+    // org.apache.commons.lang3.StringUtils.deleteWhitespace(dto.getQuartierDto().getAbrvQuartier()));
+    // site.setNomSite(
+    // dto.getQuartierDto().getCommuneDto().getVilleDto().getPaysDto().getNomPays()
+    // + "-" + dto.getQuartierDto().getCommuneDto().getVilleDto().getNomVille()
+    // + "-" + dto.getQuartierDto().getCommuneDto().getNomCommune()
+    // + "-" + dto.getQuartierDto().getNomQuartier());
+    // site.setQuartier(QuartierDto.toEntity(dto.getQuartierDto()));
+    // return site;
+    // }
 }

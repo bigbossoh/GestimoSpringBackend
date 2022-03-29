@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.BailStudioDto;
-import com.bzdata.gestimospringbackend.DTOs.StudioDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.Studio;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.BailStudioService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -40,6 +40,7 @@ public class BailStudioServiceImpl implements BailStudioService {
 
     @Override
     public BailStudioDto save(BailStudioDto dto) {
+        BailLocation bailLocationStudio = new BailLocation();
         log.info("We are going to create  a new Bail Studio {}", dto);
         List<String> errors = BailStudioDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -48,24 +49,33 @@ public class BailStudioServiceImpl implements BailStudioService {
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
 
-        UtilisateurRequestDto utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getUtilisateurRequestDto().getId()).map(UtilisateurRequestDto::fromEntity)
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getUtilisateurRequestDto().getId(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateurRequestDto.getRoleRequestDto().getRoleName().equals("LOCATAIRE")) {
+        if (utilisateur.getUrole().equals("LOCATAIRE")) {
 
-            StudioDto studioDto = studioRepository.findById(dto.getStudioDto().getId()).map(StudioDto::fromEntity)
+            Studio studio = studioRepository.findById(dto.getIdStudio())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucune Villa has been found with code " + dto.getStudioDto().getId(),
+                            "Aucune Villa has been found with code " + dto.getIdStudio(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            dto.setStudioDto(studioDto);
-            dto.setUtilisateurRequestDto(utilisateurRequestDto);
-            BailLocation studioBail = bailLocationRepository.save(BailStudioDto.toEntity(dto));
-            return BailStudioDto.fromEntity(studioBail);
+            bailLocationStudio.setStudioBail(studio);
+            bailLocationStudio.setUtilisateurOperation(utilisateur);
+            bailLocationStudio.setArchiveBail(false);
+            bailLocationStudio.setDateDebut(dto.getDateDebut());
+            bailLocationStudio.setDateFin(dto.getDateFin());
+            bailLocationStudio.setDesignationBail(dto.getDesignationBail());
+            bailLocationStudio.setEnCoursBail(true);
+            bailLocationStudio.setMontantCautionBail(dto.getMontantCautionBail());
+            bailLocationStudio.setAbrvCodeBail(dto.getAbrvCodeBail());
+            bailLocationStudio.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
+
+            BailLocation studioBailSave = bailLocationRepository.save(bailLocationStudio);
+            return BailStudioDto.fromEntity(studioBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleRequestDto().getRoleName(),
+                    + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
 

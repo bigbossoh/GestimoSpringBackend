@@ -13,7 +13,7 @@ public class QuartierDto {
     Long id;
     String abrvQuartier;
     String nomQuartier;
-    CommuneDto communeDto;
+    Long idCommune;
     private Long idAgence;
 
     public static QuartierDto fromEntity(Quartier quartier) {
@@ -24,23 +24,8 @@ public class QuartierDto {
                 .id(quartier.getId())
                 .abrvQuartier(quartier.getAbrvQuartier())
                 .nomQuartier(quartier.getNomQuartier())
-                .communeDto(CommuneDto.fromEntity(quartier.getCommune()))
+                .idCommune(quartier.getCommune().getId())
                 .idAgence(quartier.getIdAgence())
                 .build();
     }
-
-    public static Quartier toEntity(QuartierDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Quartier quartier = new Quartier();
-        quartier.setId(dto.getId());
-        quartier.setAbrvQuartier(dto.getAbrvQuartier());
-        quartier.setNomQuartier(dto.getNomQuartier());
-        quartier.setIdAgence(dto.getIdAgence());
-        quartier.setCommune(CommuneDto.toEntity(dto.getCommuneDto()));
-        return quartier;
-
-    }
-
 }

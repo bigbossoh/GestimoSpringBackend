@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.DTOs;
 import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Studio;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,8 +23,8 @@ public class BailStudioDto {
 
     LocalDate dateDebut;
     LocalDate dateFin;
-    StudioDto studioDto;
-    UtilisateurRequestDto utilisateurRequestDto;
+    Long idStudio;
+    Long idUtilisateur;
 
     public static BailStudioDto fromEntity(BailLocation bailLocation) {
         if (bailLocation == null) {
@@ -39,30 +38,30 @@ public class BailStudioDto {
                 .designationBail(bailLocation.getDesignationBail())
                 .enCoursBail(bailLocation.isEnCoursBail())
                 .id(bailLocation.getId())
-                .studioDto(StudioDto.fromEntity((Studio) bailLocation.getStudioBail()))
+                .idStudio(bailLocation.getStudioBail().getId())
                 .montantCautionBail(bailLocation.getMontantCautionBail())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
-                .utilisateurRequestDto(UtilisateurRequestDto.fromEntity(bailLocation.getUtilisateurOperation()))
+                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
                 .build();
     }
 
-    public static BailLocation toEntity(BailStudioDto bailStudioDto) {
-        if (bailStudioDto == null) {
-            return null;
-        }
-        BailLocation bailLocation = new BailLocation();
-        bailLocation.setAbrvCodeBail(bailStudioDto.getAbrvCodeBail());
-        bailLocation.setArchiveBail(bailLocation.isArchiveBail());
-        bailLocation.setStudioBail(StudioDto.toEntity(bailStudioDto.getStudioDto()));
-        bailLocation.setDateDebut(bailStudioDto.getDateDebut());
-        bailLocation.setDateFin(bailStudioDto.getDateFin());
-        bailLocation.setDesignationBail(bailStudioDto.getDesignationBail());
-        bailLocation.setEnCoursBail(bailStudioDto.isEnCoursBail());
-        bailLocation.setId(bailStudioDto.getId());
-        bailLocation.setMontantCautionBail(bailStudioDto.getMontantCautionBail());
-        bailLocation.setNbreMoisCautionBail(bailStudioDto.getNbreMoisCautionBail());
-        bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailStudioDto.getUtilisateurRequestDto()));
+    // public static BailLocation toEntity(BailStudioDto bailStudioDto) {
+    // if (bailStudioDto == null) {
+    // return null;
+    // }
+    // BailLocation bailLocation = new BailLocation();
+    // bailLocation.setAbrvCodeBail(bailStudioDto.getAbrvCodeBail());
+    // bailLocation.setArchiveBail(bailLocation.isArchiveBail());
+    // bailLocation.setStudioBail(StudioDto.toEntity(bailStudioDto.getStudioDto()));
+    // bailLocation.setDateDebut(bailStudioDto.getDateDebut());
+    // bailLocation.setDateFin(bailStudioDto.getDateFin());
+    // bailLocation.setDesignationBail(bailStudioDto.getDesignationBail());
+    // bailLocation.setEnCoursBail(bailStudioDto.isEnCoursBail());
+    // bailLocation.setId(bailStudioDto.getId());
+    // bailLocation.setMontantCautionBail(bailStudioDto.getMontantCautionBail());
+    // bailLocation.setNbreMoisCautionBail(bailStudioDto.getNbreMoisCautionBail());
+    // bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailStudioDto.getUtilisateurRequestDto()));
 
-        return bailLocation;
-    }
+    // return bailLocation;
+    // }
 }

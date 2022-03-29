@@ -17,7 +17,7 @@ public class StudioDto {
     int numeroStudio;
     String abrvNomStudio;
     String nomStudio;
-    EtageDto etageDto;
+    Long idEtage;
 
     public static StudioDto fromEntity(Studio studio) {
         if (studio == null) {
@@ -29,21 +29,21 @@ public class StudioDto {
                 .descStudio(studio.getDescStudio())
                 .nomStudio(studio.getNomStudio())
                 .numeroStudio(studio.getNumeroStudio())
-                .etageDto(EtageDto.fromEntity(studio.getEtageStudio()))
+                .idEtage(studio.getEtageStudio().getId())
                 .build();
     }
 
-    public static Studio toEntity(StudioDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        Studio studio = new Studio();
-        studio.setAbrvNomStudio(dto.getAbrvNomStudio());
-        studio.setDescStudio(dto.getDescStudio());
-        studio.setId(dto.getId());
-        studio.setNomStudio(dto.getNomStudio());
-        studio.setNumeroStudio(dto.getNumeroStudio());
-        studio.setEtageStudio(EtageDto.toEntity(dto.getEtageDto()));
-        return studio;
-    }
+    // public static Studio toEntity(StudioDto dto) {
+    // if (dto == null) {
+    // return null;
+    // }
+    // Studio studio = new Studio();
+    // studio.setAbrvNomStudio(dto.getAbrvNomStudio());
+    // studio.setDescStudio(dto.getDescStudio());
+    // studio.setId(dto.getId());
+    // studio.setNomStudio(dto.getNomStudio());
+    // studio.setNumeroStudio(dto.getNumeroStudio());
+    // studio.setEtageStudio(EtageDto.toEntity(dto.getEtageDto()));
+    // return studio;
+    // }
 }
