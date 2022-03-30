@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.StudioDto;
@@ -37,7 +38,9 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public StudioDto save(StudioDto dto) {
-        Studio studio = new Studio();
+        Optional<Studio> oldStudio = studioRepository.findById(dto.getId());
+
+        int numStu = studioRepository.getMaxNumStudio() + 1;
         log.info("We are going to create  a new Studio {}", dto);
         List<String> errors = StudioDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -45,13 +48,27 @@ public class StudioServiceImpl implements StudioService {
             throw new InvalidEntityException("Certain attributs de l'object Studio sont null.",
                     ErrorCodes.STUDIO_NOT_VALID, errors);
         }
-        Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
-                "Aucun étage trouvé",
-                ErrorCodes.ETAGE_NOT_FOUND, errors));
-        studio.setAbrvNomStudio(dto.getAbrvNomStudio());
-        studio.setEtageStudio(etage);
+        Optional<Etage> etage = etageRepository.findById(dto.getIdEtage());
+
+        if (oldStudio.isPresent()) {
+            oldStudio.get().setEtageStudio(null);
+            oldStudio.get().setNomStudio(dto.getNomStudio());
+            oldStudio.get().setNumeroStudio(dto.getNumeroStudio());
+            oldStudio.get().setDescStudio(dto.getDescStudio());
+            Studio studioSave = studioRepository.save(oldStudio.get());
+            return StudioDto.fromEntity(studioSave);
+        }
+        Studio studio = new Studio();
+
+        studio.setAbrvNomStudio(dto.getAbrvNomStudio() + "-" + numStu);
+        if (etage.isPresent()) {
+            studio.setEtageStudio(etage.get());
+            studio.setAbrvNomStudio(etage.get().getAbrvEtage() + "-STUDIO-" + numStu);
+        }
+        studio.setEtageStudio(null);
+
         studio.setNomStudio(dto.getNomStudio());
-        studio.setNumeroStudio(dto.getNumeroStudio());
+        studio.setNumeroStudio(numStu);
         studio.setDescStudio(dto.getDescStudio());
         Studio studioSave = studioRepository.save(studio);
         return StudioDto.fromEntity(studioSave);
