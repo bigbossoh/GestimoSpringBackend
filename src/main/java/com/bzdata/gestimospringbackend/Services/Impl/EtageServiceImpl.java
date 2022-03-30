@@ -38,7 +38,8 @@ public class EtageServiceImpl implements EtageService {
 
     @Override
     public EtageDto save(EtageDto dto) {
-        Etage etage = new Etage();
+        int numEt = etageRepository.getMaxNumEtage() + 1;
+        Optional<Etage> oldEtage = etageRepository.findById(dto.getId());
         log.info("We are going to create  a new Etage {}", dto);
         List<String> errors = EtageDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -50,9 +51,20 @@ public class EtageServiceImpl implements EtageService {
                 .orElseThrow(() -> new InvalidEntityException(
                         "Impossible de trouver l'immeuble.",
                         ErrorCodes.IMMEUBLE_NOT_FOUND, errors));
-        etage.setAbrvEtage(dto.getAbrvEtage());
+        if (oldEtage.isPresent()) {
+            // oldEtage.get().setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" +
+            // dto.getAbrvEtage());
+            oldEtage.get().setNomEtage(dto.getNomEtage());
+            // oldEtage.get().setNumEtage(dto.getNumEtage());
+            oldEtage.get().setImmeuble(immeuble);
+
+            Etage etageSave = etageRepository.save(oldEtage.get());
+            return EtageDto.fromEntity(etageSave);
+        }
+        Etage etage = new Etage();
+        etage.setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" + dto.getAbrvEtage() + "-ETAGE-" + numEt);
         etage.setNomEtage(dto.getNomEtage());
-        etage.setNumEtage(dto.getNumEtage());
+        etage.setNumEtage(numEt);
         etage.setImmeuble(immeuble);
 
         Etage etageSave = etageRepository.save(etage);

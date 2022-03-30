@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
@@ -100,7 +101,8 @@ public class AppartementServiceImpl implements AppartementService {
 
     @Override
     public AppartementDto save(AppartementDto dto) {
-        Appartement appartement = new Appartement();
+        Optional<Appartement> oldAppartement = appartementRepository.findById(dto.getId());
+        int numApp = appartementRepository.getMaxNumAppartement() + 1;
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -111,7 +113,24 @@ public class AppartementServiceImpl implements AppartementService {
         Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
                 "Aucun Etage has been found with id " + dto.getIdEtage(),
                 ErrorCodes.APPARTEMENT_NOT_FOUND));
-        appartement.setAbrvNomApp(dto.getAbrvNomApp());
+        if (oldAppartement.isPresent()) {
+            oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
+            oldAppartement.get().setEtageAppartement(etage);
+            oldAppartement.get().setMeubleApp(dto.isMeubleApp());
+            oldAppartement.get().setNbrPieceApp(dto.getNbrPieceApp());
+            oldAppartement.get().setNbreChambreApp(dto.getNbreChambreApp());
+            oldAppartement.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
+            oldAppartement.get().setNbreSalonApp(dto.getNbreSalonApp());
+            oldAppartement.get().setNomApp(dto.getNomApp());
+            // oldAppartement.get().setNumeroApp(dto.getNumeroApp());
+            oldAppartement.get().setResidence(dto.isResidence());
+
+            Appartement appartementSave = appartementRepository.save(oldAppartement.get());
+            return AppartementDto.fromEntity(appartementSave);
+        }
+
+        Appartement appartement = new Appartement();
+        appartement.setAbrvNomApp(etage.getAbrvEtage() + "-" + "APPARTEMENT" + "-" + numApp);
         appartement.setEtageAppartement(etage);
         appartement.setMeubleApp(dto.isMeubleApp());
         appartement.setNbrPieceApp(dto.getNbrPieceApp());
@@ -119,7 +138,7 @@ public class AppartementServiceImpl implements AppartementService {
         appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
         appartement.setNbreSalonApp(dto.getNbreSalonApp());
         appartement.setNomApp(dto.getNomApp());
-        appartement.setNumeroApp(dto.getNumeroApp());
+        appartement.setNumeroApp(numApp);
         appartement.setResidence(dto.isResidence());
 
         Appartement appartementSave = appartementRepository.save(appartement);
