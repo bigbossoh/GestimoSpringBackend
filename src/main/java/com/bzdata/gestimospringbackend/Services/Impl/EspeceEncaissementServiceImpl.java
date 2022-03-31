@@ -53,6 +53,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         especeEncaissement.setAppelLoyerEncaissement(appelLoyer);
         especeEncaissement.setDateEncaissement(dto.getDateEncaissement());
         especeEncaissement.setMontantEncaissement(dto.getMontantEncaissement());
+        //TODO il faudra verifier que utilisateur est soit un gerant ou le locataire lui meme 
         especeEncaissement.setUtilisateurEncaissement(UtilisateurRequestDto.toEntity(utilisateurRequestDto));
         // especeEncaissement.set
 
