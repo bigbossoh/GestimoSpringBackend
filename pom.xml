@@ -135,7 +135,46 @@
                     </excludes>
                 </configuration>
             </plugin>
-        </plugins>
-    </build>
+            <plugin>
+                <groupId>com.github.kongchen</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>3.1.8</version>
+                <configuration>
+                    <apiSources>
+                        <apiSource>
+                            <!--Required parameters BEGIN-->
+                            <springmvc>true</springmvc>
+                            <locations>
+                                <!-- <location>com.bossoh.gmsscbackend.controller</location>-->
+                                 <location>com.bzdata.gestimospringbackend.Controllers</location>
+                             </locations>
+                             <basePath>http://localhost:8284</basePath>
+                             <info>
+                                 <title>Swagger GESTIMOWEB REST API</title>
+                                 <version>${project.version}</version>
+                                 <description>Swagger API pour GESTIMOWEB REST API </description>
+                                 <contact>
+                                     <name>bzadata</name>
+                                     <email>michel.bossoh@outlook.fr</email>
+                                 </contact>
+                             </info>
+                             <outputPath>${project.build.directory}</outputPath>
+                             <outputFormats>json</outputFormats>
+                             <swaggerApiReader>com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
+                             <swaggerDirectory>${project.build.directory}</swaggerDirectory>
+                         </apiSource>
+                     </apiSources>
+                 </configuration>
+                 <executions>
+                     <execution>
+                         <phase>install</phase>
+                         <goals>
+                             <goal>generate</goal>
+                         </goals>
+                     </execution>
+                 </executions>
+             </plugin>
+         </plugins>
+     </build>
 
-</project>
+ </project>
