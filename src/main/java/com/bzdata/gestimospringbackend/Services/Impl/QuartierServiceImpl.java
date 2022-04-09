@@ -49,7 +49,7 @@ public class QuartierServiceImpl implements QuartierService {
                     ErrorCodes.QUARTIER_NOT_VALID, errors);
         }
         Optional<Quartier> oldQuatier = quartierRepository.findById(dto.getId());
-        if (oldQuatier.isEmpty()) {
+        if (!oldQuatier.isPresent()) {
             Quartier quartier = new Quartier();
             Commune commune = communeRepository.findById(dto.getIdCommune())
                     .orElseThrow(() -> new InvalidEntityException("Certain attributs de l'object Quartier sont null.",

@@ -51,7 +51,7 @@ public class VilleServiceImpl implements VilleService {
                     ErrorCodes.VILLE_NOT_VALID, errors);
         }
         Optional<Ville> oldVille = villeRepository.findById(dto.getId());
-        if (oldVille.isEmpty()) {
+        if (!oldVille.isPresent()) {
             Ville ville = new Ville();
             PaysDto paysDto = paysService.findById(dto.getIdPays());
             ville.setAbrvVille(paysDto.getAbrvPays() + "-" + dto.getAbrvVille());
