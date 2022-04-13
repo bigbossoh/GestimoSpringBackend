@@ -45,11 +45,11 @@ public class AuthRequestServiceImpl implements AuthRequestService {
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        dto.getEmail(),
+                        dto.getUsername(),
                         dto.getPassword()
                 )
         );
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getEmail());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUsername());
 
         final String jwt = jwtUtil.generateToken((ExtentedUser)  userDetails);
 

@@ -16,7 +16,7 @@ public class AuthRequestDtoValidator {
             errors.add("Veuillez renseigner le mot de passe");
             return errors;
         }
-        if (!StringUtils.hasLength(authRequestDto.getEmail())) {
+        if (!StringUtils.hasLength(authRequestDto.getUsername())) {
             errors.add("Veuillez renseigner l'email");
         }
         if (!StringUtils.hasLength(authRequestDto.getPassword())) {

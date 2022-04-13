@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -36,8 +37,16 @@ public class Utilisateur extends AbstractEntity {
     private String username;
     private String password;
 
+
+    private String profileImageUrl;
+    private Date lastLoginDate;
+    private Date lastLoginDateDisplay;
+    private Date joinDate;
+    private String roleUsed;
+    private String[] authorities;
+    private boolean isActive;
+    private boolean isNonLocked;
     @ManyToOne
-    // (cascade = CascadeType.PERSIST)
     AgenceImmobiliere agence;
 
     @OneToMany(mappedBy = "createur")

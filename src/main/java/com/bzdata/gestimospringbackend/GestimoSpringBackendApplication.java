@@ -1,8 +1,13 @@
 package com.bzdata.gestimospringbackend;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
@@ -33,6 +38,8 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+
+import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -165,19 +172,56 @@ public class GestimoSpringBackendApplication {
             roles = null;
             roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (roles.isPresent()) {
-                Optional<Utilisateur> userPrincipal = utilisateurRepository
-                        .findUtilisateurByEmail("superviseur@superviseur.com");
-                if (!userPrincipal.isPresent()) {
+                Utilisateur userPrincipalSuperviseur = utilisateurRepository
+                        .findUtilisateurByUsername("superviseur@superviseur.com");
+                if (userPrincipalSuperviseur ==null) {
                     utilisateur.setUrole(roles.get());
-                    utilisateur.setActivated(true);
+//                    utilisateur.setActivated(true);
+//                    utilisateur.setEmail("superviseur@superviseur.com");
+//                    utilisateur.setGenre("M");
+//                    utilisateur.setMobile("0177797744");
+//                    utilisateur.setNationalité("Ivoirien");
+//                    utilisateur.setPassword(mdp);
+//                    utilisateur.setNom("superviseur");
+//                    utilisateur.setPrenom("superviseur");
+//                    utilisateur.setUsername("superviseur");
+
+                    utilisateur.setNom("SUPERVISEUR");
+                    utilisateur.setPrenom("SUPERVISEUR PRENOM");
                     utilisateur.setEmail("superviseur@superviseur.com");
+                    utilisateur.setMobile("0103833350");
+                    utilisateur.setDateDeNaissance(LocalDate.parse("1980-01-08"));
+                    utilisateur.setLieuNaissance("Abidjan");
+                    utilisateur.setTypePieceIdentite("CNI");
+                    utilisateur.setNumeroPieceIdentite("1236544");
+                    utilisateur.setDateFinPiece(LocalDate.parse("2022-01-08"));
+                    utilisateur.setDateDebutPiece(LocalDate.parse("2016-01-08"));
+                    utilisateur.setNationalité("Ivoirienne");
                     utilisateur.setGenre("M");
-                    utilisateur.setMobile("0177797744");
-                    utilisateur.setNationalité("Ivoirien");
+                    utilisateur.setActivated(true);
+                    utilisateur.setUsername("0103833350");
                     utilisateur.setPassword(mdp);
-                    utilisateur.setNom("superviseur");
-                    utilisateur.setPrenom("superviseur");
-                    utilisateur.setUsername("superviseur");
+                    utilisateur.setIdAgence(1L);
+                   // utilisateur.setProfileImageUrl(dto.getProfileImageUrl());
+                   // utilisateur.setLastLoginDate(dto.getLastLoginDate());
+                  //  utilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
+
+//                    user.setRole(ROLE_USER.name());
+//                    user.setAuthorities(ROLE_USER.getAuthorities());
+//                    user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+//                    userRepository.save(user);
+//                    log.info("New user password: " + password);
+//                    user.setActive(true);
+//                    user.setNonLocked(true);
+
+                    utilisateur.setJoinDate(new Date());
+                    utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
+                    utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());
+                    utilisateur.setActive(true);
+                    utilisateur.setNonLocked(true);
+//                    utilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
+//                    utilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
+//                    utilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUserCreateDto()));
                     utilisateurRepository.save(utilisateur);
                 }
 

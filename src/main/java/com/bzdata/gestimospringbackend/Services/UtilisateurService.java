@@ -11,6 +11,7 @@ public interface UtilisateurService {
     UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto);
     UtilisateurRequestDto findById(Long id);
     UtilisateurRequestDto findUtilisateurByEmail(String email);
+    UtilisateurRequestDto findUtilisateurByUsername(String username);
     List<UtilisateurRequestDto> listOfAllUtilisateurOrderbyName();
     List<UtilisateurRequestDto> listOfAllUtilisateurLocataireOrderbyName();
     List<UtilisateurRequestDto> listOfAllUtilisateurProprietaireOrderbyName();
