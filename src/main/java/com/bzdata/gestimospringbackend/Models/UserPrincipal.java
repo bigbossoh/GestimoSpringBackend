@@ -1,0 +1,54 @@
+package com.bzdata.gestimospringbackend.Models;
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
+
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserPrincipal implements UserDetails {
+    private Utilisateur utilisateur;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return stream(this.utilisateur.getAuthorities())
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return this.utilisateur.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.utilisateur.getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.utilisateur.isNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.utilisateur.isActive();
+    }
+}

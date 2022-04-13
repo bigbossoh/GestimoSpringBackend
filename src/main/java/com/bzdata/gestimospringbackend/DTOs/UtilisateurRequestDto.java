@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @Builder
@@ -24,8 +25,19 @@ public class UtilisateurRequestDto {
     private String nationalité;
     private String genre;
     private boolean isActivated;
+
     private String username;
     private String password;
+
+    private String profileImageUrl;
+    private Date lastLoginDate;
+    private Date lastLoginDateDisplay;
+    private Date joinDate;
+    private String roleUsed;
+    private String[] authorities;
+    private boolean isActive;
+    private boolean isNonLocked;
+
     AgenceRequestDto agenceDto;
     RoleRequestDto roleRequestDto;
     UtilisateurRequestDto userCreateDto;
@@ -52,6 +64,14 @@ public class UtilisateurRequestDto {
                 .isActivated(utilisateur.isActivated())
                 .username(utilisateur.getUsername())
                 .password(utilisateur.getPassword())
+                .profileImageUrl(utilisateur.getProfileImageUrl())
+                .lastLoginDate(utilisateur.getLastLoginDate())
+                .lastLoginDateDisplay(utilisateur.getLastLoginDateDisplay())
+                .joinDate(utilisateur.getJoinDate())
+                .roleUsed(utilisateur.getRoleUsed())
+                .authorities(utilisateur.getAuthorities())
+                .isActive(utilisateur.isActive())
+                .isNonLocked(utilisateur.isNonLocked())
                 .agenceDto(AgenceRequestDto.fromEntity(utilisateur.getAgence()))
                 .roleRequestDto(RoleRequestDto.fromEntity(utilisateur.getUrole()))
                 .userCreateDto(UtilisateurRequestDto.fromEntity(utilisateur.getUserCreate()))
@@ -82,6 +102,14 @@ public class UtilisateurRequestDto {
         newUtilisateur.setUsername(dto.getUsername());
         newUtilisateur.setPassword(dto.getPassword());
         newUtilisateur.setIdAgence(dto.getIdAgence());
+        newUtilisateur.setProfileImageUrl(dto.getProfileImageUrl());
+        newUtilisateur.setLastLoginDate(dto.getLastLoginDate());
+        newUtilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
+        newUtilisateur.setJoinDate(dto.getJoinDate());
+        newUtilisateur.setRoleUsed(dto.getRoleUsed());
+        newUtilisateur.setAuthorities(dto.getAuthorities());
+        newUtilisateur.setActive(dto.isActive());
+        newUtilisateur.setNonLocked(dto.isNonLocked());
         newUtilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
         newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
         newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUserCreateDto()));
