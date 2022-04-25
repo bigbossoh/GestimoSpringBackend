@@ -24,7 +24,7 @@ public class Utilisateur extends AbstractEntity {
     private String nom;
     private String prenom;
     private String email;
-    @Column(unique=true)
+    @Column(unique = true)
     private String mobile;
     private LocalDate dateDeNaissance;
     private String lieuNaissance;
@@ -35,10 +35,9 @@ public class Utilisateur extends AbstractEntity {
     private String nationalité;
     private String genre;
     private boolean isActivated;
-    @Column(unique=true)
+    @Column(unique = true)
     private String username;
     private String password;
-
 
     private String profileImageUrl;
     private Date lastLoginDate;

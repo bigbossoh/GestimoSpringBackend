@@ -1,12 +1,16 @@
 package com.bzdata.gestimospringbackend;
 
+import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
+import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
+
 import java.io.File;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
-import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
@@ -31,18 +35,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
-
-import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
-import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -60,6 +61,7 @@ public class GestimoSpringBackendApplication {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
@@ -69,12 +71,14 @@ public class GestimoSpringBackendApplication {
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));
-        corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token", "Authorization",
+        corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
+                "Authorization",
                 "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
     }
+
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
             RoleRepository roleRepository,
@@ -150,19 +154,17 @@ public class GestimoSpringBackendApplication {
                 Site site = new Site();
                 site.setAbrSite(StringUtils.deleteWhitespace(monQuartier.get()
                         .getCommune().getVille().getPays().getAbrvPays())
-                        +"-"+
+                        + "-" +
                         StringUtils.deleteWhitespace(monQuartier.get().getCommune().getVille().getAbrvVille())
-                        +"-"+StringUtils.deleteWhitespace(monQuartier.get()
-                        .getCommune().getAbrvCommune())
-                        +"-"+StringUtils.deleteWhitespace(monQuartier.get().getAbrvQuartier())
-                );
+                        + "-" + StringUtils.deleteWhitespace(monQuartier.get()
+                                .getCommune().getAbrvCommune())
+                        + "-" + StringUtils.deleteWhitespace(monQuartier.get().getAbrvQuartier()));
                 site.setNomSite(
                         monQuartier.get()
                                 .getCommune().getVille().getPays().getNomPays()
-                                +"-"+monQuartier.get().getCommune().getVille().getNomVille()
-                                +"-"+monQuartier.get().getCommune().getNomCommune()
-                                +"-"+monQuartier.get().getNomQuartier()
-                );
+                                + "-" + monQuartier.get().getCommune().getVille().getNomVille()
+                                + "-" + monQuartier.get().getCommune().getNomCommune()
+                                + "-" + monQuartier.get().getNomQuartier());
                 site.setQuartier(monQuartier.get());
                 siteRepository.save(site);
             }
@@ -192,17 +194,17 @@ public class GestimoSpringBackendApplication {
             if (roles.isPresent()) {
                 Utilisateur userPrincipalSuperviseur = utilisateurRepository
                         .findUtilisateurByUsername("superviseur@superviseur.com");
-                if (userPrincipalSuperviseur ==null) {
+                if (userPrincipalSuperviseur == null) {
                     utilisateur.setUrole(roles.get());
-//                    utilisateur.setActivated(true);
-//                    utilisateur.setEmail("superviseur@superviseur.com");
-//                    utilisateur.setGenre("M");
-//                    utilisateur.setMobile("0177797744");
-//                    utilisateur.setNationalité("Ivoirien");
-//                    utilisateur.setPassword(mdp);
-//                    utilisateur.setNom("superviseur");
-//                    utilisateur.setPrenom("superviseur");
-//                    utilisateur.setUsername("superviseur");
+                    // utilisateur.setActivated(true);
+                    // utilisateur.setEmail("superviseur@superviseur.com");
+                    // utilisateur.setGenre("M");
+                    // utilisateur.setMobile("0177797744");
+                    // utilisateur.setNationalité("Ivoirien");
+                    // utilisateur.setPassword(mdp);
+                    // utilisateur.setNom("superviseur");
+                    // utilisateur.setPrenom("superviseur");
+                    // utilisateur.setUsername("superviseur");
 
                     utilisateur.setNom("SUPERVISEUR");
                     utilisateur.setPrenom("SUPERVISEUR PRENOM");
@@ -220,26 +222,26 @@ public class GestimoSpringBackendApplication {
                     utilisateur.setUsername("+2250103833350");
                     utilisateur.setPassword(mdp);
                     utilisateur.setIdAgence(1L);
-                   // utilisateur.setProfileImageUrl(dto.getProfileImageUrl());
-                   // utilisateur.setLastLoginDate(dto.getLastLoginDate());
-                  //  utilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
+                    // utilisateur.setProfileImageUrl(dto.getProfileImageUrl());
+                    // utilisateur.setLastLoginDate(dto.getLastLoginDate());
+                    // utilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
 
-//                    user.setRole(ROLE_USER.name());
-//                    user.setAuthorities(ROLE_USER.getAuthorities());
-//                    user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
-//                    userRepository.save(user);
-//                    log.info("New user password: " + password);
-//                    user.setActive(true);
-//                    user.setNonLocked(true);
+                    // user.setRole(ROLE_USER.name());
+                    // user.setAuthorities(ROLE_USER.getAuthorities());
+                    // user.setProfileImageUrl(getTemporaryProfileImageUrl(username));
+                    // userRepository.save(user);
+                    // log.info("New user password: " + password);
+                    // user.setActive(true);
+                    // user.setNonLocked(true);
 
                     utilisateur.setJoinDate(new Date());
                     utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
                     utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());
                     utilisateur.setActive(true);
                     utilisateur.setNonLocked(true);
-//                    utilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
-//                    utilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
-//                    utilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUserCreateDto()));
+                    // utilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
+                    // utilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
+                    // utilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUserCreateDto()));
                     utilisateurRepository.save(utilisateur);
                 }
 
