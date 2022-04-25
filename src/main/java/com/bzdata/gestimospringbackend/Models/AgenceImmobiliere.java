@@ -25,6 +25,7 @@ public class AgenceImmobiliere extends AbstractEntity {
     String compteContribuable;
     double capital;
     String emailAgence;
+    String mobileAgence;
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;

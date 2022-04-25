@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthResponseDto;
+import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.auth.ExtentedUser;
 import com.bzdata.gestimospringbackend.Services.AuthRequestService;
 import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;

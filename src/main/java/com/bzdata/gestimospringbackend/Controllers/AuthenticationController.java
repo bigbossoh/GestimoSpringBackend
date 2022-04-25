@@ -1,18 +1,21 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.AUTHENTICATION_ENDPOINT;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.JWT_TOKEN_HEADER;
 import static org.springframework.http.HttpStatus.OK;
 
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.Services.AuthRequestService;
 
+import com.bzdata.gestimospringbackend.Services.Impl.TwilioSmsSender;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RestController
-@RequestMapping(path={APP_ROOT+"/auth", "/"})
+@RequestMapping(path={AUTHENTICATION_ENDPOINT, "/"})
 @RequiredArgsConstructor
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
@@ -39,6 +42,7 @@ public class AuthenticationController {
     private final UtilisateurService utilisateurService;
     private final AuthenticationManager authenticationManager;
     private final JWTTokenProvider jwtTokenProvider;
+    private final TwilioSmsSender twilioSmsSender;
 
 //    @PostMapping("/login")
 //    @Operation(summary = "Authentification des SUPERVISEUR", security = @SecurityRequirement(name = "bearerAuth"))
@@ -49,13 +53,16 @@ public class AuthenticationController {
 //    }
 @PostMapping("/login")
 public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
-    log.info("we are here in the login resource {} ",request.getUsername());
+   // log.info("we are here in the login resource {} ",request.getUsername());
     authenticate(request.getUsername(), request.getPassword());
     UtilisateurRequestDto utilisateurByUsername = utilisateurService.findUtilisateurByUsername(request.getUsername());
     Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
     UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-
     HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+    log.info("we are going lo launch sms to the user ");
+    SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger avec sussces");
+    twilioSmsSender.sendSms(sms);
+    log.info("Sms sent");
     return new ResponseEntity<>(loginUser, jwtHeader, OK);
 }
     private void authenticate(String username, String password) {

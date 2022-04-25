@@ -17,6 +17,7 @@ public class AgenceRequestDto {
     String compteContribuable;
     double capital;
     String emailAgence;
+    String mobileAgence;
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;
@@ -30,6 +31,7 @@ public class AgenceRequestDto {
                 .id(agenceImmobiliere.getId())
                 .nomAgence(agenceImmobiliere.getNomAgence())
                 .telAgence(agenceImmobiliere.getTelAgence())
+                .mobileAgence(agenceImmobiliere.getMobileAgence())
                 .compteContribuable(agenceImmobiliere.getCompteContribuable())
                 .capital(agenceImmobiliere.getCapital())
                 .emailAgence(agenceImmobiliere.getEmailAgence())
@@ -49,6 +51,7 @@ public class AgenceRequestDto {
         newAgenceImmobiliere.setId(dto.getId());
         newAgenceImmobiliere.setIdAgence(dto.getId());
         newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
+        newAgenceImmobiliere.setMobileAgence(dto.getMobileAgence());
         newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
         newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());
         newAgenceImmobiliere.setCapital(dto.getCapital());

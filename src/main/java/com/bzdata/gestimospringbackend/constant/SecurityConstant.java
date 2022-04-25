@@ -4,6 +4,9 @@ package com.bzdata.gestimospringbackend.constant;
 public class SecurityConstant {
 
     public static final long EXPIRATION_TIME=432_000_000; //5 days expressed
+    public static final String APP_ROOT="gestimoweb/api/v1";
+    public static final String  AUTHENTICATION_ENDPOINT=APP_ROOT +"/auth";
+    public static final String  ACTIVATION_EMAIL="http://localhost:8284/"+APP_ROOT +"/auth/accountVerification";
     public static final String TOKEN_PREFIX="Bearer ";
     public static final String JWT_TOKEN_HEADER="Jwt-Token";
     public static final String TOKEN_CANNOT_BE_VERIFIED="Token cannot be verified";
@@ -16,7 +19,7 @@ public class SecurityConstant {
     public static final String[] PUBLIC_URLS = {
 
             "/gestimoweb/api/v1/auth/login","/**/accountVerification/**","/login",
-            "/**/utilisateurs/singup", "/swagger-ui/**", "/v3/api-docs/**"
+             "/swagger-ui/**", "/v3/api-docs/**"
     };
-    //public static final String[] PUBLIC_URLS = { "**" };
+    //public static final String[] PUBLIC_URLS = { "**" }; "/**/utilisateurs/singup",
 }

@@ -2,7 +2,8 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import com.bzdata.gestimospringbackend.Services.AppartementService;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.util.List;
 

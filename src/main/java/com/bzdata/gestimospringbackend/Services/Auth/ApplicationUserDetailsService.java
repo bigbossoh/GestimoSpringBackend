@@ -40,10 +40,10 @@ public class ApplicationUserDetailsService implements UserDetailsService {
         UtilisateurRequestDto utilisateurDto=service.findUtilisateurByUsername(username);
         Utilisateur utilisateur = UtilisateurRequestDto.toEntity(utilisateurDto);
         if(utilisateur==null){
-            log.error(NO_USER_FOUND_BY_USERNAME +username);
+            //log.error(NO_USER_FOUND_BY_USERNAME +username);
             throw new UsernameNotFoundException(NO_USER_FOUND_BY_USERNAME +username);
         }else {
-           validateLoginAttempt(utilisateur);
+            validateLoginAttempt(utilisateur);
             utilisateur.setLastLoginDateDisplay(utilisateur.getLastLoginDate());
             utilisateur.setLastLoginDate(new Date());
             utilisateurRepository.save(utilisateur);

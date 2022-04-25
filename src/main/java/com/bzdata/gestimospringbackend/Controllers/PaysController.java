@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.util.List;
 

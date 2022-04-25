@@ -1,7 +1,9 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
+import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,6 +19,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
+import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.*;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
@@ -38,7 +41,7 @@ import org.springframework.util.StringUtils;
 @Transactional
 @AllArgsConstructor
 public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
-
+    private  final UtilisateurService utilisateurService;
     private final AgenceImmobiliereRepository agenceImmobiliereRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -55,27 +58,42 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             throw new InvalidEntityException("Certain attributs de l'object agence immobiliere sont null.",
                     ErrorCodes.AGENCE_NOT_VALID,errors);
         }
-        Optional<Utilisateur> utilisateurByEmail = utilisateurRepository.findUtilisateurByEmail(dto.getEmailAgence());
-        if(!utilisateurByEmail.isPresent()) {
+
+        Utilisateur utilisateurByEmail = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
+        if(utilisateurByEmail !=null) {
+            UtilisateurRequestDto utilisateurSuperviseur=utilisateurService.findById(dto.getUtilisateurCreateur().getId());
+            dto.setUtilisateurCreateur(utilisateurSuperviseur);
             AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(dto));
+            saveAgence.setIdAgence(saveAgence.getId());
+            AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
+            AgenceImmobiliere saveAgenceUpdate=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(agenceRequestDto));
             log.info("We are going to create  a new utilisateur gerant by the logged user {}",dto.getUtilisateurCreateur());
             Utilisateur newUtilisateur = new Utilisateur();
+            newUtilisateur.setIdAgence(saveAgenceUpdate.getIdAgence());
             newUtilisateur.setNom(dto.getNomAgence());
+            newUtilisateur.setPrenom(dto.getNomAgence());
             newUtilisateur.setEmail(dto.getEmailAgence());
-            newUtilisateur.setMobile(dto.getTelAgence());
+            newUtilisateur.setMobile(dto.getMobileAgence());
             newUtilisateur.setPassword(passwordEncoder.encode("gerant"));
-            newUtilisateur.setAgence(saveAgence);
+            newUtilisateur.setAgence(saveAgenceUpdate);
             Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
             if (newRole.isPresent()) {
                 newUtilisateur.setUrole(newRole.get());
             }
+            newUtilisateur.setJoinDate(new Date());
+            newUtilisateur.setRoleUsed(ROLE_GERANT.name());
+            newUtilisateur.setAuthorities(ROLE_GERANT.getAuthorities());
+            newUtilisateur.setActive(false);
+            newUtilisateur.setActivated(false);
+            newUtilisateur.setUsername(dto.getTelAgence());
+            newUtilisateur.setNonLocked(true);
             newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
             Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
             String token=generateVerificationToken(saveUser);
             String message=mailContentBuilder.build("Merci de vous être enregistré a Gestimoweb, Cliquer sur le lien " +
                     "ci-dessous pour activer votre account: "+ ACTIVATION_EMAIL+"/"+token+"\n");
             mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",saveUser.getEmail(),message));
-            log.info("We are same a geran user and Agence also !!!");
+            log.info("We are same a gerant user and Agence also !!!");
             return AgenceResponseDto.fromEntity(saveAgence);
         }
 
@@ -102,11 +120,16 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     }
     @Override
     public void feachUserAndEnable(VerificationToken verificationToken){
-        String email=verificationToken.getUtilisateur().getEmail();
-        Utilisateur utilisateur=utilisateurRepository.findUtilisateurByEmail(email).orElseThrow(()->
-                new GestimoWebExceptionGlobal("Utilisateur avec l'username "+email+" n'exise pas."));
-        utilisateur.setActivated(true);
-        utilisateurRepository.save(utilisateur);
+        String username=verificationToken.getUtilisateur().getUsername();
+        Utilisateur utilisateur=utilisateurRepository.findUtilisateurByUsername(username);
+        if(utilisateur !=null) {
+            utilisateur.setActivated(true);
+            utilisateur.setActive(true);
+            utilisateurRepository.save(utilisateur);
+        }else{
+           throw new GestimoWebExceptionGlobal("Utilisateur avec l'username "+username+" n'exise pas.");
+        }
+
 
     }
     @Override
@@ -156,7 +179,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         }
         List<Utilisateur> utilisateurs=utilisateurRepository.findAll();
         Stream<AgenceImmobiliere> agenceImmobiliereStream = utilisateurs.stream()
-                .filter(user -> user.getUserCreate().getId() == id).map(Utilisateur::getAgence);
+                .filter(user -> user.getUserCreate().getId().equals(id) ).map(Utilisateur::getAgence);
         if (agenceImmobiliereStream.findAny().isPresent()) {
             throw new InvalidOperationException("Impossible de supprimer une agence qui a des utilisateurs déjà crées",
                     ErrorCodes.AGENCE_ALREADY_IN_USE);

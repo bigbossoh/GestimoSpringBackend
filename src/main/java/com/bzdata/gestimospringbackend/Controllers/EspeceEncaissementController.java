@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import com.bzdata.gestimospringbackend.DTOs.EspeceEncaissementDto;
 import com.bzdata.gestimospringbackend.Services.EspeceEncaissementService;

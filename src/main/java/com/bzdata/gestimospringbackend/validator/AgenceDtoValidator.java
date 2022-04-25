@@ -22,6 +22,9 @@ public class AgenceDtoValidator {
         if (!StringUtils.hasLength(dto.getEmailAgence())) {
             errors.add("Veuillez renseigner l'email de l'agence'");
         }
+        if (!StringUtils.hasLength(dto.getMobileAgence())) {
+            errors.add("Veuillez renseigner le mobile de l'agence'");
+        }
         return errors;
     }
 

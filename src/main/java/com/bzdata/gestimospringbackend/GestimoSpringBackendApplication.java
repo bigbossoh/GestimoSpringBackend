@@ -1,9 +1,8 @@
 package com.bzdata.gestimospringbackend;
 
+import java.io.File;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
@@ -38,7 +37,11 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
+import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 @SpringBootApplication
@@ -50,13 +53,28 @@ public class GestimoSpringBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
+        new File(USER_FOLDER).mkdirs();
     }
 
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
+                "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
+                "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token", "Authorization",
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(urlBasedCorsConfigurationSource);
+    }
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
             RoleRepository roleRepository,
@@ -199,7 +217,7 @@ public class GestimoSpringBackendApplication {
                     utilisateur.setNationalité("Ivoirienne");
                     utilisateur.setGenre("M");
                     utilisateur.setActivated(true);
-                    utilisateur.setUsername("0103833350");
+                    utilisateur.setUsername("+2250103833350");
                     utilisateur.setPassword(mdp);
                     utilisateur.setIdAgence(1L);
                    // utilisateur.setProfileImageUrl(dto.getProfileImageUrl());

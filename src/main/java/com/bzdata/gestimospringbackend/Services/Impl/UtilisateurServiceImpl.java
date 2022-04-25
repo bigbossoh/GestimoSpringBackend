@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.ACTIVATION_EMAIL;
+
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 
 import java.util.List;
 import java.util.Optional;

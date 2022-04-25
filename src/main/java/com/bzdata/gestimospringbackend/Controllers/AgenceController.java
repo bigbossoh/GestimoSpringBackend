@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
-import static com.bzdata.gestimospringbackend.Utils.Constants.APP_ROOT;
+
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
