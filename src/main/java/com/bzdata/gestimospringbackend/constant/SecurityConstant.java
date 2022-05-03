@@ -1,25 +1,25 @@
 package com.bzdata.gestimospringbackend.constant;
 
-
 public class SecurityConstant {
 
-    public static final long EXPIRATION_TIME=432_000_000; //5 days expressed
-    public static final String APP_ROOT="gestimoweb/api/v1";
-    public static final String  AUTHENTICATION_ENDPOINT=APP_ROOT +"/auth";
-    public static final String  ACTIVATION_EMAIL="http://localhost:8284/"+APP_ROOT +"/auth/accountVerification";
-    public static final String TOKEN_PREFIX="Bearer ";
-    public static final String JWT_TOKEN_HEADER="Jwt-Token";
-    public static final String TOKEN_CANNOT_BE_VERIFIED="Token cannot be verified";
-    public static final String BZDATA_SARL="BZDATA, Sarl";
-    public static final String BZDATA_ADMINISTRATION="User Management System";
+    public static final long EXPIRATION_TIME = 432_000_000; // 5 days expressed
+    public static final String APP_ROOT = "gestimoweb/api/v1";
+    public static final String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
+    public static final String ACTIVATION_EMAIL = "http://localhost:8284/" + APP_ROOT + "/auth/accountVerification";
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String JWT_TOKEN_HEADER = "Jwt-Token";
+    public static final String TOKEN_CANNOT_BE_VERIFIED = "Token cannot be verified";
+    public static final String BZDATA_SARL = "BZDATA, Sarl";
+    public static final String BZDATA_ADMINISTRATION = "User Management System";
     public static final String AUTHORITIES = "authorities";
     public static final String FORBIDDEN_MESSAGE = "You need to log in to access this page";
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
 
-            "/gestimoweb/api/v1/auth/login","/**/accountVerification/**","/login",
-             "/swagger-ui/**", "/v3/api-docs/**"
+            "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login",
+            "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**"
     };
-    //public static final String[] PUBLIC_URLS = { "**" }; "/**/utilisateurs/singup",
+    // public static final String[] PUBLIC_URLS = { "**" };
+    // "/**/utilisateurs/singup",
 }
