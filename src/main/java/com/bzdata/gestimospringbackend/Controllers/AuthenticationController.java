@@ -59,10 +59,10 @@ public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
     Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
     UserPrincipal userPrincipal = new UserPrincipal(loginUser);
     HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-    log.info("we are going lo launch sms to the user ");
-    SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger avec sussces");
-    twilioSmsSender.sendSms(sms);
-    log.info("Sms sent");
+//    log.info("we are going lo launch sms to the user ");
+   // SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger avec sussces");
+    //twilioSmsSender.sendSms(sms);
+    //log.info("Sms sent");
     return new ResponseEntity<>(loginUser, jwtHeader, OK);
 }
     private void authenticate(String username, String password) {

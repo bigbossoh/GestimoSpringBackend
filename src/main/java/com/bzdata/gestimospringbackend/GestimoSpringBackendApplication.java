@@ -14,6 +14,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.Services.Impl.GestimoWebInitDataAgenceImmoServiceImpl;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.PaysRepository;
 import com.bzdata.gestimospringbackend.repository.QuartierRepository;
@@ -22,6 +23,7 @@ import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
 
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -47,9 +49,12 @@ import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERV
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableAsync
+@RequiredArgsConstructor
 @OpenAPIDefinition(info = @Info(title = "Gestimo API", version = "2.0", description = "Description de Gestimo"))
 @SecurityScheme(name = "gestimoapi", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER, bearerFormat = "JWT")
 public class GestimoSpringBackendApplication {
+
+    private final GestimoWebInitDataAgenceImmoServiceImpl gestimoWebInitDataAgenceImmoService;
 
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
@@ -191,23 +196,13 @@ public class GestimoSpringBackendApplication {
             roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (roles.isPresent()) {
                 Utilisateur userPrincipalSuperviseur = utilisateurRepository
-                        .findUtilisateurByUsername("superviseur@superviseur.com");
+                        .findUtilisateurByUsername("+2250103833350");
                 if (userPrincipalSuperviseur ==null) {
                     utilisateur.setUrole(roles.get());
-//                    utilisateur.setActivated(true);
-//                    utilisateur.setEmail("superviseur@superviseur.com");
-//                    utilisateur.setGenre("M");
-//                    utilisateur.setMobile("0177797744");
-//                    utilisateur.setNationalité("Ivoirien");
-//                    utilisateur.setPassword(mdp);
-//                    utilisateur.setNom("superviseur");
-//                    utilisateur.setPrenom("superviseur");
-//                    utilisateur.setUsername("superviseur");
-
                     utilisateur.setNom("SUPERVISEUR");
                     utilisateur.setPrenom("SUPERVISEUR PRENOM");
                     utilisateur.setEmail("superviseur@superviseur.com");
-                    utilisateur.setMobile("0103833350");
+                    utilisateur.setMobile("+2250103833350");
                     utilisateur.setDateDeNaissance(LocalDate.parse("1980-01-08"));
                     utilisateur.setLieuNaissance("Abidjan");
                     utilisateur.setTypePieceIdentite("CNI");
@@ -216,8 +211,7 @@ public class GestimoSpringBackendApplication {
                     utilisateur.setDateDebutPiece(LocalDate.parse("2016-01-08"));
                     utilisateur.setNationalité("Ivoirienne");
                     utilisateur.setGenre("M");
-                    utilisateur.setActivated(true);
-                    utilisateur.setUsername("+2250103833350");
+                    utilisateur.setUsername(utilisateur.getMobile());
                     utilisateur.setPassword(mdp);
                     utilisateur.setIdAgence(1L);
                    // utilisateur.setProfileImageUrl(dto.getProfileImageUrl());
@@ -233,6 +227,7 @@ public class GestimoSpringBackendApplication {
 //                    user.setNonLocked(true);
 
                     utilisateur.setJoinDate(new Date());
+                    utilisateur.setActivated(true);
                     utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
                     utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());
                     utilisateur.setActive(true);
@@ -244,6 +239,8 @@ public class GestimoSpringBackendApplication {
                 }
 
             } // CRATION DU SUPERUTILISATEUR
+
+               // gestimoWebInitDataAgenceImmoService.initAgenceImmobilier();
         };
     }
 }
