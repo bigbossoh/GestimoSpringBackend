@@ -60,7 +60,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         }
 
         Utilisateur utilisateurByEmail = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
-        if(utilisateurByEmail !=null) {
+        if(utilisateurByEmail ==null) {
             UtilisateurRequestDto utilisateurSuperviseur=utilisateurService.findById(dto.getUtilisateurCreateur().getId());
             dto.setUtilisateurCreateur(utilisateurSuperviseur);
             AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(dto));
@@ -85,7 +85,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setAuthorities(ROLE_GERANT.getAuthorities());
             newUtilisateur.setActive(false);
             newUtilisateur.setActivated(false);
-            newUtilisateur.setUsername(dto.getTelAgence());
+            newUtilisateur.setUsername(dto.getMobileAgence());
             newUtilisateur.setNonLocked(true);
             newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
             Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);

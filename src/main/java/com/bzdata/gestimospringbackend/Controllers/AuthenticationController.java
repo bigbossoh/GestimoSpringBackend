@@ -44,30 +44,30 @@ public class AuthenticationController {
     private final JWTTokenProvider jwtTokenProvider;
     private final TwilioSmsSender twilioSmsSender;
 
-    // @PostMapping("/login")
-    // @Operation(summary = "Authentification des SUPERVISEUR", security =
-    // @SecurityRequirement(name = "bearerAuth"))
-    // public ResponseEntity<AuthResponseDto> authenticate(@RequestBody
-    // AuthRequestDto request) {
-    // log.info("we are going to login...");
-    // return ResponseEntity.ok(authRequestService.authenticate(request));
-    //
-    // }
-    @PostMapping("/login")
-    public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
-        // log.info("we are here in the login resource {} ",request.getUsername());
-        authenticate(request.getUsername(), request.getPassword());
-        UtilisateurRequestDto utilisateurByUsername = utilisateurService
-                .findUtilisateurByUsername(request.getUsername());
-        Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
-        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-        log.info("we are going lo launch sms to the user ");
-        SmsRequest sms = new SmsRequest(request.getUsername(), "Vous Vous ête logger avec sussces");
-        twilioSmsSender.sendSms(sms);
-        log.info("Sms sent");
-        return new ResponseEntity<>(loginUser, jwtHeader, OK);
-    }
+
+
+//    @PostMapping("/login")
+//    @Operation(summary = "Authentification des SUPERVISEUR", security = @SecurityRequirement(name = "bearerAuth"))
+//    public ResponseEntity<AuthResponseDto> authenticate(@RequestBody AuthRequestDto request) {
+//        log.info("we are going to login...");
+//        return ResponseEntity.ok(authRequestService.authenticate(request));
+//
+//    }
+@PostMapping("/login")
+public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
+   // log.info("we are here in the login resource {} ",request.getUsername());
+    authenticate(request.getUsername(), request.getPassword());
+    UtilisateurRequestDto utilisateurByUsername = utilisateurService.findUtilisateurByUsername(request.getUsername());
+    Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
+    UserPrincipal userPrincipal = new UserPrincipal(loginUser);
+    HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+//    log.info("we are going lo launch sms to the user ");
+   // SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger avec sussces");
+    //twilioSmsSender.sendSms(sms);
+    //log.info("Sms sent");
+    return new ResponseEntity<>(loginUser, jwtHeader, OK);
+}
+
 
     private void authenticate(String username, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));

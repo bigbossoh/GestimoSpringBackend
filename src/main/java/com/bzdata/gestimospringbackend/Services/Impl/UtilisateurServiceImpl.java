@@ -2,7 +2,9 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
+import static com.bzdata.gestimospringbackend.enumeration.Role.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -54,17 +56,26 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     "Certain attributs de l'object utiliateur avec pour role locataire sont null.",
                     ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
-        Optional<Utilisateur> utilisateurByEmail = utilisateurRepository.findUtilisateurByEmail(dto.getEmail());
-        if (!utilisateurByEmail.isPresent()) {
+        Utilisateur utilisateurByUsername = utilisateurRepository.findUtilisateurByUsername(dto.getUsername());
+        if (utilisateurByUsername==null) {
             // ROLES
             Optional<Role> roles = Optional.empty();
             roles = roleRepository.findRoleByRoleName("LOCATAIRE");
             dto.setRoleRequestDto(RoleRequestDto.fromEntity(roles.get()));
             dto.setPassword(passwordEncoderUser.encode(dto.getPassword()));
-            // UTILISATEUR
+            // UTILISATEUR DE TYPE LOCATAIRE
             Optional<Utilisateur> user = Optional.empty();
             user = utilisateurRepository.findById(dto.getUserCreateDto().getId());
             dto.setUserCreateDto(UtilisateurRequestDto.fromEntity(user.get()));
+
+
+            dto.setJoinDate(new Date());
+            dto.setRoleUsed(ROLE_LOCATAIRE.name());
+            dto.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
+            dto.setActivated(false);
+            dto.setActive(true);
+            dto.setNonLocked(true);
+
             Utilisateur saveLocataire = utilisateurRepository.save(UtilisateurRequestDto.toEntity(dto));
             String token = generateVerificationToken(saveLocataire);
             String message = mailContentBuilder.build("Activez votre compte locataire enc cliquant sur le lien "
@@ -116,8 +127,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     "Certain attributs de l'object utiliateur avec pour role proprietaire sont null.",
                     ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
-        Optional<Utilisateur> utilisateurByEmail = utilisateurRepository.findUtilisateurByEmail(dto.getEmail());
-        if (!utilisateurByEmail.isPresent()) {
+        Utilisateur utilisateurByUsername = utilisateurRepository.findUtilisateurByUsername(dto.getUsername());
+        if (utilisateurByUsername==null) {
             // ROLES
             Optional<Role> roles = Optional.empty();
             roles = roleRepository.findRoleByRoleName("PROPRIETAIRE");
@@ -127,6 +138,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             Optional<Utilisateur> user = Optional.empty();
             user = utilisateurRepository.findById(dto.getUserCreateDto().getId());
             dto.setUserCreateDto(UtilisateurRequestDto.fromEntity(user.get()));
+
+
+            dto.setJoinDate(new Date());
+            dto.setRoleUsed(ROLE_PROPRIETAIRE.name());
+            dto.setAuthorities(ROLE_PROPRIETAIRE.getAuthorities());
+            dto.setActivated(true);
+            dto.setActive(true);
+            dto.setNonLocked(true);
+
             Utilisateur saveProprietaire = utilisateurRepository.save(UtilisateurRequestDto.toEntity(dto));
             String token = generateVerificationToken(saveProprietaire);
             String message = mailContentBuilder.build("Activez votre compte propriétaire enc cliquant sur le lien "
@@ -136,7 +156,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return UtilisateurRequestDto.fromEntity(saveProprietaire);
         } else {
             log.error("We cannot save this propriétaire because this user is already exist");
-            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmail(),
+            throw new EntityNotFoundException("The email is already exist in db "+dto.getUsername(),
                     ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
         }
     }
@@ -162,6 +182,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             Optional<Utilisateur> user = Optional.empty();
             user = utilisateurRepository.findById(dto.getUserCreateDto().getId());
             dto.setUserCreateDto(UtilisateurRequestDto.fromEntity(user.get()));
+            dto.setRoleUsed(ROLE_GERANT.name());
             Utilisateur saveGerant = utilisateurRepository.save(UtilisateurRequestDto.toEntity(dto));
             String token = generateVerificationToken(saveGerant);
             String message = mailContentBuilder.build("Activez votre compte gérant enc cliquant sur le lien "
