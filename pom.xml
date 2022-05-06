@@ -91,6 +91,11 @@
             <version>4.3.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.18.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -173,35 +178,35 @@
                             <springmvc>true</springmvc>
                             <locations>
                                 <!-- <location>com.bossoh.gmsscbackend.controller</location>-->
-                                 <location>com.bzdata.gestimospringbackend.Controllers</location>
-                             </locations>
-                             <basePath>http://localhost:8284</basePath>
-                             <info>
-                                 <title>Swagger GESTIMOWEB REST API</title>
-                                 <version>${project.version}</version>
-                                 <description>Swagger API pour GESTIMOWEB REST API </description>
-                                 <contact>
-                                     <name>bzadata</name>
-                                     <email>michel.bossoh@outlook.fr</email>
-                                 </contact>
-                             </info>
-                             <outputPath>${project.build.directory}</outputPath>
-                             <outputFormats>json</outputFormats>
-                             <swaggerApiReader>com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
-                             <swaggerDirectory>${project.build.directory}</swaggerDirectory>
-                         </apiSource>
-                     </apiSources>
-                 </configuration>
-                 <executions>
-                     <execution>
-                         <phase>install</phase>
-                         <goals>
-                             <goal>generate</goal>
-                         </goals>
-                     </execution>
-                 </executions>
-             </plugin>
-         </plugins>
-     </build>
+                                <location>com.bzdata.gestimospringbackend.Controllers</location>
+                            </locations>
+                            <basePath>http://localhost:8284</basePath>
+                            <info>
+                                <title>Swagger GESTIMOWEB REST API</title>
+                                <version>${project.version}</version>
+                                <description>Swagger API pour GESTIMOWEB REST API </description>
+                                <contact>
+                                    <name>bzadata</name>
+                                    <email>michel.bossoh@outlook.fr</email>
+                                </contact>
+                            </info>
+                            <outputPath>${project.build.directory}</outputPath>
+                            <outputFormats>json</outputFormats>
+                            <swaggerApiReader>com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
+                            <swaggerDirectory>${project.build.directory}</swaggerDirectory>
+                        </apiSource>
+                    </apiSources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
- </project>
+</project>
