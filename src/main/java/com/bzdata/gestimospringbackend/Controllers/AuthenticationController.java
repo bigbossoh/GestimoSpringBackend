@@ -55,7 +55,7 @@ public class AuthenticationController {
 //    }
 @PostMapping("/login")
 public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
-   // log.info("we are here in the login resource {} ",request.getUsername());
+
     authenticate(request.getUsername(), request.getPassword());
     UtilisateurRequestDto utilisateurByUsername = utilisateurService.findUtilisateurByUsername(request.getUsername());
     Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
@@ -70,6 +70,7 @@ public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
 
 
     private void authenticate(String username, String password) {
+        log.info("we are here in the login resource {} ",username);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 
