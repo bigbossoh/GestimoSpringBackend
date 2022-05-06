@@ -45,7 +45,7 @@ public class MagasinServiceImpl implements MagasinService {
     final EtageRepository etageRepository;
 
     @Override
-    public MagasinDto save(MagasinDto dto) {
+    public boolean save(MagasinDto dto) {
         Magasin magasin = new Magasin();
         log.info("We are going to create  a new Magasin {}", dto);
         List<String> errors = MagasinDtoValidator.validate(dto);
@@ -64,44 +64,51 @@ public class MagasinServiceImpl implements MagasinService {
         if (etage.isPresent()) {
             magasin.setEtageMagasin(etage.get());
         }
+
         Utilisateur utilisateurRequestDto = utilisateurRepository
                 .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        System.out.println(utilisateurRequestDto.getUrole().getRoleName());
+        // System.out.println(utilisateurRequestDto.getUrole().getRoleName());
         if (utilisateurRequestDto.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-            System.out.println("On est ici 1");
+            magasin.setIdAgence(dto.getIdAgence());
             Long numBien = 0L;
             if (magasinRepository.count() == 0) {
                 numBien = 1L;
             } else {
-                numBien = maxOfNumBienMagasin() + 1;
+                numBien = Long.valueOf(magasinRepository.getMaxNumMagasin() + 1);
             }
-            System.out.println("On est ici 2");
             magasin.setNumBien(numBien);
-            // if (!StringUtils.hasLength(dto.getAbrvNomMagasin())) {
-            // magasin.setAbrvNomMagasin("magasin-" + dto.getNumBien());
-            // magasin.setNomBien(
-            // (recoverySite.get().getAbrSite() + "-magasin-" +
-            // dto.getNumBien()).toUpperCase());
-            // } else {
-            // magasin.setAbrvNomMagasin("magasin-" + dto.getNomMagasin() + "-" +
-            // dto.getNumBien());
-            // magasin.setNomBien(
-            // (recoverySite.get().getAbrSite() + "-magasin-" + dto.getNomMagasin() + "-" +
-            // dto.getNumBien())
-            // .toUpperCase());
-            // }
-            System.out.println("On est ici 3");
-            // magasin.setAbrvNomMagasin(
-            // (recoverySite.get().getAbrSite() + "-" +
-            // dto.getAbrvNomMagasin()).toUpperCase());
-            System.out.println("On est ici 4");
+            magasin.setDescription(dto.getDescription().toUpperCase());
+            magasin.setStatutBien(dto.getStatutBien());
+            magasin.setSuperficieBien(dto.getSuperficieBien());
+            magasin.setUtilisateur(utilisateurRequestDto);
 
-            Magasin magasinSave = magasinRepository.save(magasin);
-            System.out.println(magasin);
-            return MagasinDto.fromEntity(magasinSave);
+            if (!StringUtils.hasLength(dto.getAbrvNomMagasin())) {
+                magasin.setAbrvNomMagasin("magasin-".toUpperCase() + numBien);
+                magasin.setAbrvBienimmobilier("magasin-".toUpperCase() + numBien);
+                magasin.setNomBien(
+                        (recoverySite.get().getAbrSite() + "-magasin-" +
+                                numBien).toUpperCase());
+            } else {
+                magasin.setAbrvBienimmobilier("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
+                        numBien);
+                magasin.setAbrvNomMagasin("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
+                        numBien);
+                magasin.setNomBien(
+                        (recoverySite.get().getAbrSite() + "-magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
+                                numBien)
+                                .toUpperCase());
+            }
+
+            magasin.setAbrvNomMagasin(
+                    (recoverySite.get().getAbrSite() + "-" +
+                            dto.getAbrvNomMagasin()).toUpperCase());
+
+            magasinRepository.save(magasin);
+
+            return true;
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateurRequestDto.getUrole().getRoleName(),

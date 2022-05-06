@@ -32,7 +32,7 @@ public class MagasinController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<MagasinDto> save(@RequestBody MagasinDto dto) {
+    public ResponseEntity<Boolean> save(@RequestBody MagasinDto dto) {
         log.info("We are going to save a new Magasin {}", dto);
         return ResponseEntity.ok(magasinService.save(dto));
     }
