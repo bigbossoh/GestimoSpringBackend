@@ -16,37 +16,4 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 @DataJpaTest
 public class PaysRepositoryTest {
 
-    @Autowired
-    private PaysRepository underTest;
-
-    @AfterEach
-    void tearDown() {
-        underTest.deleteAll();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        // GIVEN
-        Pays pays = new Pays();
-        pays.setAbrvPays("abrvPays");
-        pays.setNomPays("nomPays");
-        underTest.save(pays);
-    }
-
-    @Test
-    @DisplayName("Test si on touvre pas l'abreviation")
-    void itShoulCheckIfPaysFindByAbrvPays() {
-
-        // WHEN
-        Optional<Pays> paysAttendue = underTest.findByAbrvPays("abrvPays");
-        // THEN
-        assertThat(paysAttendue).isPresent();
-    }
-
-    @Test
-    void testFindByNomPays() {
-        Optional<Pays> paysAttendue = underTest.findByNomPays("nomPays");
-        // THEN
-        assertThat(paysAttendue).isPresent();
-    }
 }
