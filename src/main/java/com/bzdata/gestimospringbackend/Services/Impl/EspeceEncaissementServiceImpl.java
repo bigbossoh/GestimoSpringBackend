@@ -6,12 +6,14 @@ import com.bzdata.gestimospringbackend.DTOs.EspeceEncaissementDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.EspeceEncaissement;
+import com.bzdata.gestimospringbackend.Models.Quittance;
 import com.bzdata.gestimospringbackend.Services.EspeceEncaissementService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.EspeceEncaissementRepository;
+import com.bzdata.gestimospringbackend.repository.QuittanceRepository;
 import com.bzdata.gestimospringbackend.validator.EspeceEncaissementDtoValidator;
 
 import org.springframework.stereotype.Service;
@@ -31,9 +33,11 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
     final EspeceEncaissementRepository encaissementRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final UtilisateurService utilisateurService;
+    final QuittanceRepository quittanceRepository;
 
     @Override
     public EspeceEncaissementDto save(EspeceEncaissementDto dto) {
+
         EspeceEncaissement especeEncaissement = new EspeceEncaissement();
         double soldeLoyer = 0;
 
@@ -53,9 +57,8 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         especeEncaissement.setAppelLoyerEncaissement(appelLoyer);
         especeEncaissement.setDateEncaissement(dto.getDateEncaissement());
         especeEncaissement.setMontantEncaissement(dto.getMontantEncaissement());
-        //TODO il faudra verifier que utilisateur est soit un gerant ou le locataire lui meme 
+
         especeEncaissement.setUtilisateurEncaissement(UtilisateurRequestDto.toEntity(utilisateurRequestDto));
-        // especeEncaissement.set
 
         EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
         // calcul des soldes
@@ -66,7 +69,27 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         } else {
             appelLoyer.setSolderAppelLoyer(false);
         }
-        appelLoyerRepository.save(appelLoyer);
+        AppelLoyer appelLoyerQuittance = appelLoyerRepository.save(appelLoyer);
+        Quittance quittance = new Quittance();
+        quittance.setAnneeLoyer(appelLoyerQuittance.getAnneeAppelLoyer());
+        // quittance.setChargeLoyer(especeEncaissementSave.get);
+        quittance.setCodeBien(
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getAbrvBienimmobilier());
+        quittance.setEnvoiParMail(true);
+        quittance.setEnvoiParMail(true);
+        quittance.setEnvoiParSms(true);
+        quittance.setMoisLoyer(appelLoyerQuittance.getMoisChiffreAppelLoyer());
+        quittance.setMontantPayer(especeEncaissementSave.getMontantEncaissement());
+        String nomPrenoms = appelLoyerQuittance.getBailLocationAppelLoyer().getUtilisateurOperation().getNom() + " "
+                + appelLoyerQuittance
+                        .getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom();
+        quittance.setNomLocataire(nomPrenoms);
+        quittance.setNomProprietaire(
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getNom()
+                        + " " + appelLoyerQuittance
+                                .getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getPrenom());
+        quittance.setSoldeLoyer(appelLoyerQuittance.getSoldeAppelLoyer());
+        quittanceRepository.save(quittance);
         return EspeceEncaissementDto.fromEntity(especeEncaissementSave);
     }
 
