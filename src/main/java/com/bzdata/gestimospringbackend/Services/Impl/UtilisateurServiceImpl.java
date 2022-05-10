@@ -67,7 +67,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 newUser.setId(userExiste.get().getId());
             }
 
-            Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow();
+            Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
+                    () -> new InvalidEntityException(
+                    "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
+                    ErrorCodes.UTILISATEUR_NOT_FOUND));
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
 
@@ -92,6 +95,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                         newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
                         break;
                     default:
+                        log.error("You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",leRole.get().getRoleName());
                         break;
                 }
             }
@@ -106,7 +110,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setPrenom(dto.getPrenom());
             newUser.setEmail(dto.getEmail());
             newUser.setMobile(dto.getMobile());
-            newUser.setPassword(passwordEncoder.encode("gerant"));
+            newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
             newUser.setUsername(dto.getMobile());
             newUser.setProfileImageUrl(dto.getProfileImageUrl());
             newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
@@ -118,8 +122,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setDateFinPiece(dto.getDateFinPiece());
             newUser.setDateDeNaissance(dto.getDateDeNaissance());
             newUser.setDateDebutPiece(dto.getDateDebutPiece());
-            newUser.setActive(false);
-            newUser.setActivated(false);
+            newUser.setActive(true);
+            newUser.setActivated(true);
             newUser.setNonLocked(true);
             utilisateurRepository.save(newUser);
             return true;
