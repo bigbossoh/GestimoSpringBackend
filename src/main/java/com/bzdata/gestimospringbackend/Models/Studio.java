@@ -24,6 +24,8 @@ public class Studio extends AbstractEntity {
     int numeroStudio;
     String abrvNomStudio;
     String nomStudio;
+    boolean occupied;
+    String statutStudio;
     @ManyToOne
     Etage etageStudio;
     @OneToMany(mappedBy = "studioBail")

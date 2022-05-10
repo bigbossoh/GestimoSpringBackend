@@ -3,11 +3,16 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailAppartementService;
+import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -36,6 +41,8 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     final BailLocationRepository bailLocationRepository;
     final UtilisateurRepository utilisateurRepository;
     final AppartementRepository appartementRepository;
+    final MontantLoyerBailService montantLoyerBailService;
+    final AppelLoyerService appelLoyerService;
 
     @Override
     public BailAppartementDto save(BailAppartementDto dto) {
@@ -59,7 +66,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Appartement has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-
+            bailLocation.setIdAgence(dto.getIdAgence());
             bailLocation.setAppartementBail(appartementBail);
             bailLocation.setUtilisateurOperation(utilisateur);
             bailLocation.setArchiveBail(false);
@@ -68,10 +75,32 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             bailLocation.setDesignationBail(dto.getDesignationBail());
             bailLocation.setEnCoursBail(true);
             bailLocation.setMontantCautionBail(dto.getMontantCautionBail());
+
             bailLocation.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
             bailLocation.setUtilisateurOperation(utilisateur);
 
             BailLocation appartementBailSave = bailLocationRepository.save(bailLocation);
+            appartementBail.setOccupied(true);
+            appartementBail.setStatutAppart("Occupied");
+            appartementRepository.save(appartementBail);
+            /**
+             * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
+             */
+            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
+            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
+            montantLoyerBail.setBailLocation(appartementBailSave);
+            montantLoyerBail.setIdAgence(dto.getIdAgence());
+            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            /**
+             * Creation de l'appel loyer
+             */
+            AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
+
+            appelLoyerRequestDto.setIdBailLocation(appartementBailSave.getId());
+            appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
+            appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
+
+            appelLoyerService.save(appelLoyerRequestDto);
             return BailAppartementDto.fromEntity(appartementBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "

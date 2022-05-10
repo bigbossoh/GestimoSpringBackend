@@ -1,9 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +10,6 @@ import javax.sql.DataSource;
 
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -33,7 +30,6 @@ import net.sf.jasperreports.engine.JasperReport;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PrintServiceImpl implements PrintService {
 
-    final ResourceLoader resource;
     final DataSource dataSourceSQL;
 
     @Override

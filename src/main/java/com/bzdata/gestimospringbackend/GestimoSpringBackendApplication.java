@@ -1,7 +1,7 @@
 package com.bzdata.gestimospringbackend;
 
 import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
-import static com.bzdata.gestimospringbackend.enumeration.Role.*;
+import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -11,9 +11,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.Commune;
-import com.bzdata.gestimospringbackend.Models.Magasin;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import com.bzdata.gestimospringbackend.Models.Role;
@@ -23,7 +21,15 @@ import com.bzdata.gestimospringbackend.Models.Ville;
 
 import com.bzdata.gestimospringbackend.repository.*;
 
-import lombok.RequiredArgsConstructor;
+import com.bzdata.gestimospringbackend.repository.CommuneRepository;
+import com.bzdata.gestimospringbackend.repository.MagasinRepository;
+import com.bzdata.gestimospringbackend.repository.PaysRepository;
+import com.bzdata.gestimospringbackend.repository.QuartierRepository;
+import com.bzdata.gestimospringbackend.repository.RoleRepository;
+import com.bzdata.gestimospringbackend.repository.SiteRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
+import com.bzdata.gestimospringbackend.repository.VilleRepository;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -42,6 +48,7 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -51,7 +58,8 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 @SecurityScheme(name = "gestimoapi", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER, bearerFormat = "JWT")
 public class GestimoSpringBackendApplication {
 
-    //private final GestimoWebInitDataAgenceImmoServiceImpl gestimoWebInitDataAgenceImmoService;
+    // private final GestimoWebInitDataAgenceImmoServiceImpl
+    // gestimoWebInitDataAgenceImmoService;
 
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
@@ -90,9 +98,7 @@ public class GestimoSpringBackendApplication {
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
         Utilisateur utilisateur = new Utilisateur();
-        Magasin magasin = new Magasin();
         Pays pays = new Pays();
-        AgenceImmobiliere aImmobiliere = new AgenceImmobiliere();
 
         return (args) -> {
             // Creation des Constants
@@ -199,7 +205,7 @@ public class GestimoSpringBackendApplication {
             if (roles.isPresent()) {
                 Utilisateur userPrincipalSuperviseur = utilisateurRepository
                         .findUtilisateurByUsername("superviseur@superviseur.com");
-                if (userPrincipalSuperviseur ==null) {
+                if (userPrincipalSuperviseur == null) {
                     utilisateur.setUrole(roles.get());
                     utilisateur.setNom("SUPERVISEUR");
                     utilisateur.setPrenom("SUPERVISEUR PRENOM");
@@ -225,9 +231,7 @@ public class GestimoSpringBackendApplication {
                     utilisateurRepository.save(utilisateur);
                 }
 
-
-            }
-
+            } // CREATION DU SUPERUTILISATEUR
 
         };
     }

@@ -3,11 +3,16 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailStudioDto;
+import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Studio;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailStudioService;
+import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -37,6 +42,8 @@ public class BailStudioServiceImpl implements BailStudioService {
     final UtilisateurRepository utilisateurRepository;
     final StudioRepository studioRepository;
     final BailLocationRepository bailLocationRepository;
+    final MontantLoyerBailService montantLoyerBailService;
+    final AppelLoyerService appelLoyerService;
 
     @Override
     public BailStudioDto save(BailStudioDto dto) {
@@ -54,7 +61,7 @@ public class BailStudioServiceImpl implements BailStudioService {
                 .orElseThrow(() -> new InvalidEntityException(
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateur.getUrole().equals("LOCATAIRE")) {
+        if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
 
             Studio studio = studioRepository.findById(dto.getIdStudio())
                     .orElseThrow(() -> new InvalidEntityException(
@@ -70,11 +77,33 @@ public class BailStudioServiceImpl implements BailStudioService {
             bailLocationStudio.setMontantCautionBail(dto.getMontantCautionBail());
             bailLocationStudio.setAbrvCodeBail(dto.getAbrvCodeBail());
             bailLocationStudio.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
-
+            bailLocationStudio.setIdAgence(dto.getIdAgence());
             BailLocation studioBailSave = bailLocationRepository.save(bailLocationStudio);
+
+            studio.setOccupied(true);
+            studio.setStatutStudio("Occupied");
+            studioRepository.save(studio);
+            /**
+             * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
+             */
+            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
+            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
+            montantLoyerBail.setBailLocation(studioBailSave);
+            montantLoyerBail.setIdAgence(dto.getIdAgence());
+            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            /**
+             * Creation de l'appel loyer
+             */
+            AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
+
+            appelLoyerRequestDto.setIdBailLocation(studioBailSave.getId());
+            appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
+            appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
+
+            appelLoyerService.save(appelLoyerRequestDto);
             return BailStudioDto.fromEntity(studioBailSave);
         } else {
-            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle Locataire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }

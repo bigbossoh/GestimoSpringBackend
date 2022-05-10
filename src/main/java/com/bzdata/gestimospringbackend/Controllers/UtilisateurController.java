@@ -27,23 +27,31 @@ import lombok.extern.slf4j.Slf4j;
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
-    @PostMapping("/locataire/save")
-    public ResponseEntity<UtilisateurRequestDto> saveLocataire(@RequestBody UtilisateurRequestDto request) {
+    @PostMapping("/save")
+    public ResponseEntity<Boolean> saveLocataire(@RequestBody UtilisateurRequestDto request) {
         log.info("We are going to save a new locatire {}", request);
-        return ResponseEntity.ok(utilisateurService.saveLocataire(request));
+        return ResponseEntity.ok(utilisateurService.saveutilisateur(request));
     }
+    // @PostMapping("/locataire/save")
+    // public ResponseEntity<UtilisateurRequestDto> saveLocataire(@RequestBody
+    // UtilisateurRequestDto request) {
+    // log.info("We are going to save a new locatire {}", request);
+    // return ResponseEntity.ok(utilisateurService.saveLocataire(request));
+    // }
 
-    @PostMapping("/proprietaire/save")
-    public ResponseEntity<UtilisateurRequestDto> saveProprietaire(@RequestBody UtilisateurRequestDto request) {
-        log.info("We are going to save a new Proprietaire {}", request);
-        return ResponseEntity.ok(utilisateurService.saveProprietaire(request));
-    }
+    // @PostMapping("/proprietaire/save")
+    // public ResponseEntity<Boolean> saveProprietaire(@RequestBody
+    // UtilisateurRequestDto request) {
+    // log.info("We are going to save a new Proprietaire {}", request);
+    // return ResponseEntity.ok(utilisateurService.saveProprietaire(request));
+    // }
 
-    @PostMapping("/gerant/save")
-    public ResponseEntity<UtilisateurRequestDto> saveGerant(@RequestBody UtilisateurRequestDto request) {
-        log.info("We are going to save a new Gerant {}", request);
-        return ResponseEntity.ok(utilisateurService.saveGerant(request));
-    }
+    // @PostMapping("/gerant/save")
+    // public ResponseEntity<UtilisateurRequestDto> saveGerant(@RequestBody
+    // UtilisateurRequestDto request) {
+    // log.info("We are going to save a new Gerant {}", request);
+    // return ResponseEntity.ok(utilisateurService.saveGerant(request));
+    // }
 
     @GetMapping("/getutilisateurbyid/{id}")
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByID(@PathVariable("id") Long id) {
