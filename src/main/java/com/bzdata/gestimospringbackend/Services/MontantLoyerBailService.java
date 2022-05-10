@@ -6,7 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 
 public interface MontantLoyerBailService {
 
-    MontantLoyerBailDto saveNewMontantLoyerBail(MontantLoyerBailDto dto);
+    boolean saveNewMontantLoyerBail(MontantLoyerBailDto dto);
 
     MontantLoyerBailDto updateNewMontantLoyerBail(MontantLoyerBailDto dto);
 
