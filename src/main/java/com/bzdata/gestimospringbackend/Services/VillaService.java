@@ -7,7 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 
 public interface VillaService {
 
-    VillaDto save(VillaDto dto);
+    boolean save(VillaDto dto);
 
     boolean delete(Long id);
 

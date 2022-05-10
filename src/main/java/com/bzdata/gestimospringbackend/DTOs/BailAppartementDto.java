@@ -14,12 +14,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailAppartementDto {
     Long id;
+    Long idAgence;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;
     boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
+    double nouveauMontantLoyer;
 
     LocalDate dateDebut;
     LocalDate dateFin;

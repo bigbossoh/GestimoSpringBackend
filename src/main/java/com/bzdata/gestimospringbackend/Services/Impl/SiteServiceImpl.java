@@ -36,7 +36,7 @@ public class SiteServiceImpl implements SiteService {
     final QuartierRepository quartierRepository;
 
     @Override
-    public SiteResponseDto save(SiteRequestDto dto) {
+    public boolean save(SiteRequestDto dto) {
         Optional<Site> oldSite = siteRepository.findById(dto.getId());
 
         log.info("We are going to create  a new site {}", dto);
@@ -46,28 +46,34 @@ public class SiteServiceImpl implements SiteService {
             throw new InvalidEntityException("Certain attributs de l'object site sont null.",
                     ErrorCodes.SITE_NOT_VALID, errors);
         }
-        if (oldSite.isPresent()) {
+        try {
+            if (oldSite.isPresent()) {
 
-            Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
-                    () -> new InvalidEntityException(
-                            "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
-                            ErrorCodes.SITE_NOT_FOUND));
-            oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
-            oldSite.get().setNomSite(dto.getNomSite());
-            oldSite.get().setQuartier(quartier);
-            Site siteSave = siteRepository.save(oldSite.get());
-            return SiteResponseDto.fromEntity(siteSave);
-        } else {
-            Site site = new Site();
-            Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
-                    () -> new InvalidEntityException(
-                            "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
-                            ErrorCodes.SITE_NOT_FOUND));
-            site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
-            site.setNomSite(dto.getNomSite());
-            site.setQuartier(quartier);
-            Site siteSave = siteRepository.save(site);
-            return SiteResponseDto.fromEntity(siteSave);
+                Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                                ErrorCodes.SITE_NOT_FOUND));
+                oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+                oldSite.get().setNomSite(dto.getNomSite());
+                oldSite.get().setQuartier(quartier);
+                oldSite.get().setIdAgence(dto.getIdAgence());
+                siteRepository.save(oldSite.get());
+                return true;
+            } else {
+                Site site = new Site();
+                Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                                ErrorCodes.SITE_NOT_FOUND));
+                site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+
+                site.setIdAgence(dto.getIdAgence());
+                site.setQuartier(quartier);
+                siteRepository.save(site);
+                return true;
+            }
+        } catch (Exception e) {
+            throw new InvalidEntityException(" Erreur : " + e.getMessage());
         }
 
     }

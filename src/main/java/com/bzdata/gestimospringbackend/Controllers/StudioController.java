@@ -41,7 +41,7 @@ public class StudioController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Studio", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<StudioDto> save(@RequestBody StudioDto dto) {
+    public ResponseEntity<Boolean> save(@RequestBody StudioDto dto) {
         log.info("We are going to save a new Studio {}", dto);
         return ResponseEntity.ok(studioService.save(dto));
     }

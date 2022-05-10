@@ -5,7 +5,7 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.StudioDto;
 
 public interface StudioService {
-    StudioDto save(StudioDto dto);
+    boolean save(StudioDto dto);
 
     boolean delete(Long id);
 

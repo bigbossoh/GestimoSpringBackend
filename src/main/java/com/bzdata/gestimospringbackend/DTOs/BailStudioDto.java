@@ -14,13 +14,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailStudioDto {
     Long id;
+    Long idAgence;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;
     boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
-
+    double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
     Long idStudio;
@@ -42,6 +43,8 @@ public class BailStudioDto {
                 .montantCautionBail(bailLocation.getMontantCautionBail())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
                 .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
+                .idAgence(bailLocation.getIdAgence())
+
                 .build();
     }
 

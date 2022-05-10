@@ -97,6 +97,8 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             immeuble.setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
             immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
             immeuble.setGarrage(dto.isGarrage());
+            immeuble.setNumBien(Long.valueOf(numeroDubien));
+            immeuble.setIdAgence(dto.getIdAgence());
             // immeuble.setArchived(immeuble.isArchived());
             immeuble.setDescription(dto.getDescriptionImmeuble());
             immeuble.setNbrEtage(dto.getNbrEtage());
@@ -107,7 +109,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             immeuble.setOccupied(false);
             immeuble.setStatutBien(dto.getStatutBien());
             immeuble.setSuperficieBien(dto.getSuperficieBien());
-
+            immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
             Immeuble immeubleSave = immeubleRepository.save(immeuble);
             return ImmeubleDto.fromEntity(immeubleSave);
         } else {

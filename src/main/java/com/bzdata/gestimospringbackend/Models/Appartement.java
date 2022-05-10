@@ -26,6 +26,8 @@ public class Appartement extends AbstractEntity {
     int nbreSalonApp;
     int nbreSalleEauApp;
     boolean isResidence;
+    boolean occupied;
+    String statutAppart;
     int numeroApp;
     String abrvNomApp;
     String nomApp;

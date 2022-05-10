@@ -32,7 +32,7 @@ public class VillaController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<VillaDto> save(@RequestBody VillaDto dto) {
+    public ResponseEntity<Boolean> save(@RequestBody VillaDto dto) {
         log.info("We are going to save a new Villa {}", dto);
         return ResponseEntity.ok(villaService.save(dto));
     }

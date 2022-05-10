@@ -57,6 +57,7 @@ public class QuartierServiceImpl implements QuartierService {
             quartier.setAbrvQuartier(commune.getAbrvCommune() + "-" + dto.getAbrvQuartier());
             quartier.setNomQuartier(dto.getNomQuartier());
             quartier.setCommune(commune);
+            quartier.setIdAgence(dto.getIdAgence());
             Quartier quartierSave = quartierRepository.save(quartier);
             return QuartierDto.fromEntity(quartierSave);
         } else {
@@ -67,6 +68,7 @@ public class QuartierServiceImpl implements QuartierService {
             oldQuatier.get().setAbrvQuartier(commune.getAbrvCommune() + "-" + dto.getAbrvQuartier());
             oldQuatier.get().setNomQuartier(dto.getNomQuartier());
             oldQuatier.get().setCommune(commune);
+            oldQuatier.get().setIdAgence(dto.getIdAgence());
             Quartier quartierSave = quartierRepository.save(oldQuatier.get());
             return QuartierDto.fromEntity(quartierSave);
         }

@@ -16,8 +16,8 @@ public class UtilisateurDtoValiditor {
             errors.add("Veuillez renseigner le nom de l'utilisateur");
             errors.add("Veuillez renseigner le mobile de l'utilisateur");
             errors.add("Veuillez renseigner l'utilisateur responsable de la création de cet utilisateur");
-//            errors.addAll(AgenceDtoValidator.validate(null));
-//            errors.addAll(RoleDtoValidator.validate(null));
+            // errors.addAll(AgenceDtoValidator.validate(null));
+            // errors.addAll(RoleDtoValidator.validate(null));
             return errors;
         }
         if (!StringUtils.hasLength(dto.getEmail())) {
@@ -32,11 +32,11 @@ public class UtilisateurDtoValiditor {
         if (!StringUtils.hasLength(dto.getMobile())) {
             errors.add("Veuillez renseigner le mobile de l'utilisateur");
         }
-        if(dto.getUserCreateDto().getId()==null){
+        if (dto.getUserCreate() == null) {
             errors.add("Veuillez renseigner l'utilisateur responsable de la création de cet utilisateur");
         }
-        //errors.addAll(AgenceDtoValidator.validate(dto.getAgenceDto()));
-        //errors.addAll(RoleDtoValidator.validate(dto.getRoleRequestDto()));
+        // errors.addAll(AgenceDtoValidator.validate(dto.getAgenceDto()));
+        // errors.addAll(RoleDtoValidator.validate(dto.getRoleRequestDto()));
         return errors;
     }
 

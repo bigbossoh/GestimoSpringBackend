@@ -48,7 +48,7 @@ public class BailVillaServiceImpl implements BailVillaService {
         List<String> errors = BailVillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("le Villa n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
+            throw new InvalidEntityException("Certains attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
 
@@ -86,7 +86,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(villaBailSave);
-            montantLoyerBail.setIdAgence(villaBailSave.getIdAgence());
+            montantLoyerBail.setIdAgence(dto.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
             /**
              * Creation de l'appel loyer
@@ -95,7 +95,7 @@ public class BailVillaServiceImpl implements BailVillaService {
 
             appelLoyerRequestDto.setIdBailLocation(villaBailSave.getId());
             appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
-            appelLoyerRequestDto.setIdAgence(villaBailSave.getIdAgence());
+            appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
 

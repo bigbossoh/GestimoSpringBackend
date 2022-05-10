@@ -33,7 +33,7 @@ public class SiteController {
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Site", security = @SecurityRequirement(name = "bearerAuth"))
 
-    public ResponseEntity<SiteResponseDto> save(@RequestBody SiteRequestDto dto){
+    public ResponseEntity<Boolean> save(@RequestBody SiteRequestDto dto) {
 
         log.info("We are going to save a new Site {}", dto);
         return ResponseEntity.ok(siteService.save(dto));
@@ -51,7 +51,7 @@ public class SiteController {
     @Operation(summary = "Liste de tous les Sites", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<SiteResponseDto>>findAll(){
+    public ResponseEntity<List<SiteResponseDto>> findAll() {
         return ResponseEntity.ok(siteService.findAll());
     }
 

@@ -37,7 +37,7 @@ public class StudioServiceImpl implements StudioService {
     final EtageRepository etageRepository;
 
     @Override
-    public StudioDto save(StudioDto dto) {
+    public boolean save(StudioDto dto) {
         Optional<Studio> oldStudio = studioRepository.findById(dto.getId());
 
         int numStu = studioRepository.getMaxNumStudio() + 1;
@@ -48,30 +48,36 @@ public class StudioServiceImpl implements StudioService {
             throw new InvalidEntityException("Certain attributs de l'object Studio sont null.",
                     ErrorCodes.STUDIO_NOT_VALID, errors);
         }
-        Optional<Etage> etage = etageRepository.findById(dto.getIdEtage());
 
-        if (oldStudio.isPresent()) {
-            oldStudio.get().setEtageStudio(null);
-            oldStudio.get().setNomStudio(dto.getNomStudio());
-            oldStudio.get().setNumeroStudio(dto.getNumeroStudio());
-            oldStudio.get().setDescStudio(dto.getDescStudio());
-            Studio studioSave = studioRepository.save(oldStudio.get());
-            return StudioDto.fromEntity(studioSave);
+        try {
+            Optional<Etage> etage = etageRepository.findById(dto.getIdEtage());
+
+            if (oldStudio.isPresent()) {
+                oldStudio.get().setEtageStudio(null);
+                oldStudio.get().setNomStudio(dto.getNomStudio());
+                oldStudio.get().setNumeroStudio(dto.getNumeroStudio());
+                oldStudio.get().setDescStudio(dto.getDescStudio());
+                studioRepository.save(oldStudio.get());
+                return true;
+            }
+            Studio studio = new Studio();
+
+            studio.setAbrvNomStudio(dto.getAbrvNomStudio() + "-" + numStu);
+            if (etage.isPresent()) {
+                studio.setEtageStudio(etage.get());
+                studio.setAbrvNomStudio(etage.get().getAbrvEtage() + "-STUDIO-" + numStu);
+            }
+            studio.setEtageStudio(null);
+
+            studio.setNomStudio(dto.getNomStudio());
+            studio.setNumeroStudio(numStu);
+            studio.setDescStudio(dto.getDescStudio());
+            studioRepository.save(studio);
+            return true;
+        } catch (Exception e) {
+            throw new InvalidEntityException("L'erreur suivante est parvenue" + e.getMessage());
         }
-        Studio studio = new Studio();
 
-        studio.setAbrvNomStudio(dto.getAbrvNomStudio() + "-" + numStu);
-        if (etage.isPresent()) {
-            studio.setEtageStudio(etage.get());
-            studio.setAbrvNomStudio(etage.get().getAbrvEtage() + "-STUDIO-" + numStu);
-        }
-        studio.setEtageStudio(null);
-
-        studio.setNomStudio(dto.getNomStudio());
-        studio.setNumeroStudio(numStu);
-        studio.setDescStudio(dto.getDescStudio());
-        Studio studioSave = studioRepository.save(studio);
-        return StudioDto.fromEntity(studioSave);
     }
 
     @Override
