@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
+
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import lombok.AccessLevel;
@@ -20,7 +21,7 @@ public class MontantLoyerBailDto {
     boolean statusLoyer;
     double tauxLoyer;
     double montantAugmentation;
-    BailLocation bailLocation;
+    Long bailLocation;
 
     public static MontantLoyerBailDto fromEntity(MontantLoyerBail montantLoyerBail) {
         if (montantLoyerBail == null) {
@@ -36,7 +37,7 @@ public class MontantLoyerBailDto {
                 .statusLoyer(montantLoyerBail.isStatusLoyer())
                 .tauxLoyer(montantLoyerBail.getTauxLoyer())
                 .montantAugmentation(montantLoyerBail.getMontantAugmentation())
-                .bailLocation(montantLoyerBail.getBailLocation())
+                .bailLocation(montantLoyerBail.getBailLocation().getId())
                 .build();
     }
 
@@ -54,7 +55,7 @@ public class MontantLoyerBailDto {
         m.setStatusLoyer(dto.isStatusLoyer());
         m.setTauxLoyer(dto.getTauxLoyer());
         m.setMontantAugmentation(dto.getMontantAugmentation());
-        m.setBailLocation(dto.getBailLocation());
+        // m.setBailLocation(dto.getBailLocation());
         return m;
     }
 }
