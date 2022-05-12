@@ -32,7 +32,7 @@ public class AppelLoyersController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un appel", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<List<String>> save(@RequestBody AppelLoyerRequestDto dto) {
+    public ResponseEntity<List<String>> saveAppelLoyers(@RequestBody AppelLoyerRequestDto dto) {
         log.info("We are going to save a new appel {}", dto);
         return ResponseEntity.ok(appelLoyerService.save(dto));
     }
