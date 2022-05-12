@@ -32,7 +32,7 @@ public class VillaController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> save(@RequestBody VillaDto dto) {
+    public ResponseEntity<Boolean> saveVilla(@RequestBody VillaDto dto) {
         log.info("We are going to save a new Villa {}", dto);
         return ResponseEntity.ok(villaService.save(dto));
     }
@@ -41,7 +41,7 @@ public class VillaController {
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<VillaDto>> findAll() {
+    public ResponseEntity<List<VillaDto>> findAllVillaDto() {
         return ResponseEntity.ok(villaService.findAll());
     }
 }
