@@ -35,14 +35,14 @@ public class CommuneController {
     // SUPPRESSION D'UNE COMMUNE
     @Operation(summary = "Suppression d'une Commune avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteCommune(@PathVariable("id") Long id) {
         log.info("We are going to delete a Ville {}", id);
         return ResponseEntity.ok(communeService.delete(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Commune", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<CommuneDto> save(@RequestBody CommuneDto dto) {
+    public ResponseEntity<CommuneDto> saveCommune(@RequestBody CommuneDto dto) {
         log.info("We are going to save a new Commune {}", dto);
         return ResponseEntity.ok(communeService.save(dto));
     }
@@ -50,20 +50,20 @@ public class CommuneController {
     // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Communes", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<CommuneDto>> findAll() {
+    public ResponseEntity<List<CommuneDto>> findAllCommune() {
         return ResponseEntity.ok(communeService.findAll());
     }
 
     @Operation(summary = "Trouver une commune par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<CommuneDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<CommuneDto> findCommuneByID(@PathVariable("id") Long id) {
         log.info("Find Commune by ID{}", id);
         return ResponseEntity.ok(communeService.findById(id));
     }
 
     @Operation(summary = "Trouver une commune par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<CommuneDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<CommuneDto> findCommuneByName(@PathVariable("name") String name) {
         log.info("Find commune By nom {}", name);
         return ResponseEntity.ok(communeService.findByName(name));
     }
@@ -82,7 +82,7 @@ public class CommuneController {
 
     @Operation(summary = "Trouver une commune par l'Id de la Ville", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdVille/{id}")
-    public ResponseEntity<List<CommuneDto>> findByIdPays(@PathVariable("id") Long id) {
+    public ResponseEntity<List<CommuneDto>> findCommuneByIdPays(@PathVariable("id") Long id) {
         log.info("Find Ville By Id Pays {}", id);
         return ResponseEntity.ok(communeService.findAllByIdVille(id));
     }

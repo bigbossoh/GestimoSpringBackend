@@ -33,7 +33,7 @@ public class SiteController {
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Site", security = @SecurityRequirement(name = "bearerAuth"))
 
-    public ResponseEntity<Boolean> save(@RequestBody SiteRequestDto dto) {
+    public ResponseEntity<Boolean> saveSite(@RequestBody SiteRequestDto dto) {
 
         log.info("We are going to save a new Site {}", dto);
         return ResponseEntity.ok(siteService.save(dto));
@@ -42,7 +42,7 @@ public class SiteController {
     // SUPPRESSION D'UN SITE
     @Operation(summary = "Suppression d'un Site avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteSite(@PathVariable("id") Long id) {
         log.info("We are going to delete a Site with ID {}", id);
         return ResponseEntity.ok(siteService.delete(id));
     }
@@ -51,22 +51,22 @@ public class SiteController {
     @Operation(summary = "Liste de tous les Sites", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<SiteResponseDto>> findAll() {
+    public ResponseEntity<List<SiteResponseDto>> findAllSites() {
         return ResponseEntity.ok(siteService.findAll());
     }
 
-    // GET PAYS BY ID
+    // GET Site BY ID
     @Operation(summary = "Trouver un site par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<SiteResponseDto> findByID(@PathVariable("id") Long id) {
-        log.info("Find by ID{}", id);
+    public ResponseEntity<SiteResponseDto> findSiteByID(@PathVariable("id") Long id) {
+        log.info("Find site by ID{}", id);
         return ResponseEntity.ok(siteService.findById(id));
     }
 
-    // GET PAYS BY ID
+    // GET SITE BY ID
     @Operation(summary = "Trouver un Site par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<SiteResponseDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<SiteResponseDto> findSiteByName(@PathVariable("name") String name) {
         log.info("Find Site By nom {}", name);
         return ResponseEntity.ok(siteService.findByName(name));
     }

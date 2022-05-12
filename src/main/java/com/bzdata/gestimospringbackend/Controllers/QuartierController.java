@@ -34,41 +34,41 @@ public class QuartierController {
 
     @Operation(summary = "Suppression d'un Quartier avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteQuartier(@PathVariable("id") Long id) {
         log.info("We are going to save a new Ville {}", id);
         return ResponseEntity.ok(quartierService.delete(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Quartier", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<QuartierDto> save(@RequestBody QuartierDto dto) {
+    public ResponseEntity<QuartierDto> saveQuartier(@RequestBody QuartierDto dto) {
         log.info("We are going to save a new Commune {}", dto);
         return ResponseEntity.ok(quartierService.save(dto));
     }
 
     @Operation(summary = "Liste de tous les Quartiers", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<QuartierDto>> findAll() {
+    public ResponseEntity<List<QuartierDto>> findAllQuartiers() {
         return ResponseEntity.ok(quartierService.findAll());
     }
 
     @Operation(summary = "Trouver un Quartier par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<QuartierDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<QuartierDto> findByIDQuartiers(@PathVariable("id") Long id) {
         log.info("Find Commune by ID{}", id);
         return ResponseEntity.ok(quartierService.findById(id));
     }
 
     @Operation(summary = "Trouver un Quartier par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<QuartierDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<QuartierDto> findByNameQuartier(@PathVariable("name") String name) {
         log.info("Find Quartier By nom {}", name);
         return ResponseEntity.ok(quartierService.findByName(name));
     }
 
     @Operation(summary = "Trouver un Quartier par l'Id de la Ville", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdCommune/{id}")
-    public ResponseEntity<List<QuartierDto>> findByIdCommune(@PathVariable("id") Long id) {
+    public ResponseEntity<List<QuartierDto>> findAllQuartierByIdCommune(@PathVariable("id") Long id) {
         log.info("Find Quartier By Id Commune {}", id);
         return ResponseEntity.ok(quartierService.findAllByIdCommune(id));
     }

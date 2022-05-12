@@ -33,42 +33,42 @@ public class ImmeubleController {
     final ImmeubleService immeubleService;
 
     @Operation(summary = "Suppression d'un Immeuble avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    @DeleteMapping("/deleteImmeuble/{id}")
+    public ResponseEntity<Boolean> deleteImmeuble(@PathVariable("id") Long id) {
         log.info("We are going to delete a Immeuble {}", id);
         return ResponseEntity.ok(immeubleService.delete(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ImmeubleDto> save(@RequestBody ImmeubleDto dto) {
+    public ResponseEntity<ImmeubleDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
         log.info("We are going to save a new Immeuble {}", dto);
         return ResponseEntity.ok(immeubleService.save(dto));
     }
 
     @Operation(summary = "Liste de toutes les Immeubles", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<ImmeubleDto>> findAll() {
+    public ResponseEntity<List<ImmeubleDto>> findAllImmeuble() {
         return ResponseEntity.ok(immeubleService.findAll());
     }
 
     @Operation(summary = "Trouver une Immeuble par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<ImmeubleDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<ImmeubleDto> findImmeubleByID(@PathVariable("id") Long id) {
         log.info("Find Immeuble by ID{}", id);
         return ResponseEntity.ok(immeubleService.findById(id));
     }
 
     @Operation(summary = "Trouver une Immeuble par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<ImmeubleDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<ImmeubleDto> findImmeubleByName(@PathVariable("name") String name) {
         log.info("Find Immeuble By nom {}", name);
         return ResponseEntity.ok(immeubleService.findByName(name));
     }
 
     @Operation(summary = "Trouver une Immeuble par l'Id de la Site", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdSite/{id}")
-    public ResponseEntity<List<ImmeubleDto>> findByIdPays(@PathVariable("id") Long id) {
+    public ResponseEntity<List<ImmeubleDto>> findImmeubleByIdSite(@PathVariable("id") Long id) {
         log.info("Find Ville By Id Pays {}", id);
         return ResponseEntity.ok(immeubleService.findAllByIdSite(id));
     }

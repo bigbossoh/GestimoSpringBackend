@@ -35,35 +35,35 @@ public class PaysController {
     //CREATION ET MODIFICATION D'UN PAYS
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Pays", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<PaysDto>save(@RequestBody PaysDto dto){
+    public ResponseEntity<PaysDto>savePays(@RequestBody PaysDto dto){
         log.info("We are going to save a new Pays {}", dto);
         return ResponseEntity.ok(paysService.save(dto)); 
     }
     //SUPPRESSION D'UN PAYS
     @Operation(summary = "Suppression d'un Pays avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean>delete(@PathVariable("id") Long id){
+    public ResponseEntity<Boolean>deletePays(@PathVariable("id") Long id){
         log.info("We are going to save a new pays {}", id);
         return ResponseEntity.ok(paysService.delete(id));
     }
     // TOUT LES PAYS
     @Operation(summary = "Liste de tous les Pays", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<PaysDto>>findAll(){
+    public ResponseEntity<List<PaysDto>>findAllPays(){
         return ResponseEntity.ok(paysService.findAll());
     }
     //GET PAYS BY ID
     @Operation(summary = "Trouver un pays par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<PaysDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<PaysDto> findPaysByID(@PathVariable("id") Long id) {
         log.info("Find by ID{}", id);
         return ResponseEntity.ok(paysService.findById(id));
     }
 
-    // GET PAYS BY ID
+    // GET PAYS BY NAME
     @Operation(summary = "Trouver un pays par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<PaysDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<PaysDto> findPaysByName(@PathVariable("name") String name) {
         log.info("Find Pays By nom {}", name);
         return ResponseEntity.ok(paysService.findByName(name));
     }
