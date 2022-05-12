@@ -35,7 +35,7 @@ public class VilleController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Ville", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<VilleDto> save(@RequestBody VilleDto dto) {
+    public ResponseEntity<VilleDto> saveVille(@RequestBody VilleDto dto) {
         log.info("We are going to save a new Ville {}", dto);
         return ResponseEntity.ok(villeService.save(dto));
     }
@@ -43,7 +43,7 @@ public class VilleController {
     // SUPPRESSION D'UNE VILLE
     @Operation(summary = "Suppression d'une Ville avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteVille(@PathVariable("id") Long id) {
         log.info("We are going to save a new Ville {}", id);
         return ResponseEntity.ok(villeService.delete(id));
     }
@@ -51,14 +51,14 @@ public class VilleController {
     // TOUTES LES VILLES
     @Operation(summary = "Liste de toutes les villes", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<VilleDto>> findAll() {
+    public ResponseEntity<List<VilleDto>> findAllVilles() {
         return ResponseEntity.ok(villeService.findAll());
     }
 
     // GET VILLE BY ID
     @Operation(summary = "Trouver une ville par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<VilleDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<VilleDto> findByIdVille(@PathVariable("id") Long id) {
         log.info("Find by ID{}", id);
         return ResponseEntity.ok(villeService.findById(id));
     }
@@ -66,7 +66,7 @@ public class VilleController {
     // GET VILLE BY NAME
     @Operation(summary = "Trouver une ville par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<VilleDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<VilleDto> findByNameVille(@PathVariable("name") String name) {
         log.info("Find Ville By nom {}", name);
         return ResponseEntity.ok(villeService.findByName(name));
     }
