@@ -35,34 +35,34 @@ public class BailVillaController {
 
     @Operation(summary = "Suppression d'un Bail Villa avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteBailVilla(@PathVariable("id") Long id) {
         log.info("We are going to delete a Bail Villa {}", id);
         return ResponseEntity.ok(bailVillaService.delete(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Bail Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<BailVillaDto> save(@RequestBody BailVillaDto dto) {
+    public ResponseEntity<BailVillaDto> saveBailVilla(@RequestBody BailVillaDto dto) {
         log.info("We are going to save a new Bail Magasin {}", dto);
         return ResponseEntity.ok(bailVillaService.saveNewBailVilla(dto));
     }
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<BailVillaDto>> findAll() {
+    public ResponseEntity<List<BailVillaDto>> findAllBailVilla() {
         return ResponseEntity.ok(bailVillaService.findAll());
     }
 
     @Operation(summary = "Trouver un Bail Villa par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<BailVillaDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<BailVillaDto> findBailVillaByID(@PathVariable("id") Long id) {
         log.info("Find Bail Magains by ID{}", id);
         return ResponseEntity.ok(bailVillaService.findById(id));
     }
 
     @Operation(summary = "Trouver un Villa par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<BailVillaDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<BailVillaDto> findBailVillaByName(@PathVariable("name") String name) {
         log.info("Find Bail Magain By nom {}", name);
         return ResponseEntity.ok(bailVillaService.findByName(name));
     }

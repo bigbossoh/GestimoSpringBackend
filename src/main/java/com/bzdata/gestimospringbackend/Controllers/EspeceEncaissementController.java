@@ -30,7 +30,7 @@ public class EspeceEncaissementController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un encaissement especes", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<EspeceEncaissementDto> save(@RequestBody EspeceEncaissementDto dto) {
+    public ResponseEntity<EspeceEncaissementDto> saveEspeceEncaissement(@RequestBody EspeceEncaissementDto dto) {
         log.info("We are going to save a new Especeencaissement{}", dto);
         return ResponseEntity.ok(encaissementService.save(dto));
     }

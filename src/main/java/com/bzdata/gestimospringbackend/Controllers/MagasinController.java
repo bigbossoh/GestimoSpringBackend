@@ -5,14 +5,11 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
 import com.bzdata.gestimospringbackend.Services.MagasinService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,16 +29,37 @@ public class MagasinController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> save(@RequestBody MagasinDto dto) {
+    public ResponseEntity<Boolean> saveMagasin(@RequestBody MagasinDto dto) {
         log.info("We are going to save a new Magasin {}", dto);
         return ResponseEntity.ok(magasinService.save(dto));
     }
 
-    // TOUT LES VILLA
+    // TOUT LES Magasins
     @Operation(summary = "Liste de tous les Magasins", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<MagasinDto>> findAll() {
+    public ResponseEntity<List<MagasinDto>> findAllMagasin() {
         return ResponseEntity.ok(magasinService.findAll());
     }
+
+    @Operation(summary = "Trouver un Magasin par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findmagasinById/{id}")
+    public ResponseEntity<MagasinDto> findByIDMagasin(@PathVariable("id") Long id) {
+        log.info("Find Commune by ID{}", id);
+        return ResponseEntity.ok(magasinService.findById(id));
+    }
+
+    @Operation(summary = "Trouver un Quartier par son nom", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<MagasinDto> findByNameMagasinDto(@PathVariable("name") String name) {
+        log.info("Find Quartier By nom {}", name);
+        return ResponseEntity.ok(magasinService.findByName(name));
+    }
+
+    @Operation(summary = "Liste de tous les Magasins by Idsite", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllMagasinByIdSite/{idSite}")
+    public ResponseEntity<List<MagasinDto>> findAllMagasinByIdSite(@PathVariable("idSite") Long idSite) {
+        return ResponseEntity.ok(magasinService.findAllByIdSite(idSite));
+    }
+
 }

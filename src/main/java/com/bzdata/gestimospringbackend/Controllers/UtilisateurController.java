@@ -28,7 +28,7 @@ public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
     @PostMapping("/save")
-    public ResponseEntity<Boolean> saveLocataire(@RequestBody UtilisateurRequestDto request) {
+    public ResponseEntity<Boolean> saveUtilisateur(@RequestBody UtilisateurRequestDto request) {
         log.info("We are going to save a new locatire {}", request);
         return ResponseEntity.ok(utilisateurService.saveutilisateur(request));
     }
@@ -63,14 +63,18 @@ public class UtilisateurController {
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByEmail(@PathVariable("email") String email) {
         return ResponseEntity.ok(utilisateurService.findUtilisateurByEmail(email));
     }
-
+    @GetMapping("/getutilisateurbyusername/{username}")
+    public ResponseEntity<UtilisateurRequestDto> getUtilisateurByUsername(@PathVariable("username") String username) {
+        return ResponseEntity.ok(utilisateurService.findUtilisateurByUsername(username));
+    }
+    //findUtilisateurByUsername
     @GetMapping("/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllUtilisateurByOrder() {
+    public ResponseEntity<List<UtilisateurRequestDto>> getAllUtilisateursByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurOrderbyName());
     }
 
     @GetMapping("/locataires/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllLocataireByOrder() {
+    public ResponseEntity<List<UtilisateurRequestDto>> getAllLocatairesByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyName());
     }
 
@@ -80,12 +84,12 @@ public class UtilisateurController {
     }
 
     @GetMapping("/gerants/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllGerantByOrder() {
+    public ResponseEntity<List<UtilisateurRequestDto>> getAllGerantsByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurGerantOrderbyName());
     }
 
     @GetMapping("/superviseurs/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllSuperviseurByOrder() {
+    public ResponseEntity<List<UtilisateurRequestDto>> getAllSuperviseursByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurSuperviseurOrderbyName());
     }
 }

@@ -66,7 +66,7 @@ public class VilleController {
     // GET VILLE BY NAME
     @Operation(summary = "Trouver une ville par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<VilleDto> findByNameVille(@PathVariable("name") String name) {
+    public ResponseEntity<VilleDto> findVilleByNameVille(@PathVariable("name") String name) {
         log.info("Find Ville By nom {}", name);
         return ResponseEntity.ok(villeService.findByName(name));
     }
@@ -74,7 +74,7 @@ public class VilleController {
     // GET VILLE BY PAYS
     @Operation(summary = "Trouver une ville par son Pays", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByPays")
-    public ResponseEntity<List<VilleDto>> findByPays(@RequestBody PaysDto paysDto) {
+    public ResponseEntity<List<VilleDto>> findAllVilleByPaysObject(@RequestBody PaysDto paysDto) {
         log.info("Find Ville By nom {}", paysDto);
         return ResponseEntity.ok(villeService.findAllByPays(paysDto));
     }
@@ -82,7 +82,7 @@ public class VilleController {
     // GET VILLE BY PAYS
     @Operation(summary = "Trouver une ville par l'Id du pays", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdPays/{id}")
-    public ResponseEntity<List<VilleDto>> findByIdPays(@PathVariable("id") Long id) {
+    public ResponseEntity<List<VilleDto>> findAllVilleByIdPays(@PathVariable("id") Long id) {
         log.info("Find Ville By Id Pays {}", id);
         return ResponseEntity.ok(villeService.findAllByIdPays(id));
     }

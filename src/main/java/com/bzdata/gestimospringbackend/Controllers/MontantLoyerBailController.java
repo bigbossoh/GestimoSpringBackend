@@ -30,7 +30,7 @@ public class MontantLoyerBailController {
     // CREATION ET MODIFICATION D'UN PAYS
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Montant loyer bail ", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> save(@RequestBody MontantLoyerBailDto dto) {
+    public ResponseEntity<Boolean> saveMontantLoyerBail(@RequestBody MontantLoyerBailDto dto) {
         log.info("We are going to save a new MontantLoyerBailDto {}", dto);
         return ResponseEntity.ok(montantLoyerBailService.saveNewMontantLoyerBail(dto));
     }

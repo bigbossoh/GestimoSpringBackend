@@ -34,41 +34,41 @@ public class StudioController {
 
     @Operation(summary = "Suppression d'un Studio avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Boolean> deleteStudio(@PathVariable("id") Long id) {
         log.info("We are going to delete a Studio {}", id);
         return ResponseEntity.ok(studioService.delete(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Studio", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> save(@RequestBody StudioDto dto) {
+    public ResponseEntity<Boolean> saveStudio(@RequestBody StudioDto dto) {
         log.info("We are going to save a new Studio {}", dto);
         return ResponseEntity.ok(studioService.save(dto));
     }
 
     @Operation(summary = "Liste de toutes les Studios", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<StudioDto>> findAll() {
+    public ResponseEntity<List<StudioDto>> findAllStudios() {
         return ResponseEntity.ok(studioService.findAll());
     }
 
     @Operation(summary = "Trouver un Studio par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
-    public ResponseEntity<StudioDto> findByID(@PathVariable("id") Long id) {
+    public ResponseEntity<StudioDto> findStudioByID(@PathVariable("id") Long id) {
         log.info("Find Appartement by ID{}", id);
         return ResponseEntity.ok(studioService.findById(id));
     }
 
     @Operation(summary = "Trouver un Studio par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<StudioDto> findByName(@PathVariable("name") String name) {
+    public ResponseEntity<StudioDto> findStudioByName(@PathVariable("name") String name) {
         log.info("Find Studio By nom {}", name);
         return ResponseEntity.ok(studioService.findByName(name));
     }
 
     @Operation(summary = "Trouver une Studio par l'Id de l'étage", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdEtage/{id}")
-    public ResponseEntity<List<StudioDto>> findByIdPays(@PathVariable("id") Long id) {
+    public ResponseEntity<List<StudioDto>> findAllStudioByIdPays(@PathVariable("id") Long id) {
         log.info("Find Studio By Id Pays {}", id);
         return ResponseEntity.ok(studioService.findAllByIdEtage(id));
     }

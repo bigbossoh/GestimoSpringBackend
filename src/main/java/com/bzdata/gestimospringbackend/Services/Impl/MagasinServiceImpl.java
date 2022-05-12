@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Magasin;
 import com.bzdata.gestimospringbackend.Models.Site;
@@ -161,21 +162,39 @@ public class MagasinServiceImpl implements MagasinService {
 
     @Override
     public MagasinDto findByName(String nom) {
-        return null;
+
+        Magasin magasinByUsername = magasinRepository.findMagasinByNomBien(nom);
+        if (magasinByUsername != null) {
+            return MagasinDto.fromEntity(magasinByUsername);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<MagasinDto> findAllBySite(SiteRequestDto siteRequestDto) {
-        return null;
+
+        return magasinRepository.findAll().stream()
+                .filter(magasin -> magasin.getSite().equals(siteRequestDto))
+                .map(MagasinDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<MagasinDto> findAllByIdSite(Long id) {
-        return null;
+
+        return magasinRepository.findAll().stream()
+                .filter(magasin -> magasin.getSite().getId().equals(id))
+                .map(MagasinDto::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<MagasinDto> findAllByIdEtage(Long id) {
-        return null;
+
+        return magasinRepository.findAll().stream()
+                .filter(magasin -> magasin.getEtageMagasin().getId().equals(id))
+                .map(MagasinDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }

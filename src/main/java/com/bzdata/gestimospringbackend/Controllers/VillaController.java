@@ -41,7 +41,7 @@ public class VillaController {
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
 
-    public ResponseEntity<List<VillaDto>> findAllVillaDto() {
+    public ResponseEntity<List<VillaDto>> findAllVilla() {
         return ResponseEntity.ok(villaService.findAll());
     }
 }

@@ -28,7 +28,7 @@ public class PrintController {
     final PrintService printService;
 
     @GetMapping("/quittance/{id}")
-    public ResponseEntity<byte[]> sample(@PathVariable("id") Long id)
+    public ResponseEntity<byte[]> sampleQuitance(@PathVariable("id") Long id)
             throws FileNotFoundException, JRException, SQLException {
 
         byte[] donnees = printService.quittanceLoyer(id);
