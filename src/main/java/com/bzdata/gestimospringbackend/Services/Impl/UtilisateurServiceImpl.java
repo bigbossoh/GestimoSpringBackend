@@ -44,8 +44,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public final PasswordEncoder passwordEncoderUser;
     private final VerificationTokenRepository verificationTokenRepository;
     private final RoleRepository roleRepository;
-    private final MailContentBuilder mailContentBuilder;
-    private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -69,8 +67,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
                     () -> new InvalidEntityException(
-                    "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
-                    ErrorCodes.UTILISATEUR_NOT_FOUND));
+                            "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
+                            ErrorCodes.UTILISATEUR_NOT_FOUND));
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
 
@@ -95,7 +93,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                         newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
                         break;
                     default:
-                        log.error("You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",leRole.get().getRoleName());
+                        log.error(
+                                "You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",
+                                leRole.get().getRoleName());
                         break;
                 }
             }
