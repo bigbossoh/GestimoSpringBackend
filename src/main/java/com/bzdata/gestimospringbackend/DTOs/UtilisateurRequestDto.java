@@ -12,6 +12,7 @@ import java.util.Date;
 public class UtilisateurRequestDto {
     private Long id;
     private Long idAgence;
+    private String utilisateurIdApp;
     private String nom;
     private String prenom;
     private String email;
@@ -33,13 +34,13 @@ public class UtilisateurRequestDto {
     private Date lastLoginDate;
     private Date lastLoginDateDisplay;
     private Date joinDate;
-    private Long roleUsed;
+    private String roleUsed;
     private String[] authorities;
     private boolean isActive;
     private boolean isNonLocked;
 
     Long agenceDto;
-    // RoleRequestDto roleRequestDto;
+     RoleRequestDto roleRequestDto;
     Long userCreate;
 
     public static UtilisateurRequestDto fromEntity(Utilisateur utilisateur) {
@@ -49,6 +50,7 @@ public class UtilisateurRequestDto {
         return UtilisateurRequestDto.builder()
                 .id(utilisateur.getId())
                 .idAgence(utilisateur.getIdAgence())
+                .utilisateurIdApp(utilisateur.getUtilisateurIdApp())
                 .nom(utilisateur.getNom())
                 .prenom(utilisateur.getPrenom())
                 .email(utilisateur.getEmail())
@@ -68,12 +70,12 @@ public class UtilisateurRequestDto {
                 .lastLoginDate(utilisateur.getLastLoginDate())
                 .lastLoginDateDisplay(utilisateur.getLastLoginDateDisplay())
                 .joinDate(utilisateur.getJoinDate())
-                // .roleUsed(utilisateur.getRoleUsed())
+                .roleUsed(utilisateur.getRoleUsed())
                 .authorities(utilisateur.getAuthorities())
                 .isActive(utilisateur.isActive())
                 .isNonLocked(utilisateur.isNonLocked())
                 // .agenceDto(AgenceRequestDto.fromEntity(utilisateur.getAgence()))
-                // .roleRequestDto(RoleRequestDto.fromEntity(utilisateur.getUrole()))
+                 .roleRequestDto(RoleRequestDto.fromEntity(utilisateur.getUrole()))
                 .userCreate(utilisateur.getId())
                 .build();
     }
@@ -86,6 +88,7 @@ public class UtilisateurRequestDto {
         Utilisateur newUtilisateur = new Utilisateur();
 
         newUtilisateur.setId(dto.getId());
+        newUtilisateur.setUtilisateurIdApp(dto.getUtilisateurIdApp());
         newUtilisateur.setNom(dto.getNom());
         newUtilisateur.setPrenom(dto.getPrenom());
         newUtilisateur.setEmail(dto.getEmail());
@@ -106,12 +109,12 @@ public class UtilisateurRequestDto {
         newUtilisateur.setLastLoginDate(dto.getLastLoginDate());
         newUtilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
         newUtilisateur.setJoinDate(dto.getJoinDate());
-        // newUtilisateur.setRoleUsed(dto.getRoleUsed());
+         newUtilisateur.setRoleUsed(dto.getRoleUsed());
         newUtilisateur.setAuthorities(dto.getAuthorities());
         newUtilisateur.setActive(dto.isActive());
         newUtilisateur.setNonLocked(dto.isNonLocked());
         // newUtilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
-        // newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
+         newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
         // newUtilisateur.setUserCreate(dto.getUserCreate());
 
         return newUtilisateur;

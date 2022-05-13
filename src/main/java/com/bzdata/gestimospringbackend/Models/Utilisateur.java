@@ -21,6 +21,7 @@ import lombok.Setter;
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Utilisateur extends AbstractEntity {
+    private String utilisateurIdApp;
     private String nom;
     private String prenom;
     private String email;

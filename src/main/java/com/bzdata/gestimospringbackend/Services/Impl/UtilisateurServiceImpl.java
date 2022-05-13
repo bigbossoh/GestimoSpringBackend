@@ -27,6 +27,7 @@ import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
 import com.bzdata.gestimospringbackend.validator.UtilisateurDtoValiditor;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,7 +73,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
 
-            Optional<Role> leRole = roleRepository.findById(dto.getRoleUsed());
+            Optional<Role> leRole = roleRepository.findById(dto.getRoleRequestDto().getId());
             if (leRole.isPresent()) {
                 newUser.setUrole(leRole.get());
                 switch (leRole.get().getRoleName()) {
@@ -107,6 +108,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             newUser.setIdAgence(dto.getIdAgence());
             newUser.setNom(dto.getNom());
+            newUser.setUtilisateurIdApp(generateUserId());
             newUser.setPrenom(dto.getPrenom());
             newUser.setEmail(dto.getEmail());
             newUser.setMobile(dto.getMobile());
@@ -134,6 +136,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     ErrorCodes.UTILISATEUR_NOT_VALID);
         }
 
+    }
+
+    private String generateUserId() {
+        return "User-"+RandomStringUtils.randomAlphanumeric(5);
     }
     // @Override
     // public UtilisateurRequestDto saveLocataire(UtilisateurRequestDto dto) {

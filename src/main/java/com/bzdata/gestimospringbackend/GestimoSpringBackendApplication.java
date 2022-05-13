@@ -29,7 +29,9 @@ import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
-
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -97,6 +99,7 @@ public class GestimoSpringBackendApplication {
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
+
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
 
@@ -204,9 +207,10 @@ public class GestimoSpringBackendApplication {
             roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (roles.isPresent()) {
                 Utilisateur userPrincipalSuperviseur = utilisateurRepository
-                        .findUtilisateurByUsername("superviseur@superviseur.com");
+                        .findUtilisateurByUsername("0103833350");
                 if (userPrincipalSuperviseur == null) {
                     utilisateur.setUrole(roles.get());
+                    utilisateur.setUtilisateurIdApp(generateUserId());
                     utilisateur.setNom("SUPERVISEUR");
                     utilisateur.setPrenom("SUPERVISEUR PRENOM");
                     utilisateur.setEmail("superviseur@superviseur.com");
@@ -234,5 +238,9 @@ public class GestimoSpringBackendApplication {
             } // CREATION DU SUPERUTILISATEUR
 
         };
+    }
+
+    private String generateUserId() {
+        return "User-"+RandomStringUtils.randomAlphanumeric(5);
     }
 }
