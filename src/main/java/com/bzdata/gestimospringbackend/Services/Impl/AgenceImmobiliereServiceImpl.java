@@ -27,6 +27,7 @@ import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
 import com.bzdata.gestimospringbackend.validator.AgenceDtoValidator;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,11 +81,12 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             if (newRole.isPresent()) {
                 newUtilisateur.setUrole(newRole.get());
             }
+            newUtilisateur.setUtilisateurIdApp(generateUserId());
             newUtilisateur.setJoinDate(new Date());
             newUtilisateur.setRoleUsed(ROLE_GERANT.name());
             newUtilisateur.setAuthorities(ROLE_GERANT.getAuthorities());
-            newUtilisateur.setActive(false);
-            newUtilisateur.setActivated(false);
+            newUtilisateur.setActive(true);
+            newUtilisateur.setActivated(true);
             newUtilisateur.setUsername(dto.getMobileAgence());
             newUtilisateur.setNonLocked(true);
             newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
@@ -104,6 +106,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             }
 
     }
+
+    private String generateUserId() {
+        return "User-"+ RandomStringUtils.randomAlphanumeric(5);
+    }
+
     private String generateVerificationToken(Utilisateur utilisateur){
         String token= UUID.randomUUID().toString();
         VerificationToken verificationToken= new VerificationToken();
