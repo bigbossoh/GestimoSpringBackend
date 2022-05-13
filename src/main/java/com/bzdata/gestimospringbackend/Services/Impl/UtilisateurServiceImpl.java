@@ -73,7 +73,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
 
-            Optional<Role> leRole = roleRepository.findById(dto.getRoleRequestDto().getId());
+            Optional<Role> leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed());
             if (leRole.isPresent()) {
                 newUser.setUrole(leRole.get());
                 switch (leRole.get().getRoleName()) {
