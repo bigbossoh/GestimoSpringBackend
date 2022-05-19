@@ -24,7 +24,7 @@ public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
 
     @PostMapping("/signup")
-    public ResponseEntity<AgenceResponseDto> authenticateAgence(@RequestBody AgenceRequestDto request) {
+    public ResponseEntity<Boolean> authenticateAgence(@RequestBody AgenceRequestDto request) {
         log.info("We are going to save a new agence {}", request);
         return ResponseEntity.ok(agenceImmobilierService.save(request));
     }

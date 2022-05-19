@@ -6,10 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -28,10 +25,15 @@ public class MontantLoyerBailController {
     final MontantLoyerBailService montantLoyerBailService;
 
     // CREATION ET MODIFICATION D'UN PAYS
-    @PostMapping("/save")
-    @Operation(summary = "Creation et mise à jour d'un Montant loyer bail ", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> saveMontantLoyerBail(@RequestBody MontantLoyerBailDto dto) {
-        log.info("We are going to save a new MontantLoyerBailDto {}", dto);
-        return ResponseEntity.ok(montantLoyerBailService.saveNewMontantLoyerBail(dto));
-    }
+//    @PostMapping("/save")
+//    @Operation(summary = "Creation et mise à jour d'un Montant loyer bail ", security = @SecurityRequirement(name = "bearerAuth"))
+//    public ResponseEntity<Boolean> saveMontantLoyerBail(@RequestBody MontantLoyerBailDto dto) {
+//        log.info("We are going to save a new MontantLoyerBailDto {}", dto);
+//        return ResponseEntity.ok(montantLoyerBailService.saveNewMontantLoyerBail(
+//                @RequestParam("currentUsername") String currentUsername,
+//                @RequestParam("firstName") String firstName,
+//                @RequestParam("lastName") String lastName,
+//                @RequestParam("username") String username,
+//                @RequestParam("email") String email));
+//    }
 }

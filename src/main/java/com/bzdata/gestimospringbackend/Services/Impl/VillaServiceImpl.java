@@ -46,6 +46,7 @@ public class VillaServiceImpl implements VillaService {
     public boolean save(VillaDto dto) {
         Villa villa = new Villa();
         log.info("We are going to create  a new Villa {}", dto);
+
         List<String> errors = VillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("la Villa n'est pas valide {}", errors);

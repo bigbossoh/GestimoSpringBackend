@@ -41,22 +41,22 @@ public class AgenceResponseDto {
                 .build();
     }
 
-    public static AgenceImmobiliere toEntity(AgenceResponseDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        AgenceImmobiliere newAgenceImmobiliere = new AgenceImmobiliere();
-        newAgenceImmobiliere.setId(dto.getId());
-        newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
-        newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
-        newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());
-        newAgenceImmobiliere.setCapital(dto.getCapital());
-        newAgenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
-        newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
-        newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
-        newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
-        newAgenceImmobiliere.setIdAgence(dto.getIdAgence());
-        newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
-        return newAgenceImmobiliere;
-    }
+//    public static AgenceImmobiliere toEntity(AgenceResponseDto dto) {
+//        if (dto == null) {
+//            return null;
+//        }
+//        AgenceImmobiliere newAgenceImmobiliere = new AgenceImmobiliere();
+//        newAgenceImmobiliere.setId(dto.getId());
+//        newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
+//        newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
+//        newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());
+//        newAgenceImmobiliere.setCapital(dto.getCapital());
+//        newAgenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
+//        newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
+//        newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
+//        newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
+//        newAgenceImmobiliere.setIdAgence(dto.getIdAgence());
+//        newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurRequestDto()));
+//        return newAgenceImmobiliere;
+//    }
 }

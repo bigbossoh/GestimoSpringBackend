@@ -12,10 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
-import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
-import com.bzdata.gestimospringbackend.Models.Role;
-import com.bzdata.gestimospringbackend.Models.Utilisateur;
-import com.bzdata.gestimospringbackend.Models.VerificationToken;
+import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;

@@ -10,8 +10,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AgenceRequestDto {
-    private Long id;
-    private Long idAgence;
+     Long id;
+     Long idAgence;
     String nomAgence;
     String telAgence;
     String compteContribuable;
@@ -21,7 +21,8 @@ public class AgenceRequestDto {
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;
-    UtilisateurRequestDto utilisateurCreateur;
+    Long idUtilisateurCreateur;
+
 
     public static AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere) {
         if (agenceImmobiliere == null) {
@@ -38,28 +39,28 @@ public class AgenceRequestDto {
                 .regimeFiscaleAgence(agenceImmobiliere.getRegimeFiscaleAgence())
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
-                .utilisateurCreateur(UtilisateurRequestDto.fromEntity(agenceImmobiliere.getCreateur()))
+                .idUtilisateurCreateur(agenceImmobiliere.getCreateur().getId())
                 .idAgence(agenceImmobiliere.getIdAgence())
                 .build();
     }
 
-    public static AgenceImmobiliere toEntity(AgenceRequestDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        AgenceImmobiliere newAgenceImmobiliere = new AgenceImmobiliere();
-        newAgenceImmobiliere.setId(dto.getId());
-        newAgenceImmobiliere.setIdAgence(dto.getId());
-        newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
-        newAgenceImmobiliere.setMobileAgence(dto.getMobileAgence());
-        newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
-        newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());
-        newAgenceImmobiliere.setCapital(dto.getCapital());
-        newAgenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
-        newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
-        newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
-        newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
-        newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
-        return newAgenceImmobiliere;
-    }
+//    public static AgenceImmobiliere toEntity(AgenceRequestDto dto) {
+//        if (dto == null) {
+//            return null;
+//        }
+//        AgenceImmobiliere newAgenceImmobiliere = new AgenceImmobiliere();
+//        newAgenceImmobiliere.setId(dto.getId());
+//        newAgenceImmobiliere.setIdAgence(dto.getId());
+//        newAgenceImmobiliere.setNomAgence(dto.getNomAgence());
+//        newAgenceImmobiliere.setMobileAgence(dto.getMobileAgence());
+//        newAgenceImmobiliere.setFaxAgence(dto.getFaxAgence());
+//        newAgenceImmobiliere.setEmailAgence(dto.getEmailAgence());
+//        newAgenceImmobiliere.setCapital(dto.getCapital());
+//        newAgenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
+//        newAgenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
+//        newAgenceImmobiliere.setSigleAgence(dto.getSigleAgence());
+//        newAgenceImmobiliere.setTelAgence(dto.getTelAgence());
+//        newAgenceImmobiliere.setCreateur(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
+//        return newAgenceImmobiliere;
+//    }
 }

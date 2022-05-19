@@ -13,6 +13,9 @@ import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.Services.AuthRequestService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.Services.Impl.TwilioSmsSender;
+import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
+import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
 
 import org.springframework.http.HttpHeaders;
@@ -42,23 +45,21 @@ public class AuthenticationController {
     private final UtilisateurService utilisateurService;
     private final AuthenticationManager authenticationManager;
     private final JWTTokenProvider jwtTokenProvider;
+    private final UtilisateurRepository utilisateurRepository;
     private final TwilioSmsSender twilioSmsSender;
 
 
-
-//    @PostMapping("/login")
-//    @Operation(summary = "Authentification des SUPERVISEUR", security = @SecurityRequirement(name = "bearerAuth"))
-//    public ResponseEntity<AuthResponseDto> authenticate(@RequestBody AuthRequestDto request) {
-//        log.info("we are going to login...");
-//        return ResponseEntity.ok(authRequestService.authenticate(request));
-//
-//    }
 @PostMapping("/login")
 public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
 
     authenticate(request.getUsername(), request.getPassword());
     UtilisateurRequestDto utilisateurByUsername = utilisateurService.findUtilisateurByUsername(request.getUsername());
-    Utilisateur loginUser = UtilisateurRequestDto.toEntity(utilisateurByUsername);
+    log.info("get back id of the user {}", utilisateurByUsername.getId());
+    Utilisateur userCreate = utilisateurRepository.findById(utilisateurByUsername.getId()).orElseThrow(
+            () -> new InvalidEntityException(
+                    "Aucun Utilisateur has been found with Code " + utilisateurByUsername.getId(),
+                    ErrorCodes.UTILISATEUR_NOT_FOUND));
+    Utilisateur loginUser = userCreate;
     UserPrincipal userPrincipal = new UserPrincipal(loginUser);
     HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
 //    log.info("we are going lo launch sms to the user ");

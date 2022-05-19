@@ -8,7 +8,7 @@ import com.bzdata.gestimospringbackend.Models.VerificationToken;
 
 public interface AgenceImmobilierService {
 
-    AgenceResponseDto save(AgenceRequestDto dto);
+    boolean save(AgenceRequestDto dto);
 
     AgenceResponseDto findAgenceById(Long id);
 

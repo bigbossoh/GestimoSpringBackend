@@ -90,7 +90,8 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(appartementBailSave);
             montantLoyerBail.setIdAgence(dto.getIdAgence());
-            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            montantLoyerBailService.saveNewMontantLoyerBail(0L,
+                    dto.getNouveauMontantLoyer(),0.0,appartementBailSave.getId(),dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */
