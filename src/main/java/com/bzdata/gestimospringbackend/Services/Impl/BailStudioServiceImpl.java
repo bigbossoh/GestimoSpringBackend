@@ -67,6 +67,10 @@ public class BailStudioServiceImpl implements BailStudioService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucune Villa has been found with code " + dto.getIdStudio(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
+            if(studio.isOccupied()==true){
+                log.error("le studio est deja occupé {}",studio);
+                 return null;
+            }
             bailLocationStudio.setStudioBail(studio);
             bailLocationStudio.setUtilisateurOperation(utilisateur);
             bailLocationStudio.setArchiveBail(false);
