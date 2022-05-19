@@ -32,24 +32,26 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
     final BailLocationRepository bailLocationRepository;
 
     @Override
-    public boolean saveNewMontantLoyerBail(MontantLoyerBailDto dto) {
-        log.info("We are going to create  a new Montant loyer bail {}", dto);
-        List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
-        if (!errors.isEmpty()) {
-            log.error("le montant loyer bail n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object Montant loyer bail sont null.",
-                    ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
-        }
+    public boolean saveNewMontantLoyerBail(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
+                                           double ancienMontantLoyer,Long idBailLocation, Long idAgence) {
+        log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation,idAgence );
+//        List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
+//        if (!errors.isEmpty()) {
+//            log.error("le montant loyer bail n'est pas valide {}", errors);
+//            throw new InvalidEntityException("Certain attributs de l'object Montant loyer bail sont null.",
+//                    ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
+//        }
 
         try {
 
+
             MontantLoyerBail newMontantLoyerBail = new MontantLoyerBail();
-            BailLocation bailLocation = bailLocationRepository.findById(dto.getBailLocation())
+            BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
                     .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
-                            dto.getBailLocation(),
+                            idBailLocation,
                             ErrorCodes.BAILLOCATION_NOT_FOUND));
             List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
-            Optional<MontantLoyerBail> oldMontantBail = montantLoyerBailRepository.findById(dto.getId());
+            Optional<MontantLoyerBail> oldMontantBail = montantLoyerBailRepository.findById(currentIdMontantLoyerBail);
             if (oldMontantBail.isPresent()) {
                 newMontantLoyerBail.setId(oldMontantBail.get().getId());
             }
@@ -57,17 +59,17 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 newMontantLoyerBail.setAncienMontantLoyer(0);
                 newMontantLoyerBail.setTauxLoyer(0);
                 newMontantLoyerBail
-                        .setMontantAugmentation((dto.getNouveauMontantLoyer() - dto.getAncienMontantLoyer()));
+                        .setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
                 newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
             } else {
                 Optional<MontantLoyerBail> firstMontantLoyerBail = byBailLocation.stream().findFirst();
                 if (firstMontantLoyerBail.get().getAncienMontantLoyer() != 0) {
                     newMontantLoyerBail.setTauxLoyer(
-                            (dto.getNouveauMontantLoyer() - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
+                            (nouveauMontantLoyer - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
                                     / firstMontantLoyerBail.get().getAncienMontantLoyer());
                 }
                 newMontantLoyerBail
-                        .setMontantAugmentation((dto.getNouveauMontantLoyer() - dto.getAncienMontantLoyer()));
+                        .setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
                 newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
             }
             montantLoyerBailRepository.save(newMontantLoyerBail);

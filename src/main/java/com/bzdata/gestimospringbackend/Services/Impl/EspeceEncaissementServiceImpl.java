@@ -7,6 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.EspeceEncaissement;
 import com.bzdata.gestimospringbackend.Models.Quittance;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.EspeceEncaissementService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -14,6 +15,7 @@ import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.EspeceEncaissementRepository;
 import com.bzdata.gestimospringbackend.repository.QuittanceRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.EspeceEncaissementDtoValidator;
 
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
     final EspeceEncaissementRepository encaissementRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final UtilisateurService utilisateurService;
+    final UtilisateurRepository utilisateurRepository;
     final QuittanceRepository quittanceRepository;
 
     @Override
@@ -57,8 +60,11 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         especeEncaissement.setAppelLoyerEncaissement(appelLoyer);
         especeEncaissement.setDateEncaissement(dto.getDateEncaissement());
         especeEncaissement.setMontantEncaissement(dto.getMontantEncaissement());
-
-        especeEncaissement.setUtilisateurEncaissement(UtilisateurRequestDto.toEntity(utilisateurRequestDto));
+        Utilisateur userCreate = utilisateurRepository.findById(dto.getIdUtilisateurEncaissement()).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurEncaissement(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        especeEncaissement.setUtilisateurEncaissement(userCreate);
 
         EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
         // calcul des soldes

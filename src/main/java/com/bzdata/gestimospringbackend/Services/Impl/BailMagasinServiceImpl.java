@@ -81,7 +81,8 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(magasinBailSave);
             montantLoyerBail.setIdAgence(magasinBail.getIdAgence());
-            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+            montantLoyerBailService.saveNewMontantLoyerBail(0L,
+                    dto.getNouveauMontantLoyer(),0.0,magasinBailSave.getId(),dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */

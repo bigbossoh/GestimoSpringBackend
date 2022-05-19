@@ -86,11 +86,12 @@ public class BailStudioServiceImpl implements BailStudioService {
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
              */
-            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
-            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
-            montantLoyerBail.setBailLocation(studioBailSave);
-            montantLoyerBail.setIdAgence(dto.getIdAgence());
-            montantLoyerBailService.saveNewMontantLoyerBail(MontantLoyerBailDto.fromEntity(montantLoyerBail));
+//            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
+//            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
+//            montantLoyerBail.setBailLocation(studioBailSave);
+//            montantLoyerBail.setIdAgence(dto.getIdAgence());
+            montantLoyerBailService.saveNewMontantLoyerBail(0L,
+                    dto.getNouveauMontantLoyer(),0.0,studioBailSave.getId(),dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */

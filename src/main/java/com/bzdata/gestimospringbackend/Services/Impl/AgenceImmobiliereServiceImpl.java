@@ -51,7 +51,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     private final MailContentBuilder mailContentBuilder;
     private final MailService mailService;
     @Override
-    public AgenceResponseDto save(AgenceRequestDto dto) {
+    public boolean save(AgenceRequestDto dto) {
+        AgenceImmobiliere agenceImmobiliere=new AgenceImmobiliere();
         log.info("We are going to create  a new agence {}",dto);
         List<String> errors= AgenceDtoValidator.validate(dto);
         if(!errors.isEmpty()){
@@ -60,17 +61,32 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                     ErrorCodes.AGENCE_NOT_VALID,errors);
         }
 
-        Utilisateur utilisateurByEmail = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
-        if(utilisateurByEmail ==null) {
-            UtilisateurRequestDto utilisateurSuperviseur=utilisateurService.findById(dto.getUtilisateurCreateur().getId());
-            dto.setUtilisateurCreateur(utilisateurSuperviseur);
-            AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(dto));
+        //Check if the user already exist in the database
+        Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
+        if(utilisateurByMobile ==null) {
+            //get back the connected user
+            Utilisateur userCreate = utilisateurRepository.findById(dto.getIdUtilisateurCreateur()).orElseThrow(
+                    () -> new InvalidEntityException(
+                            "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
+                            ErrorCodes.UTILISATEUR_NOT_FOUND));
+            agenceImmobiliere.setCreateur(userCreate);
+            agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
+            agenceImmobiliere.setCapital(dto.getCapital());
+            agenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
+            agenceImmobiliere.setEmailAgence(dto.getEmailAgence());
+            agenceImmobiliere.setFaxAgence(dto.getFaxAgence());
+            agenceImmobiliere.setMobileAgence(dto.getMobileAgence());
+            agenceImmobiliere.setNomAgence(dto.getNomAgence());
+            agenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
+            agenceImmobiliere.setTelAgence(dto.getTelAgence());
+
+            AgenceImmobiliere saveAgence=agenceImmobiliereRepository.save(agenceImmobiliere);
             saveAgence.setIdAgence(saveAgence.getId());
-            AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
-            AgenceImmobiliere saveAgenceUpdate=agenceImmobiliereRepository.save(AgenceRequestDto.toEntity(agenceRequestDto));
-            log.info("We are going to create  a new utilisateur gerant by the logged user {}",dto.getUtilisateurCreateur());
+            //AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
+            AgenceImmobiliere saveAgenceUpdate=agenceImmobiliereRepository.save(saveAgence);
+            log.info("We are going to create  a new utilisateur gerant by the logged user {}",dto.getIdUtilisateurCreateur());
             Utilisateur newUtilisateur = new Utilisateur();
-            newUtilisateur.setIdAgence(saveAgenceUpdate.getIdAgence());
+            newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
             newUtilisateur.setNom(dto.getNomAgence());
             newUtilisateur.setPrenom(dto.getNomAgence());
             newUtilisateur.setEmail(dto.getEmailAgence());
@@ -89,19 +105,19 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setActivated(true);
             newUtilisateur.setUsername(dto.getMobileAgence());
             newUtilisateur.setNonLocked(true);
-            newUtilisateur.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
+            newUtilisateur.setUserCreate(userCreate);
             Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
             String token=generateVerificationToken(saveUser);
             String message=mailContentBuilder.build("Merci de vous être enregistré a Gestimoweb, Cliquer sur le lien " +
                     "ci-dessous pour activer votre account: "+ ACTIVATION_EMAIL+"/"+token+"\n");
             mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",saveUser.getEmail(),message));
             log.info("We are same a gerant user and Agence also !!!");
-            return AgenceResponseDto.fromEntity(saveAgence);
+            return true;
         }
 
         else {
                 log.error("This user is already exist");
-            throw new EntityNotFoundException("The email is already exist in db "+dto.getEmailAgence(),
+            throw new EntityNotFoundException("The username or mobile is already exist in db "+dto.getMobileAgence(),
                     ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
             }
 

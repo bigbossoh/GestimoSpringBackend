@@ -40,7 +40,7 @@ public class UtilisateurRequestDto {
     private boolean isNonLocked;
 
     Long agenceDto;
-     RoleRequestDto roleRequestDto;
+    RoleRequestDto roleRequestDto;
     Long userCreate;
 
     public static UtilisateurRequestDto fromEntity(Utilisateur utilisateur) {
@@ -75,7 +75,7 @@ public class UtilisateurRequestDto {
                 .isActive(utilisateur.isActive())
                 .isNonLocked(utilisateur.isNonLocked())
                 // .agenceDto(AgenceRequestDto.fromEntity(utilisateur.getAgence()))
-                 .roleRequestDto(RoleRequestDto.fromEntity(utilisateur.getUrole()))
+                .roleRequestDto(RoleRequestDto.fromEntity(utilisateur.getUrole()))
                 .userCreate(utilisateur.getId())
                 .build();
     }
@@ -109,12 +109,12 @@ public class UtilisateurRequestDto {
         newUtilisateur.setLastLoginDate(dto.getLastLoginDate());
         newUtilisateur.setLastLoginDateDisplay(dto.getLastLoginDateDisplay());
         newUtilisateur.setJoinDate(dto.getJoinDate());
-         newUtilisateur.setRoleUsed(dto.getRoleUsed());
+        newUtilisateur.setRoleUsed(dto.getRoleUsed());
         newUtilisateur.setAuthorities(dto.getAuthorities());
         newUtilisateur.setActive(dto.isActive());
         newUtilisateur.setNonLocked(dto.isNonLocked());
         // newUtilisateur.setAgence(AgenceRequestDto.toEntity(dto.getAgenceDto()));
-         newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
+        newUtilisateur.setUrole(RoleRequestDto.toEntity(dto.getRoleRequestDto()));
         // newUtilisateur.setUserCreate(dto.getUserCreate());
 
         return newUtilisateur;
