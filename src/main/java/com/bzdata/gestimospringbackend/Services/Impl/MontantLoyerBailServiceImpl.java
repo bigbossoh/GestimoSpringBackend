@@ -50,26 +50,47 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                     .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                             idBailLocation,
                             ErrorCodes.BAILLOCATION_NOT_FOUND));
-            List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
+            List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository.findByBailLocation(bailLocation);
             Optional<MontantLoyerBail> oldMontantBail = montantLoyerBailRepository.findById(currentIdMontantLoyerBail);
             if (oldMontantBail.isPresent()) {
                 newMontantLoyerBail.setId(oldMontantBail.get().getId());
             }
-            if (byBailLocation.size() == 0) {
+            if (ListBauxMontantLoyerBail.size() == 0) {
+                newMontantLoyerBail.setId(currentIdMontantLoyerBail);
                 newMontantLoyerBail.setAncienMontantLoyer(0);
                 newMontantLoyerBail.setTauxLoyer(0);
-                newMontantLoyerBail
-                        .setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
+                newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
                 newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
+                newMontantLoyerBail.setFinLoyer(bailLocation.getDateFin());
+                newMontantLoyerBail.setIdAgence(bailLocation.getIdAgence());
+                newMontantLoyerBail.setBailLocation(bailLocation);
+                newMontantLoyerBail.setNouveauMontantLoyer(nouveauMontantLoyer);
+                newMontantLoyerBail.setStatusLoyer(true);
             } else {
-                Optional<MontantLoyerBail> firstMontantLoyerBail = byBailLocation.stream().findFirst();
+                Optional<MontantLoyerBail> firstMontantLoyerBail = ListBauxMontantLoyerBail.stream()
+                        .filter(montantLoyerBail->montantLoyerBail.isStatusLoyer()==true)
+                        .findFirst();
                 if (firstMontantLoyerBail.get().getAncienMontantLoyer() != 0) {
-                    newMontantLoyerBail.setTauxLoyer(
-                            (nouveauMontantLoyer - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
+                    newMontantLoyerBail.setTauxLoyer((nouveauMontantLoyer - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
                                     / firstMontantLoyerBail.get().getAncienMontantLoyer());
                 }
-                newMontantLoyerBail
-                        .setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
+
+                newMontantLoyerBail.setId(firstMontantLoyerBail.get().getId());
+                if (firstMontantLoyerBail.get().getNouveauMontantLoyer()!=nouveauMontantLoyer){
+                    firstMontantLoyerBail.get().setAncienMontantLoyer(firstMontantLoyerBail.get().getNouveauMontantLoyer());
+                    firstMontantLoyerBail.get().setFinLoyer(bailLocation.getDateFin());
+                    firstMontantLoyerBail.get().setStatusLoyer(false);
+                    montantLoyerBailRepository.save(firstMontantLoyerBail.get());
+                }
+                newMontantLoyerBail.setAncienMontantLoyer(0);
+                newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
+                newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
+                newMontantLoyerBail.setFinLoyer(bailLocation.getDateFin());
+                newMontantLoyerBail.setIdAgence(bailLocation.getIdAgence());
+                newMontantLoyerBail.setBailLocation(bailLocation);
+                newMontantLoyerBail.setNouveauMontantLoyer(nouveauMontantLoyer);
+                newMontantLoyerBail.setStatusLoyer(true);
+                newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
                 newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
             }
             montantLoyerBailRepository.save(newMontantLoyerBail);
