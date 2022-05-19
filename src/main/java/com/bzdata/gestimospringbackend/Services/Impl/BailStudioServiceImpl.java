@@ -67,46 +67,47 @@ public class BailStudioServiceImpl implements BailStudioService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucune Villa has been found with code " + dto.getIdStudio(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            if(studio.isOccupied()==true){
-                log.error("le studio est deja occupé {}",studio);
-                 return null;
+            if(studio.isOccupied()==false){
+                bailLocationStudio.setStudioBail(studio);
+                bailLocationStudio.setUtilisateurOperation(utilisateur);
+                bailLocationStudio.setArchiveBail(false);
+                bailLocationStudio.setDateDebut(dto.getDateDebut());
+                bailLocationStudio.setDateFin(dto.getDateFin());
+                bailLocationStudio.setDesignationBail(dto.getDesignationBail());
+                bailLocationStudio.setEnCoursBail(true);
+                bailLocationStudio.setMontantCautionBail(dto.getMontantCautionBail());
+                bailLocationStudio.setAbrvCodeBail(dto.getAbrvCodeBail());
+                bailLocationStudio.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
+                bailLocationStudio.setIdAgence(dto.getIdAgence());
+                BailLocation studioBailSave = bailLocationRepository.save(bailLocationStudio);
+
+                studio.setOccupied(true);
+                studio.setStatutStudio("Occupied");
+                studioRepository.save(studio);
+                /**
+                 * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
+                 */
+
+                montantLoyerBailService.saveNewMontantLoyerBail(0L,
+                        dto.getNouveauMontantLoyer(),0.0,studioBailSave.getId(),dto.getIdAgence());
+                /**
+                 * Creation de l'appel loyer
+                 */
+                AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
+
+                appelLoyerRequestDto.setIdBailLocation(studioBailSave.getId());
+                appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
+                appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
+
+                appelLoyerService.save(appelLoyerRequestDto);
+
+                return BailStudioDto.fromEntity(studioBailSave);
+            }else {
+                throw new InvalidEntityException("le studio est déjà occupé "
+                        + studio.isOccupied(),
+                        ErrorCodes.STUDIO_ALREADY_IN_USE);
             }
-            bailLocationStudio.setStudioBail(studio);
-            bailLocationStudio.setUtilisateurOperation(utilisateur);
-            bailLocationStudio.setArchiveBail(false);
-            bailLocationStudio.setDateDebut(dto.getDateDebut());
-            bailLocationStudio.setDateFin(dto.getDateFin());
-            bailLocationStudio.setDesignationBail(dto.getDesignationBail());
-            bailLocationStudio.setEnCoursBail(true);
-            bailLocationStudio.setMontantCautionBail(dto.getMontantCautionBail());
-            bailLocationStudio.setAbrvCodeBail(dto.getAbrvCodeBail());
-            bailLocationStudio.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
-            bailLocationStudio.setIdAgence(dto.getIdAgence());
-            BailLocation studioBailSave = bailLocationRepository.save(bailLocationStudio);
 
-            studio.setOccupied(true);
-            studio.setStatutStudio("Occupied");
-            studioRepository.save(studio);
-            /**
-             * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
-             */
-//            MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
-//            montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
-//            montantLoyerBail.setBailLocation(studioBailSave);
-//            montantLoyerBail.setIdAgence(dto.getIdAgence());
-            montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                    dto.getNouveauMontantLoyer(),0.0,studioBailSave.getId(),dto.getIdAgence());
-            /**
-             * Creation de l'appel loyer
-             */
-            AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
-
-            appelLoyerRequestDto.setIdBailLocation(studioBailSave.getId());
-            appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
-            appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
-
-            appelLoyerService.save(appelLoyerRequestDto);
-            return BailStudioDto.fromEntity(studioBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle Locataire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),

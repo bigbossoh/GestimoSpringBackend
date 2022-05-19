@@ -12,6 +12,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -49,6 +50,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     final MontantLoyerBailRepository montantLoyerBailRepository;
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerRepository appelLoyerRepository;
+    private final TwilioSmsSender twilioSmsSender;
 
     /**
      * Cette methode est utilisé pour enregister tous les appels loyers
@@ -108,6 +110,10 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         appelLoyerRepository.saveAll(appelLoyerList);
+            log.info("we are going lo launch sms to the user ");
+         SmsRequest sms =new SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),"Vôtre bail de location a été créé avec succès.");
+        twilioSmsSender.sendSms(sms);
+        log.info("Sms sent");
         return appelLoyerList
                 .stream()
                 .map(AppelLoyer::getPeriodeAppelLoyer)
