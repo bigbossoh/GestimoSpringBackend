@@ -29,7 +29,7 @@ public class StudioDto {
                 .descStudio(studio.getDescStudio())
                 .nomStudio(studio.getNomStudio())
                 .numeroStudio(studio.getNumeroStudio())
-                .idEtage(studio.getEtageStudio().getId())
+                // .idEtage(studio.getEtageStudio().getId())
                 .build();
     }
 
