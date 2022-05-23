@@ -17,6 +17,7 @@ public class StudioDto {
     int numeroStudio;
     String abrvNomStudio;
     String nomStudio;
+    Long idSite;
     Long idEtage;
 
     public static StudioDto fromEntity(Studio studio) {
@@ -29,7 +30,8 @@ public class StudioDto {
                 .descStudio(studio.getDescStudio())
                 .nomStudio(studio.getNomStudio())
                 .numeroStudio(studio.getNumeroStudio())
-                // .idEtage(studio.getEtageStudio().getId())
+                .idEtage(studio.getEtageStudio().getId())
+                .idSite(studio.getSite().getId())
                 .build();
     }
 

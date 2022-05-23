@@ -27,12 +27,12 @@ public class OperationDto {
     Instant lastModifiedDate;
     LocalDate dateDebut;
     LocalDate dateFin;
-    Utilisateur utilisateurOperation;
-    Bienimmobilier bienImmobilierOperation;
-    Studio studioBail;
-    Appartement appartementBail;
-    Magasin magasinBail;
-    Villa villaBail;
+    String utilisateurOperation;
+    String bienImmobilierOperation;
+    Long studioBail;
+    // String appartementBail;
+    // String magasinBail;
+    // String villaBail;
 
     public static OperationDto fromEntity(Operation operation) {
         if (operation == null) {
@@ -41,16 +41,19 @@ public class OperationDto {
         return OperationDto.builder()
                 .id(operation.getId())
                 .idAgence(operation.getIdAgence())
-                .appartementBail(operation.getAppartementBail())
-                .bienImmobilierOperation(operation.getBienImmobilierOperation())
+                // .appartementBail(operation.getAppartementBail().getAbrvNomApp())
+                // .bienImmobilierOperation(operation.getBienImmobilierOperation().getAbrvBienimmobilier())
                 .creationDate(operation.getCreationDate())
                 .dateDebut(operation.getDateDebut())
                 .dateFin(operation.getDateFin())
                 .lastModifiedDate(operation.getLastModifiedDate())
-                .magasinBail(operation.getMagasinBail())
-                .studioBail(operation.getStudioBail())
-                .utilisateurOperation(operation.getUtilisateurOperation())
-                .villaBail(operation.getVillaBail())
+                // .magasinBail(operation.getMagasinBail().getAbrvNomMagasin())
+                .studioBail(operation.getStudioBail().getId())
+                .utilisateurOperation(operation.getUtilisateurOperation().getNom() + " " +
+                        operation
+                                .getUtilisateurOperation()
+                                .getPrenom())
+                // .villaBail(operation.getVillaBail().getAbrvVilla())
                 .build();
     }
 }

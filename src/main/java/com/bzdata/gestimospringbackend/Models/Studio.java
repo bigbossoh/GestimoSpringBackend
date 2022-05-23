@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Models;
 
 import java.util.List;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -19,7 +20,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Studio extends AbstractEntity {
+@DiscriminatorValue("Studio")
+public class Studio extends Bienimmobilier {
     String descStudio;
     int numeroStudio;
     String abrvNomStudio;
