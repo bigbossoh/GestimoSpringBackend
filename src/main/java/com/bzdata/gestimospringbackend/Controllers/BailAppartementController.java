@@ -5,7 +5,9 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.BailAppartementService;
+import com.bzdata.gestimospringbackend.Services.OperationService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @SecurityRequirement(name = "gestimoapi")
 public class BailAppartementController {
     final BailAppartementService bailAppartementService;
+    final OperationService operationService;
 
     @Operation(summary = "Suppression d'un Bail Appartement avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
@@ -50,6 +53,12 @@ public class BailAppartementController {
     @GetMapping("/all")
     public ResponseEntity<List<BailAppartementDto>> findAllBailAppartement() {
         return ResponseEntity.ok(bailAppartementService.findAll());
+    }
+
+    @Operation(summary = "Liste de toutes les Opération", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/alloperation")
+    public ResponseEntity<List<OperationDto>> findAllOperations() {
+        return ResponseEntity.ok(operationService.getAllOperation());
     }
 
     @Operation(summary = "Trouver un Bail Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
