@@ -17,8 +17,8 @@ public class SiteRequestDto {
     Long id;
     Long idQuartier;
     Long idAgence;
-    String abrSite;
-    String nomSite;
+//    String abrSite;
+//    String nomSite;
 
     public static SiteRequestDto fromEntity(Site site) {
         if (site == null) {
@@ -28,8 +28,8 @@ public class SiteRequestDto {
                 .id(site.getId())
                 .idQuartier(site.getQuartier().getId())
                 .idAgence(site.getIdAgence())
-                .abrSite(site.getAbrSite())
-                .nomSite(site.getNomSite())
+//                .abrSite(site.getAbrSite())
+//                .nomSite(site.getNomSite())
                 .build();
     }
 

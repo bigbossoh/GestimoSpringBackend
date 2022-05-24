@@ -91,11 +91,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                     dto.getIdUtilisateurCreateur());
             Utilisateur newUtilisateur = new Utilisateur();
             newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
-            newUtilisateur.setNom(dto.getNomAgence());
-            newUtilisateur.setPrenom(dto.getNomAgence());
+            newUtilisateur.setNom(dto.getNomPrenomGerant());
+            //newUtilisateur.setPrenom(dto.getNomAgence());
             newUtilisateur.setEmail(dto.getEmailAgence());
             newUtilisateur.setMobile(dto.getMobileAgence());
-            newUtilisateur.setPassword(passwordEncoder.encode("gerant"));
+            newUtilisateur.setPassword(passwordEncoder.encode(dto.getMotdepasse()));
             newUtilisateur.setAgence(saveAgenceUpdate);
             Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
             if (newRole.isPresent()) {
@@ -105,7 +105,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setJoinDate(new Date());
             newUtilisateur.setRoleUsed(ROLE_GERANT.name());
             newUtilisateur.setAuthorities(ROLE_GERANT.getAuthorities());
-            newUtilisateur.setActive(true);
+            newUtilisateur.setActive(dto.isActive());
             newUtilisateur.setActivated(true);
             newUtilisateur.setUsername(dto.getMobileAgence());
             newUtilisateur.setNonLocked(true);
