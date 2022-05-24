@@ -31,5 +31,4 @@ public class Magasin extends Bienimmobilier {
     Etage etageMagasin;
     @OneToMany(mappedBy = "magasinBail")
     List<Operation> operationsMagasin;
-
 }

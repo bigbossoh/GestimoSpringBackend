@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
-import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
@@ -48,30 +47,30 @@ public class AuthenticationController {
     private final UtilisateurRepository utilisateurRepository;
     private final TwilioSmsSender twilioSmsSender;
 
+    @PostMapping("/login")
+    public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
 
-@PostMapping("/login")
-public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
-
-    authenticate(request.getUsername(), request.getPassword());
-    UtilisateurRequestDto utilisateurByUsername = utilisateurService.findUtilisateurByUsername(request.getUsername());
-    log.info("get back id of the user {}", utilisateurByUsername.getId());
-    Utilisateur userCreate = utilisateurRepository.findById(utilisateurByUsername.getId()).orElseThrow(
-            () -> new InvalidEntityException(
-                    "Aucun Utilisateur has been found with Code " + utilisateurByUsername.getId(),
-                    ErrorCodes.UTILISATEUR_NOT_FOUND));
-    Utilisateur loginUser = userCreate;
-    UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-    HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-//    log.info("we are going lo launch sms to the user ");
-   // SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger avec sussces");
-    //twilioSmsSender.sendSms(sms);
-    //log.info("Sms sent");
-    return new ResponseEntity<>(loginUser, jwtHeader, OK);
-}
-
+        authenticate(request.getUsername(), request.getPassword());
+        UtilisateurRequestDto utilisateurByUsername = utilisateurService
+                .findUtilisateurByUsername(request.getUsername());
+        log.info("get back id of the user {}", utilisateurByUsername.getId());
+        Utilisateur userCreate = utilisateurRepository.findById(utilisateurByUsername.getId()).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with Code " + utilisateurByUsername.getId(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        Utilisateur loginUser = userCreate;
+        UserPrincipal userPrincipal = new UserPrincipal(loginUser);
+        HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
+        // log.info("we are going lo launch sms to the user ");
+        // SmsRequest sms =new SmsRequest(request.getUsername(),"Vous Vous ête logger
+        // avec sussces");
+        // twilioSmsSender.sendSms(sms);
+        // log.info("Sms sent");
+        return new ResponseEntity<>(loginUser, jwtHeader, OK);
+    }
 
     private void authenticate(String username, String password) {
-        log.info("we are here in the login resource {} ",username);
+        log.info("we are here in the login resource {} ", username);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 

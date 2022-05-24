@@ -5,9 +5,8 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailStudioDto;
-import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Studio;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
@@ -17,6 +16,7 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
+import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.StudioRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.BailStudioDtoValidator;
@@ -44,6 +44,7 @@ public class BailStudioServiceImpl implements BailStudioService {
     final BailLocationRepository bailLocationRepository;
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
+    final BienImmobilierRepository bienImmobilierRepository;
 
     @Override
     public BailStudioDto save(BailStudioDto dto) {
@@ -62,12 +63,16 @@ public class BailStudioServiceImpl implements BailStudioService {
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
-
+            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdStudio())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Bien has been found with code " + dto.getIdStudio(),
+                            ErrorCodes.MAGASIN_NOT_FOUND));
             Studio studio = studioRepository.findById(dto.getIdStudio())
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucune Villa has been found with code " + dto.getIdStudio(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            if(studio.isOccupied()==false){
+            if (studio.isOccupied() == false) {
+                bailLocationStudio.setBienImmobilierOperation(bienImmobilierOperation);
                 bailLocationStudio.setStudioBail(studio);
                 bailLocationStudio.setUtilisateurOperation(utilisateur);
                 bailLocationStudio.setArchiveBail(false);
@@ -89,7 +94,7 @@ public class BailStudioServiceImpl implements BailStudioService {
                  */
 
                 montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                        dto.getNouveauMontantLoyer(),0.0,studioBailSave.getId(),dto.getIdAgence());
+                        dto.getNouveauMontantLoyer(), 0.0, studioBailSave.getId(), dto.getIdAgence());
                 /**
                  * Creation de l'appel loyer
                  */
@@ -102,7 +107,7 @@ public class BailStudioServiceImpl implements BailStudioService {
                 appelLoyerService.save(appelLoyerRequestDto);
 
                 return BailStudioDto.fromEntity(studioBailSave);
-            }else {
+            } else {
                 throw new InvalidEntityException("le studio est déjà occupé "
                         + studio.isOccupied(),
                         ErrorCodes.STUDIO_ALREADY_IN_USE);

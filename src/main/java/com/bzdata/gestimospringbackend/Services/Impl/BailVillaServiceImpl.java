@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Villa;
@@ -12,6 +13,7 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
+import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VillaRepository;
 import com.bzdata.gestimospringbackend.validator.BailVillaDtoValidator;
@@ -40,6 +42,7 @@ public class BailVillaServiceImpl implements BailVillaService {
     final VillaRepository villaRepository;
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
+    final BienImmobilierRepository bienImmobilierRepository;
 
     @Override
     public BailVillaDto saveNewBailVilla(BailVillaDto dto) {
@@ -58,11 +61,15 @@ public class BailVillaServiceImpl implements BailVillaService {
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
-
+            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdVilla())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Bien has been found with code " + dto.getIdVilla(),
+                            ErrorCodes.MAGASIN_NOT_FOUND));
             Villa villa = villaRepository.findById(dto.getIdVilla())
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucune Villa has been found with code " + dto.getIdVilla(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
+            bailLocationVilla.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationVilla.setVillaBail(villa);
             bailLocationVilla.setUtilisateurOperation(utilisateur);
             bailLocationVilla.setAbrvCodeBail(dto.getAbrvCodeBail());
@@ -88,7 +95,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             montantLoyerBail.setBailLocation(villaBailSave);
             montantLoyerBail.setIdAgence(dto.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                    dto.getNouveauMontantLoyer(),0.0,villaBailSave.getId(),dto.getIdAgence());
+                    dto.getNouveauMontantLoyer(), 0.0, villaBailSave.getId(), dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */

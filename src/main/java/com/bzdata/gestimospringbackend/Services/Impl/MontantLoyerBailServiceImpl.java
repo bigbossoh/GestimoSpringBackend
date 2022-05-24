@@ -11,7 +11,6 @@ import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
-import com.bzdata.gestimospringbackend.validator.MontantLoyerBailDtoValidator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,24 +32,25 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
 
     @Override
     public boolean saveNewMontantLoyerBail(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
-                                           double ancienMontantLoyer,Long idBailLocation, Long idAgence) {
-        log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation,idAgence );
-//        List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
-//        if (!errors.isEmpty()) {
-//            log.error("le montant loyer bail n'est pas valide {}", errors);
-//            throw new InvalidEntityException("Certain attributs de l'object Montant loyer bail sont null.",
-//                    ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
-//        }
+            double ancienMontantLoyer, Long idBailLocation, Long idAgence) {
+        log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation, idAgence);
+        // List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
+        // if (!errors.isEmpty()) {
+        // log.error("le montant loyer bail n'est pas valide {}", errors);
+        // throw new InvalidEntityException("Certain attributs de l'object Montant loyer
+        // bail sont null.",
+        // ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
+        // }
 
         try {
-
 
             MontantLoyerBail newMontantLoyerBail = new MontantLoyerBail();
             BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
                     .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                             idBailLocation,
                             ErrorCodes.BAILLOCATION_NOT_FOUND));
-            List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository.findByBailLocation(bailLocation);
+            List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository
+                    .findByBailLocation(bailLocation);
             Optional<MontantLoyerBail> oldMontantBail = montantLoyerBailRepository.findById(currentIdMontantLoyerBail);
             if (oldMontantBail.isPresent()) {
                 newMontantLoyerBail.setId(oldMontantBail.get().getId());
@@ -68,16 +68,18 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 newMontantLoyerBail.setStatusLoyer(true);
             } else {
                 Optional<MontantLoyerBail> firstMontantLoyerBail = ListBauxMontantLoyerBail.stream()
-                        .filter(montantLoyerBail->montantLoyerBail.isStatusLoyer()==true)
+                        .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
                         .findFirst();
                 if (firstMontantLoyerBail.get().getAncienMontantLoyer() != 0) {
-                    newMontantLoyerBail.setTauxLoyer((nouveauMontantLoyer - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
+                    newMontantLoyerBail.setTauxLoyer(
+                            (nouveauMontantLoyer - firstMontantLoyerBail.get().getAncienMontantLoyer()) * 100
                                     / firstMontantLoyerBail.get().getAncienMontantLoyer());
                 }
 
                 newMontantLoyerBail.setId(firstMontantLoyerBail.get().getId());
-                if (firstMontantLoyerBail.get().getNouveauMontantLoyer()!=nouveauMontantLoyer){
-                    firstMontantLoyerBail.get().setAncienMontantLoyer(firstMontantLoyerBail.get().getNouveauMontantLoyer());
+                if (firstMontantLoyerBail.get().getNouveauMontantLoyer() != nouveauMontantLoyer) {
+                    firstMontantLoyerBail.get()
+                            .setAncienMontantLoyer(firstMontantLoyerBail.get().getNouveauMontantLoyer());
                     firstMontantLoyerBail.get().setFinLoyer(bailLocation.getDateFin());
                     firstMontantLoyerBail.get().setStatusLoyer(false);
                     montantLoyerBailRepository.save(firstMontantLoyerBail.get());
