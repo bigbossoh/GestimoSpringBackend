@@ -5,9 +5,9 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
-import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
+import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.BailAppartementDtoValidator;
 
@@ -43,6 +44,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     final AppartementRepository appartementRepository;
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
+    final BienImmobilierRepository bienImmobilierRepository;
 
     @Override
     public BailAppartementDto save(BailAppartementDto dto) {
@@ -66,8 +68,13 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Appartement has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
+            Bienimmobilier bienImmobilierOperation = bien.findById(dto.getIdAppartement())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Appartement has been found with code " + dto.getIdAppartement(),
+                            ErrorCodes.MAGASIN_NOT_FOUND));
             bailLocation.setIdAgence(dto.getIdAgence());
             bailLocation.setAppartementBail(appartementBail);
+            bailLocation.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocation.setUtilisateurOperation(utilisateur);
             bailLocation.setArchiveBail(false);
             bailLocation.setDateDebut(dto.getDateDebut());
@@ -91,7 +98,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             montantLoyerBail.setBailLocation(appartementBailSave);
             montantLoyerBail.setIdAgence(dto.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                    dto.getNouveauMontantLoyer(),0.0,appartementBailSave.getId(),dto.getIdAgence());
+                    dto.getNouveauMontantLoyer(), 0.0, appartementBailSave.getId(), dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */

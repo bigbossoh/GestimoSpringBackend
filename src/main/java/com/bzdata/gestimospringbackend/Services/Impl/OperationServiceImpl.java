@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.OperationService;
+import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.OperationRepository;
 
 import org.springframework.stereotype.Service;
@@ -21,12 +22,12 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OperationServiceImpl implements OperationService {
-    final OperationRepository operationRepository;
+    final BailLocationRepository bailLocationRepository;
 
     @Override
     public List<OperationDto> getAllOperation() {
 
-        return operationRepository.findAll().stream()
+        return bailLocationRepository.findAll().stream()
                 .map(OperationDto::fromEntity)
                 .collect(Collectors.toList());
 

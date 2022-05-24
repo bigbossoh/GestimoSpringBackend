@@ -18,9 +18,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
-
-import com.bzdata.gestimospringbackend.repository.*;
-
+import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
 import com.bzdata.gestimospringbackend.repository.PaysRepository;
@@ -29,8 +27,7 @@ import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.CommandLineRunner;
@@ -241,6 +238,6 @@ public class GestimoSpringBackendApplication {
     }
 
     private String generateUserId() {
-        return "User-"+RandomStringUtils.randomAlphanumeric(5);
+        return "User-" + RandomStringUtils.randomAlphanumeric(5);
     }
 }

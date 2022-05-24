@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services;
 
 import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.MagasinResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public interface MagasinService {
 
     Long maxOfNumBienMagasin();
 
-    List<MagasinDto> findAll();
+    List<MagasinResponseDto> findAll();
 
     MagasinDto findById(Long id);
 

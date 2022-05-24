@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthResponseDto;
-import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.auth.ExtentedUser;
 import com.bzdata.gestimospringbackend.Services.AuthRequestService;
 import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Slf4j
 @Transactional
@@ -36,23 +36,21 @@ public class AuthRequestServiceImpl implements AuthRequestService {
     @Override
     public AuthResponseDto authenticate(AuthRequestDto dto) {
 
-             log.info("We are going to login into the system {}",dto);
-    List<String> errors= AuthRequestDtoValidator.validate(dto);
-        if(!errors.isEmpty()){
-            log.error("Les informations fournies par l'utilisateur ne sont pas valide {}",errors);
+        log.info("We are going to login into the system {}", dto);
+        List<String> errors = AuthRequestDtoValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Les informations fournies par l'utilisateur ne sont pas valide {}", errors);
             throw new InvalidEntityException("Les informations fournies par l'utilisateur ne sont pas valide",
-                    ErrorCodes.UTILISATEUR_NOT_VALID,errors);
+                    ErrorCodes.UTILISATEUR_NOT_VALID, errors);
         }
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         dto.getUsername(),
-                        dto.getPassword()
-                )
-        );
+                        dto.getPassword()));
         final UserDetails userDetails = userDetailsService.loadUserByUsername(dto.getUsername());
 
-        final String jwt = jwtUtil.generateToken((ExtentedUser)  userDetails);
+        final String jwt = jwtUtil.generateToken((ExtentedUser) userDetails);
 
         return AuthResponseDto.builder().accessToken(jwt).build();
 

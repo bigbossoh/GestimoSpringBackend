@@ -16,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Site extends AbstractEntity{
+public class Site extends AbstractEntity {
     String abrSite;
     String nomSite;
     @ManyToOne

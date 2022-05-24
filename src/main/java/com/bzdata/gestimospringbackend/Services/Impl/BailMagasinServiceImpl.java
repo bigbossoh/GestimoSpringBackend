@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Magasin;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
@@ -15,6 +16,7 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
+import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.BailMagasinDtoValidator;
@@ -42,6 +44,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     final MagasinRepository magasinRepository;
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
+    final BienImmobilierRepository bienImmobilierRepository;
 
     @Override
     public BailMagasinDto save(BailMagasinDto dto) {
@@ -60,11 +63,15 @@ public class BailMagasinServiceImpl implements BailMagasinService {
                         "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
-
+            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdMagasin())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Bien has been found with code " + dto.getIdMagasin(),
+                            ErrorCodes.MAGASIN_NOT_FOUND));
             Magasin magasinBail = magasinRepository.findById(dto.getIdMagasin())
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Magasin has been found with code " + dto.getIdMagasin(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
+            bailLocationMagasin.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationMagasin.setMagasinBail(magasinBail);
             bailLocationMagasin.setUtilisateurOperation(utilisateur);
             BailLocation magasinBailSave = bailLocationRepository.save(bailLocationMagasin);
@@ -82,7 +89,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             montantLoyerBail.setBailLocation(magasinBailSave);
             montantLoyerBail.setIdAgence(magasinBail.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                    dto.getNouveauMontantLoyer(),0.0,magasinBailSave.getId(),dto.getIdAgence());
+                    dto.getNouveauMontantLoyer(), 0.0, magasinBailSave.getId(), dto.getIdAgence());
             /**
              * Creation de l'appel loyer
              */

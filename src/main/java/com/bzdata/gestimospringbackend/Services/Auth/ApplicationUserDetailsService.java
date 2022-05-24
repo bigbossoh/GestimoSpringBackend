@@ -4,18 +4,11 @@ import static com.bzdata.gestimospringbackend.constant.UserImplConstant.NO_USER_
 
 import java.util.Date;
 
-import com.bzdata.gestimospringbackend.DTOs.RoleRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
-import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
-import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.LoginAttemptService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
-import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
-import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
-import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 
 import org.springframework.security.core.userdetails.UserDetails;

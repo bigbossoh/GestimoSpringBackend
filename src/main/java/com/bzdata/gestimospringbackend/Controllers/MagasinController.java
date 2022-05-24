@@ -5,11 +5,16 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
-import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
+import com.bzdata.gestimospringbackend.DTOs.MagasinResponseDto;
 import com.bzdata.gestimospringbackend.Services.MagasinService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,8 +42,7 @@ public class MagasinController {
     // TOUT LES Magasins
     @Operation(summary = "Liste de tous les Magasins", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-
-    public ResponseEntity<List<MagasinDto>> findAllMagasin() {
+    public ResponseEntity<List<MagasinResponseDto>> findAllMagasin() {
         return ResponseEntity.ok(magasinService.findAll());
     }
 
@@ -62,4 +66,9 @@ public class MagasinController {
         return ResponseEntity.ok(magasinService.findAllByIdSite(idSite));
     }
 
+    @Operation(summary = "Liste de tous les Magasins by Idsite", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllMagasinByIdEtage/{id}")
+    public ResponseEntity<List<MagasinDto>> findAllMagasinByEtage(@PathVariable("id") Long idSite) {
+        return ResponseEntity.ok(magasinService.findAllByIdEtage(idSite));
+    }
 }

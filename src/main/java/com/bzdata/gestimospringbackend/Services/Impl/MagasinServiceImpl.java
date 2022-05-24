@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.MagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.MagasinResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Magasin;
 import com.bzdata.gestimospringbackend.Models.Site;
@@ -22,7 +22,6 @@ import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.MagasinDtoValidator;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -59,6 +58,7 @@ public class MagasinServiceImpl implements MagasinService {
         if (recoverySite.isPresent()) {
             magasin.setSite(recoverySite.get());
         }
+
         // magasin.setEtageMagasin(null);
         Optional<Etage> etage = etageRepository.findById(dto.getIdEtage());
         if (etage.isPresent()) {
@@ -142,9 +142,10 @@ public class MagasinServiceImpl implements MagasinService {
     }
 
     @Override
-    public List<MagasinDto> findAll() {
-        return magasinRepository.findAll(Sort.by(Sort.Direction.ASC, "nomBien")).stream()
-                .map(MagasinDto::fromEntity)
+    public List<MagasinResponseDto> findAll() {
+        log.info("All Magasin 21 {}", magasinRepository.findAll().toArray());
+        return magasinRepository.findAll().stream()
+                .map(MagasinResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
