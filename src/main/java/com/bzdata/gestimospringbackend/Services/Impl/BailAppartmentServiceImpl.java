@@ -68,9 +68,9 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Appartement has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
-            Bienimmobilier bienImmobilierOperation = bien.findById(dto.getIdAppartement())
+            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdAppartement())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucun Appartement has been found with code " + dto.getIdAppartement(),
+                            "Aucun Bien has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
             bailLocation.setIdAgence(dto.getIdAgence());
             bailLocation.setAppartementBail(appartementBail);
