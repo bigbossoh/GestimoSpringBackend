@@ -22,6 +22,10 @@ public class AgenceRequestDto {
     String faxAgence;
     String sigleAgence;
     Long idUtilisateurCreateur;
+    String motdepasse;
+    String nomPrenomGerant;
+    boolean active;
+
 
 
     public static AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere) {

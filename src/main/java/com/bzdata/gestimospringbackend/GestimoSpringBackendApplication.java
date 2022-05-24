@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Pays;
@@ -92,12 +93,12 @@ public class GestimoSpringBackendApplication {
 
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
-            RoleRepository roleRepository,
-            UtilisateurRepository utilisateurRepository,
-            PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
-            CommuneRepository communeRepository,
-            AgenceImmobiliereRepository agenceImmobiliereRepository,
-            MagasinRepository magasinRepository) {
+                                            RoleRepository roleRepository,
+                                            UtilisateurRepository utilisateurRepository,
+                                            PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
+                                            CommuneRepository communeRepository,
+                                            AgenceImmobiliereRepository agenceImmobiliereRepository,
+                                            MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
 
         Utilisateur utilisateur = new Utilisateur();
@@ -109,6 +110,7 @@ public class GestimoSpringBackendApplication {
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");
             if (!oPays.isPresent()) {
                 pays.setAbrvPays("CI");
+                pays.setIdAgence(1L);
                 pays.setNomPays("Côte d'Ivoire");
                 paysRepository.save(pays);
             }
@@ -118,17 +120,19 @@ public class GestimoSpringBackendApplication {
             if (p.isPresent()) {
                 Optional<Ville> v = villeRepository.findById(1L);
                 if (!v.isPresent()) {
-                    Ville ville = new Ville();
-                    ville.setAbrvVille("ABJ");
-                    ville.setPays(p.get());
-                    ville.setNomVille("Abidjan");
-                    villeRepository.save(ville);
+                    Stream.of("ABIDJAN", "ABOISSO").forEach(vil -> {
+                        Ville ville = new Ville();
+                        if (vil == "ABIDJAN") {
+                            ville.setAbrvVille("ABJ");
+                        } else {
+                            ville.setAbrvVille("ABOI");
+                        }
+                        ville.setPays(p.get());
+                        ville.setNomVille(vil);
+                        ville.setIdAgence(1L);
+                        villeRepository.save(ville);
 
-                    Ville ville1 = new Ville();
-                    ville1.setAbrvVille("BKE");
-                    ville1.setPays(p.get());
-                    ville1.setNomVille("Bouaké");
-                    villeRepository.save(ville1);
+                    });
                 }
 
             }
@@ -136,111 +140,172 @@ public class GestimoSpringBackendApplication {
             // CREATION DES COMMUNES
             List<Ville> lesVilles = villeRepository.findAll();
             lesVilles.forEach(v -> {
-                if (v.getAbrvVille().contains("ABJ")) {
+                Optional<Commune> maCommune1 = communeRepository.findById(1L);
+                if (!maCommune1.isPresent()) {
+                    if (v.getAbrvVille().contains("ABJ")) {
+                        Stream.of("Abobo", "Adjamé", "Anyama",
+                                "Attécoubé", "Bingerville", "Cocody", "Koumassi",
+                                "Marcory", "Plateau", "Port bouët", "Treichville",
+                                "Songon", "Yopougon").forEach(com -> {
 
-                    Commune commune1 = new Commune();
-                    commune1.setAbrvCommune("KOUM");
-                    commune1.setNomCommune("Koumassi");
-                    commune1.setVille(v);
-                    communeRepository.save(commune1);
-
-                    Commune commune = new Commune();
-                    commune.setAbrvCommune("YOP");
-                    commune.setNomCommune("Yopougon");
-                    commune.setVille(v);
-                    communeRepository.save(commune);
+                            Commune commune1 = new Commune();
+                            commune1.setAbrvCommune(com.substring(0,4));
+                            commune1.setNomCommune(com);
+                            commune1.setIdAgence(1L);
+                            commune1.setVille(v);
+                            communeRepository.save(commune1);
+                        });
+                    }
                 }
+
+
             });
+
             // CREATIONS DES QUARTIERS
-            for (int index = 0; index < 1; index++) {
-                Quartier quartier = new Quartier();
-                Optional<Commune> maCommune = communeRepository.findById(1L);
-                if (maCommune.isPresent()) {
-                    quartier.setAbrvQuartier("PROD");
-                    quartier.setNomQuartier("Prodomo");
-                    quartier.setCommune(maCommune.get());
-                    quartierRepository.save(quartier);
-                }
+
+            Optional<Quartier> monQuartierVerification = quartierRepository.findById(1L);
+            if (!monQuartierVerification.isPresent()) {
+                List<Commune> lesCommunes = communeRepository.findAll();
+                lesCommunes.forEach(comm -> {
+
+                    if (comm.getNomCommune().contains("Cocody")) {
+                        Stream.of("Abatta", "Aghien", "Dokui").forEach(com -> {
+                            Quartier quartier = new Quartier();
+                            quartier.setAbrvQuartier(com.substring(0,4));
+                            quartier.setNomQuartier(com);
+                            quartier.setIdAgence(1L);
+                            quartier.setCommune(comm);
+                            quartierRepository.save(quartier);
+                        });
+                    }
+                    if (comm.getNomCommune().contains("Anyama")) {
+                        Stream.of("Ebimpé").forEach(com -> {
+                            Quartier quartier = new Quartier();
+                            quartier.setIdAgence(1L);
+                            quartier.setAbrvQuartier(com.substring(0,3));
+                            quartier.setNomQuartier(com);
+                            quartier.setCommune(comm);
+                            quartierRepository.save(quartier);
+                        });
+                    }
+                    if (comm.getNomCommune().contains("Yopougon")) {
+                        Stream.of("Assanvon", "Niangon", "Port Bouet II").forEach(com -> {
+                            Quartier quartier = new Quartier();
+                            quartier.setAbrvQuartier(com.substring(0,4));
+                            quartier.setIdAgence(1L);
+                            quartier.setNomQuartier(com);
+                            quartier.setCommune(comm);
+                            quartierRepository.save(quartier);
+                        });
+                    }
+                });
+
             }
+
             // GESTION DES SITES
-            Optional<Quartier> monQuartier = quartierRepository.findById(1L);
-            if (monQuartier.isPresent()) {
-                Site site = new Site();
-                site.setAbrSite(StringUtils.deleteWhitespace(monQuartier.get()
-                        .getCommune().getVille().getPays().getAbrvPays())
-                        + "-" +
-                        StringUtils.deleteWhitespace(monQuartier.get().getCommune().getVille().getAbrvVille())
-                        + "-" + StringUtils.deleteWhitespace(monQuartier.get()
+            Optional<Site> monSite = siteRepository.findById(1L);
+            if (!monSite.isPresent()) {
+                List<Quartier> lesQuartiers = quartierRepository.findAll();
+                lesQuartiers.forEach(quart -> {
+
+                    if (quart.getNomQuartier().contains("Assanvon")) {
+                        Site site = new Site();
+                        site.setIdAgence(1L);
+                        site.setAbrSite(StringUtils.deleteWhitespace(quart
+                                .getCommune().getVille().getPays().getAbrvPays())
+                                + "-" +
+                                StringUtils.deleteWhitespace(quart.getCommune().getVille().getAbrvVille())
+                                + "-" + StringUtils.deleteWhitespace(quart
                                 .getCommune().getAbrvCommune())
-                        + "-" + StringUtils.deleteWhitespace(monQuartier.get().getAbrvQuartier()));
-                site.setNomSite(
-                        monQuartier.get()
-                                .getCommune().getVille().getPays().getNomPays()
-                                + "-" + monQuartier.get().getCommune().getVille().getNomVille()
-                                + "-" + monQuartier.get().getCommune().getNomCommune()
-                                + "-" + monQuartier.get().getNomQuartier());
-                site.setQuartier(monQuartier.get());
-                siteRepository.save(site);
+                                + "-" + StringUtils.deleteWhitespace(quart.getAbrvQuartier()));
+                        site.setNomSite(
+                                quart.getCommune().getVille().getPays().getNomPays()
+                                        + "-" + quart.getCommune().getVille().getNomVille()
+                                        + "-" + quart.getCommune().getNomCommune()
+                                        + "-" + quart.getNomQuartier());
+                        site.setQuartier(quart);
+                        siteRepository.save(site);
+                    }
+                    if (quart.getNomQuartier().contains("Aghien")) {
+                        Site site = new Site();
+                        site.setIdAgence(1L);
+                        site.setAbrSite(StringUtils.deleteWhitespace(quart
+                                .getCommune().getVille().getPays().getAbrvPays())
+                                + "-" +
+                                StringUtils.deleteWhitespace(quart.getCommune().getVille().getAbrvVille())
+                                + "-" + StringUtils.deleteWhitespace(quart
+                                .getCommune().getAbrvCommune())
+                                + "-" + StringUtils.deleteWhitespace(quart.getAbrvQuartier()));
+                        site.setNomSite(
+                                quart.getCommune().getVille().getPays().getNomPays()
+                                        + "-" + quart.getCommune().getVille().getNomVille()
+                                        + "-" + quart.getCommune().getNomCommune()
+                                        + "-" + quart.getNomQuartier());
+                        site.setQuartier(quart);
+                        siteRepository.save(site);
+                    }
+                });
             }
-            // ROLES
-            Optional<Role> roles = null;
-            roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
-            if (!roles.isPresent()) {
-                roleRepository.save(new Role("SUPERVISEUR", "Role de superviseur", null));
-            }
-            roles = null;
-            roles = roleRepository.findRoleByRoleName("GERANT");
-            if (!roles.isPresent()) {
-                roleRepository.save(new Role("GERANT", "Role de GERANT", null));
-            }
-            roles = null;
-            roles = roleRepository.findRoleByRoleName("PROPRIETAIRE");
-            if (!roles.isPresent()) {
-                roleRepository.save(new Role("PROPRIETAIRE", "Role de PROPRIETAIRE", null));
-            }
-            roles = null;
-            roles = roleRepository.findRoleByRoleName("LOCATAIRE");
-            if (!roles.isPresent()) {
-                roleRepository.save(new Role("LOCATAIRE", "Role de LOCATAIRE", null));
-            }
-            roles = null;
-            roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
-            if (roles.isPresent()) {
-                Utilisateur userPrincipalSuperviseur = utilisateurRepository
-                        .findUtilisateurByUsername("0103833350");
-                if (userPrincipalSuperviseur == null) {
-                    utilisateur.setUrole(roles.get());
-                    utilisateur.setUtilisateurIdApp(generateUserId());
-                    utilisateur.setNom("SUPERVISEUR");
-                    utilisateur.setPrenom("SUPERVISEUR PRENOM");
-                    utilisateur.setEmail("superviseur@superviseur.com");
-                    utilisateur.setMobile("0103833350");
-                    utilisateur.setDateDeNaissance(LocalDate.parse("1980-01-08"));
-                    utilisateur.setLieuNaissance("Abidjan");
-                    utilisateur.setTypePieceIdentite("CNI");
-                    utilisateur.setNumeroPieceIdentite("1236544");
-                    utilisateur.setDateFinPiece(LocalDate.parse("2022-01-08"));
-                    utilisateur.setDateDebutPiece(LocalDate.parse("2016-01-08"));
-                    utilisateur.setNationalité("Ivoirienne");
-                    utilisateur.setGenre("M");
-                    utilisateur.setActivated(true);
-                    utilisateur.setUsername("0103833350");
-                    utilisateur.setPassword(mdp);
-                    utilisateur.setIdAgence(1L);
-                    utilisateur.setJoinDate(new Date());
-                    utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
-                    utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());
-                    utilisateur.setActive(true);
-                    utilisateur.setNonLocked(true);
-                    utilisateurRepository.save(utilisateur);
-                }
 
-            } // CREATION DU SUPERUTILISATEUR
+                    // ROLES
+                    Optional<Role> roles = null;
+                    roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
+                    if (!roles.isPresent()) {
+                        roleRepository.save(new Role("SUPERVISEUR", "Role de superviseur", null));
+                    }
+                    roles = null;
+                    roles = roleRepository.findRoleByRoleName("GERANT");
+                    if (!roles.isPresent()) {
+                        roleRepository.save(new Role("GERANT", "Role de GERANT", null));
+                    }
+                    roles = null;
+                    roles = roleRepository.findRoleByRoleName("PROPRIETAIRE");
+                    if (!roles.isPresent()) {
+                        roleRepository.save(new Role("PROPRIETAIRE", "Role de PROPRIETAIRE", null));
+                    }
+                    roles = null;
+                    roles = roleRepository.findRoleByRoleName("LOCATAIRE");
+                    if (!roles.isPresent()) {
+                        roleRepository.save(new Role("LOCATAIRE", "Role de LOCATAIRE", null));
+                    }
+                    roles = null;
+                    roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
+                    if (roles.isPresent()) {
+                        Utilisateur userPrincipalSuperviseur = utilisateurRepository
+                                .findUtilisateurByUsername("0103833350");
+                        if (userPrincipalSuperviseur == null) {
+                            utilisateur.setUrole(roles.get());
+                            utilisateur.setUtilisateurIdApp(generateUserId());
+                            utilisateur.setNom("SUPERVISEUR");
+                            utilisateur.setPrenom("SUPERVISEUR PRENOM");
+                            utilisateur.setEmail("superviseur@superviseur.com");
+                            utilisateur.setMobile("0103833350");
+                            utilisateur.setDateDeNaissance(LocalDate.parse("1980-01-08"));
+                            utilisateur.setLieuNaissance("Abidjan");
+                            utilisateur.setTypePieceIdentite("CNI");
+                            utilisateur.setNumeroPieceIdentite("1236544");
+                            utilisateur.setDateFinPiece(LocalDate.parse("2022-01-08"));
+                            utilisateur.setDateDebutPiece(LocalDate.parse("2016-01-08"));
+                            utilisateur.setNationalité("Ivoirienne");
+                            utilisateur.setGenre("M");
+                            utilisateur.setActivated(true);
+                            utilisateur.setUsername("0103833350");
+                            utilisateur.setPassword(mdp);
+                            utilisateur.setIdAgence(1L);
+                            utilisateur.setJoinDate(new Date());
+                            utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
+                            utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());
+                            utilisateur.setActive(true);
+                            utilisateur.setNonLocked(true);
+                            utilisateurRepository.save(utilisateur);
+                        }
 
-        };
-    }
+                    } // CREATION DU SUPERUTILISATEUR
 
-    private String generateUserId() {
-        return "User-"+RandomStringUtils.randomAlphanumeric(5);
-    }
-}
+                };
+            }
+
+            private String generateUserId () {
+                return "User-" + RandomStringUtils.randomAlphanumeric(5);
+            }
+        }
