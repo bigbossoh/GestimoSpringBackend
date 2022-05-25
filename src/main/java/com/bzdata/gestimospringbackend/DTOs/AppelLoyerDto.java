@@ -24,7 +24,7 @@ public class AppelLoyerDto {
     private double soldeAppelLoyer;
     private boolean isSolderAppelLoyer;
     private double montantBailLPeriode;
-    private BailLocation bailLocationAppelLoyer;
+    private Long bailLocationAppelLoyer;
 
     public static AppelLoyerDto fromEntity(AppelLoyer appelLoyer) {
         if (appelLoyer == null) {
@@ -42,31 +42,10 @@ public class AppelLoyerDto {
                 .moisChiffreAppelLoyer(appelLoyer.getMoisChiffreAppelLoyer())
                 .descAppelLoyer(appelLoyer.getDescAppelLoyer())
                 .montantBailLPeriode(appelLoyer.getMontantBailLPeriode())
-                .bailLocationAppelLoyer(appelLoyer.getBailLocationAppelLoyer())
+                .bailLocationAppelLoyer(appelLoyer.getBailLocationAppelLoyer().getId())
                 .soldeAppelLoyer(appelLoyer.getSoldeAppelLoyer())
                 .isSolderAppelLoyer(appelLoyer.isSolderAppelLoyer())
                 .build();
     }
 
-    public static AppelLoyer toEntity(AppelLoyerDto dto) {
-        if (dto == null) {
-            return null;
-        }
-        AppelLoyer a = new AppelLoyer();
-        a.setId(dto.getId());
-        a.setIdAgence(dto.getIdAgence());
-        a.setPeriodeAppelLoyer(dto.getPeriodeAppelLoyer());
-        a.setStatusAppelLoyer(dto.getStatusAppelLoyer());
-        a.setDatePaiementPrevuAppelLoyer(dto.getDatePaiementPrevuAppelLoyer());
-        a.setDateDebutMoisAppelLoyer(dto.getDateDebutMoisAppelLoyer());
-        a.setDateFinMoisAppelLoyer(dto.getDateFinMoisAppelLoyer());
-        a.setAnneeAppelLoyer(dto.getAnneeAppelLoyer());
-        a.setMoisChiffreAppelLoyer(dto.getMoisChiffreAppelLoyer());
-        a.setDescAppelLoyer(dto.getDescAppelLoyer());
-        a.setMontantBailLPeriode(dto.getMontantBailLPeriode());
-        a.setBailLocationAppelLoyer(dto.getBailLocationAppelLoyer());
-        a.setSoldeAppelLoyer(dto.getSoldeAppelLoyer());
-        a.setSolderAppelLoyer(dto.isSolderAppelLoyer);
-        return a;
-    }
 }
