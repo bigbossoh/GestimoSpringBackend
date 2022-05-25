@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
-import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.QuartierRequestDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import com.bzdata.gestimospringbackend.Services.CommuneService;
@@ -39,7 +39,7 @@ public class QuartierServiceImpl implements QuartierService {
     final CommuneService communeService;
 
     @Override
-    public QuartierDto save(QuartierDto dto) {
+    public QuartierRequestDto save(QuartierRequestDto dto) {
 
         log.info("We are going to create  a new Quartier {}", dto);
         List<String> errors = QuartierDtoValidator.validate(dto);
@@ -59,7 +59,7 @@ public class QuartierServiceImpl implements QuartierService {
             quartier.setCommune(commune);
             quartier.setIdAgence(dto.getIdAgence());
             Quartier quartierSave = quartierRepository.save(quartier);
-            return QuartierDto.fromEntity(quartierSave);
+            return QuartierRequestDto.fromEntity(quartierSave);
         } else {
 
             Commune commune = communeRepository.findById(dto.getIdCommune())
@@ -70,7 +70,7 @@ public class QuartierServiceImpl implements QuartierService {
             oldQuatier.get().setCommune(commune);
             oldQuatier.get().setIdAgence(dto.getIdAgence());
             Quartier quartierSave = quartierRepository.save(oldQuatier.get());
-            return QuartierDto.fromEntity(quartierSave);
+            return QuartierRequestDto.fromEntity(quartierSave);
         }
 
     }
@@ -92,38 +92,38 @@ public class QuartierServiceImpl implements QuartierService {
     }
 
     @Override
-    public List<QuartierDto> findAll() {
+    public List<QuartierRequestDto> findAll() {
         return quartierRepository.findAll(Sort.by(Direction.ASC, "nomQuartier")).stream()
-                .map(QuartierDto::fromEntity)
+                .map(QuartierRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public QuartierDto findById(Long id) {
+    public QuartierRequestDto findById(Long id) {
         log.info("We are going to get back the Quartier By {}", id);
         if (id == null) {
             log.error("you are not provided a Quartier.");
             return null;
         }
-        return quartierRepository.findById(id).map(QuartierDto::fromEntity).orElseThrow(
+        return quartierRepository.findById(id).map(QuartierRequestDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Quartier has been found with Code " + id,
                         ErrorCodes.QUARTIER_NOT_FOUND));
     }
 
     @Override
-    public QuartierDto findByName(String nom) {
+    public QuartierRequestDto findByName(String nom) {
         log.info("We are going to get back the Qaurtier By {}", nom);
         if (!StringUtils.hasLength(nom)) {
             log.error("you are not provided a Quartier.");
             return null;
         }
-        return quartierRepository.findByNomQuartier(nom).map(QuartierDto::fromEntity).orElseThrow(
+        return quartierRepository.findByNomQuartier(nom).map(QuartierRequestDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Quartier has been found with name " + nom,
                         ErrorCodes.QUARTIER_NOT_FOUND));
     }
 
     @Override
-    public List<QuartierDto> findAllByIdCommune(Long id) {
+    public List<QuartierRequestDto> findAllByIdCommune(Long id) {
         log.info("We are going to get back the Commune By {}", id);
         if (id == null || id == 0) {
             log.error("you are not provided a Commune.");
@@ -131,8 +131,8 @@ public class QuartierServiceImpl implements QuartierService {
                     ErrorCodes.COMMUNE_NOT_FOUND);
             return null;
         }
-        CommuneDto communeDto = communeService.findById(id);
-        if (communeDto == null) {
+        CommuneRequestDto communeRequestDto = communeService.findById(id);
+        if (communeRequestDto == null) {
 
         }
         Optional<Commune> c = communeRepository.findById(id);
@@ -141,7 +141,7 @@ public class QuartierServiceImpl implements QuartierService {
             return null;
         }
         return quartierRepository.findByCommune(c.get()).stream()
-                .map(QuartierDto::fromEntity)
+                .map(QuartierRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

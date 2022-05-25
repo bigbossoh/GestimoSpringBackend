@@ -9,22 +9,21 @@ import lombok.experimental.FieldDefaults;
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class QuartierDto {
+public class QuartierResponseDto {
     Long id;
     String abrvQuartier;
     String nomQuartier;
-    Long idCommune;
-    private Long idAgence;
-
-    public static QuartierDto fromEntity(Quartier quartier) {
+    CommuneResponseDto communeResponseDto;
+    Long idAgence;
+    public static QuartierResponseDto fromEntity(Quartier quartier) {
         if (quartier == null) {
             return null;
         }
-        return QuartierDto.builder()
+        return QuartierResponseDto.builder()
                 .id(quartier.getId())
                 .abrvQuartier(quartier.getAbrvQuartier())
                 .nomQuartier(quartier.getNomQuartier())
-                .idCommune(quartier.getCommune().getId())
+                .communeResponseDto(CommuneResponseDto.fromEntity(quartier.getCommune()))
                 .idAgence(quartier.getIdAgence())
                 .build();
     }

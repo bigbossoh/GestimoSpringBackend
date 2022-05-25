@@ -3,12 +3,12 @@ package com.bzdata.gestimospringbackend.validator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
+import com.bzdata.gestimospringbackend.DTOs.QuartierRequestDto;
 
 import org.springframework.util.StringUtils;
 
 public class QuartierDtoValidator {
-    public static List<String> validate(QuartierDto dto) {
+    public static List<String> validate(QuartierRequestDto dto) {
         List<String> errors = new ArrayList<>();
 
         if (dto == null) {

@@ -14,7 +14,7 @@ public class SiteResponseDto {
     private Long idAgence;
     String abrSite;
     String nomSite;
-    Long idQuartier;
+    QuartierResponseDto quartierResponseDto;
 
     public static SiteResponseDto fromEntity(Site site) {
         if (site == null) {
@@ -37,7 +37,9 @@ public class SiteResponseDto {
                         + "-" + site.getQuartier().getCommune().getVille().getNomVille()
                         + "-" + site.getQuartier().getCommune().getNomCommune()
                         + "-" + site.getQuartier().getNomQuartier())
-                .idQuartier(site.getQuartier().getId())
+//                .idQuartier(site.getQuartier().getId())
+                .quartierResponseDto(QuartierResponseDto.fromEntity(site.getQuartier()))
+
                 .build();
     }
 

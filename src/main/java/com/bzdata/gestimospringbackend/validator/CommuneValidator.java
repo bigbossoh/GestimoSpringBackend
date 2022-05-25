@@ -3,12 +3,12 @@ package com.bzdata.gestimospringbackend.validator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
 
 import org.springframework.util.StringUtils;
 
 public class CommuneValidator {
-    public static List<String> validate(CommuneDto dto) {
+    public static List<String> validate(CommuneRequestDto dto) {
         List<String> errors = new ArrayList<>();
 
         if (dto == null) {
