@@ -2,18 +2,18 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.QuartierDto;
+import com.bzdata.gestimospringbackend.DTOs.QuartierRequestDto;
 
 public interface QuartierService {
-    QuartierDto save(QuartierDto dto);
+    QuartierRequestDto save(QuartierRequestDto dto);
 
     boolean delete(Long id);
 
-    List<QuartierDto> findAll();
+    List<QuartierRequestDto> findAll();
 
-    QuartierDto findById(Long id);
+    QuartierRequestDto findById(Long id);
 
-    QuartierDto findByName(String nom);
+    QuartierRequestDto findByName(String nom);
 
-    List<QuartierDto> findAllByIdCommune(Long id);
+    List<QuartierRequestDto> findAllByIdCommune(Long id);
 }

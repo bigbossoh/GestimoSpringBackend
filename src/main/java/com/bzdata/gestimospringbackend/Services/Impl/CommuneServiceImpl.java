@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Ville;
@@ -37,7 +37,7 @@ public class CommuneServiceImpl implements CommuneService {
     final VilleRepository villeRepository;
 
     @Override
-    public CommuneDto save(CommuneDto dto) {
+    public CommuneRequestDto save(CommuneRequestDto dto) {
         Optional<Commune> oldCommune = communeRepository.findById(dto.getId());
 
         log.info("We are going to create  a new Commune {}", dto);
@@ -57,7 +57,7 @@ public class CommuneServiceImpl implements CommuneService {
             oldCommune.get().setNomCommune(dto.getNomCommune());
             oldCommune.get().setVille(ville);
             Commune communeSave = communeRepository.save(oldCommune.get());
-            return CommuneDto.fromEntity(communeSave);
+            return CommuneRequestDto.fromEntity(communeSave);
         } else {
             Commune commune = new Commune();
             Ville ville = villeRepository.findById(dto.getIdVille())
@@ -68,7 +68,7 @@ public class CommuneServiceImpl implements CommuneService {
             commune.setNomCommune(dto.getNomCommune());
             commune.setVille(ville);
             Commune communeSave = communeRepository.save(commune);
-            return CommuneDto.fromEntity(communeSave);
+            return CommuneRequestDto.fromEntity(communeSave);
         }
 
     }
@@ -90,50 +90,50 @@ public class CommuneServiceImpl implements CommuneService {
     }
 
     @Override
-    public List<CommuneDto> findAll() {
+    public List<CommuneRequestDto> findAll() {
         return communeRepository.findAll(Sort.by(Direction.ASC, "nomCommune")).stream()
-                .map(CommuneDto::fromEntity)
+                .map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CommuneDto findById(Long id) {
+    public CommuneRequestDto findById(Long id) {
         log.info("We are going to get back the Commune By {}", id);
         if (id == null) {
             log.error("you are not provided a Commune.");
             return null;
         }
-        return communeRepository.findById(id).map(CommuneDto::fromEntity).orElseThrow(
+        return communeRepository.findById(id).map(CommuneRequestDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucune Ville has been found with Code " + id,
                         ErrorCodes.COMMUNE_NOT_FOUND));
     }
 
     @Override
-    public CommuneDto findByName(String nom) {
+    public CommuneRequestDto findByName(String nom) {
         log.info("We are going to get back the Commune By {}", nom);
         if (!StringUtils.hasLength(nom)) {
             log.error("you are not provided a Commune.");
             return null;
         }
-        return communeRepository.findByNomCommune(nom).map(CommuneDto::fromEntity).orElseThrow(
+        return communeRepository.findByNomCommune(nom).map(CommuneRequestDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Commune has been found with name " + nom,
                         ErrorCodes.COMMUNE_NOT_FOUND));
     }
 
     @Override
-    public List<CommuneDto> findAllByVille(VilleDto villeDto) {
+    public List<CommuneRequestDto> findAllByVille(VilleDto villeDto) {
         log.info("We are going to get back the Commune By {}", villeDto);
         if (!StringUtils.hasLength(villeDto.getNomVille())) {
             log.error("you are not provided a Ville.");
             return null;
         }
 
-        return communeRepository.findByVille(villeDto.getId()).stream().map(CommuneDto::fromEntity)
+        return communeRepository.findByVille(villeDto.getId()).stream().map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<CommuneDto> findAllByIdVille(Long id) {
+    public List<CommuneRequestDto> findAllByIdVille(Long id) {
 
         log.info("We are going to get back the Ville By {}", id);
         if (id == null) {
@@ -146,7 +146,7 @@ public class CommuneServiceImpl implements CommuneService {
             return null;
         }
         return communeRepository.findByVille(id).stream()
-                .map(CommuneDto::fromEntity)
+                .map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

@@ -2,21 +2,21 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 
 public interface CommuneService {
-    CommuneDto save(CommuneDto dto);
+    CommuneRequestDto save(CommuneRequestDto dto);
 
     boolean delete(Long id);
 
-    List<CommuneDto> findAll();
+    List<CommuneRequestDto> findAll();
 
-    CommuneDto findById(Long id);
+    CommuneRequestDto findById(Long id);
 
-    CommuneDto findByName(String nom);
+    CommuneRequestDto findByName(String nom);
 
-    List<CommuneDto> findAllByVille(VilleDto villeDto);
+    List<CommuneRequestDto> findAllByVille(VilleDto villeDto);
 
-    List<CommuneDto> findAllByIdVille(Long id);
+    List<CommuneRequestDto> findAllByIdVille(Long id);
 }

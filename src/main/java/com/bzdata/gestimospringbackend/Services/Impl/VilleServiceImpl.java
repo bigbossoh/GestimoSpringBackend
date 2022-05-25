@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.PaysDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Ville;
@@ -81,7 +81,7 @@ public class VilleServiceImpl implements VilleService {
             log.error("you are provided a null ID for the Ville");
             return false;
         }
-        List<CommuneDto> communeVille = communeService.findAllByIdVille(id);
+        List<CommuneRequestDto> communeVille = communeService.findAllByIdVille(id);
         if (communeVille.size() != 0) {
             log.error("Ville Contains Contains");
             return false;
