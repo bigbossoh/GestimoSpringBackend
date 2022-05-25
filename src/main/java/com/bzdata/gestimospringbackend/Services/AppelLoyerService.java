@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 
@@ -15,5 +16,5 @@ public interface AppelLoyerService {
 
     AppelLoyer findById(Long id);
 
-    List<AppelLoyer> findAllAppelLoyerByBailId(Long idBailLocation);
+    List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
 }

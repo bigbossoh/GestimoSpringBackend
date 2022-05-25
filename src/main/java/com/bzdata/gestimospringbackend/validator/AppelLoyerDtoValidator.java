@@ -17,19 +17,18 @@ public class AppelLoyerDtoValidator {
             errors.add("Veuillez renseigner le bail de location.");
             return errors;
         }
-        if(dto.getDateFinMoisAppelLoyer().compareTo(dto.getDateDebutMoisAppelLoyer())<=0){
+        if (dto.getDateFinMoisAppelLoyer().compareTo(dto.getDateDebutMoisAppelLoyer()) <= 0) {
             errors.add("La date de fin ne peut être antérieur à la date de debut");
         }
-        if(dto.getMontantBailLPeriode()==0){
+        if (dto.getMontantBailLPeriode() == 0) {
             errors.add("Veuillez renseigner le montant du bail en cours");
         }
         if (!StringUtils.hasLength(dto.getPeriodeAppelLoyer())) {
             errors.add("Veuillez renseigner l'la periode de l'appel de loyer.");
         }
-        if (dto.getBailLocationAppelLoyer()==null || dto.getBailLocationAppelLoyer().getId()==null) {
+        if (dto.getBailLocationAppelLoyer() == null || dto.getBailLocationAppelLoyer() == null) {
             errors.add("Veuillez renseigner le bail de location.");
         }
         return errors;
     }
 }
-

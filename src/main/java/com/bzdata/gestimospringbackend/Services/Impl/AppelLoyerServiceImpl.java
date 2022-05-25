@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -137,7 +138,15 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<AppelLoyer> findAllAppelLoyerByBailId(Long idBailLocation) {
-        return null;
+    public List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation) {
+        BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
+                .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
+                        idBailLocation,
+                        ErrorCodes.BAILLOCATION_NOT_FOUND));
+        List<AppelLoyer> lesLoyers = appelLoyerRepository.findAllByBailLocationAppelLoyer(bailLocation);
+
+        return lesLoyers.stream().filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
+                .map(AppelLoyerDto::fromEntity)
+                .collect(Collectors.toList());
     }
 }
