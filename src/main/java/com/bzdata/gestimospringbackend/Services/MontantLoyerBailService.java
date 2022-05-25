@@ -15,7 +15,7 @@ public interface MontantLoyerBailService {
 
     List<MontantLoyerBailDto> findAll();
 
-    MontantLoyerBailDto findById(Long id);
+    MontantLoyerBailDto findById(Long id); 
 
     List<MontantLoyerBailDto> findAllMontantLoyerBailByBailId(Long idBailLocation);
 }

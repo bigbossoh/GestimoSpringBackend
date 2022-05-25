@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -115,6 +116,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
 
     @Override
     public List<MontantLoyerBailDto> findAll() {
+
         return null;
     }
 
@@ -125,6 +127,18 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
 
     @Override
     public List<MontantLoyerBailDto> findAllMontantLoyerBailByBailId(Long idBailLocation) {
-        return null;
+        BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
+                .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
+                        idBailLocation,
+                        ErrorCodes.BAILLOCATION_NOT_FOUND));
+        List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository.findByBailLocation(bailLocation);
+
+        return ListBauxMontantLoyerBail.stream()
+                .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
+                // .findFirst()
+                .map(MontantLoyerBailDto::fromEntity)
+                .collect(Collectors.toList());
+
+        // return null;
     }
 }
