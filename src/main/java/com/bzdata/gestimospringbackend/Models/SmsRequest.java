@@ -11,7 +11,7 @@ public class SmsRequest {
     }
 
     public String getPhoneNumber() {
-        return phoneNumber;
+        return "+2250103833350";
     }
 
     public String getMessage() {

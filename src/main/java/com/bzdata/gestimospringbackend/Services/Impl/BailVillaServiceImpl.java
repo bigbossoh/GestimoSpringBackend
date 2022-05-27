@@ -77,6 +77,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             bailLocationVilla.setDateDebut(dto.getDateDebut());
             bailLocationVilla.setDateFin(dto.getDateFin());
             bailLocationVilla.setDesignationBail(dto.getDesignationBail());
+            bailLocationVilla.setIdAgence(dto.getIdAgence());
             bailLocationVilla.setEnCoursBail(true);
             bailLocationVilla.setMontantCautionBail(dto.getMontantCautionBail());
             bailLocationVilla.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
@@ -104,6 +105,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             appelLoyerRequestDto.setIdBailLocation(villaBailSave.getId());
             appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
             appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
+
 
             appelLoyerService.save(appelLoyerRequestDto);
 
