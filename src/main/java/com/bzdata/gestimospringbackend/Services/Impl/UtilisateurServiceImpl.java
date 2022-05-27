@@ -5,10 +5,7 @@ import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_LOCATAIRE;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_PROPRIETAIRE;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPERVISEUR;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
@@ -138,56 +135,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private String generateUserId() {
         return "User-"+RandomStringUtils.randomAlphanumeric(5);
     }
-    // @Override
-    // public UtilisateurRequestDto saveLocataire(UtilisateurRequestDto dto) {
-    // log.info("We are going to create a new user with the role Locataire {}",
-    // dto);
-    // List<String> errors = UtilisateurDtoValiditor.validate(dto);
-    // if (!errors.isEmpty()) {
-    // log.error("l'utilisateur n'est pas valide {}", errors);
-    // throw new InvalidEntityException(
-    // "Certain attributs de l'object utiliateur avec pour role locataire sont
-    // null.",
-    // ErrorCodes.UTILISATEUR_NOT_VALID, errors);
-    // }
-    // Utilisateur utilisateurByUsername =
-    // utilisateurRepository.findUtilisateurByUsername(dto.getUsername());
-    // if (utilisateurByUsername == null) {
-    // // ROLES
-    // Optional<Role> roles = Optional.empty();
-    // roles = roleRepository.findRoleByRoleName("LOCATAIRE");
-    // dto.setRoleRequestDto(RoleRequestDto.fromEntity(roles.get()));
-    // dto.setPassword(passwordEncoderUser.encode(dto.getPassword()));
-    // // UTILISATEUR DE TYPE LOCATAIRE
-    // Optional<Utilisateur> user = Optional.empty();
-    // // user = utilisateurRepository.findById(dto.getUserCreateDto().getId());
-    // // dto.setUserCreateDto(UtilisateurRequestDto.fromEntity(user.get()));
 
-    // dto.setJoinDate(new Date());
-    // dto.setRoleUsed(ROLE_LOCATAIRE.name());
-    // dto.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
-    // dto.setActivated(false);
-    // dto.setActive(true);
-    // dto.setNonLocked(true);
-
-    // Utilisateur saveLocataire =
-    // utilisateurRepository.save(UtilisateurRequestDto.toEntity(dto));
-    // String token = generateVerificationToken(saveLocataire);
-    // String message = mailContentBuilder.build("Activez votre compte locataire enc
-    // cliquant sur le lien "
-    // + ACTIVATION_EMAIL + "/" + token + "\n");
-    // mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en
-    // cliquant sur ce lien: ",
-    // saveLocataire.getEmail(), message));
-    // return UtilisateurRequestDto.fromEntity(saveLocataire);
-    // } else {
-    // log.error("We cannot save this locataire because this user is already
-    // exist");
-    // throw new EntityNotFoundException("The email is already exist in db " +
-    // dto.getEmail(),
-    // ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
-    // }
-    // }
 
     private String generateVerificationToken(Utilisateur utilisateur) {
         String token = UUID.randomUUID().toString();
@@ -215,95 +163,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     }
 
-    // @Override
-    // public boolean saveProprietaire(UtilisateurRequestDto dto) {
-    // System.out.println("On n'est Bien Ici.");
-    // log.info("We are going to create a new user with the role Proprietaire {}",
-    // dto);
-    // List<String> errors = UtilisateurDtoValiditor.validate(dto);
-    // if (!errors.isEmpty()) {
-    // log.error("l'utilisateur n'est pas valide {}", errors);
-    // throw new InvalidEntityException(
-    // "Certain attributs de l'object utiliateur avec pour role proprietaire sont
-    // null.",
-    // ErrorCodes.UTILISATEUR_NOT_VALID, errors);
-    // }
-
-    // Utilisateur utilisateurByUsername =
-    // utilisateurRepository.findUtilisateurByUsername(dto.getUsername());
-    // if (utilisateurByUsername == null) {
-    // Utilisateur newUser = new Utilisateur();
-    // // newUser.setIdAgence(saveAgenceUpdate.getIdAgence());
-    // newUser.setNom(dto.getNom());
-    // newUser.setPrenom(dto.getPrenom());
-    // newUser.setEmail(dto.getEmail());
-    // newUser.setMobile(dto.getMobile());
-    // newUser.setPassword(passwordEncoder.encode("gerant"));
-    // // newUser.setAgence(saveAgenceUpdate);
-    // Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
-    // if (newRole.isPresent()) {
-    // newUser.setUrole(newRole.get());
-    // }
-    // newUser.setJoinDate(new Date());
-    // newUser.setRoleUsed(ROLE_GERANT.name());
-    // newUser.setAuthorities(ROLE_GERANT.getAuthorities());
-    // newUser.setActive(false);
-    // newUser.setActivated(false);
-    // // newUser.setUsername(dto.getMobileAgence());
-    // newUser.setNonLocked(true);
-    // //
-    // newUser.setUserCreate(UtilisateurRequestDto.toEntity(dto.getUtilisateurCreateur()));
-    // Utilisateur saveUser = utilisateurRepository.save(newUser);
-    // return true;
-    // } else {
-    // log.error("We cannot save this propriétaire because this user is already
-    // exist");
-    // throw new EntityNotFoundException("The email is already exist in db " +
-    // dto.getUsername(),
-    // ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
-    // }
-    // }
-
-    // @Override
-    // public UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto) {
-    // log.info("We are going to create a new user with the role gérant {}", dto);
-    // List<String> errors = UtilisateurDtoValiditor.validate(dto);
-    // if (!errors.isEmpty()) {
-    // log.error("l'utilisateur n'est pas valide {}", errors);
-    // throw new InvalidEntityException(
-    // "Certain attributs de l'object utiliateur avec pour role gérant sont null.",
-    // ErrorCodes.UTILISATEUR_NOT_VALID, errors);
-    // }
-    // Optional<Utilisateur> utilisateurByEmail =
-    // utilisateurRepository.findUtilisateurByEmail(dto.getEmail());
-    // if (!utilisateurByEmail.isPresent()) {
-    // // ROLES
-    // Optional<Role> roles = Optional.empty();
-    // roles = roleRepository.findRoleByRoleName("GERANT");
-    // dto.setRoleRequestDto(RoleRequestDto.fromEntity(roles.get()));
-    // dto.setPassword(passwordEncoderUser.encode(dto.getPassword()));
-    // // UTILISATEUR
-    // Optional<Utilisateur> user = Optional.empty();
-    // // user = utilisateurRepository.findById(dto.getUserCreateDto().getId());
-    // // dto.setUserCreateDto(UtilisateurRequestDto.fromEntity(user.get()));
-    // dto.setRoleUsed(ROLE_GERANT.name());
-    // Utilisateur saveGerant =
-    // utilisateurRepository.save(UtilisateurRequestDto.toEntity(dto));
-    // String token = generateVerificationToken(saveGerant);
-    // String message = mailContentBuilder.build("Activez votre compte gérant enc
-    // cliquant sur le lien "
-    // + ACTIVATION_EMAIL + "/" + token + "\n");
-    // mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en
-    // cliquant sur ce lien: ",
-    // saveGerant.getEmail(), message));
-    // return UtilisateurRequestDto.fromEntity(saveGerant);
-    // } else {
-    // log.error("We cannot save this gerant because this user is already exist");
-    // throw new EntityNotFoundException("The email is already exist in db " +
-    // dto.getEmail(),
-    // ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
-    // }
-    // }
 
     @Override
     public UtilisateurRequestDto findById(Long id) {
@@ -342,7 +201,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<UtilisateurRequestDto> listOfAllUtilisateurOrderbyName() {
         log.info("We are going to take back all the utilisateur order by utilisateur name");
 
-        return utilisateurRepository.findAllByOrderByNomAsc().stream()
+        return utilisateurRepository.findAll().stream()
+                .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(UtilisateurRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -351,8 +211,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<UtilisateurRequestDto> listOfAllUtilisateurLocataireOrderbyName() {
         log.info("We are going to take back all the locataires order by locataires name");
 
-        return utilisateurRepository.findAllByOrderByNomAsc().stream()
+        return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
+                .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(UtilisateurRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -361,8 +222,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<UtilisateurRequestDto> listOfAllUtilisateurProprietaireOrderbyName() {
         log.info("We are going to take back all the PROPRIETAIRE order by PROPRIETAIRE name");
 
-        return utilisateurRepository.findAllByOrderByNomAsc().stream()
+        return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("PROPRIETAIRE"))
+                .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(UtilisateurRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -371,8 +233,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<UtilisateurRequestDto> listOfAllUtilisateurGerantOrderbyName() {
         log.info("We are going to take back all the GERANT order by GERANT name");
 
-        return utilisateurRepository.findAllByOrderByNomAsc().stream()
-                .filter(user -> user.getUrole().getRoleName().equals("GERANT")).map(UtilisateurRequestDto::fromEntity)
+        return utilisateurRepository.findAll().stream()
+                .filter(user -> user.getUrole().getRoleName().equals("GERANT"))
+                .sorted(Comparator.comparing(Utilisateur::getNom))
+                .map(UtilisateurRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

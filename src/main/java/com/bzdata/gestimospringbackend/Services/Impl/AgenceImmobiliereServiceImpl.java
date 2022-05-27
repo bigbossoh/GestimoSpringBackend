@@ -3,10 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -190,7 +187,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     public List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc() {
         log.info("We are going to take back all the agences order by agence name");
 
-        return agenceImmobiliereRepository.findAllByOrderByNomAgenceAsc().stream()
+        return agenceImmobiliereRepository.findAll().stream()
+                .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
                 .map(AgenceResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }

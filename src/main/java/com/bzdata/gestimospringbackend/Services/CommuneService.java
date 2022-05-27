@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Services;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 
 public interface CommuneService {
@@ -18,5 +19,5 @@ public interface CommuneService {
 
     List<CommuneRequestDto> findAllByVille(VilleDto villeDto);
 
-    List<CommuneRequestDto> findAllByIdVille(Long id);
+    List<CommuneResponseDto> findAllByIdVille(Long id);
 }

@@ -4,6 +4,7 @@ import com.bzdata.gestimospringbackend.Models.auth.ExtentedUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 @Service
+@Slf4j
 public class JwtUtil {
     private String SECRET_KEY = "secret";
 
@@ -38,6 +40,12 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
+    public String extractIdAgnece(String token) {
+        final Claims claims = extractAllClaims(token);
+
+        return claims.get("idAgence", String.class);
+    }
+
     private Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
@@ -48,11 +56,12 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, ExtentedUser userDetails) {
-
+        log.info("claims {} ",userDetails.getIdAgence().toString() );
         return Jwts.builder().setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .claim("idAgence", userDetails.getIdAgence().toString())
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 

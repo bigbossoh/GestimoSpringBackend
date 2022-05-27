@@ -287,7 +287,7 @@ public class GestimoSpringBackendApplication {
                     utilisateur.setActivated(true);
                     utilisateur.setUsername("0103833350");
                     utilisateur.setPassword(mdp);
-                    utilisateur.setIdAgence(1L);
+                    utilisateur.setIdAgence(1001L);
                     utilisateur.setJoinDate(new Date());
                     utilisateur.setRoleUsed(ROLE_SUPER_SUPERVISEUR.name());
                     utilisateur.setAuthorities(ROLE_SUPER_SUPERVISEUR.getAuthorities());

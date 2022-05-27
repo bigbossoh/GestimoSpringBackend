@@ -1,8 +1,10 @@
 package com.bzdata.gestimospringbackend.SecurityConfig.filter;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +30,13 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.OPTIONS_
 @Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JWTTokenProvider jwtTokenProvider;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+        Claim idAgence = null;
         if(request.getMethod().equalsIgnoreCase(OPTIONS_HTTP_METHOD)){
             response.setStatus(OK.value());
         }else{
@@ -43,16 +47,22 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
             String token=authorizationHeader.substring(TOKEN_PREFIX.length());
             String username=jwtTokenProvider.getSubject(token);
+            idAgence = jwtTokenProvider.extractIdAgnece(token);
+            log.info("idAgence {}",idAgence);
             if(jwtTokenProvider.isTokenValid(username,token) &&
                     SecurityContextHolder.getContext().getAuthentication()==null){
                 List<GrantedAuthority> authorities=jwtTokenProvider.getAuthorities(token);
                 Authentication authentication =jwtTokenProvider.getAuthentication(username,authorities,request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
             }else {
                 log.error("Token is not valid");
                 SecurityContextHolder.clearContext();
             }
         }
+        MDC.put("idAgence",idAgence.toString());
+        log.info("get MDC {} and {}",MDC.get("idAgence"),idAgence.toString());
+
         filterChain.doFilter(request,response);
     }
 

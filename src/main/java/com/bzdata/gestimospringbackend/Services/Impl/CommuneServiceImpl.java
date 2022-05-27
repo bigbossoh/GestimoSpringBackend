@@ -1,10 +1,12 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Ville;
@@ -91,7 +93,10 @@ public class CommuneServiceImpl implements CommuneService {
 
     @Override
     public List<CommuneRequestDto> findAll() {
-        return communeRepository.findAll(Sort.by(Direction.ASC, "nomCommune")).stream()
+        return communeRepository.findAll()
+//                Sort.by(Direction.ASC, "nomCommune"))
+                .stream()
+                .sorted(Comparator.comparing(Commune::getNomCommune))
                 .map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -133,7 +138,7 @@ public class CommuneServiceImpl implements CommuneService {
     }
 
     @Override
-    public List<CommuneRequestDto> findAllByIdVille(Long id) {
+    public List<CommuneResponseDto> findAllByIdVille(Long id) {
 
         log.info("We are going to get back the Ville By {}", id);
         if (id == null) {
@@ -146,7 +151,7 @@ public class CommuneServiceImpl implements CommuneService {
             return null;
         }
         return communeRepository.findByVille(id).stream()
-                .map(CommuneRequestDto::fromEntity)
+                .map(CommuneResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
 

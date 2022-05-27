@@ -5,10 +5,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class CommuneResponseDto {
     Long id;
     Long idAgence;
@@ -19,6 +21,7 @@ public class CommuneResponseDto {
         if (commune == null) {
             return null;
         }
+        log.info("We are going to create  a new Commune {}", commune);
         return CommuneResponseDto.builder()
                 .id(commune.getId())
                 .abrvCommune(commune.getAbrvCommune())

@@ -22,6 +22,9 @@ public class UserPrincipal implements UserDetails {
                 .collect(Collectors.toList());
     }
 
+    public Long getIdAgence() {
+        return this.utilisateur.getIdAgence();
+    }
     @Override
     public String getPassword() {
         return this.utilisateur.getPassword();

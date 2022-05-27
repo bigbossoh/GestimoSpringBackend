@@ -5,6 +5,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.CommuneResponseDto;
 import com.bzdata.gestimospringbackend.Services.CommuneService;
 
 import org.springframework.http.ResponseEntity;
@@ -82,8 +83,8 @@ public class CommuneController {
 
     @Operation(summary = "Trouver une commune par l'Id de la Ville", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdVille/{id}")
-    public ResponseEntity<List<CommuneRequestDto>> findCommuneByIdPays(@PathVariable("id") Long id) {
-        log.info("Find Ville By Id Pays {}", id);
+    public ResponseEntity<List<CommuneResponseDto>> findCommuneByIdPays(@PathVariable("id") Long id) {
+        log.info("Find all the commune By Id Ville {}", id);
         return ResponseEntity.ok(communeService.findAllByIdVille(id));
     }
 }
