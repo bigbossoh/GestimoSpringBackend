@@ -26,7 +26,7 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public List<OperationDto> getAllOperation() {
-
+        log.info("We want to get all the baux");
         return bailLocationRepository.findAll().stream()
                 .map(OperationDto::fromEntity)
                 .collect(Collectors.toList());

@@ -99,6 +99,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             appelLoyer.setAnneeAppelLoyer(period.getYear());
             appelLoyer.setMoisChiffreAppelLoyer(period.getMonthValue());
             appelLoyer.setDescAppelLoyer("Appel groupé");
+            appelLoyer.setSoldeAppelLoyer(dto.getMontantLoyerEnCours());
             List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
             Double montantBail = byBailLocation.stream()
                     .filter(st -> st.isStatusLoyer() == true)
