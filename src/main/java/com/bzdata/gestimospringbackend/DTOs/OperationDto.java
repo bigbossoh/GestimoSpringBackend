@@ -22,7 +22,7 @@ public class OperationDto {
     Instant lastModifiedDate;
     LocalDate dateDebut;
     LocalDate dateFin;
-    // String utilisateurOperation;
+    String utilisateurOperation;
     String bienImmobilierOperation;
 
     String designationBail;
@@ -48,7 +48,8 @@ public class OperationDto {
                 .designationBail(operation.getDesignationBail())
                 .montantCautionBail(operation.getMontantCautionBail())
                 .nbreMoisCautionBail(operation.getNbreMoisCautionBail())
-                // .nouveauMontantLoyer(operation.getMontantLoyerBail().)
+                .utilisateurOperation(operation.getUtilisateurOperation().getNom() + " "
+                        + operation.getUtilisateurOperation().getPrenom())
                 .dateDebut(operation.getDateDebut())
                 .dateFin(operation.getDateFin())
                 .lastModifiedDate(operation.getLastModifiedDate())

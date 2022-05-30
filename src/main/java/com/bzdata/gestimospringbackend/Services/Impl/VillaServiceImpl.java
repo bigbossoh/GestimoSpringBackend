@@ -90,7 +90,7 @@ public class VillaServiceImpl implements VillaService {
 
             villa.setNumBien(numBien);
             if (!StringUtils.hasLength(dto.getNomVilla())) {
-                villa.setAbrvVilla("villa-".toUpperCase() + dto.getNumBien());
+                villa.setAbrvVilla("villa-".toUpperCase() + numBien);
                 villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
             } else {
                 villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
