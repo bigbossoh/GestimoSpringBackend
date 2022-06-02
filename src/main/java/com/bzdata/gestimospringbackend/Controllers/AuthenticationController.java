@@ -61,12 +61,13 @@ public class AuthenticationController {
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         Utilisateur loginUser = userCreate;
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
-        log.info("depuis la method principale login : {}",userPrincipal.toString());
+        log.info("depuis la method principale login : {}", userPrincipal.toString());
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-         log.info("we are going lo launch sms to the user ");
-         SmsRequest sms =new SmsRequest("+2550103833350","Le "+loginUser.getUrole()+" "+loginUser.getNom() +" "+"a été connecté avec succès");
-         twilioSmsSender.sendSms(sms);
-         log.info("Sms sent");
+        // log.info("we are going lo launch sms to the user ");
+        // SmsRequest sms =new SmsRequest("+2550103833350","Le "+loginUser.getUrole()+"
+        // "+loginUser.getNom() +" "+"a été connecté avec succès");
+        // twilioSmsSender.sendSms(sms);
+        // log.info("Sms sent");
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
 
@@ -76,7 +77,7 @@ public class AuthenticationController {
     }
 
     private HttpHeaders getJwtHeader(UserPrincipal userPrincipal) {
-        log.info("depuis la fonction getJwtHeader {}",userPrincipal.toString());
+        log.info("depuis la fonction getJwtHeader {}", userPrincipal.toString());
         HttpHeaders headers = new HttpHeaders();
         headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(userPrincipal));
         return headers;

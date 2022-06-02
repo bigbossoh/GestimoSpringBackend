@@ -85,7 +85,7 @@ public class EtageServiceImpl implements EtageService {
         }
         Optional<Etage> eta = etageRepository.findById(id);
         if (eta.isPresent()) {
-            if (eta.get().getMagasins().size() != 0 || eta.get().getAppartements().size() != 0 || eta.get().getStudios()
+            if (!eta.get().getMagasins().isEmpty() || eta.get().getAppartements().size() != 0 || eta.get().getStudios()
                     .size() != 0) {
                 throw new EntityNotFoundException("l'Etage avec l'ID = " + id + " "
                         + "n' est pas vide ", ErrorCodes.IMMEUBLE_ALREADY_IN_USE);
@@ -130,7 +130,7 @@ public class EtageServiceImpl implements EtageService {
     public List<EtageDto> findAllByIdImmeuble(Long id) {
 
         log.info("We are going to get back the Etage By {}", id);
-        if (id == null) {
+        if (id == null || id == 0) {
             log.error("you are not provided a Etage.");
             return null;
         }
