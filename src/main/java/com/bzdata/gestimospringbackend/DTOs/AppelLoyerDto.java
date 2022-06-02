@@ -1,11 +1,11 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.time.LocalDate;
+
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Models.BailLocation;
+
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 @Builder

@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Operation;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,7 +34,7 @@ public class OperationDto {
 
     public static OperationDto fromEntity(BailLocation operation) {
         if (operation == null) {
-
+            return null;
         }
         return OperationDto.builder()
                 .id(operation.getId())
