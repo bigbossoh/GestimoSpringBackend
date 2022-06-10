@@ -145,4 +145,12 @@ public class AppartementServiceImpl implements AppartementService {
         return AppartementDto.fromEntity(appartementSave);
     }
 
+    @Override
+    public List<AppartementDto> findAllLibre() {
+        return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
+                .map(AppartementDto::fromEntity)
+                .filter((app) -> app.isOccupied() == false)
+                .collect(Collectors.toList());
+    }
+
 }

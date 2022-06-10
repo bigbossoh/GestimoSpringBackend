@@ -181,4 +181,12 @@ public class VillaServiceImpl implements VillaService {
         return null;
     }
 
+    @Override
+    public List<VillaDto> findAllLibre() {
+        return villaRepository.findAll().stream()
+                .map(VillaDto::fromEntity)
+                .filter((vil)->vil.isOccupied()==false)
+                .collect(Collectors.toList());
+    }
+
 }

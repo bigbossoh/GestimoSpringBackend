@@ -10,6 +10,7 @@ public interface AppartementService {
     boolean delete(Long id);
 
     List<AppartementDto> findAll();
+    List<AppartementDto> findAllLibre();
 
     AppartementDto findById(Long id);
 

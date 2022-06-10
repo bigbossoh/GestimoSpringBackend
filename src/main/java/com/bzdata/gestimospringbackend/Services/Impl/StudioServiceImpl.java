@@ -81,8 +81,8 @@ public class StudioServiceImpl implements StudioService {
                 studio.setSuperficieBien(dto.getSuperficieBien());
                 studio.setUtilisateur(utilisateurRequestDto);
 
-                if (!StringUtils.hasLength(dto.getAbrvNomStudio())) {
-                    studio.setAbrvNomStudio("studio-".toUpperCase() + numBien);
+                if (!StringUtils.hasLength(dto.getAbrvBienimmobilier())) {
+                    studio.setAbrvBienimmobilier("studio-".toUpperCase() + numBien);
                     // studio.setAbrvBienimmobilier("studio-".toUpperCase() + numBien);
                     if (recoverySite.isPresent()) {
                         studio.setNomBien(
@@ -102,14 +102,15 @@ public class StudioServiceImpl implements StudioService {
                                         +
                                         numBien)
                                         .toUpperCase());
+                                        studio.setAbrvNomStudio(
+                                            (recoverySite.get().getAbrSite() + "-" +
+                                                    dto.getAbrvBienimmobilier()).toUpperCase());
                     }
 
                 }
 
-                studio.setAbrvNomStudio(
-                        (recoverySite.get().getAbrSite() + "-" +
-                                dto.getAbrvNomStudio()).toUpperCase());
-                studio.setId(0L);
+
+              //  studio.setId(0L);
                 log.info("Before save {} ", studio);
                 studioRepository.save(studio);
                 return true;
@@ -189,6 +190,14 @@ public class StudioServiceImpl implements StudioService {
         return studioRepository.findByEtageStudio(etage).stream()
                 .map(StudioDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<StudioDto> findAllLibre() {
+        return studioRepository.findAll(Sort.by(Direction.ASC, "nomStudio")).stream()
+                .map(StudioDto::fromEntity)
+        .filter((stud)->stud.isOccupied()==false)
+        .collect(Collectors.toList());
     }
 
 }

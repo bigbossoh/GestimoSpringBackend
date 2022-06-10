@@ -44,4 +44,11 @@ public class VillaController {
     public ResponseEntity<List<VillaDto>> findAllVilla() {
         return ResponseEntity.ok(villaService.findAll());
     }
+     // TOUT LES VILLAS LIBRES
+     @Operation(summary = "Liste de tous les villas libres ", security = @SecurityRequirement(name = "bearerAuth"))
+     @GetMapping("/alllibre")
+
+     public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
+         return ResponseEntity.ok(villaService.findAllLibre());
+     }
 }

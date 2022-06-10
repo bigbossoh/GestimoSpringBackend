@@ -10,7 +10,7 @@ public interface StudioService {
     boolean delete(Long id);
 
     List<StudioDto> findAll();
-
+    List<StudioDto> findAllLibre();
     StudioDto findById(Long id);
 
     StudioDto findByName(String nom);
