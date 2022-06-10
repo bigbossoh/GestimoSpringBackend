@@ -45,7 +45,12 @@ public class MagasinController {
     public ResponseEntity<List<MagasinResponseDto>> findAllMagasin() {
         return ResponseEntity.ok(magasinService.findAll());
     }
-
+ // TOUT LES Magasins
+ @Operation(summary = "Liste de tous les Magasins libres", security = @SecurityRequirement(name = "bearerAuth"))
+ @GetMapping("/alllibre")
+ public ResponseEntity<List<MagasinResponseDto>> findAllMagasinLibre() {
+     return ResponseEntity.ok(magasinService.findAllLibre());
+ }
     @Operation(summary = "Trouver un Magasin par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findmagasinById/{id}")
     public ResponseEntity<MagasinDto> findByIDMagasin(@PathVariable("id") Long id) {

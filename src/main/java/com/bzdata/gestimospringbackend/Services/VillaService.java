@@ -14,7 +14,7 @@ public interface VillaService {
     Long maxOfNumBien();
 
     List<VillaDto> findAll();
-
+    List<VillaDto> findAllLibre();
     VillaDto findById(Long id);
 
     VillaDto findByName(String nom);
