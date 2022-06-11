@@ -35,6 +35,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+      //  log.info("incomming request {}",request.getRequestURI());
 
         Claim idAgence = null;
         if(request.getMethod().equalsIgnoreCase(OPTIONS_HTTP_METHOD)){
@@ -43,14 +44,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if (authorizationHeader == null || !authorizationHeader.startsWith(TOKEN_PREFIX)) {
                 filterChain.doFilter(request, response);
+               // log.info("we are adding the jwt into the request {}",request);
                 return;
             }
             String token=authorizationHeader.substring(TOKEN_PREFIX.length());
             String username=jwtTokenProvider.getSubject(token);
+            log.info("we are take the token {}",token);
             idAgence = jwtTokenProvider.extractIdAgnece(token);
-            log.info("idAgence {}",idAgence);
+           log.info("idAgence {}",idAgence);
             if(jwtTokenProvider.isTokenValid(username,token) &&
                     SecurityContextHolder.getContext().getAuthentication()==null){
+                log.info("token is valid");
                 List<GrantedAuthority> authorities=jwtTokenProvider.getAuthorities(token);
                 Authentication authentication =jwtTokenProvider.getAuthentication(username,authorities,request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -61,8 +65,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         }
         MDC.put("idAgence",idAgence.toString());
-        log.info("get MDC {} and {}",MDC.get("idAgence"),idAgence.toString());
-
+//        log.info("get MDC {} and {}",MDC.get("idAgence"),idAgence.toString());
+       // log.info("nothing has been done {}, {}", request,response);
         filterChain.doFilter(request,response);
     }
 

@@ -67,7 +67,7 @@ public class JWTTokenProvider {
     //
     public Claim extractIdAgnece(String token) {
         JWTVerifier verifier=getJWTVerifier();
-        log.info("extractIdAgnece {}", verifier.verify(token).getClaim("idAgence"));
+//        log.info("extractIdAgnece {}", verifier.verify(token).getClaim("idAgence"));
 
         return verifier.verify(token).getClaim("idAgence");
 

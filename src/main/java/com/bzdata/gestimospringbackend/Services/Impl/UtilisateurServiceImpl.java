@@ -199,7 +199,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurRequestDto> listOfAllUtilisateurOrderbyName() {
-        log.info("We are going to take back all the utilisateur order by utilisateur name");
+        log.info("We are going to take back all the utilisateurs");
 
         return utilisateurRepository.findAll().stream()
                 .sorted(Comparator.comparing(Utilisateur::getNom))
