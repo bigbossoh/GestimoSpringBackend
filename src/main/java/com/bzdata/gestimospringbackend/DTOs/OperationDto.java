@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.Operation;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,7 +21,7 @@ public class OperationDto {
     Instant lastModifiedDate;
     LocalDate dateDebut;
     LocalDate dateFin;
-    // String utilisateurOperation;
+    String utilisateurOperation;
     String bienImmobilierOperation;
 
     String designationBail;
@@ -35,7 +34,7 @@ public class OperationDto {
 
     public static OperationDto fromEntity(BailLocation operation) {
         if (operation == null) {
-
+            return null;
         }
         return OperationDto.builder()
                 .id(operation.getId())
@@ -48,7 +47,8 @@ public class OperationDto {
                 .designationBail(operation.getDesignationBail())
                 .montantCautionBail(operation.getMontantCautionBail())
                 .nbreMoisCautionBail(operation.getNbreMoisCautionBail())
-                // .nouveauMontantLoyer(operation.getMontantLoyerBail().)
+                .utilisateurOperation(operation.getUtilisateurOperation().getNom() + " "
+                        + operation.getUtilisateurOperation().getPrenom())
                 .dateDebut(operation.getDateDebut())
                 .dateFin(operation.getDateFin())
                 .lastModifiedDate(operation.getLastModifiedDate())

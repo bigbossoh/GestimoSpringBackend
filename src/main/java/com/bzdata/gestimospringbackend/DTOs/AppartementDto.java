@@ -18,6 +18,7 @@ public class AppartementDto {
     int nbreSalonApp;
     int nbreSalleEauApp;
     boolean isResidence;
+    boolean occupied;
     int numeroApp;
     String abrvNomApp;
     String nomApp;
@@ -32,6 +33,7 @@ public class AppartementDto {
                 .abrvNomApp(appartement.getAbrvNomApp())
                 .idEtage(appartement.getEtageAppartement().getId())
                 .isResidence(appartement.isResidence())
+                .occupied(appartement.isOccupied())
                 .meubleApp(appartement.isMeubleApp())
                 .nbrPieceApp(appartement.getNbrPieceApp())
                 .nbreChambreApp(appartement.getNbreChambreApp())
@@ -42,22 +44,5 @@ public class AppartementDto {
                 .build();
     }
 
-    // public static Appartement toEntity(AppartementDto dto) {
-    // if (dto == null) {
-    // return null;
-    // }
-    // Appartement appartement = new Appartement();
-    // appartement.setAbrvNomApp(dto.getAbrvNomApp());
-    // appartement.setEtageAppartement(EtageDto.toEntity(dto.getEtageDto()));
-    // appartement.setId(dto.getId());
-    // appartement.setMeubleApp(dto.isMeubleApp());
-    // appartement.setNbrPieceApp(dto.getNbrPieceApp());
-    // appartement.setNbreChambreApp(dto.getNbreChambreApp());
-    // appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
-    // appartement.setNumeroApp(dto.getNumeroApp());
-    // appartement.setNomApp(dto.getNomApp());
-    // appartement.setResidence(dto.isResidence());
 
-    // return appartement;
-    // }
 }

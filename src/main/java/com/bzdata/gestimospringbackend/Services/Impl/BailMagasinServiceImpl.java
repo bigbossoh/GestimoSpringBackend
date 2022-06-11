@@ -71,6 +71,17 @@ public class BailMagasinServiceImpl implements BailMagasinService {
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Magasin has been found with code " + dto.getIdMagasin(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
+
+            bailLocationMagasin.setAbrvCodeBail(dto.getAbrvCodeBail());
+            bailLocationMagasin.setArchiveBail(false);
+            bailLocationMagasin.setDateDebut(dto.getDateDebut());
+            bailLocationMagasin.setDateFin(dto.getDateFin());
+            bailLocationMagasin.setDesignationBail(dto.getDesignationBail());
+            bailLocationMagasin.setIdAgence(dto.getIdAgence());
+            bailLocationMagasin.setEnCoursBail(true);
+            bailLocationMagasin.setMontantCautionBail(dto.getMontantCautionBail());
+            bailLocationMagasin.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
+
             bailLocationMagasin.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationMagasin.setMagasinBail(magasinBail);
             bailLocationMagasin.setUtilisateurOperation(utilisateur);

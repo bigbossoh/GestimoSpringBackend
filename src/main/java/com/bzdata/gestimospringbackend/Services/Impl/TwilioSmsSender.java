@@ -18,26 +18,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class TwilioSmsSender implements SmsSender {
 
     private final TwilioConfiguration twilioConfiguration;
+
     @Override
     public void sendSms(SmsRequest smsRequest) {
-        if(isPhoneNumberValid(smsRequest.getPhoneNumber())){
-            PhoneNumber to= new PhoneNumber(smsRequest.getPhoneNumber());
-            PhoneNumber from= new PhoneNumber(twilioConfiguration.getTrialNumber());
-            String message=smsRequest.getMessage();
-            MessageCreator creator= Message.creator(to,from,message);
-            creator.create();
-            log.warn("Send SMS {} ",smsRequest.toString());
+        // if(isPhoneNumberValid(smsRequest.getPhoneNumber())){
+        // PhoneNumber to= new PhoneNumber(smsRequest.getPhoneNumber());
+        // PhoneNumber from= new PhoneNumber(twilioConfiguration.getTrialNumber());
+        // String message=smsRequest.getMessage();
+        // MessageCreator creator= Message.creator(to,from,message);
+        // creator.create();
+        // log.warn("Send SMS {} ",smsRequest.toString());
 
-        }else {
-            throw new IllegalArgumentException(
-              "phone number ["+smsRequest.getPhoneNumber()+"] is not correct number."
-            );
-        }
+        // }else {
+        // throw new IllegalArgumentException(
+        // "phone number ["+smsRequest.getPhoneNumber()+"] is not correct number."
+        // );
+        // }
 
     }
 
     private boolean isPhoneNumberValid(String phoneNumber) {
-        //TODO
+        // TODO
         return true;
     }
 }

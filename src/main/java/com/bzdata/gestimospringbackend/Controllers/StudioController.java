@@ -51,7 +51,11 @@ public class StudioController {
     public ResponseEntity<List<StudioDto>> findAllStudios() {
         return ResponseEntity.ok(studioService.findAll());
     }
-
+    @Operation(summary = "Liste de toutes les Studios libres", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/alllibre")
+    public ResponseEntity<List<StudioDto>> findAllStudiosLibre() {
+        return ResponseEntity.ok(studioService.findAllLibre());
+    }
     @Operation(summary = "Trouver un Studio par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<StudioDto> findStudioByID(@PathVariable("id") Long id) {

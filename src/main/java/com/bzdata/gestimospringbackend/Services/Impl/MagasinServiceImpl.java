@@ -198,4 +198,12 @@ public class MagasinServiceImpl implements MagasinService {
                 .map(MagasinDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MagasinResponseDto> findAllLibre() {
+        return magasinRepository.findAll().stream()
+                .map(MagasinResponseDto::fromEntity)
+        .filter((mag)->mag.isOccupied()==false)
+        .collect(Collectors.toList());
+    }
 }

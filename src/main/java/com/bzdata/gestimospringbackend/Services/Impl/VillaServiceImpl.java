@@ -90,7 +90,7 @@ public class VillaServiceImpl implements VillaService {
 
             villa.setNumBien(numBien);
             if (!StringUtils.hasLength(dto.getNomVilla())) {
-                villa.setAbrvVilla("villa-".toUpperCase() + dto.getNumBien());
+                villa.setAbrvVilla("villa-".toUpperCase() + numBien);
                 villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
             } else {
                 villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
@@ -179,6 +179,14 @@ public class VillaServiceImpl implements VillaService {
     public List<VillaDto> findAllByIdSite(Long id) {
 
         return null;
+    }
+
+    @Override
+    public List<VillaDto> findAllLibre() {
+        return villaRepository.findAll().stream()
+                .map(VillaDto::fromEntity)
+                .filter((vil)->vil.isOccupied()==false)
+                .collect(Collectors.toList());
     }
 
 }

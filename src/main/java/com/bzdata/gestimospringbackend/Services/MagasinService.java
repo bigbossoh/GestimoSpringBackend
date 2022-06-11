@@ -15,7 +15,7 @@ public interface MagasinService {
     Long maxOfNumBienMagasin();
 
     List<MagasinResponseDto> findAll();
-
+    List<MagasinResponseDto> findAllLibre();
     MagasinDto findById(Long id);
 
     MagasinDto findByName(String nom);
