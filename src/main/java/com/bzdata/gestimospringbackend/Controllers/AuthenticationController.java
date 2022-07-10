@@ -63,11 +63,10 @@ public class AuthenticationController {
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         log.info("depuis la method principale login : {}", userPrincipal.toString());
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-        // log.info("we are going lo launch sms to the user ");
-        // SmsRequest sms =new SmsRequest("+2550103833350","Le "+loginUser.getUrole()+"
-        // "+loginUser.getNom() +" "+"a été connecté avec succès");
-        // twilioSmsSender.sendSms(sms);
-        // log.info("Sms sent");
+       //  log.info("we are going lo launch sms to the user ");
+//         SmsRequest sms =new SmsRequest("+2550103833350","Le "+loginUser.getUrole()+" "+loginUser.getNom() +" "+"a été connecté avec succès");
+//         twilioSmsSender.sendSms(sms);
+       //  log.info("Sms sent");
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
 
