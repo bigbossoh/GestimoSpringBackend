@@ -27,6 +27,7 @@ public class MagasinDto {
     Long idEtage;
     Long idSite;
     Long idUtilisateur;
+    
 
     public static MagasinDto fromEntity(Magasin magasin) {
         if (magasin == null) {

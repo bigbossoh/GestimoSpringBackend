@@ -30,6 +30,7 @@ public class VillaDto {
     boolean isOccupied;
     Long idSite;
     Long idUtilisateur;
+    String proprietaire;
 
     public static VillaDto fromEntity(Villa villa) {
         if (villa == null) {
@@ -56,6 +57,7 @@ public class VillaDto {
                 .numBien(villa.getNumBien())
                 .idSite(villa.getSite().getId())
                 .idUtilisateur(villa.getUtilisateur().getId())
+                .proprietaire(villa.getUtilisateur().getNom()+" "+villa.getUtilisateur().getPrenom())
                 .build();
     }
 

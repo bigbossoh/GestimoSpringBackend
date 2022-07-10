@@ -23,6 +23,7 @@ public class AppartementDto {
     String abrvNomApp;
     String nomApp;
     Long idEtage;
+    String proprietaire;
 
     public static AppartementDto fromEntity(Appartement appartement) {
         if (appartement == null) {
@@ -41,7 +42,9 @@ public class AppartementDto {
                 .nbreSalonApp(appartement.getNbreSalonApp())
                 .nomApp(appartement.getNomApp())
                 .numeroApp(appartement.getNumeroApp())
+                .proprietaire(appartement.getEtageAppartement().getImmeuble().getUtilisateur().getNom()+" "+appartement.getEtageAppartement().getImmeuble().getUtilisateur().getPrenom())
                 .build();
+
     }
 
 

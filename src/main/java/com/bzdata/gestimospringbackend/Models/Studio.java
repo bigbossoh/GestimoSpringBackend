@@ -31,5 +31,5 @@ public class Studio extends Bienimmobilier {
     @ManyToOne
     Etage etageStudio;
     @OneToMany(mappedBy = "studioBail")
-    List<Operation> operationsStudio;
+    List<Operation> operationsStudio; 
 }
