@@ -27,6 +27,7 @@ public class BienImmobilierDto {
         if (bienimmobilier == null) {
             return null;
         }
+        System.out.println(bienimmobilier.toString());
         return BienImmobilierDto.builder()
                 .abrvBienimmobilier(bienimmobilier.getAbrvBienimmobilier())
                 .description(bienimmobilier.getDescription())

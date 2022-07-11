@@ -89,8 +89,9 @@ public class VillaServiceImpl implements VillaService {
             }
 
             villa.setNumBien(numBien);
-            if (!StringUtils.hasLength(dto.getNomVilla())) {
+            if (!StringUtils.hasLength(dto.getAbrvVilla())) {
                 villa.setAbrvVilla("villa-".toUpperCase() + numBien);
+
                 villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
             } else {
                 villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
@@ -98,7 +99,7 @@ public class VillaServiceImpl implements VillaService {
                         .toUpperCase(Locale.ROOT));
             }
             villa.setAbrvBienimmobilier(
-                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase(Locale.ROOT));
+                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase());
             villaRepository.save(villa);
             return true;
         } else {

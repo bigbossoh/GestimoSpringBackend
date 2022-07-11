@@ -26,9 +26,9 @@ public class MagasinResponseDto {
     String abrvNomMagasin;
     int nmbrPieceMagasin;
     String nomMagasin;
-    // Etage etage;
-    // Site site;
+
     Utilisateur utilisateur;
+    String proprietaire;
 
     public static MagasinResponseDto fromEntity(Magasin magasin) {
         if (magasin == null) {
@@ -50,9 +50,7 @@ public class MagasinResponseDto {
                 .abrvNomMagasin(magasin.getAbrvNomMagasin())
                 .nmbrPieceMagasin(magasin.getNmbrPieceMagasin())
                 .nomMagasin(magasin.getNomMagasin())
-                // .etage(magasin.getEtageMagasin())
-                // .site(magasin.getSite())
-                // .utilisateur(magasin.getUtilisateur())
+                .proprietaire(magasin.getUtilisateur().getNom()+" "+(magasin.getUtilisateur().getPrenom()))
                 .build();
     }
 }

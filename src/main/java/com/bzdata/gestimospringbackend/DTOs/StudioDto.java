@@ -29,6 +29,7 @@ public class StudioDto {
     Long idSite;
     Long idEtage;
     Long idUtilisateur;
+    String proprietaire;
 
     public static StudioDto fromEntity(Studio studio) {
         if (studio == null) {
@@ -52,6 +53,7 @@ public class StudioDto {
                 .idEtage(studio.getEtageStudio().getId())
                 .idSite(studio.getSite().getId())
                 .idUtilisateur(studio.getUtilisateur().getId())
+                .proprietaire(studio.getUtilisateur().getNom()+" "+studio.getUtilisateur().getPrenom())
                 .build();
     }
 
