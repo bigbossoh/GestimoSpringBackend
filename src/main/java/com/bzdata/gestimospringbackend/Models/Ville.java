@@ -17,6 +17,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Ville extends AbstractEntity {
+
     String abrvVille;
     String nomVille;
     @ManyToOne

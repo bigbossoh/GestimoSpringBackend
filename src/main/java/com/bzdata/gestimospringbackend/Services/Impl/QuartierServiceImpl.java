@@ -127,8 +127,7 @@ public class QuartierServiceImpl implements QuartierService {
         log.info("We are going to get back the Commune By {}", id);
         if (id == null || id == 0) {
             log.error("you are not provided a Commune.");
-            new InvalidEntityException("Aucun Quartier has been found with name " + id,
-                    ErrorCodes.COMMUNE_NOT_FOUND);
+            new InvalidEntityException("Aucun Quartier has been found with name " + id,          ErrorCodes.COMMUNE_NOT_FOUND);
             return null;
         }
         CommuneRequestDto communeRequestDto = communeService.findById(id);
