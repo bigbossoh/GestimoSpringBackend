@@ -3,11 +3,13 @@ package com.bzdata.gestimospringbackend.interceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.EmptyInterceptor;
 import org.slf4j.MDC;
+import org.springframework.context.annotation.Bean;
 import org.springframework.util.StringUtils;
 @Slf4j
 public class Interceptor extends EmptyInterceptor {
 
   @Override
+  @Bean
   public String onPrepareStatement(String sql) {
     log.info("the sql incoming request is : {}", sql);
     if (StringUtils.hasLength(sql) && sql.toLowerCase().startsWith("select") && (MDC.get("idAgence")!=null)) {
@@ -27,11 +29,13 @@ public class Interceptor extends EmptyInterceptor {
           && !entityName.toLowerCase().contains("count")
               && !entityName.toLowerCase().contains("coalesce")
               && !entityName.toLowerCase().contains("pays")
-              && !entityName.toLowerCase().contains("ville")
+              && !entityName.toLowerCase().contains("ville0_")
               && !entityName.toLowerCase().contains("commune")
               && !entityName.toLowerCase().contains("role")
               && !entityName.toLowerCase().contains("quartier")
-              && !entityName.toLowerCase().contains("site0")
+          && !entityName.toLowerCase().contains("site")
+          && !entityName.toLowerCase().contains("studio")
+          && !entityName.toLowerCase().contains("appartemen")
           && StringUtils.hasLength(idAgence))
       {
 
