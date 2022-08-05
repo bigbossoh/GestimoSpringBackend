@@ -33,12 +33,19 @@ public class SiteController {
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Site", security = @SecurityRequirement(name = "bearerAuth"))
 
-    public ResponseEntity<Boolean> saveSite(@RequestBody SiteRequestDto dto) {
+    public ResponseEntity<Boolean> save(@RequestBody SiteRequestDto dto) {
 
         log.info("We are going to save a new Site {}", dto);
         return ResponseEntity.ok(siteService.save(dto));
     }
+    @PostMapping("/savesite")
+    @Operation(summary = "Creation et mise à jour d'un Site", security = @SecurityRequirement(name = "bearerAuth"))
 
+    public ResponseEntity<SiteResponseDto> saveSite(@RequestBody SiteRequestDto dto) {
+
+        log.info("We are going to save a new Site {}", dto);
+        return ResponseEntity.ok(siteService.saveSite(dto));
+    }
     // SUPPRESSION D'UN SITE
     @Operation(summary = "Suppression d'un Site avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")

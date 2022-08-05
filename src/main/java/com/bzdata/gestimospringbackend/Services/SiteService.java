@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface SiteService {
     boolean save(SiteRequestDto dto);
-
+    SiteResponseDto saveSite(SiteRequestDto dto);
     boolean delete(Long id);
 
     List<SiteResponseDto> findAll();
