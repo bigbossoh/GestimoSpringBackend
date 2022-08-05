@@ -99,7 +99,7 @@ public class VillaServiceImpl implements VillaService {
                         .toUpperCase(Locale.ROOT));
             }
             villa.setAbrvBienimmobilier(
-                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase());
+                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase()+ "-" + numBien);
             villaRepository.save(villa);
             return true;
         } else {
