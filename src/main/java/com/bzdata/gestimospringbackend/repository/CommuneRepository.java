@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.repository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,8 +13,7 @@ public interface CommuneRepository extends JpaRepository<Commune, Long> {
 
     Optional<Commune> findByNomCommune(String nom);
 
-    List<Commune> findByVille(Ville idVille);
+    List<Commune> findByVille(Ville ville);
 
     List<Commune> findByVille(VilleDto villeDto);
-
 }
