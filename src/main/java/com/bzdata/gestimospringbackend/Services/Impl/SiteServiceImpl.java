@@ -53,16 +53,18 @@ public class SiteServiceImpl implements SiteService {
                         () -> new InvalidEntityException(
                                 "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
                                 ErrorCodes.SITE_NOT_FOUND));
-//                oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
-//                oldSite.get().setNomSite(dto.getNomSite());
+                // oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" +
+                // dto.getAbrSite());
+                // oldSite.get().setNomSite(dto.getNomSite());
                 oldSite.get().setQuartier(quartier);
                 oldSite.get().setIdAgence(dto.getIdAgence());
                 oldSite.get().setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
                         .getCommune().getVille().getPays().getAbrvPays())
                         + "-" +
-                        org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
+                        org.apache.commons.lang3.StringUtils
+                                .deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
                         + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
-                        .getCommune().getAbrvCommune())
+                                .getCommune().getAbrvCommune())
                         + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getAbrvQuartier()));
                 oldSite.get().setNomSite(
                         quartier.getCommune().getVille().getPays().getNomPays()
@@ -77,7 +79,7 @@ public class SiteServiceImpl implements SiteService {
                         () -> new InvalidEntityException(
                                 "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
                                 ErrorCodes.SITE_NOT_FOUND));
-               // site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+                // site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
 
                 site.setIdAgence(dto.getIdAgence());
                 site.setQuartier(quartier);
@@ -85,9 +87,10 @@ public class SiteServiceImpl implements SiteService {
                 site.setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
                         .getCommune().getVille().getPays().getAbrvPays())
                         + "-" +
-                        org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
+                        org.apache.commons.lang3.StringUtils
+                                .deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
                         + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
-                        .getCommune().getAbrvCommune())
+                                .getCommune().getAbrvCommune())
                         + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getAbrvQuartier()));
                 site.setNomSite(
                         quartier.getCommune().getVille().getPays().getNomPays()
@@ -149,5 +152,76 @@ public class SiteServiceImpl implements SiteService {
         return siteRepository.findByNomSite(nom).map(SiteResponseDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucun Site has been found with name " + nom,
                         ErrorCodes.SITE_NOT_FOUND));
+    }
+
+    @Override
+    public SiteResponseDto saveSite(SiteRequestDto dto) {
+        Optional<Site> oldSite = siteRepository.findById(dto.getId());
+
+        log.info("We are going to create  a new site {}", dto);
+        List<String> errors = SiteDtoValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("Le site n'est pas valide {}", errors);
+            throw new InvalidEntityException("Certain attributs de l'object site sont null.",
+                    ErrorCodes.SITE_NOT_VALID, errors);
+        }
+        try {
+            if (oldSite.isPresent()) {
+
+                Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                                ErrorCodes.SITE_NOT_FOUND));
+                // oldSite.get().setAbrSite(quartier.getAbrvQuartier() + "-" +
+                // dto.getAbrSite());
+                // oldSite.get().setNomSite(dto.getNomSite());
+                oldSite.get().setQuartier(quartier);
+                oldSite.get().setIdAgence(dto.getIdAgence());
+                oldSite.get().setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
+                        .getCommune().getVille().getPays().getAbrvPays())
+                        + "-" +
+                        org.apache.commons.lang3.StringUtils
+                                .deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
+                        + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
+                                .getCommune().getAbrvCommune())
+                        + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getAbrvQuartier()));
+                oldSite.get().setNomSite(
+                        quartier.getCommune().getVille().getPays().getNomPays()
+                                + "-" + quartier.getCommune().getVille().getNomVille()
+                                + "-" + quartier.getCommune().getNomCommune()
+                                + "-" + quartier.getNomQuartier());
+                Site siteSave = siteRepository.save(oldSite.get());
+                return SiteResponseDto.fromEntity(siteSave);
+            } else {
+                Site site = new Site();
+                Quartier quartier = quartierRepository.findById(dto.getIdQuartier()).orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Quartier has been found with Code " + dto.getIdQuartier(),
+                                ErrorCodes.SITE_NOT_FOUND));
+                // site.setAbrSite(quartier.getAbrvQuartier() + "-" + dto.getAbrSite());
+
+                site.setIdAgence(dto.getIdAgence());
+                site.setQuartier(quartier);
+                site.setIdAgence(1L);
+                site.setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
+                        .getCommune().getVille().getPays().getAbrvPays())
+                        + "-" +
+                        org.apache.commons.lang3.StringUtils
+                                .deleteWhitespace(quartier.getCommune().getVille().getAbrvVille())
+                        + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
+                                .getCommune().getAbrvCommune())
+                        + "-" + org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier.getAbrvQuartier()));
+                site.setNomSite(
+                        quartier.getCommune().getVille().getPays().getNomPays()
+                                + "-" + quartier.getCommune().getVille().getNomVille()
+                                + "-" + quartier.getCommune().getNomCommune()
+                                + "-" + quartier.getNomQuartier());
+                Site siteSave = siteRepository.save(site);
+
+                return SiteResponseDto.fromEntity(siteSave);
+            }
+        } catch (Exception e) {
+            throw new InvalidEntityException(" Erreur : " + e.getMessage());
+        }
     }
 }
