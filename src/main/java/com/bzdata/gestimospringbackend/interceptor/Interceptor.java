@@ -22,7 +22,7 @@ public class Interceptor extends EmptyInterceptor {
       if (StringUtils.hasLength(entityName)
               &&
               !idAgence.toLowerCase().contains("1001")
-          //    && !entityName.toLowerCase().contains("utilisateur")
+          //   && !entityName.toLowerCase().contains("utilisateur")
                   && !entityName.toLowerCase().contains("operation")
               && !entityName.toLowerCase().contains("bail")
               && !entityName.toLowerCase().contains("Agence")
@@ -33,7 +33,8 @@ public class Interceptor extends EmptyInterceptor {
               && !entityName.toLowerCase().contains("commune")
               && !entityName.toLowerCase().contains("role")
               && !entityName.toLowerCase().contains("quartier")
-          && !entityName.toLowerCase().contains("site")
+              && !entityName.toLowerCase().contains("site")
+              && !entityName.toLowerCase().contains("immeuble")
           && !entityName.toLowerCase().contains("studio")
           && !entityName.toLowerCase().contains("appartemen")
           && StringUtils.hasLength(idAgence))
