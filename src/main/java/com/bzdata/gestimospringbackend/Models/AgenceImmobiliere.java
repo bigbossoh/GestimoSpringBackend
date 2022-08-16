@@ -32,7 +32,7 @@ public class AgenceImmobiliere extends AbstractEntity {
 
     // @OneToMany(mappedBy = "agenceImmobilier")
     // List<Utilisateur> utilisateursAgence;
-    @ManyToOne
-    Utilisateur createur;
+    // @ManyToOne
+    // Utilisateur createur;
 
 }
