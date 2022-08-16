@@ -12,8 +12,8 @@ public interface AgenceImmobiliereRepository extends JpaRepository<AgenceImmobil
 
     Optional<AgenceImmobiliere> findAgenceImmobiliereByEmailAgence(String email);
 
-    //@Query(value = "SELECT agence FROM AgenceImmobiliere agence,Utilisateur ut WHERE agence.id=ut.idAgence ")
-    List<AgenceImmobiliere> findAllByOrderByNomAgenceAsc();
+    @Query(value = "SELECT agence FROM AgenceImmobiliere agence,Utilisateur ut WHERE agence.id=ut.idAgence ")
+    List<AgenceImmobiliere> findAllAgenceImmo();
 
     // @Query(value = "SELECT agen FROM AgenceImmobiliere agen")
     // List<AgenceImmobiliere> findAllByOrderByNomAgenceQuery();

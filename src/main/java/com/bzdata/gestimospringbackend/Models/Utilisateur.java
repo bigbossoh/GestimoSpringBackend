@@ -51,8 +51,8 @@ public class Utilisateur extends AbstractEntity {
     // @ManyToOne
     // AgenceImmobiliere agenceImmobilier;
 
-    @OneToMany(mappedBy = "createur")
-    List<AgenceImmobiliere> createurAgenceImmobiliere;
+    // @OneToMany(mappedBy = "createur")
+    // List<AgenceImmobiliere> createurAgenceImmobiliere;
 
     @ManyToOne(fetch = FetchType.EAGER)
     Role urole;

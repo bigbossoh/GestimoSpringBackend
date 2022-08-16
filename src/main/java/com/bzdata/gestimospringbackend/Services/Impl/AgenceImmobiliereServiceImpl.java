@@ -69,7 +69,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                     () -> new InvalidEntityException(
                             "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
                             ErrorCodes.UTILISATEUR_NOT_FOUND));
-            agenceImmobiliere.setCreateur(userCreate);
+            //agenceImmobiliere.setCreateur(userCreate);
             agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
             agenceImmobiliere.setCapital(dto.getCapital());
             agenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
@@ -187,8 +187,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     public List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc() {
         log.info("We are going to take back all the agences order by agence name");
 
-        return agenceImmobiliereRepository.findAllByOrderByNomAgenceAsc().stream()
-               // .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
+        return agenceImmobiliereRepository.findAllAgenceImmo().stream()
+                .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
                 .map(AgenceResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }

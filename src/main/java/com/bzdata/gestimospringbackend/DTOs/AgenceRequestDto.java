@@ -43,7 +43,7 @@ public class AgenceRequestDto {
                 .regimeFiscaleAgence(agenceImmobiliere.getRegimeFiscaleAgence())
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
-                .idUtilisateurCreateur(agenceImmobiliere.getCreateur().getId())
+                // .idUtilisateurCreateur(agenceImmobiliere.getCreateur().getId())
                 .idAgence(agenceImmobiliere.getIdAgence())
                 .build();
     }
