@@ -97,7 +97,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
             Optional<AgenceImmobiliere> agenceImmobiliere = agenceImmobiliereRepository.findById(dto.getAgenceDto());
             if (agenceImmobiliere.isPresent()) {
-                newUser.setAgence(agenceImmobiliere.get());
+               // newUser.setAgenceImmobilier(agenceImmobiliere.get());
             }
 
             newUser.setIdAgence(dto.getIdAgence());

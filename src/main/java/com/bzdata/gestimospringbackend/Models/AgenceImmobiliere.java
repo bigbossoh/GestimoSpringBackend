@@ -30,8 +30,8 @@ public class AgenceImmobiliere extends AbstractEntity {
     String faxAgence;
     String sigleAgence;
 
-    @OneToMany(mappedBy = "agence")
-    List<Utilisateur> utilisateurs;
+    // @OneToMany(mappedBy = "agenceImmobilier")
+    // List<Utilisateur> utilisateursAgence;
     @ManyToOne
     Utilisateur createur;
 

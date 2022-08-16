@@ -93,7 +93,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setEmail(dto.getEmailAgence());
             newUtilisateur.setMobile(dto.getMobileAgence());
             newUtilisateur.setPassword(passwordEncoder.encode(dto.getMotdepasse()));
-            newUtilisateur.setAgence(saveAgenceUpdate);
+            //newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
             Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
             if (newRole.isPresent()) {
                 newUtilisateur.setUrole(newRole.get());
@@ -187,8 +187,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     public List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc() {
         log.info("We are going to take back all the agences order by agence name");
 
-        return agenceImmobiliereRepository.findAll().stream()
-                .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
+        return agenceImmobiliereRepository.findAllByOrderByNomAgenceAsc().stream()
+               // .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
                 .map(AgenceResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -206,8 +206,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
         }
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
-        Stream<AgenceImmobiliere> agenceImmobiliereStream = utilisateurs.stream()
-                .filter(user -> user.getUserCreate().getId().equals(id)).map(Utilisateur::getAgence);
+        Stream<Long> agenceImmobiliereStream = utilisateurs.stream()
+                .filter(user -> user.getUserCreate().getId().equals(id)).map(Utilisateur::getIdAgence);
         if (agenceImmobiliereStream.findAny().isPresent()) {
             throw new InvalidOperationException("Impossible de supprimer une agence qui a des utilisateurs déjà crées",
                     ErrorCodes.AGENCE_ALREADY_IN_USE);
