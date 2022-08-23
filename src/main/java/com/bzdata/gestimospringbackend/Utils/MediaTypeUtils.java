@@ -11,6 +11,7 @@ public class MediaTypeUtils {
             MediaType mediaType = MediaType.parseMediaType(mineType);
             return mediaType;
         } catch (Exception e) {
+            
             return MediaType.APPLICATION_OCTET_STREAM;
         }
     }
