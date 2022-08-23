@@ -34,8 +34,8 @@ public class PrintServiceImpl implements PrintService {
 
     @Override
     public byte[] quittanceLoyer(Long id) throws FileNotFoundException, JRException, SQLException {
-
         String path = "src/main/resources/templates";
+
 
         File file = ResourceUtils.getFile("classpath:templates/print/Recu_paiement.jrxml");
         Map<String, Object> parameters = new HashMap<>();
@@ -43,8 +43,22 @@ public class PrintServiceImpl implements PrintService {
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
-        JasperExportManager.exportReportToPdfFile(print, path + "/testetat" + id + ".pdf");
+        JasperExportManager.exportReportToPdfFile(print, path + "/quittance" + id + ".pdf");
 
+        return JasperExportManager.exportReportToPdf(print);
+    }
+
+    @Override
+    public byte[] quittanceLoyerGrouperParPeriode(String periode)
+            throws FileNotFoundException, JRException, SQLException {
+                String path = "src/main/resources/templates";
+                File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("PARAMETER_PERIODE", periode);
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+        JasperExportManager.exportReportToPdfFile(print, path+"/depot_etat/"+periode+".pdf");
         return JasperExportManager.exportReportToPdf(print);
     }
 
