@@ -35,4 +35,12 @@ public class PrintController {
         System.out.println(donnees);
         return ResponseEntity.ok(donnees);
     }
+    @GetMapping("/quittancegrouper/{periode}")
+    public ResponseEntity<byte[]> etatAppelLoyerGroupeParPeriode(@PathVariable("periode") String periode)
+            throws FileNotFoundException, JRException, SQLException {
+
+        byte[] donnees = printService.quittanceLoyerGrouperParPeriode(periode);
+
+        return ResponseEntity.ok(donnees);
+    }
 }
