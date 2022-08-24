@@ -54,7 +54,7 @@ public class PrintController {
     }
 
     @GetMapping("/quittancegrouper/{periodes}")
-    public ResponseEntity<InputStreamResource> etatAppelLoyerGroupeParPeriode(
+    public ResponseEntity<InputStreamResource> printAppelLoyerGroupeParPeriode(
             @RequestParam(defaultValue = DEFAULT_FILE_NAME) String periode)
             throws FileNotFoundException, JRException, SQLException {
 
