@@ -53,7 +53,7 @@ public class PrintController {
         return ResponseEntity.ok(donnees);
     }
 
-    @GetMapping("/quittancegrouper/{periodes}")
+    @GetMapping("/quittancegrouper/{periode}")
     public ResponseEntity<InputStreamResource> printAppelLoyerGroupeParPeriode(
             @RequestParam(defaultValue = DEFAULT_FILE_NAME) String periode)
             throws FileNotFoundException, JRException, SQLException {
