@@ -54,16 +54,21 @@ public class PrintController {
     }
 
     @GetMapping("/quittancegrouper/{periode}")
-    public ResponseEntity<InputStreamResource> printAppelLoyerGroupeParPeriode(
-            @RequestParam(defaultValue = DEFAULT_FILE_NAME) String periode)
+    public ResponseEntity<InputStreamResource> printAppelLoyerGroupeParPeriodeString(
+            @PathVariable("periode") String periode)
             throws FileNotFoundException, JRException, SQLException {
 
         String donnees = printService.quittanceLoyerGrouperParPeriodeString(periode);
+        log.info("Periode {}", periode);
+        log.info("Donnee {}", donnees);
         MediaType mediaType = MediaTypeUtils.getMediaTypeForFileNane(this.servletContext,
                 "appel_loyer_du" + periode + ".pdf");
         File file = new File(donnees);
-
+        log.info("Media {}", mediaType);
+        log.info("File {}", file.getName());
         InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        log.info("Ressources  {}", resource);
+        log.info("Longur fichier {}", file.length());
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
                 .contentType(mediaType)
