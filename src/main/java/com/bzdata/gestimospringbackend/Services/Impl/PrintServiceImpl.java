@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +48,26 @@ public class PrintServiceImpl implements PrintService {
         return JasperExportManager.exportReportToPdf(print);
     }
 
+    // @Override
+    // public byte[] quittanceLoyerGrouperParPeriode(String periode)
+    // throws FileNotFoundException, JRException, SQLException {
+    // String path = "src/main/resources/templates";
+    // File file =
+    // ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
+    // Map<String, Object> parameters = new HashMap<>();
+    // parameters.put("PARAMETER_PERIODE", periode);
+    // JasperReport jasperReport =
+    // JasperCompileManager.compileReport(file.getAbsolutePath());
+
+    // JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,
+    // dataSourceSQL.getConnection());
+    // JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/" +
+    // periode + ".pdf");
+    // return JasperExportManager.exportReportToPdf(print);
+    // }
+
     @Override
-    public byte[] quittanceLoyerGrouperParPeriode(String periode)
+    public byte[] quittancePeriode(String periode)
             throws FileNotFoundException, JRException, SQLException {
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
@@ -57,23 +76,36 @@ public class PrintServiceImpl implements PrintService {
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
-        JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/" + periode + ".pdf");
+        JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+        // String fichier = path + "/depot_etat/appel_loyer_du_" + periode + ".pdf";
         return JasperExportManager.exportReportToPdf(print);
     }
 
     @Override
-    public String quittanceLoyerGrouperParPeriodeString(String periode)
-            throws FileNotFoundException, JRException, SQLException {
-        String path = "src/main/resources/templates";
-        File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("PARAMETER_PERIODE", periode);
-        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+    public String quittancePeriodeString(String periode) throws FileNotFoundException, JRException, SQLException {
 
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
-        JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du" + periode + ".pdf");
-        String fichier = path + "/depot_etat/appel_loyer_du" + periode + ".pdf";
-        return fichier;
+        try {
+            String path = "src/main/resources/templates";
+            File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("PARAMETER_PERIODE", periode);
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+            JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+            return "Impression réussie";
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return "Un probleme est survenu";
+        }
+
     }
+
+    // @Override
+    // public byte[] readQuittance(String periode) throws FileNotFoundException,
+    // JRException, SQLException {
+    // // TODO Auto-generated method stub
+    // return null;
+    // }
 
 }
