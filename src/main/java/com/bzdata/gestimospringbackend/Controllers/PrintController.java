@@ -39,10 +39,7 @@ import net.sf.jasperreports.engine.JRException;
 @Slf4j
 public class PrintController {
     final PrintService printService;
-    @Autowired
-    private ServletContext servletContext;
-    static final String DIRECTORY = "C:/ETAT_QUITTANCE";
-    static final String DEFAULT_FILE_NAME = "appel_loyer_du_.pdf";
+
 
     @GetMapping("/quittance/{id}")
     public ResponseEntity<byte[]> sampleQuitance(@PathVariable("id") Long id)
@@ -53,20 +50,11 @@ public class PrintController {
         return ResponseEntity.ok(donnees);
     }
 
-    @GetMapping("/quittancegrouper/{periode}")
-    public ResponseEntity<InputStreamResource> printAppelLoyerGroupeParPeriode(
-            @RequestParam(defaultValue = DEFAULT_FILE_NAME) String periode)
+    @GetMapping(path = "/quittancegrouper/{periode}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<String> quittancePeriode(
+            @PathVariable("periode") String periode)
             throws FileNotFoundException, JRException, SQLException {
-
-        String donnees = printService.quittanceLoyerGrouperParPeriodeString(periode);
-        MediaType mediaType = MediaTypeUtils.getMediaTypeForFileNane(this.servletContext,
-                "appel_loyer_du" + periode + ".pdf");
-        File file = new File(donnees);
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file.getName())
-                .contentType(mediaType)
-                .contentLength(file.length()).body(resource);
+                log.info("Periode {}", periode);
+        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode));
     }
 }
