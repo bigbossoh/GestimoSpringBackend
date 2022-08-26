@@ -18,6 +18,7 @@ import org.springframework.util.ResourceUtils;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -28,6 +29,7 @@ import net.sf.jasperreports.engine.JasperReport;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PrintServiceImpl implements PrintService {
 
@@ -90,9 +92,16 @@ public class PrintServiceImpl implements PrintService {
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-
+            File di= new File(path+"/depot_etat");
+            boolean di1 = di.mkdirs();
+            if(di1){
+                System.out.println("Folder is created successfully");
+             }else{
+                System.out.println("Error Found!");
+             }
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+            log.info("Le fichier {}",path + "/appel_loyer_du_" + periode + ".pdf");
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());
