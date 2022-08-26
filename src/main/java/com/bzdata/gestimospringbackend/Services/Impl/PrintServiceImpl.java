@@ -82,7 +82,7 @@ public class PrintServiceImpl implements PrintService {
     }
 
     @Override
-    public String quittancePeriodeString(String periode) throws FileNotFoundException, JRException, SQLException {
+    public byte[] quittancePeriodeString(String periode) throws FileNotFoundException, JRException, SQLException {
 
         try {
             String path = "src/main/resources/templates";
@@ -93,10 +93,10 @@ public class PrintServiceImpl implements PrintService {
 
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-            return "Impression réussie";
+            return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return "Un probleme est survenu";
+            return null;
         }
 
     }

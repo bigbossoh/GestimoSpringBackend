@@ -51,7 +51,7 @@ public class PrintController {
     }
 
     @GetMapping(path = "/quittancegrouper/{periode}",produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<String> quittancePeriode(
+    public ResponseEntity<byte[]> quittancePeriode(
             @PathVariable("periode") String periode)
             throws FileNotFoundException, JRException, SQLException {
                 log.info("Periode {}", periode);
