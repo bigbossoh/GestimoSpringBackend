@@ -72,7 +72,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             bailLocationVilla.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationVilla.setVillaBail(villa);
             bailLocationVilla.setUtilisateurOperation(utilisateur);
-            bailLocationVilla.setAbrvCodeBail(dto.getAbrvCodeBail());
+            bailLocationVilla.setAbrvCodeBail(utilisateur.getNom()+" "+utilisateur.getPrenom()+"/"+bienImmobilierOperation.getAbrvBienimmobilier());
             bailLocationVilla.setArchiveBail(false);
             bailLocationVilla.setDateDebut(dto.getDateDebut());
             bailLocationVilla.setDateFin(dto.getDateFin());

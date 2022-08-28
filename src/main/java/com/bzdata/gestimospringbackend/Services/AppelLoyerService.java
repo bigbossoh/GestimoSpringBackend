@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 
 import java.util.List;
@@ -12,9 +13,10 @@ public interface AppelLoyerService {
 
     boolean deleteAppelDto(Long id);
 
-    List<AppelLoyer> findAll();
+    List<AppelLoyersFactureDto> findAll();
 
-    AppelLoyer findById(Long id);
+    List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
+    AppelLoyersFactureDto findById(Long id);
 
     List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
 }
