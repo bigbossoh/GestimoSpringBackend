@@ -2,10 +2,16 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.Models.AppelLoyer;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import org.springframework.http.ResponseEntity;
@@ -45,6 +51,27 @@ public class AppelLoyersController {
     public ResponseEntity<List<AppelLoyerDto>> listDesLoyersParBail(@PathVariable("id") Long id) {
         log.info("Find Appel by ID Bail {}", id);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByBailId(id));
+    }
+
+    @Operation(summary = "Trouver un appel loyer par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAppelloyer/{id}")
+    public ResponseEntity<AppelLoyersFactureDto> AppelLoyersParId(@PathVariable("id") Long id) {
+        log.info("Find Appel by ID Bail {}", id);
+        return ResponseEntity.ok(appelLoyerService.findById(id));
+    }
+
+    @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllAppelloyerByPeriode/{periode}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode) {
+        log.info("Find Appel by periode {}", periode);
+        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode));
+    }
+
+    @Operation(summary = "Lister tous les appels de BD", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllAppelsLoyer")
+    public ResponseEntity<List<AppelLoyersFactureDto>> listTousAppelsLoyers() {
+        log.info("Liste de tous les appels ");
+        return ResponseEntity.ok(appelLoyerService.findAll());
     }
 
 }

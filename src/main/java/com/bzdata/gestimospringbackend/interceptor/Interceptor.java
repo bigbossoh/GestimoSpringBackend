@@ -37,6 +37,7 @@ public class Interceptor extends EmptyInterceptor {
               && !entityName.toLowerCase().contains("immeuble")
           && !entityName.toLowerCase().contains("studio")
           && !entityName.toLowerCase().contains("appartemen")
+              && !entityName.toLowerCase().contains("appelloye")
           && StringUtils.hasLength(idAgence))
       {
 

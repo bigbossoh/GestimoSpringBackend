@@ -5,18 +5,19 @@ import java.time.Period;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Models.BailLocation;
-import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
-import com.bzdata.gestimospringbackend.Models.SmsRequest;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
@@ -52,6 +53,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final TwilioSmsSender twilioSmsSender;
+    final GestimoWebMapperImpl gestimoWebMapper;
 
     /**
      * Cette methode est utilisé pour enregister tous les appels loyers
@@ -129,13 +131,39 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<AppelLoyer> findAll() {
-        return null;
+    public List<AppelLoyersFactureDto> findAll() {
+        return appelLoyerRepository.findAll()
+                .stream()
+                .map(gestimoWebMapper::fromAppelLoyer)
+                .collect(Collectors.toList())
+                ;
     }
 
     @Override
-    public AppelLoyer findById(Long id) {
-        return null;
+    public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer) {
+        return appelLoyerRepository.findAll()
+                .stream()
+                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
+                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                .map(gestimoWebMapper::fromAppelLoyer)
+                .collect(Collectors.toList());
+    }
+
+
+
+    @Override
+    public AppelLoyersFactureDto findById(Long id) {
+
+        log.info("We are going to get back the AppelLoyersFactureDTO By {}", id);
+        if (id == null) {
+            log.error("you are not provided a good Id of AppelLoyersFacture.");
+            return null;
+        }
+        return appelLoyerRepository.findById(id)
+                .map(gestimoWebMapper::fromAppelLoyer)
+                .orElseThrow(
+                () -> new InvalidEntityException("Aucun Appel loyer has been found with Code " + id,
+                        ErrorCodes.APPELLOYER_NOT_FOUND));
     }
 
     @Override
