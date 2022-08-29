@@ -182,6 +182,19 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         return collectPeriodeDistinct;
     }
 
+    @Override
+    public List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee) {
+
+
+        return appelLoyerRepository
+                .findAll()
+                .stream()
+                .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer()==annee)
+                .map(gestimoWebMapper::fromAppelLoyerForAnnee)
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public AppelLoyersFactureDto findById(Long id) {

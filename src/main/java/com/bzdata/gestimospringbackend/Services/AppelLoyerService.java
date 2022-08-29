@@ -26,4 +26,6 @@ public interface AppelLoyerService {
     List<Integer> listOfDistinctAnnee();
 
     List<String> listOfPerodesByAnnee(Integer annee);
+
+    List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
 }
