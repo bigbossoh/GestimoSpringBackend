@@ -65,6 +65,12 @@ public class AppelLoyersController {
         log.info("Find Appelperiode by annee {}", annee);
         return ResponseEntity.ok(appelLoyerService.listOfPerodesByAnnee(annee));
     }
+    @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllPeriodeChiffreEtLettreByAnnee/{annee}")
+    public ResponseEntity<List<AnneeAppelLoyersDto>> findAllPeriodeChiffreEtLettreByAnnee(@PathVariable("annee") Integer annee) {
+        log.info("Find Appelperiode by annee {}", annee);
+        return ResponseEntity.ok(appelLoyerService.listOfAppelLoyerByAnnee(annee));
+    }
     @Operation(summary = "Trouver toutes les années appels loyers ", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/listOfDistinctAnneeAppel")
     public ResponseEntity<List<Integer>> listOfDistinctAnneeAppel() {
