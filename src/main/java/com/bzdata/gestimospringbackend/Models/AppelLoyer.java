@@ -1,6 +1,8 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Period;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -22,12 +24,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyer extends AbstractEntity {
     String periodeAppelLoyer;
+    String periodeLettre;
     String statusAppelLoyer;
     LocalDate datePaiementPrevuAppelLoyer;
     LocalDate dateDebutMoisAppelLoyer;
     LocalDate dateFinMoisAppelLoyer;
     int anneeAppelLoyer;
     int moisChiffreAppelLoyer;
+    String moisUniquementLettre;
     String descAppelLoyer;
     double montantBailLPeriode;
     double soldeAppelLoyer;

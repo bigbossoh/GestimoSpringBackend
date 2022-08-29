@@ -57,7 +57,9 @@ public class GestimoWebMapperImpl {
         if(bienImmobilier == null)
             throw new EntityNotFoundException("Bien immobilier from GestimoMapper not found", ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
         appelLoyersFactureDto.setAbrvBienimmobilier(bienImmobilier.getAbrvBienimmobilier());
-        appelLoyersFactureDto.setBienImmobilierFullName(bienImmobilier.getNomBien());
+        StringBuilder str = new StringBuilder(bienImmobilier.getNomBien());
+        str.delete(0,14);
+        appelLoyersFactureDto.setBienImmobilierFullName(str.toString());
         //Bail
         BailLocation bailLocation=bailLocationRepository.findById(appelLoyer.getBailLocationAppelLoyer().getId()).orElse(null);
         if(bailLocation==null)

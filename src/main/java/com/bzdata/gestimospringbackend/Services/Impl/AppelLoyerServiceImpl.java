@@ -3,10 +3,13 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
@@ -92,6 +95,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             LocalDate start = initial.withDayOfMonth(1);
             LocalDate datePaiementPrevu = initial.withDayOfMonth(10);
             LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
+
+            YearMonth ym = YearMonth.from( start ) ;
+           DateTimeFormatter f = DateTimeFormatter.ofPattern( "MMMM uuuu" , Locale.FRANCE ) ;
+            appelLoyer.setPeriodeLettre( ym.format( f )) ;
+            DateTimeFormatter mois = DateTimeFormatter.ofPattern( "MMMM" , Locale.FRANCE ) ;
+            appelLoyer.setMoisUniquementLettre( ym.format( mois));
+
             appelLoyer.setIdAgence(dto.getIdAgence());
             appelLoyer.setPeriodeAppelLoyer(period.toString());
             appelLoyer.setStatusAppelLoyer("Impayé");
@@ -100,6 +110,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             appelLoyer.setDateFinMoisAppelLoyer(end);
             appelLoyer.setAnneeAppelLoyer(period.getYear());
             appelLoyer.setMoisChiffreAppelLoyer(period.getMonthValue());
+
             appelLoyer.setDescAppelLoyer("Appel groupé");
             appelLoyer.setSoldeAppelLoyer(dto.getMontantLoyerEnCours());
             List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
