@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.mappers;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
+import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.Models.*;
 
@@ -81,7 +82,11 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto.setGenrePropietaire(utilisateur.getGenre());
         return appelLoyersFactureDto;
     }
-
+    public AnneeAppelLoyersDto fromAppelLoyerForAnnee(AppelLoyer appelLoyer){
+        AnneeAppelLoyersDto anneeAppelLoyersDto=new AnneeAppelLoyersDto();
+        BeanUtils.copyProperties(appelLoyer,anneeAppelLoyersDto);
+        return anneeAppelLoyersDto;
+    }
 
     public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO){
         AgenceImmobiliere agenceImmo= new AgenceImmobiliere();
