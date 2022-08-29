@@ -19,6 +19,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.Services.EmailService;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
@@ -95,6 +96,7 @@ public class GestimoSpringBackendApplication {
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
             AgenceImmobiliereRepository agenceImmobiliereRepository,
+            EmailService emailService,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
 
@@ -102,6 +104,11 @@ public class GestimoSpringBackendApplication {
         Pays pays = new Pays();
 
         return (args) -> {
+            // TEST SEND MAIL TO ME
+            boolean enoyer = emailService.sendMailWithAttachment("astairenazaire@gmail.com", "test envoi quittance",
+                    " Bonjour messieur zrangus, comment vas-tu",
+                    "src/main/resources/templates/appel_loyer_du_2022-09.pdf");
+            System.out.println(enoyer);
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");

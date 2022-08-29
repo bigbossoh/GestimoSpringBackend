@@ -6,7 +6,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
-import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;

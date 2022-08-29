@@ -3,17 +3,14 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Services.SmsSender;
 import com.bzdata.gestimospringbackend.TwilioConfiguration.TwilioConfiguration;
-import com.twilio.rest.api.v2010.account.Message;
-import com.twilio.rest.api.v2010.account.MessageCreator;
-import com.twilio.type.PhoneNumber;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.AllArgsConstructor;
+
 @Service
 @Transactional
-@Slf4j
 @AllArgsConstructor
 public class TwilioSmsSender implements SmsSender {
 

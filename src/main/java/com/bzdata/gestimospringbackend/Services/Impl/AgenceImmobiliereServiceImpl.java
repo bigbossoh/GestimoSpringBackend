@@ -3,7 +3,11 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +19,6 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
-import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
@@ -41,7 +44,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @AllArgsConstructor
 public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
-    private final UtilisateurService utilisateurService;
     private final AgenceImmobiliereRepository agenceImmobiliereRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final VerificationTokenRepository verificationTokenRepository;
