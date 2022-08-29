@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmailRequestDto {
      String from;
+     String periode;
      String to;
      String body;
      String subject;

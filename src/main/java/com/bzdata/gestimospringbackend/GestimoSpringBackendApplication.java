@@ -105,9 +105,9 @@ public class GestimoSpringBackendApplication {
 
         return (args) -> {
             // TEST SEND MAIL TO ME
-            boolean enoyer = emailService.sendMailWithAttachment("astairenazaire@gmail.com", "test envoi quittance",
+            boolean enoyer = emailService.sendMailWithAttachment("septembre 2022","bossohpaulin@gmail.com", "test envoi quittance",
                     " Bonjour messieur zrangus, comment vas-tu",
-                    "src/main/resources/templates/appel_loyer_du_2022-09.pdf");
+                    "src/main/resources/templates/depot_etat/appel_loyer_du_2022-09.pdf");
             System.out.println(enoyer);
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE
