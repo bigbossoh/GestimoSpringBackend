@@ -4,6 +4,7 @@
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataSeve.jrdax"/>
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
+	<parameter name="ID_UTILISATEUR" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT gestimoweb.appel_loyer.periode_appel_loyer,
 	gestimoweb.appel_loyer.date_paiement_prevu_appel_loyer,
@@ -26,7 +27,9 @@ WHERE
  AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id 
 AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id 
 AND    gestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
+AND  gestimoweb.utilisateur.id =$P{ID_UTILISATEUR}
  AND gestimoweb.appel_loyer.is_solder_appel_loyer =0
+ 
 ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC]]>
 	</queryString>
 	<field name="periode_appel_loyer" class="java.lang.String">

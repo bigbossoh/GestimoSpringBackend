@@ -43,7 +43,6 @@ public class StudioServiceImpl implements StudioService {
 
     @Override
     public boolean save(StudioDto dto) {
-        Optional<Studio> oldStudio = studioRepository.findById(dto.getId());
         Studio studio = new Studio();
         int numStu = studioRepository.getMaxNumStudio() + 1;
         log.info("We are going to create  a new Studio {}", dto);
