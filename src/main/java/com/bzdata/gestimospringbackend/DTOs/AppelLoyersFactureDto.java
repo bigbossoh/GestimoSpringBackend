@@ -22,6 +22,8 @@ public class AppelLoyersFactureDto {
     LocalDate datePaiementPrevuAppelLoyer;
     LocalDate dateDebutMoisAppelLoyer;
     LocalDate dateFinMoisAppelLoyer;
+    String periodeLettre;
+    String moisUniquementLettre;
     int anneeAppelLoyer;
     int moisChiffreAppelLoyer;
     String descAppelLoyer;
