@@ -26,6 +26,6 @@ public class EmailController {
     final EmailService emailService;
 
     public ResponseEntity<Boolean> sendMailWithAttachment(@RequestBody EmailRequestDto dto) {
-        return ResponseEntity.ok(emailService.sendMailWithAttachment(dto.getTo(), dto.getSubject(), dto.getBody(), dto.getFileToAttache()));
+        return ResponseEntity.ok(emailService.sendMailWithAttachment(dto.getPeriode(),dto.getTo(), dto.getSubject(), dto.getBody(), dto.getFileToAttache()));
     }
 }

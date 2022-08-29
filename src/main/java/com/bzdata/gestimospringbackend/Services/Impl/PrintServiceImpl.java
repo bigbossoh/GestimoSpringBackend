@@ -50,23 +50,7 @@ public class PrintServiceImpl implements PrintService {
         return JasperExportManager.exportReportToPdf(print);
     }
 
-    // @Override
-    // public byte[] quittanceLoyerGrouperParPeriode(String periode)
-    // throws FileNotFoundException, JRException, SQLException {
-    // String path = "src/main/resources/templates";
-    // File file =
-    // ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
-    // Map<String, Object> parameters = new HashMap<>();
-    // parameters.put("PARAMETER_PERIODE", periode);
-    // JasperReport jasperReport =
-    // JasperCompileManager.compileReport(file.getAbsolutePath());
 
-    // JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters,
-    // dataSourceSQL.getConnection());
-    // JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/" +
-    // periode + ".pdf");
-    // return JasperExportManager.exportReportToPdf(print);
-    // }
 
     @Override
     public byte[] quittancePeriode(String periode)
@@ -110,11 +94,30 @@ public class PrintServiceImpl implements PrintService {
 
     }
 
-    // @Override
-    // public byte[] readQuittance(String periode) throws FileNotFoundException,
-    // JRException, SQLException {
-    // // TODO Auto-generated method stub
-    // return null;
-    // }
-
+    @Override
+    public byte[] quittancePeriodeById(String periode, Long id)
+            throws FileNotFoundException, JRException, SQLException {
+                try {
+                    String path = "src/main/resources/templates";
+                    File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
+                    Map<String, Object> parameters = new HashMap<>();
+                    parameters.put("PARAMETER_PERIODE", periode);
+                    parameters.put("ID_UTILISATEUR", id.toString());
+                    JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+                    File di= new File(path+"/depot_etat");
+                    boolean di1 = di.mkdirs();
+                    if(di1){
+                        System.out.println("Folder is created successfully");
+                     }else{
+                        System.out.println("Error Found!");
+                     }
+                    JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+                    JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode +"_"+id+ ".pdf");
+                    log.info("Le fichier {}",path + "/appel_loyer_du_" + periode + ".pdf");
+                    return JasperExportManager.exportReportToPdf(print);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return null;
+                }
+    }
 }

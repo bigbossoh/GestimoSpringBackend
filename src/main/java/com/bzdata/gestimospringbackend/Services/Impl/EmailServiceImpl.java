@@ -2,9 +2,15 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import com.bzdata.gestimospringbackend.Services.EmailService;
 
@@ -29,24 +35,32 @@ public class EmailServiceImpl implements EmailService {
     final JavaMailSender mailSender;
 
     @Override
-    public boolean sendMailWithAttachment(String to, String subject, String body, String fileToAttache) {
+    public boolean sendMailWithAttachment(String periode,String to, String subject, String body, String fileToAttache) {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
 
             @Override
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-                mimeMessage.setFrom(new InternetAddress("bzdata2021@outlook.com"));
+                mimeMessage.setFrom(new InternetAddress("seve_investissment@outlook.fr"));
                 mimeMessage.setSubject(subject);
-                mimeMessage.setText(body);
-
-                FileSystemResource file = new FileSystemResource(new File(fileToAttache));
-                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-                helper.addAttachment("quittance.pdf", file);
+                //mimeMessage.setText(body);
+                File file = new File(fileToAttache);
+                log.info("****** Le fichier a envoyer ***** {}",file);
+                Multipart multipart = new MimeMultipart();
+                MimeBodyPart textBodyPart = new MimeBodyPart();
+                textBodyPart.setText(body);
+                MimeBodyPart attachementBodyPart = new MimeBodyPart();
+                DataSource source = new FileDataSource(file);
+                attachementBodyPart.setDataHandler(new DataHandler(source));
+                attachementBodyPart.setFileName("Quittance du mois de "+periode+".pdf");
+                multipart.addBodyPart(textBodyPart);
+                multipart.addBodyPart(attachementBodyPart);
+                mimeMessage.setContent(multipart);
             }
 
         };
         try {
-            System.out.println("*************** send mails**********");
+            System.out.println("*************** send mails for Test **********");
             mailSender.send(preparator);
             log.info("Le send mail {}", preparator);
             System.out.println("***************  end send mails**********");
