@@ -4,9 +4,8 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
+
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import org.springframework.http.ResponseEntity;
@@ -60,6 +59,18 @@ public class AppelLoyersController {
     public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode) {
         log.info("Find Appel by periode {}", periode);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode));
+    }
+    @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllPeriodeByAnnee/{annee}")
+    public ResponseEntity<List<String>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee) {
+        log.info("Find Appelperiode by annee {}", annee);
+        return ResponseEntity.ok(appelLoyerService.listOfPerodesByAnnee(annee));
+    }
+    @Operation(summary = "Trouver toutes les années appels loyers ", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/listOfDistinctAnneeAppel")
+    public ResponseEntity<List<Integer>> listOfDistinctAnneeAppel() {
+        log.info("Find liste des annees Appel periode.");
+        return ResponseEntity.ok(appelLoyerService.listOfDistinctAnnee());
     }
 
     @Operation(summary = "Lister tous les appels de BD", security = @SecurityRequirement(name = "bearerAuth"))

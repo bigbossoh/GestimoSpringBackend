@@ -3,16 +3,16 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -92,6 +92,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             LocalDate start = initial.withDayOfMonth(1);
             LocalDate datePaiementPrevu = initial.withDayOfMonth(10);
             LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
+
+            YearMonth ym = YearMonth.from( start ) ;
+           DateTimeFormatter f = DateTimeFormatter.ofPattern( "MMMM uuuu" , Locale.FRANCE ) ;
+            appelLoyer.setPeriodeLettre( ym.format( f )) ;
+            DateTimeFormatter mois = DateTimeFormatter.ofPattern( "MMMM" , Locale.FRANCE ) ;
+            appelLoyer.setMoisUniquementLettre( ym.format( mois));
+
             appelLoyer.setIdAgence(dto.getIdAgence());
             appelLoyer.setPeriodeAppelLoyer(period.toString());
             appelLoyer.setStatusAppelLoyer("Impayé");
@@ -100,6 +107,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             appelLoyer.setDateFinMoisAppelLoyer(end);
             appelLoyer.setAnneeAppelLoyer(period.getYear());
             appelLoyer.setMoisChiffreAppelLoyer(period.getMonthValue());
+
             appelLoyer.setDescAppelLoyer("Appel groupé");
             appelLoyer.setSoldeAppelLoyer(dto.getMontantLoyerEnCours());
             List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
@@ -149,6 +157,30 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Integer> listOfDistinctAnnee() {
+        List<Integer> collectAnneAppelDistinct = appelLoyerRepository
+                .findAll()
+                .stream()
+                .map(AppelLoyer::getAnneeAppelLoyer)
+                .distinct()
+                .collect(Collectors.toList());
+        return collectAnneAppelDistinct;
+
+    }
+
+    @Override
+    public List<String> listOfPerodesByAnnee(Integer annee) {
+        List<String> collectPeriodeDistinct = appelLoyerRepository
+                .findAll()
+                .stream()
+                .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer()==annee)
+                .map(AppelLoyer::getPeriodeLettre)
+                .distinct()
+                .collect(Collectors.toList());
+
+        return collectPeriodeDistinct;
+    }
 
 
     @Override
@@ -178,4 +210,6 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 .map(AppelLoyerDto::fromEntity)
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -21,7 +21,8 @@ public class UserPrincipal implements UserDetails {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
-
+//    public  Long getIdCreateur()
+//    {return  this.utilisateur.getUserCreate().getId();}
     public Long getIdAgence() {
         return this.utilisateur.getIdAgence();
     }

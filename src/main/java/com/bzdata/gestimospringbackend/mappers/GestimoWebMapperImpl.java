@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.mappers;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
+import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.Models.*;
 
@@ -57,7 +58,9 @@ public class GestimoWebMapperImpl {
         if(bienImmobilier == null)
             throw new EntityNotFoundException("Bien immobilier from GestimoMapper not found", ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
         appelLoyersFactureDto.setAbrvBienimmobilier(bienImmobilier.getAbrvBienimmobilier());
-        appelLoyersFactureDto.setBienImmobilierFullName(bienImmobilier.getNomBien());
+        StringBuilder str = new StringBuilder(bienImmobilier.getNomBien());
+        str.delete(0,14);
+        appelLoyersFactureDto.setBienImmobilierFullName(str.toString());
         //Bail
         BailLocation bailLocation=bailLocationRepository.findById(appelLoyer.getBailLocationAppelLoyer().getId()).orElse(null);
         if(bailLocation==null)
@@ -79,7 +82,11 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto.setGenrePropietaire(utilisateur.getGenre());
         return appelLoyersFactureDto;
     }
-
+    public AnneeAppelLoyersDto fromAppelLoyerForAnnee(AppelLoyer appelLoyer){
+        AnneeAppelLoyersDto anneeAppelLoyersDto=new AnneeAppelLoyersDto();
+        BeanUtils.copyProperties(appelLoyer,anneeAppelLoyersDto);
+        return anneeAppelLoyersDto;
+    }
 
     public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO){
         AgenceImmobiliere agenceImmo= new AgenceImmobiliere();

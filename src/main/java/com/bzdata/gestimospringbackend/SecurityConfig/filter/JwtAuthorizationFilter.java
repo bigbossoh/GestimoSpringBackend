@@ -38,6 +38,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
       //  log.info("incomming request {}",request.getRequestURI());
 
         Claim idAgence = null;
+        //Claim idCreateur=null;
         if(request.getMethod().equalsIgnoreCase(OPTIONS_HTTP_METHOD)){
             response.setStatus(OK.value());
         }else{
@@ -51,6 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             String username=jwtTokenProvider.getSubject(token);
             log.info("we are take the token {}",token);
             idAgence = jwtTokenProvider.extractIdAgnece(token);
+          //  idCreateur= jwtTokenProvider.extractIdCreateur(token);
            log.info("idAgence {}",idAgence);
             if(jwtTokenProvider.isTokenValid(username,token) &&
                     SecurityContextHolder.getContext().getAuthentication()==null){
@@ -65,7 +67,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
         }
         MDC.put("idAgence",idAgence.toString());
-//        log.info("get MDC {} and {}",MDC.get("idAgence"),idAgence.toString());
+       // MDC.put("idCreateur",idCreateur.toString());
+     //  log.info("get MDC {} and {}",MDC.get("idCreateur"),idCreateur.toString());
        // log.info("nothing has been done {}, {}", request,response);
         filterChain.doFilter(request,response);
     }

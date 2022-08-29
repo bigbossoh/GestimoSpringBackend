@@ -42,6 +42,7 @@ public class JWTTokenProvider {
                 .withIssuedAt(new Date())
                 .withSubject(userPrincipal.getUsername())
                 .withClaim("idAgence",userPrincipal.getIdAgence())
+//                .withClaim("idCreateur",userPrincipal.getIdCreateur())
                 .withArrayClaim(AUTHORITIES,claims)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(secret.getBytes()));
@@ -70,15 +71,13 @@ public class JWTTokenProvider {
     //
     public Claim extractIdAgnece(String token) {
         JWTVerifier verifier=getJWTVerifier();
-//        log.info("extractIdAgnece {}", verifier.verify(token).getClaim("idAgence"));
-
         return verifier.verify(token).getClaim("idAgence");
 
-//        final Claims claims = extractAllClaims(token);
-//
-//        return claims.get("idEntreprise", String.class);
     }
-    //
+//    public Claim extractIdCreateur(String token) {
+//        JWTVerifier verifier=getJWTVerifier();
+//        return verifier.verify(token).getClaim("idCreateur");
+//    }
 
     private boolean isTokenExpired(JWTVerifier verifier, String token) {
         Date expiration=verifier.verify(token).getExpiresAt();
