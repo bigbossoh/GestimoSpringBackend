@@ -31,7 +31,8 @@ public class AppelLoyersFactureDto {
     String nomLocataire;
     String prenomLocataire;
     String genreLocataire;
-    //Agence
+    String mailLocataire;
+      //Agence
     String nomAgence;
     String telAgence;
     String compteContribuableAgence;
@@ -47,6 +48,7 @@ public class AppelLoyersFactureDto {
     String nomPropietaire;
     String prenomPropietaire;
     String genrePropietaire;
+    String mailProprietaire;
     //BailLocation
     String abrvCodeBail;
     double nouveauMontantLoyer;
