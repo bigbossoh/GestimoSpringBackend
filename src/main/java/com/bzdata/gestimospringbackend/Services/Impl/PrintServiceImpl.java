@@ -2,7 +2,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -75,6 +74,7 @@ public class PrintServiceImpl implements PrintService {
             File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
+            parameters.put("NOM_PROPRIO", "N'GOUAN GEREMI");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di= new File(path+"/depot_etat");
             boolean di1 = di.mkdirs();
@@ -85,7 +85,7 @@ public class PrintServiceImpl implements PrintService {
              }
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-            log.info("Le fichier {}",path + "/appel_loyer_du_" + periode + ".pdf");
+            log.info("Le fichier {}",path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -103,6 +103,7 @@ public class PrintServiceImpl implements PrintService {
                     Map<String, Object> parameters = new HashMap<>();
                     parameters.put("PARAMETER_PERIODE", periode);
                     parameters.put("ID_UTILISATEUR", id.toString());
+                    parameters.put("NOM_PROPRIO", "N'GOUAN GEREMI");
                     JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
                     File di= new File(path+"/depot_etat");
                     boolean di1 = di.mkdirs();
@@ -113,7 +114,7 @@ public class PrintServiceImpl implements PrintService {
                      }
                     JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
                     JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode +"_"+id+ ".pdf");
-                    log.info("Le fichier {}",path + "/appel_loyer_du_" + periode + ".pdf");
+                    log.info("Le fichier {}",path + "/appel_loyer_du_" + periode  +"_"+id+".pdf");
                     return JasperExportManager.exportReportToPdf(print);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());

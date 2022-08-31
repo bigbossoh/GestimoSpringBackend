@@ -1,12 +1,11 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-
-import java.util.List;
 
 public interface AppelLoyerService {
 
