@@ -96,7 +96,6 @@ public class GestimoSpringBackendApplication {
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
             AgenceImmobiliereRepository agenceImmobiliereRepository,
-            EmailService emailService,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
 
@@ -104,11 +103,7 @@ public class GestimoSpringBackendApplication {
         Pays pays = new Pays();
 
         return (args) -> {
-            // TEST SEND MAIL TO ME
-            boolean enoyer = emailService.sendMailWithAttachment("septembre 2022","bossohpaulin@gmail.com", "test envoi quittance",
-                    " Bonjour messieur zrangus, comment vas-tu",
-                    "src/main/resources/templates/depot_etat/appel_loyer_du_2022-09.pdf");
-            System.out.println(enoyer);
+
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");
