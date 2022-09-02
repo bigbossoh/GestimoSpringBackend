@@ -1,16 +1,11 @@
 package com.bzdata.gestimospringbackend.mappers;
 
-import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
-import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
-import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
-import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
-import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
+import com.bzdata.gestimospringbackend.repository.*;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.BeanUtils;
@@ -24,6 +19,7 @@ public class GestimoWebMapperImpl {
     private final BienImmobilierRepository bienImmobilierRepository;
     private final BailLocationRepository bailLocationRepository;
     private final UtilisateurRepository utilisateurRepository;
+    private final AppelLoyerRepository appelLoyerRepository;
 
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto){
         AppelLoyer appelLoyer= new AppelLoyer();
@@ -39,6 +35,7 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto.setPrenomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
         appelLoyersFactureDto.setNomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
         appelLoyersFactureDto.setGenreLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getGenre());
+        appelLoyersFactureDto.setEmailLocatire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getEmail());
         //AGENCE
         AgenceImmobiliere agenceImmobiliere=agenceImmobiliereRepository.findById(appelLoyer.getIdAgence()).orElse(null);
         if(agenceImmobiliere==null)
@@ -87,7 +84,6 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(appelLoyer,anneeAppelLoyersDto);
         return anneeAppelLoyersDto;
     }
-
     public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO){
         AgenceImmobiliere agenceImmo= new AgenceImmobiliere();
         BeanUtils.copyProperties(agenceImmobilierDTO,agenceImmo);
@@ -98,6 +94,22 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(agenceImmobilier,agenceImmoDTO);
         return  agenceImmoDTO;
 
+    }
+    public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto){
+        EncaissementPrincipal encaissementPrincipal=new EncaissementPrincipal();
+        BeanUtils.copyProperties(encaissementPayloadDto,encaissementPrincipal);
+        // Information sur l'appel loyer
+        AppelLoyer appelLoyer=appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
+        if(appelLoyer==null)
+            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
+        encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
+        return encaissementPrincipal;
+    }
+    public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal){
+        EncaissementPrincipalDTO encaissementPrincipalDTO= new EncaissementPrincipalDTO();
+        BeanUtils.copyProperties(encaissementPrincipal,encaissementPrincipalDTO);
+        encaissementPrincipalDTO.setAppelLoyersFactureDto(fromAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement()));
+        return encaissementPrincipalDTO;
     }
 
 }

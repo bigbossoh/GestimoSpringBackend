@@ -27,12 +27,12 @@ public class AppelLoyersFactureDto {
     double montantBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
-    //Locataire
+    // Locataire
     String nomLocataire;
     String prenomLocataire;
     String genreLocataire;
-    String mailLocataire;
-      //Agence
+    String emailLocatire;
+    // Agence
     String nomAgence;
     String telAgence;
     String compteContribuableAgence;
@@ -41,17 +41,16 @@ public class AppelLoyersFactureDto {
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;
-    //Bien Immobilier
+    // Bien Immobilier
     String bienImmobilierFullName;
     String abrvBienimmobilier;
-    //Proprietaire
+    // Proprietaire
     String nomPropietaire;
     String prenomPropietaire;
     String genrePropietaire;
     String mailProprietaire;
-    //BailLocation
+    // BailLocation
     String abrvCodeBail;
     double nouveauMontantLoyer;
-
 
 }

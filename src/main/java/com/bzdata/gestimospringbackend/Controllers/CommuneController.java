@@ -33,6 +33,13 @@ import lombok.extern.slf4j.Slf4j;
 public class CommuneController {
     final CommuneService communeService;
 
+
+    @PostMapping("/save")
+    @Operation(summary = "Creation et mise à jour d'une Commune", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<CommuneRequestDto> saveCommune(@RequestBody CommuneRequestDto dto) {
+        log.info("We are going to save a new Commune {}", dto);
+        return ResponseEntity.ok(communeService.save(dto));
+    }
     // SUPPRESSION D'UNE COMMUNE
     @Operation(summary = "Suppression d'une Commune avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
@@ -41,12 +48,7 @@ public class CommuneController {
         return ResponseEntity.ok(communeService.delete(id));
     }
 
-    @PostMapping("/save")
-    @Operation(summary = "Creation et mise à jour d'une Commune", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<CommuneRequestDto> saveCommune(@RequestBody CommuneRequestDto dto) {
-        log.info("We are going to save a new Commune {}", dto);
-        return ResponseEntity.ok(communeService.save(dto));
-    }
+
 
     // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Communes", security = @SecurityRequirement(name = "bearerAuth"))
