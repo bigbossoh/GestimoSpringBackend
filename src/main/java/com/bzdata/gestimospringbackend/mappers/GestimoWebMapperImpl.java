@@ -36,6 +36,7 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto.setNomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
         appelLoyersFactureDto.setGenreLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getGenre());
         appelLoyersFactureDto.setEmailLocatire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getEmail());
+        appelLoyersFactureDto.setIdLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getId());
         //AGENCE
         AgenceImmobiliere agenceImmobiliere=agenceImmobiliereRepository.findById(appelLoyer.getIdAgence()).orElse(null);
         if(agenceImmobiliere==null)
