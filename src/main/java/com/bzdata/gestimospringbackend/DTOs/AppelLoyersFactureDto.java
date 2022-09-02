@@ -32,6 +32,7 @@ public class AppelLoyersFactureDto {
     String prenomLocataire;
     String genreLocataire;
     String emailLocatire;
+    Long idLocataire;
     // Agence
     String nomAgence;
     String telAgence;
