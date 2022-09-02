@@ -52,7 +52,7 @@ public class PrintServiceImpl implements PrintService {
 
 
     @Override
-    public byte[] quittancePeriode(String periode)
+    public byte[] quittancePeriode(String periode,String proprio)
             throws FileNotFoundException, JRException, SQLException {
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");

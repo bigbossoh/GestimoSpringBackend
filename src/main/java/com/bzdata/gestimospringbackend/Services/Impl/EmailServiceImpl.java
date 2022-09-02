@@ -89,12 +89,12 @@ public class EmailServiceImpl implements EmailService {
 
         try {
             for (int i = 0; i < listDesLocataireAppel.size(); i++) {
-                this.printService.quittancePeriodeById(periode, listDesLocataireAppel.get(i).getId());
-                System.out.println(" Les quittance par ID sont : "+periode+"****"+"");
+                this.printService.quittancePeriodeById(periode, listDesLocataireAppel.get(i).getIdLocataire());
+                System.out.println(" Les quittance par ID sont : "+periode+"** Locatire ID **"+listDesLocataireAppel.get(i).getIdLocataire()+" *** Nom ***"+listDesLocataireAppel.get(i).getNomLocataire());
                 this.sendMailWithAttachment(periode, "astairenazaire@gmail.com", "Envoi de Quittance groupé",
                         "Bonjour Bonsieur " + i,
                         "src/main/resources/templates/depot_etat/appel_loyer_du_" + periode + "_"
-                                + listDesLocataireAppel.get(i).getId() + ".pdf");
+                                +  listDesLocataireAppel.get(i).getIdLocataire() + ".pdf");
                 System.out.println(i);
             }
             return true;
@@ -109,14 +109,15 @@ public class EmailServiceImpl implements EmailService {
     public boolean sendMailQuittanceWithAttachment(Long id) {
         AppelLoyersFactureDto factureLocataire = this.appelLoyerService.findById(id);
         try {
-            this.printService.quittancePeriodeById(factureLocataire.getPeriodeAppelLoyer(), factureLocataire.getId());
+            log.info("facture du du client {} ", factureLocataire);
+            this.printService.quittancePeriodeById(factureLocataire.getPeriodeAppelLoyer(), factureLocataire.getIdLocataire());
             this.sendMailWithAttachment(factureLocataire.getPeriodeAppelLoyer(), "astairenazaire@gmail.com",
                     "Envoi de Quittance groupé",
                     "Bonjour,  " + factureLocataire.getNomLocataire() + " " + factureLocataire.getPrenomLocataire(),
                     "src/main/resources/templates/depot_etat/appel_loyer_du_" + factureLocataire.getPeriodeAppelLoyer()
                             + "_"
-                            + factureLocataire.getId() + ".pdf");
-            System.out.println(factureLocataire.getId() + "-" + factureLocataire.getNomLocataire() + " "
+                            + factureLocataire.getIdLocataire() + ".pdf");
+            System.out.println(factureLocataire.getIdLocataire() + "-" + factureLocataire.getNomLocataire() + " "
                     + factureLocataire.getPrenomLocataire());
             return true;
         } catch (Exception e) {
