@@ -90,6 +90,7 @@ public class EmailServiceImpl implements EmailService {
         try {
             for (int i = 0; i < listDesLocataireAppel.size(); i++) {
                 this.printService.quittancePeriodeById(periode, listDesLocataireAppel.get(i).getId());
+                System.out.println(" Les quittance par ID sont : "+periode+"****"+"");
                 this.sendMailWithAttachment(periode, "astairenazaire@gmail.com", "Envoi de Quittance groupé",
                         "Bonjour Bonsieur " + i,
                         "src/main/resources/templates/depot_etat/appel_loyer_du_" + periode + "_"
