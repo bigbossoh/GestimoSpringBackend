@@ -27,4 +27,6 @@ public interface AppelLoyerService {
     List<String> listOfPerodesByAnnee(Integer annee);
 
     List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
+
+    List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
 }

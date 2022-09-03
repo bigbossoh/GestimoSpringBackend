@@ -11,14 +11,14 @@ public class Interceptor extends EmptyInterceptor {
   @Override
   @Bean
   public String onPrepareStatement(String sql) {
-    log.info("the sql incoming request is : {}", sql);
+   // log.info("the sql incoming request is : {}", sql);
     if (StringUtils.hasLength(sql) && sql.toLowerCase().startsWith("select") && (MDC.get("idAgence")!=null)) {
       // select utilisateu0_.
       final String entityName = sql.substring(7, sql.indexOf("."));
 
       final String idAgence = MDC.get("idAgence");
 
-      log.info("entityName {} and idAgence {}",entityName,idAgence);
+    //  log.info("entityName {} and idAgence {}",entityName,idAgence);
       if (StringUtils.hasLength(entityName)
               &&
               !idAgence.toLowerCase().contains("1001")
@@ -35,6 +35,8 @@ public class Interceptor extends EmptyInterceptor {
               && !entityName.toLowerCase().contains("quartier")
               && !entityName.toLowerCase().contains("site")
               && !entityName.toLowerCase().contains("immeuble")
+              && !entityName.toLowerCase().contains("montantloy")
+              && !entityName.toLowerCase().contains("encaissement_princi")
           && !entityName.toLowerCase().contains("studio")
           && !entityName.toLowerCase().contains("appartemen")
               && !entityName.toLowerCase().contains("appelloye")
@@ -46,10 +48,10 @@ public class Interceptor extends EmptyInterceptor {
         } else {
           sql = sql + " where " + entityName + ".id_agence = " + idAgence;
         }
-        log.info("on va append la clause where into the request {}",sql);
+       // log.info("on va append la clause where into the request {}",sql);
       }
       else {
-        log.info("We are not apped the where clause {}",sql);
+        //log.info("We are not apped the where clause {}",sql);
         return super.onPrepareStatement(sql);
       }
     }

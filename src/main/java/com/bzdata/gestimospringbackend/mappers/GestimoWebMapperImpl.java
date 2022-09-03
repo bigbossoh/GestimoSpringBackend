@@ -24,13 +24,17 @@ public class GestimoWebMapperImpl {
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto){
         AppelLoyer appelLoyer= new AppelLoyer();
         BeanUtils.copyProperties(appelLoyersFactureDto,appelLoyer);
+        BailLocation bail= new BailLocation();
+        bail=bailLocationRepository.findById(appelLoyersFactureDto.getIdBailLocation()).orElse(null);
+        if(bail!=null)
+        appelLoyer.setBailLocationAppelLoyer(bail);
          return appelLoyer;
     }
     public AppelLoyersFactureDto fromAppelLoyer(AppelLoyer appelLoyer) {
         AppelLoyersFactureDto appelLoyersFactureDto= new AppelLoyersFactureDto();
         BeanUtils.copyProperties(appelLoyer,appelLoyersFactureDto);
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
-         appelLoyer.setMontantBailLPeriode(appelLoyer.getBailLocationAppelLoyer().getMontantCautionBail());
+
       //LOCATAIRE
         appelLoyersFactureDto.setPrenomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
         appelLoyersFactureDto.setNomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
@@ -63,8 +67,16 @@ public class GestimoWebMapperImpl {
         BailLocation bailLocation=bailLocationRepository.findById(appelLoyer.getBailLocationAppelLoyer().getId()).orElse(null);
         if(bailLocation==null)
             throw new EntityNotFoundException("bail from GestimoMapper not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
+        appelLoyersFactureDto.setIdBailLocation(bailLocation.getId());
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
         appelLoyersFactureDto.setNouveauMontantLoyer(bailLocation
+                .getMontantLoyerBail()
+                .stream()
+                .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
+                .findFirst()
+                .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
+                .orElse(null));
+        appelLoyer.setMontantLoyerBailLPeriode(bailLocation
                 .getMontantLoyerBail()
                 .stream()
                 .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)

@@ -24,7 +24,7 @@ public class AppelLoyersFactureDto {
     int anneeAppelLoyer;
     int moisChiffreAppelLoyer;
     String descAppelLoyer;
-    double montantBailLPeriode;
+    double montantLoyerBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
     // Locataire
@@ -51,6 +51,7 @@ public class AppelLoyersFactureDto {
     String genrePropietaire;
     String mailProprietaire;
     // BailLocation
+    Long idBailLocation;
     String abrvCodeBail;
     double nouveauMontantLoyer;
 

@@ -8,8 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 public interface EncaissementPrincipalService {
-    EncaissementPrincipalDTO saveEncaissement(EncaissementPayloadDto dto);
+    boolean saveEncaissement(EncaissementPayloadDto dto);
     List<EncaissementPrincipalDTO> findAllEncaissement();
+    double getTotalEncaissementByIdAppelLoyer(Long idAppelLoyer);
     EncaissementPrincipalDTO findEncaissementById(Long id);
     List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id);
     List<EncaissementPrincipalDTO> findAllEncaissementByIdLocataire(Long id);
