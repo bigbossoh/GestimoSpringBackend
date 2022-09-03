@@ -40,11 +40,17 @@ public class AppelLoyersController {
         return ResponseEntity.ok(appelLoyerService.save(dto));
     }
 
-    @Operation(summary = "Trouver un Quartier par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Trouver un appel loyer par son ID Bail", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAppelsByIdBail/{id}")
     public ResponseEntity<List<AppelLoyerDto>> listDesLoyersParBail(@PathVariable("id") Long id) {
         log.info("Find Appel by ID Bail {}", id);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByBailId(id));
+    }
+    @Operation(summary = "Trouver un appel loyer impayé par son ID Bail", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAppelsImpayerByIdBail/{id}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> listDesLoyersImpayerParBail(@PathVariable("id") Long id) {
+        log.info("Find Appel by ID Bail {}", id);
+        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerImpayerByBailId(id));
     }
 
     @Operation(summary = "Trouver un appel loyer par son ID", security = @SecurityRequirement(name = "bearerAuth"))

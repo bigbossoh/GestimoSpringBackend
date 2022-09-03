@@ -33,7 +33,7 @@ public class AppelLoyer extends AbstractEntity {
     int moisChiffreAppelLoyer;
     String moisUniquementLettre;
     String descAppelLoyer;
-    double montantBailLPeriode;
+    double montantLoyerBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
 

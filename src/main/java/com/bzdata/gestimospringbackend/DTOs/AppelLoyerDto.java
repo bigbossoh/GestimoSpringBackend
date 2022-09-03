@@ -41,7 +41,7 @@ public class AppelLoyerDto {
                 .anneeAppelLoyer(appelLoyer.getAnneeAppelLoyer())
                 .moisChiffreAppelLoyer(appelLoyer.getMoisChiffreAppelLoyer())
                 .descAppelLoyer(appelLoyer.getDescAppelLoyer())
-                .montantBailLPeriode(appelLoyer.getMontantBailLPeriode())
+                .montantBailLPeriode(appelLoyer.getMontantLoyerBailLPeriode())
                 .bailLocationAppelLoyer(appelLoyer.getBailLocationAppelLoyer().getId())
                 .soldeAppelLoyer(appelLoyer.getSoldeAppelLoyer())
                 .isSolderAppelLoyer(appelLoyer.isSolderAppelLoyer())

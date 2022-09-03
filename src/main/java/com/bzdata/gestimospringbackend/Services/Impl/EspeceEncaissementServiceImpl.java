@@ -68,7 +68,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
 
         EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
         // calcul des soldes
-        soldeLoyer = appelLoyer.getMontantBailLPeriode() - dto.getMontantEncaissement();
+        soldeLoyer = appelLoyer.getMontantLoyerBailLPeriode() - dto.getMontantEncaissement();
         appelLoyer.setSoldeAppelLoyer(soldeLoyer);
         if (soldeLoyer == 0) {
             appelLoyer.setSolderAppelLoyer(true);

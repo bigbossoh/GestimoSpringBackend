@@ -12,12 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
 public class EncaissementPrincipalDTO {
     private Long id;
     private Long idAgence;
+    private Instant creationDate;
     private Long idCreateur;
     private ModePaiement modePaiement;
     private OperationType operationType;
