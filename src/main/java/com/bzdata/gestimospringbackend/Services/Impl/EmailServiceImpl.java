@@ -20,9 +20,7 @@ import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.EmailService;
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +66,6 @@ public class EmailServiceImpl implements EmailService {
                 multipart.addBodyPart(attachementBodyPart);
                 mimeMessage.setContent(multipart);
             }
-
         };
         try {
             System.out.println("*************** send mails for Test **********");
