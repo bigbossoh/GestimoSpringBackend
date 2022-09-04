@@ -20,6 +20,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 
@@ -52,6 +53,11 @@ public class ImmeubleController {
         return ResponseEntity.ok(immeubleService.findAll());
     }
 
+    @Operation(summary = "Liste de tous les Immeubles avec leur proprietaire ", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/affichetoutlesimmeubles")
+    public ResponseEntity<List<ImmeubleAfficheDto>> affichageDesImmeubles() {
+        return ResponseEntity.ok(immeubleService.findAllPourAffichageImmeuble());
+    }
     @Operation(summary = "Trouver une Immeuble par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<ImmeubleDto> findImmeubleByID(@PathVariable("id") Long id) {

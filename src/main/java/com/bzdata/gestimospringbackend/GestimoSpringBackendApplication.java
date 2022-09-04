@@ -19,7 +19,6 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
-import com.bzdata.gestimospringbackend.Services.EmailService;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;

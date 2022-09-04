@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.EtageAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
@@ -11,6 +12,7 @@ import com.bzdata.gestimospringbackend.Services.EtageService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.validator.EtageDtoValidator;
@@ -33,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageServiceImpl implements EtageService {
     final EtageRepository etageRepository;
-
+    final GestimoWebMapperImpl gestimoWebMapperImpl;
     final ImmeubleRepository immeubleRepository;
 
     @Override
@@ -97,7 +99,7 @@ public class EtageServiceImpl implements EtageService {
 
     @Override
     public List<EtageDto> findAll() {
-        return etageRepository.findAll(Sort.by(Direction.ASC, "nomEtage")).stream()
+        return etageRepository.findAll().stream()
                 .map(EtageDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -141,6 +143,23 @@ public class EtageServiceImpl implements EtageService {
 
         return etageRepository.findByImmeuble(immeuble).stream()
                 .map(EtageDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EtageAfficheDto> affichageDesEtageParImmeuble(Long id) {
+        log.info("We are going to get back the Etage By {}", id);
+        if (id == null || id == 0) {
+            log.error("you are not provided a Etage.");
+            return null;
+        }
+        Immeuble immeuble = immeubleRepository.findById(id)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Impossible de trouver l'immeuble.",
+                        ErrorCodes.IMMEUBLE_NOT_FOUND));
+
+        return etageRepository.findByImmeuble(immeuble).stream()
+                .map(gestimoWebMapperImpl::fromEtage)
                 .collect(Collectors.toList());
     }
 

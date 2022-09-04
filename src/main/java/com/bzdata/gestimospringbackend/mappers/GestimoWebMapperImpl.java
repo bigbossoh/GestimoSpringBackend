@@ -20,6 +20,7 @@ public class GestimoWebMapperImpl {
     private final BailLocationRepository bailLocationRepository;
     private final UtilisateurRepository utilisateurRepository;
     private final AppelLoyerRepository appelLoyerRepository;
+    private final EtageRepository etageRepository;
 
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto){
         AppelLoyer appelLoyer= new AppelLoyer();
@@ -125,4 +126,39 @@ public class GestimoWebMapperImpl {
         return encaissementPrincipalDTO;
     }
 
+    public ImmeubleAfficheDto fromImmeuble(Immeuble immeuble) {
+        ImmeubleAfficheDto immeubleAfficheDto = new ImmeubleAfficheDto();
+        BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
+        Bienimmobilier bien = bienImmobilierRepository.findById(immeuble.getId()).orElse(null);
+        if (bien == null)
+            throw new EntityNotFoundException("Bien immobiier from GestimoMapper not found",
+                    ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
+
+        immeubleAfficheDto.setNomPropio(bien.getUtilisateur().getNom());
+        immeubleAfficheDto.setPrenomProprio(bien.getUtilisateur().getPrenom());
+        return immeubleAfficheDto;
+
+    }
+
+    public Immeuble fromImmeubleDTO(ImmeubleAfficheDto immeubleAfficheDto) {
+        Immeuble immeuble = new Immeuble();
+        BeanUtils.copyProperties(immeubleAfficheDto, immeuble);
+        return immeuble;
+
+    }
+
+    //MAPPER DES ETAGES
+    public EtageAfficheDto fromEtage(Etage etage) {
+        EtageAfficheDto etageAfficheDto = new EtageAfficheDto();
+        BeanUtils.copyProperties(etage, etageAfficheDto);
+        Etage etageFound = etageRepository.findById(etage.getId()).orElse(null);
+        if (etageFound == null)
+            throw new EntityNotFoundException("Etage from GestimoMapper not found",
+                    ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
+
+        etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateur().getNom());
+        etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateur().getNom());
+        return etageAfficheDto;
+
+    }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
 import com.bzdata.gestimospringbackend.Models.Site;
@@ -12,6 +13,7 @@ import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -38,7 +40,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     final SiteRepository siteRepository;
     final ImmeubleRepository immeubleRepository;
     final UtilisateurRepository utilisateurRepository;
-
+    final GestimoWebMapperImpl gestimoWebMapperImpl;
     @Override
     public ImmeubleDto save(ImmeubleDto dto) {
 
@@ -192,6 +194,15 @@ public class ImmeubleServiceImpl implements ImmeubleService {
         return immeubleRepository.findBySite(site).stream()
                 .map(ImmeubleDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ImmeubleAfficheDto> findAllPourAffichageImmeuble() {
+
+        return immeubleRepository.findAll(Sort.by(Direction.ASC, "descriptionImmeuble")).stream()
+                .map(gestimoWebMapperImpl::fromImmeuble)
+                .collect(Collectors.toList());
+        
     }
 
 }
