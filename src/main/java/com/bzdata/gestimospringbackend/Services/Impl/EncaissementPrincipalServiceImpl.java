@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
@@ -22,9 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -108,12 +107,14 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
     }
 
     @Override
-    public List<EncaissementPrincipalDTO> findAllEncaissement() {
+    public boolean saveEncaissementMasse(List<EncaissementPayloadDto> dtos) {
+        return false;
+    }
 
+    @Override
+    public List<EncaissementPrincipalDTO> findAllEncaissement() {
         Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                 .comparing(EncaissementPrincipal::getCreationDate);
-
-
         return encaissementPrincipalRepository.findAll()
                 .stream()
                 .sorted(compareBydatecreation)
@@ -123,27 +124,31 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
     @Override
     public double getTotalEncaissementByIdAppelLoyer(Long idAppelLoyer) {
-
         List<Double> listeloyerEncaisser = encaissementPrincipalRepository.findAll()
                 .stream()
                 .filter(e -> e.getAppelLoyerEncaissement().getId() == idAppelLoyer)
                 .map(EncaissementPrincipal::getMontantEncaissement)
                 .collect(Collectors.toList());
-
         Double sum = listeloyerEncaisser.stream().mapToDouble(Double::doubleValue).sum();
         System.out.println(sum);
         return sum;
-//                .stream()
-//                .filter(e -> e.getAppelLoyersFactureDto().getId() == idAppelLoyer)
-//                .map(EncaissementPrincipalDTO::getMontantEncaissement)
-//                .mapToDouble(Double::doubleValue).sum();
-
     }
 
     @Override
     public EncaissementPrincipalDTO findEncaissementById(Long id) {
-        return null;
+        log.info("We are going to get back the Encaissement By id {}", id);
+        if (id == null) {
+            log.error("you are not provided a Villa.");
+            return null;
+        }
+        EncaissementPrincipal encaissementPrincipal = encaissementPrincipalRepository.findById(id)
+                .orElseThrow(
+                        () -> new InvalidEntityException("Aucun Studio has been found with Code " + id,
+                                ErrorCodes.ENCAISEMENT_NOT_FOUND));
+        return gestimoWebMapper.fromEncaissementPrincipal(encaissementPrincipal);
     }
+
+
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id) {
@@ -151,8 +156,20 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
     }
 
     @Override
-    public List<EncaissementPrincipalDTO> findAllEncaissementByIdLocataire(Long id) {
-        return null;
+    public List<EncaissementPrincipal> findAllEncaissementByIdLocataire(Long id) {
+        log.info("The locatire Id is {} , le nombre occurence des encaissements est {}", id,encaissementPrincipalRepository.findAll());
+        List<EncaissementPrincipal> listes = new ArrayList<>();
+        for(EncaissementPrincipal encaissementPrincipalDTO : encaissementPrincipalRepository.findAll()){
+            log.info("L'ID des locataire sont : ",encaissementPrincipalDTO.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId());
+            if (encaissementPrincipalDTO.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId()==id) {
+                listes.add(encaissementPrincipalDTO);
+            }
+        }
+        return listes;
+//        return findAllEncaissement()
+//                .stream()
+//                .filter(e-> Objects.equals(e.getAppelLoyersFactureDto().getIdLocataire(), id))
+//                .collect(Collectors.toList());
     }
 
     @Override

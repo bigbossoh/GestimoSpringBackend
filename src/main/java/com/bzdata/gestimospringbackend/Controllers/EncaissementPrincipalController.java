@@ -1,9 +1,7 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
-import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
-import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.DTOs.*;
+import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Services.CommuneService;
 import com.bzdata.gestimospringbackend.Services.EncaissementPrincipalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -47,5 +45,20 @@ public class EncaissementPrincipalController {
     public ResponseEntity<Double> totalencaissementParIdAppelLoyer(@PathVariable("id") Long id) {
         log.info("Find totalencaissement by ID AppelLoyer {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementByIdAppelLoyer(id));
+    }
+    // GET Encaissement BY ID
+    @Operation(summary = "Trouver un encaissement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findByIdEncaissement/{id}")
+    public ResponseEntity<EncaissementPrincipalDTO> findByIdEncaissement(@PathVariable("id") Long id) {
+        log.info("Find by ID{}", id);
+        return ResponseEntity.ok(encaissementPrincipalService.findEncaissementById(id));
+    }
+
+    // GET ALL ENCAISSEMENTS BY IDLOCATAIRE
+    @Operation(summary = "Trouver tous les encaissements par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findAllEncaissementByIdLocatire/{idLocatire}")
+    public ResponseEntity<List<EncaissementPrincipal>> findAllEncaissementByIdLocatire(@PathVariable("idLocatire") Long idLocatire) {
+        log.info("Find by ID {}", idLocatire);
+        return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdLocataire(idLocatire));
     }
 }
