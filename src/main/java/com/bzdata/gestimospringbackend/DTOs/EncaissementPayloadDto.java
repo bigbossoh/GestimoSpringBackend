@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class EncaissementPayloadDto {
+    private Long idAgence;
+    private Long idCreateur;
     private Long idAppelLoyer;
     private ModePaiement modePaiement;
     private OperationType operationType;

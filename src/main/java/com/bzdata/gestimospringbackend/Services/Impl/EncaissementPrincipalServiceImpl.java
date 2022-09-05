@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -70,6 +71,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
@@ -93,6 +96,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantVerser);
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
@@ -147,11 +152,17 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id) {
-        return null;
+
+        return encaissementPrincipalRepository.findAll()
+        .stream()
+        .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getId(), id))
+        .map(gestimoWebMapper::fromEncaissementPrincipal)
+        .collect(Collectors.toList());
     }
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdLocataire(Long id) {
+        findAllEncaissement();
         return null;
     }
 

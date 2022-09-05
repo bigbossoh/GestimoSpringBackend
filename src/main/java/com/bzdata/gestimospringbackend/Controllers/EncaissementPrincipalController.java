@@ -52,4 +52,10 @@ public class EncaissementPrincipalController {
         log.info("Find totalencaissement by ID AppelLoyer {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementByIdAppelLoyer(id));
     }
+    @Operation(summary = "Total des encaissements par IdBienImmobilioer d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/allencaissementByIdBien/{id}")
+    public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(@PathVariable("id") Long id) {
+        log.info(" find All Encaissement By IdBienImmobilier  {}", id);
+        return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdBienImmobilier(id));
+    }
 }
