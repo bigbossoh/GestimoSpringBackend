@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 
 public interface ImmeubleService {
@@ -11,6 +12,8 @@ public interface ImmeubleService {
     boolean delete(Long id);
 
     List<ImmeubleDto> findAll();
+
+    List<ImmeubleAfficheDto> findAllPourAffichageImmeuble();
 
     ImmeubleDto findById(Long id);
 

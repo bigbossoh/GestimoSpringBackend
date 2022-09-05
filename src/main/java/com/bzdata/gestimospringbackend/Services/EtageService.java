@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.EtageAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 
 public interface EtageService {
@@ -17,4 +18,5 @@ public interface EtageService {
     EtageDto findByName(String nom);
 
     List<EtageDto> findAllByIdImmeuble(Long id);
+    List<EtageAfficheDto> affichageDesEtageParImmeuble(Long id);
 }
