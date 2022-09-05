@@ -1,19 +1,13 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-import com.bzdata.gestimospringbackend.Models.AbstractEntity;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import java.time.Instant;
+import java.time.LocalDate;
+
 import com.bzdata.gestimospringbackend.enumeration.EntiteOperation;
 import com.bzdata.gestimospringbackend.enumeration.ModePaiement;
 import com.bzdata.gestimospringbackend.enumeration.OperationType;
-import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToOne;
-import java.time.Instant;
-import java.time.LocalDate;
+import lombok.Data;
 
 @Data
 public class EncaissementPrincipalDTO {

@@ -24,6 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -69,6 +73,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
@@ -92,6 +98,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantVerser);
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
@@ -152,26 +160,23 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id) {
-        return null;
+
+        return encaissementPrincipalRepository.findAll()
+        .stream()
+        .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getId(), id))
+        .map(gestimoWebMapper::fromEncaissementPrincipal)
+        .collect(Collectors.toList());
     }
 
     @Override
-    public List<EncaissementPrincipal> findAllEncaissementByIdLocataire(Long id) {
-        log.info("The locatire Id is {} , le nombre occurence des encaissements est {}", id,encaissementPrincipalRepository.findAll());
-        List<EncaissementPrincipal> listes = new ArrayList<>();
-        for(EncaissementPrincipal encaissementPrincipalDTO : encaissementPrincipalRepository.findAll()){
-            log.info("L'ID des locataire sont : ",encaissementPrincipalDTO.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId());
-            if (encaissementPrincipalDTO.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId()==id) {
-                listes.add(encaissementPrincipalDTO);
-            }
-        }
-        return listes;
-//        return findAllEncaissement()
-//                .stream()
-//                .filter(e-> Objects.equals(e.getAppelLoyersFactureDto().getIdLocataire(), id))
-//                .collect(Collectors.toList());
-    }
+    public List<EncaissementPrincipalDTO> findAllEncaissementByIdLocataire(Long id) {
 
+        return  encaissementPrincipalRepository.findAll()
+        .stream()
+        .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId(), id))
+        .map(gestimoWebMapper::fromEncaissementPrincipal)
+        .collect(Collectors.toList());
+    }
     @Override
     public boolean delete(Long id) {
         return false;

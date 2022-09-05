@@ -7,12 +7,16 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
+@Transactional
 public class GestimoWebMapperImpl {
 
     private final AgenceImmobiliereRepository agenceImmobiliereRepository;
@@ -109,9 +113,12 @@ public class GestimoWebMapperImpl {
         return  agenceImmoDTO;
 
     }
+
     public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto){
         EncaissementPrincipal encaissementPrincipal=new EncaissementPrincipal();
-        BeanUtils.copyProperties(encaissementPayloadDto,encaissementPrincipal);
+        BeanUtils.copyProperties(encaissementPayloadDto, encaissementPrincipal);
+        log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
+
         // Information sur l'appel loyer
         AppelLoyer appelLoyer=appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
         if(appelLoyer==null)
@@ -119,6 +126,7 @@ public class GestimoWebMapperImpl {
         encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
         return encaissementPrincipal;
     }
+
     public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal){
         EncaissementPrincipalDTO encaissementPrincipalDTO= new EncaissementPrincipalDTO();
         BeanUtils.copyProperties(encaissementPrincipal,encaissementPrincipalDTO);
