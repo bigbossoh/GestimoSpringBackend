@@ -112,7 +112,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             appelLoyer.setSoldeAppelLoyer(dto.getMontantLoyerEnCours());
             List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(bailLocation);
             Double montantBail = byBailLocation.stream()
-                    .filter(st -> st.isStatusLoyer() == true)
+                    .filter(MontantLoyerBail::isStatusLoyer)
                     .map(MontantLoyerBail::getNouveauMontantLoyer)
                     .findFirst().orElse(0.0);
             log.info("montantBail {}", montantBail);
@@ -225,20 +225,29 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
     @Override
     public List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation) {
-        BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
-                .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
-                        idBailLocation,
-                        ErrorCodes.BAILLOCATION_NOT_FOUND));
-        List<AppelLoyer> lesLoyers = appelLoyerRepository.findAllByBailLocationAppelLoyer(bailLocation);
-        //first date debut du mois
-        Comparator<AppelLoyer> AppelLoyerByDateDebutAppelLoyer = Comparator.comparing( AppelLoyer::getDateDebutMoisAppelLoyer );
-        return lesLoyers.stream()
-                .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
-                .filter(bail-> !bail.isSolderAppelLoyer())
-                .sorted(AppelLoyerByDateDebutAppelLoyer)
-                .map(gestimoWebMapper::fromAppelLoyer)
-                .collect(Collectors.toList());
+            BailLocation bailLocation = bailLocationRepository.findById(idBailLocation)
+                            .orElseThrow(() -> new InvalidEntityException(
+                                            "Aucun BailMagasin has been found with Code " +
+                                                            idBailLocation,
+                                            ErrorCodes.BAILLOCATION_NOT_FOUND));
+            List<AppelLoyer> lesLoyers = appelLoyerRepository.findAllByBailLocationAppelLoyer(bailLocation);
+            //first date debut du mois
+            Comparator<AppelLoyer> AppelLoyerByDateDebutAppelLoyer = Comparator
+                            .comparing(AppelLoyer::getDateDebutMoisAppelLoyer);
+            return lesLoyers.stream()
+                            .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
+                            .filter(bail -> !bail.isSolderAppelLoyer())
+                            .sorted(AppelLoyerByDateDebutAppelLoyer)
+                            .map(gestimoWebMapper::fromAppelLoyer)
+                            .collect(Collectors.toList());
     }
+
+@Override
+public double soldeArrierer(Long idBailLocation) {
+       
+        return 0;
+}
+
 
 
 }

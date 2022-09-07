@@ -76,6 +76,5 @@ public class EncaissementPrincipalController {
     public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(@PathVariable("id") Long id) {
         log.info(" find All Encaissement By IdBienImmobilier  {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdBienImmobilier(id));
-
     }
 }
