@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
-import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Services.EncaissementPrincipalService;
 
 import org.springframework.http.ResponseEntity;
@@ -40,6 +39,12 @@ public class EncaissementPrincipalController {
     public ResponseEntity<Boolean> saveEncaissement(@RequestBody EncaissementPayloadDto dto) {
         //log.info("We are going to save a new encaissement {}", dto);
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissement(dto));
+    }
+    @PostMapping("/saveencaissementmasse")
+    @Operation(summary = "Creation d'un encaissement e masse", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<Boolean> saveEncaissementMasse(@RequestBody List<EncaissementPayloadDto> dtos) {
+        //log.info("We are going to save a new encaissement {}", dto);
+        return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementMasse(dtos));
     }
     @Operation(summary = "Listés tous les envaissements de lae BD", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllEncaissementPrincipal")

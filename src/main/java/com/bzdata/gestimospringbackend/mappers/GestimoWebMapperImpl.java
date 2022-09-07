@@ -25,7 +25,7 @@ public class GestimoWebMapperImpl {
     private final UtilisateurRepository utilisateurRepository;
     private final AppelLoyerRepository appelLoyerRepository;
     private final EtageRepository etageRepository;
-
+    //AppelLoyer
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto){
         AppelLoyer appelLoyer= new AppelLoyer();
         BeanUtils.copyProperties(appelLoyersFactureDto,appelLoyer);
@@ -102,6 +102,7 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(appelLoyer,anneeAppelLoyersDto);
         return anneeAppelLoyersDto;
     }
+    //AgenceImmobiliere
     public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO){
         AgenceImmobiliere agenceImmo= new AgenceImmobiliere();
         BeanUtils.copyProperties(agenceImmobilierDTO,agenceImmo);
@@ -113,27 +114,7 @@ public class GestimoWebMapperImpl {
         return  agenceImmoDTO;
 
     }
-
-    public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto){
-        EncaissementPrincipal encaissementPrincipal=new EncaissementPrincipal();
-        BeanUtils.copyProperties(encaissementPayloadDto, encaissementPrincipal);
-        log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
-
-        // Information sur l'appel loyer
-        AppelLoyer appelLoyer=appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
-        if(appelLoyer==null)
-            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
-        encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
-        return encaissementPrincipal;
-    }
-
-    public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal){
-        EncaissementPrincipalDTO encaissementPrincipalDTO= new EncaissementPrincipalDTO();
-        BeanUtils.copyProperties(encaissementPrincipal,encaissementPrincipalDTO);
-        encaissementPrincipalDTO.setAppelLoyersFactureDto(fromAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement()));
-        return encaissementPrincipalDTO;
-    }
-
+    //Immeuble
     public ImmeubleAfficheDto fromImmeuble(Immeuble immeuble) {
         ImmeubleAfficheDto immeubleAfficheDto = new ImmeubleAfficheDto();
         BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
@@ -147,14 +128,30 @@ public class GestimoWebMapperImpl {
         return immeubleAfficheDto;
 
     }
-
     public Immeuble fromImmeubleDTO(ImmeubleAfficheDto immeubleAfficheDto) {
         Immeuble immeuble = new Immeuble();
         BeanUtils.copyProperties(immeubleAfficheDto, immeuble);
         return immeuble;
 
     }
-
+    //Encaissement Principal
+    public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto){
+        EncaissementPrincipal encaissementPrincipal=new EncaissementPrincipal();
+        BeanUtils.copyProperties(encaissementPayloadDto, encaissementPrincipal);
+        //log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
+        // Information sur l'appel loyer
+        AppelLoyer appelLoyer=appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
+        if(appelLoyer==null)
+            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
+        encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
+        return encaissementPrincipal;
+    }
+    public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal){
+        EncaissementPrincipalDTO encaissementPrincipalDTO= new EncaissementPrincipalDTO();
+        BeanUtils.copyProperties(encaissementPrincipal,encaissementPrincipalDTO);
+        encaissementPrincipalDTO.setAppelLoyersFactureDto(fromAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement()));
+        return encaissementPrincipalDTO;
+    }
     //MAPPER DES ETAGES
     public EtageAfficheDto fromEtage(Etage etage) {
         EtageAfficheDto etageAfficheDto = new EtageAfficheDto();
