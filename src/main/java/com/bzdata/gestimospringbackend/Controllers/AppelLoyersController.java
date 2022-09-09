@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
@@ -46,6 +47,12 @@ public class AppelLoyersController {
         log.info("Find Appel by ID Bail {}", id);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByBailId(id));
     }
+    @Operation(summary = "Cloture un appel Loyer par rapporta son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/clotureOfAppelDtoByID/{id}")
+    public ResponseEntity<Boolean> deleteAppelDto(@PathVariable("id") Long id) {
+        log.info("cloture de l' Appel by ID Bail {}", id);
+        return ResponseEntity.ok(appelLoyerService.deleteAppelDto(id));
+    }
     @Operation(summary = "Trouver un appel loyer impayé par son ID Bail", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAppelsImpayerByIdBail/{id}")
     public ResponseEntity<List<AppelLoyersFactureDto>> listDesLoyersImpayerParBail(@PathVariable("id") Long id) {
@@ -66,6 +73,7 @@ public class AppelLoyersController {
         log.info("Find Appel by periode {}", periode);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode));
     }
+
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllPeriodeByAnnee/{annee}")
     public ResponseEntity<List<String>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee) {
@@ -91,5 +99,10 @@ public class AppelLoyersController {
         log.info("Liste de tous les appels ");
         return ResponseEntity.ok(appelLoyerService.findAll());
     }
-
+    //    @Operation(summary = "Trouver tous les appels loyers après la date de debut", security = @SecurityRequirement(name = "bearerAuth"))
+//    @GetMapping("/findAllAppelLoyerSuperieurPeriodePourCloture/{dateDebut}")
+//    public ResponseEntity<List<AppelLoyersFactureDto>> findAllAppelLoyerSuperieurPeriodePourCloture(@PathVariable("dateDebut") LocalDate dateDebut) {
+//        log.info("Find Appel by periode {}", dateDebut);
+//        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerSuperieurPeriodePourCloture(dateDebut));
+//    }
 }
