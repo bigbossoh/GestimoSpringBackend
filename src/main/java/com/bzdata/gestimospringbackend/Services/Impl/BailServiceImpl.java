@@ -77,7 +77,11 @@ public class BailServiceImpl implements BailService {
 
     @Override
     public int nombreBauxActifs() {
-        return 0;
+
+        return (int) bailLocationRepository.findAll()
+                .stream()
+                .filter(encourrs-> encourrs.isEnCoursBail())
+                .count();
     }
 
 }

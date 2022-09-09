@@ -32,4 +32,10 @@ public class BailController {
         log.info("cloture du bail by ID Bail {}", id);
         return ResponseEntity.ok(bailService.closeBail(id));
     }
+    @Operation(summary = "nombre de bail actif", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/nombrebailactif")
+    public ResponseEntity<Integer> nombrebailactif() {
+        log.info("nombre de baux actifs");
+        return ResponseEntity.ok(bailService.nombreBauxActifs());
+    }
 }
