@@ -27,6 +27,7 @@ public class AppelLoyersFactureDto {
     double montantLoyerBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
+    boolean isCloturer;
     // Locataire
     String nomLocataire;
     String prenomLocataire;

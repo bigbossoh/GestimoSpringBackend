@@ -52,7 +52,9 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService.findAllAppelLoyerImpayerByBailId(bailLocation.getId());
         double montantVerser = dto.getMontantEncaissement();
         log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(), listAppelImpayerParBail.size());
+        EncaissementPrincipal encaissementPrincipal;
         for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
+            encaissementPrincipal= new EncaissementPrincipal();
             if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
                 //Total des encaissement percu pour le mois en cours;
                 double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
@@ -62,7 +64,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 appelLoyerDto.setSolderAppelLoyer(true);
                 appelLoyerDto.setSoldeAppelLoyer(0);
                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
-                EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
+
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
@@ -87,7 +89,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 appelLoyerDto.setSolderAppelLoyer(false);
                 appelLoyerDto.setSoldeAppelLoyer(montantPayer);
                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
-                EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
+                //EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());

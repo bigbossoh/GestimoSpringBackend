@@ -36,6 +36,7 @@ public class AppelLoyer extends AbstractEntity {
     double montantLoyerBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
+    boolean isCloturer;
 
     @ManyToOne
     BailLocation bailLocationAppelLoyer;
