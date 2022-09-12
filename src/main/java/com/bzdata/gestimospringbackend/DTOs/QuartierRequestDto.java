@@ -11,10 +11,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuartierRequestDto {
     Long id;
+    Long idAgence;
+    Long idCreateur;
     String abrvQuartier;
     String nomQuartier;
     Long idCommune;
-    private Long idAgence;
+   
 
     public static QuartierRequestDto fromEntity(Quartier quartier) {
         if (quartier == null) {

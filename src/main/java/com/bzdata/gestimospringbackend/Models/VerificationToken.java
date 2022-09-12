@@ -21,6 +21,4 @@ public class VerificationToken extends AbstractEntity {
     private Instant expiryDate;
     @OneToOne(fetch = FetchType.LAZY)
     private Utilisateur utilisateur;
-
-
 }

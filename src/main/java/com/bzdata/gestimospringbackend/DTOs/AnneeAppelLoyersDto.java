@@ -1,12 +1,11 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.util.Objects;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.Objects;
 
 @Getter
 @Setter

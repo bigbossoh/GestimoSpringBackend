@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class StudioDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     Long numBien;
     String statutBien;
     boolean isArchived;

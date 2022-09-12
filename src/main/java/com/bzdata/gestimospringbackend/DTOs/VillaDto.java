@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class VillaDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     int nbrChambreVilla;
     int nbrePiece;
     int nbrSalonVilla;

@@ -1,11 +1,9 @@
 package com.bzdata.gestimospringbackend.validator;
 
-import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
-import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
-import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 
 public class EncaissementPayloadDtoValidator {
     public static List<String> validate(EncaissementPayloadDto dto) {

@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class MontantLoyerBailDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     double ancienMontantLoyer;
     double nouveauMontantLoyer;
     LocalDate debutLoyer;

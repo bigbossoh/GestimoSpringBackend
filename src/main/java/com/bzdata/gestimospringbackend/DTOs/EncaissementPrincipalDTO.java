@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class EncaissementPrincipalDTO {
     private Long id;
-    private Long idAgence;
+  private  Long idAgence;
+  private  Long idCreateur;
     private Instant creationDate;
-    private Long idCreateur;
     private ModePaiement modePaiement;
     private OperationType operationType;
     private LocalDate dateEncaissement;

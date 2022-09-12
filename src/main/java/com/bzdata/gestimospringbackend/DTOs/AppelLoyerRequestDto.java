@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 public class AppelLoyerRequestDto {
 
     Long idAgence;
+    Long idCreateur;
     Long idBailLocation;
     double montantLoyerEnCours;
 }

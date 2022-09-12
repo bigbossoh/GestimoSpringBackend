@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BienImmobilierDto {
     Long id;
+    Long idAgence;
+    Long idCreateur;
     Long numBien;
     String statutBien;
     boolean isArchived;

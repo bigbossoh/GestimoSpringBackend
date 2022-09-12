@@ -1,11 +1,9 @@
 package com.bzdata.gestimospringbackend.interceptor;
 
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.EmptyInterceptor;
 import org.slf4j.MDC;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.StringUtils;
-@Slf4j
 public class Interceptor extends EmptyInterceptor {
 
   @Override

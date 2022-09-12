@@ -16,7 +16,8 @@ import lombok.experimental.FieldDefaults;
 public class OperationDto {
 
     Long id;
-    private Long idAgence;
+    Long idAgence;
+    Long idCreateur;
     Instant creationDate;
     Instant lastModifiedDate;
     LocalDate dateDebut;

@@ -11,6 +11,7 @@ import com.bzdata.gestimospringbackend.Services.AppartementService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.validator.AppartementDtoValidator;
@@ -32,7 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppartementServiceImpl implements AppartementService {
-    public final AppartementRepository appartementRepository;
+   final GestimoWebMapperImpl gestimoWebMapperImpl;
+     final AppartementRepository appartementRepository;
 
     final EtageRepository etageRepository;
 
@@ -55,8 +57,8 @@ public class AppartementServiceImpl implements AppartementService {
 
     @Override
     public List<AppartementDto> findAll() {
-        return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
-                .map(AppartementDto::fromEntity)
+        return appartementRepository.findAll().stream()
+                .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +69,7 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Appartement.");
             return null;
         }
-        return appartementRepository.findById(id).map(AppartementDto::fromEntity).orElseThrow(
+        return appartementRepository.findById(id).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Appartement has been found with Code " + id,
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
@@ -79,7 +81,7 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Appartement.");
             return null;
         }
-        return appartementRepository.findByNomApp(nom).map(AppartementDto::fromEntity).orElseThrow(
+        return appartementRepository.findByNomApp(nom).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Appartement has been found with name " + nom,
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
@@ -95,7 +97,7 @@ public class AppartementServiceImpl implements AppartementService {
                 "Aucun Appartement has been found with id " + id,
                 ErrorCodes.APPARTEMENT_NOT_FOUND));
         return appartementRepository.findByEtageAppartement(etage).stream()
-                .map(AppartementDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
 
@@ -126,7 +128,7 @@ public class AppartementServiceImpl implements AppartementService {
             oldAppartement.get().setResidence(dto.isResidence());
 
             Appartement appartementSave = appartementRepository.save(oldAppartement.get());
-            return AppartementDto.fromEntity(appartementSave);
+            return gestimoWebMapperImpl.fromAppartement(appartementSave);
         }
 
         Appartement appartement = new Appartement();
@@ -140,15 +142,17 @@ public class AppartementServiceImpl implements AppartementService {
         appartement.setNomApp(dto.getNomApp());
         appartement.setNumeroApp(numApp);
         appartement.setResidence(dto.isResidence());
+        appartement.setIdAgence(dto.getIdAgence());
+        appartement.setIdCreateur(dto.getIdCreateur());
 
         Appartement appartementSave = appartementRepository.save(appartement);
-        return AppartementDto.fromEntity(appartementSave);
+        return gestimoWebMapperImpl.fromAppartement(appartementSave);
     }
 
     @Override
     public List<AppartementDto> findAllLibre() {
         return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
-                .map(AppartementDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAppartement)
                 .filter((app) -> app.isOccupied() == false)
                 .collect(Collectors.toList());
     }

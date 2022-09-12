@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,8 +11,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.*;
-import com.bzdata.gestimospringbackend.Models.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.Models.AppelLoyer;
+import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -24,9 +32,6 @@ import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -161,7 +166,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     public List<AppelLoyersFactureDto> findAll() {
         return appelLoyerRepository.findAll()
                 .stream()
-                .filter(appelLoyer -> !appelLoyer.isCloturer())
+            //    .filter(appelLoyer -> !appelLoyer.isCloturer())
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .collect(Collectors.toList())
                 ;
@@ -171,7 +176,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer) {
         return appelLoyerRepository.findAll()
                 .stream()
-                .filter(appelLoyer -> !appelLoyer.isCloturer())
+            //    .filter(appelLoyer -> !appelLoyer.isCloturer())
                 .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                 .map(gestimoWebMapper::fromAppelLoyer)
@@ -225,7 +230,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
             return null;
         }
         return appelLoyerRepository.findById(id)
-                .filter(appelLoyer -> !appelLoyer.isCloturer())
+               // .filter(appelLoyer -> !appelLoyer.isCloturer())
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .orElseThrow(
                 () -> new InvalidEntityException("Aucun Appel loyer has been found with Code " + id,
@@ -242,7 +247,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         return lesLoyers
                 .stream()
-                .filter(appelLoyer -> !appelLoyer.isCloturer())
+             //   .filter(appelLoyer -> !appelLoyer.isCloturer())
                 .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
                 .map(AppelLoyerDto::fromEntity)
                 .collect(Collectors.toList());
@@ -260,7 +265,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                             .comparing(AppelLoyer::getDateDebutMoisAppelLoyer);
             return lesLoyers.stream()
                             .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
-                            .filter(appelLoyer -> !appelLoyer.isCloturer())
+                         //   .filter(appelLoyer -> !appelLoyer.isCloturer())
                             .filter(bail -> !bail.isSolderAppelLoyer())
                             .sorted(AppelLoyerByDateDebutAppelLoyer)
                             .map(gestimoWebMapper::fromAppelLoyer)
