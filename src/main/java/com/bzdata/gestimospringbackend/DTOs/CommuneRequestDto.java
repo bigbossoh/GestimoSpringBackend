@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class CommuneRequestDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     String abrvCommune;
     String nomCommune;
     Long idVille;

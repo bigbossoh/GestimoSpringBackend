@@ -11,7 +11,8 @@ import java.util.Date;
 @Builder
 public class UtilisateurRequestDto {
     private Long id;
-    private Long idAgence;
+    Long idAgence;
+    Long idCreateur;
     private String utilisateurIdApp;
     private String nom;
     private String prenom;

@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class AgenceRequestDto {
      Long id;
      Long idAgence;
+     Long idCreateur;
     String nomAgence;
     String telAgence;
     String compteContribuable;

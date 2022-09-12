@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class VilleDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     String abrvVille;
     String nomVille;
     Long idPays;

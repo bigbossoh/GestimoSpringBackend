@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
@@ -24,6 +25,7 @@ import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.exceptions.InvalidOperationException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -51,6 +53,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     private PasswordEncoder passwordEncoder;
     private final MailContentBuilder mailContentBuilder;
     private final MailService mailService;
+    private GestimoWebMapperImpl gestimoWebMapperImpl;
 
     @Override
     public boolean save(AgenceRequestDto dto) {
@@ -176,22 +179,22 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     }
 
     @Override
-    public List<AgenceResponseDto> listOfAgenceImmobilier() {
+    public List<AgenceImmobilierDTO> listOfAgenceImmobilier() {
 
         log.info("We are going to take back all agences");
 
         return agenceImmobiliereRepository.findAll().stream()
-                .map(AgenceResponseDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAgenceImmobilier)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc() {
+    public List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc() {
         log.info("We are going to take back all the agences order by agence name");
 
         return agenceImmobiliereRepository.findAllAgenceImmo().stream()
                 .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
-                .map(AgenceResponseDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAgenceImmobilier)
                 .collect(Collectors.toList());
     }
 
@@ -219,15 +222,90 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     }
 
     @Override
-    public AgenceResponseDto findAgenceByEmail(String email) {
+    public AgenceImmobilierDTO findAgenceByEmail(String email) {
         log.info("We are going to get back the Agence by email {}", email);
         if (!StringUtils.hasLength(email)) {
             log.error("you are not provided a email  get back the Agence.");
             return null;
         }
         return agenceImmobiliereRepository.findAgenceImmobiliereByEmailAgence(email)
-                .map(AgenceResponseDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAgenceImmobilier)
                 .orElseThrow(() -> new InvalidEntityException("Aucun bien immobilier has been found with Code " + email,
                         ErrorCodes.AGENCE_NOT_FOUND));
+    }
+
+    @Override
+    public AgenceImmobilierDTO  saveUneAgence(AgenceRequestDto dto) {
+        AgenceImmobiliere agenceImmobiliere = new AgenceImmobiliere();
+        log.info("We are going to create  a new agence {}", dto);
+        List<String> errors = AgenceDtoValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("l'agence immobilière n'est pas valide {}", errors);
+            throw new InvalidEntityException("Certain attributs de l'object agence immobiliere sont null.",
+                    ErrorCodes.AGENCE_NOT_VALID, errors);
+        }
+
+        // Check if the user already exist in the database
+        Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
+        if (utilisateurByMobile == null) {
+            // get back the connected user
+            Utilisateur userCreate = utilisateurRepository.findById(dto.getIdUtilisateurCreateur()).orElseThrow(
+                    () -> new InvalidEntityException(
+                            "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
+                            ErrorCodes.UTILISATEUR_NOT_FOUND));
+            //agenceImmobiliere.setCreateur(userCreate);
+            agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
+            agenceImmobiliere.setCapital(dto.getCapital());
+            agenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
+            agenceImmobiliere.setEmailAgence(dto.getEmailAgence());
+            agenceImmobiliere.setFaxAgence(dto.getFaxAgence());
+            agenceImmobiliere.setMobileAgence(dto.getMobileAgence());
+            agenceImmobiliere.setNomAgence(dto.getNomAgence());
+            agenceImmobiliere.setRegimeFiscaleAgence(dto.getRegimeFiscaleAgence());
+            agenceImmobiliere.setTelAgence(dto.getTelAgence());
+
+            AgenceImmobiliere saveAgence = agenceImmobiliereRepository.save(agenceImmobiliere);
+            saveAgence.setIdAgence(saveAgence.getId());
+            // AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
+            AgenceImmobiliere saveAgenceUpdate = agenceImmobiliereRepository.save(saveAgence);
+            log.info("We are going to create  a new utilisateur gerant by the logged user {}",
+                    dto.getIdUtilisateurCreateur());
+            Utilisateur newUtilisateur = new Utilisateur();
+            newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
+            newUtilisateur.setNom(dto.getNomPrenomGerant());
+            //newUtilisateur.setPrenom(dto.getNomAgence());
+            newUtilisateur.setEmail(dto.getEmailAgence());
+            newUtilisateur.setMobile(dto.getMobileAgence());
+            newUtilisateur.setPassword(passwordEncoder.encode(dto.getMotdepasse()));
+            //newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
+            Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
+            if (newRole.isPresent()) {
+                newUtilisateur.setUrole(newRole.get());
+            }
+            newUtilisateur.setUtilisateurIdApp(generateUserId());
+            newUtilisateur.setJoinDate(new Date());
+            newUtilisateur.setRoleUsed(ROLE_GERANT.name());
+            newUtilisateur.setAuthorities(ROLE_GERANT.getAuthorities());
+            newUtilisateur.setActive(dto.isActive());
+            newUtilisateur.setActivated(true);
+            newUtilisateur.setUsername(dto.getMobileAgence());
+            newUtilisateur.setNonLocked(true);
+            newUtilisateur.setUserCreate(userCreate);
+            Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
+            String token = generateVerificationToken(saveUser);
+            String message = mailContentBuilder
+                    .build("Merci de vous être enregistré a Gestimoweb, Cliquer sur le lien " +
+                            "ci-dessous pour activer votre account: " + ACTIVATION_EMAIL + "/" + token + "\n");
+            mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",
+                    saveUser.getEmail(), message));
+            log.info("We are same a gerant user and Agence also !!!");
+            return gestimoWebMapperImpl.fromAgenceImmobilier(saveAgenceUpdate);
+        }
+
+        else {
+            log.error("This user is already exist");
+            throw new EntityNotFoundException("The username or mobile is already exist in db " + dto.getMobileAgence(),
+                    ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
+        }
     }
 }

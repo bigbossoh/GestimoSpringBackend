@@ -15,8 +15,10 @@ import lombok.experimental.FieldDefaults;
 public class SiteRequestDto {
 
     Long id;
-    Long idQuartier;
     Long idAgence;
+    Long idCreateur;
+    Long idQuartier;
+ 
 //    String abrSite;
 //    String nomSite;
 

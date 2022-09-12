@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class BailMagasinDto {
     Long id;
     Long idAgence;
+    Long idCreateur;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;

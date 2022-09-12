@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
@@ -10,15 +11,16 @@ public interface AgenceImmobilierService {
 
     boolean save(AgenceRequestDto dto);
 
+    AgenceImmobilierDTO  saveUneAgence(AgenceRequestDto dto);
     AgenceResponseDto findAgenceById(Long id);
 
-    List<AgenceResponseDto> listOfAgenceImmobilier();
+    List<AgenceImmobilierDTO> listOfAgenceImmobilier();
 
-    List<AgenceResponseDto> listOfAgenceOrderByNomAgenceAsc();
+    List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc();
 
     void deleteAgence(Long id);
 
-    AgenceResponseDto findAgenceByEmail(String email);
+    AgenceImmobilierDTO findAgenceByEmail(String email);
 
     void verifyAccount(String token);
 

@@ -47,7 +47,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     final BienImmobilierRepository bienImmobilierRepository;
 
     @Override
-    public BailMagasinDto save(BailMagasinDto dto) {
+    public BailMagasinDto save(BailMagasinDto dto)  {
         BailLocation bailLocationMagasin = new BailLocation();
         log.info("We are going to create  a new Bail Magasin in the service layer {}", dto);
         List<String> errors = BailMagasinDtoValidator.validate(dto);
@@ -98,7 +98,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(magasinBailSave);
-            montantLoyerBail.setIdAgence(magasinBail.getIdAgence());
+            montantLoyerBail.setIdAgence(magasinBailSave.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
                     dto.getNouveauMontantLoyer(), 0.0, magasinBailSave.getId(), dto.getIdAgence());
             /**
@@ -106,9 +106,9 @@ public class BailMagasinServiceImpl implements BailMagasinService {
              */
             AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
 
-            appelLoyerRequestDto.setIdBailLocation(magasinBail.getId());
+            appelLoyerRequestDto.setIdBailLocation(magasinBailSave.getId());
             appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
-            appelLoyerRequestDto.setIdAgence(magasinBail.getIdAgence());
+            appelLoyerRequestDto.setIdAgence(magasinBailSave.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
             return BailMagasinDto.fromEntity(magasinBailSave);

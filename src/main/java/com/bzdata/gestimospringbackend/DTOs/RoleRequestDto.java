@@ -12,9 +12,11 @@ import lombok.experimental.FieldDefaults;
 @Builder
 public class RoleRequestDto {
     Long id;
+    Long idAgence;
+    Long idCreateur;
     String roleName;
     String descriptionRole;
-    private Long idAgence;
+   
 
     public static RoleRequestDto fromEntity(Role role) {
         if (role == null) {

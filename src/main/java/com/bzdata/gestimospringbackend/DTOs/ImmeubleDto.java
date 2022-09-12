@@ -15,6 +15,7 @@ public class ImmeubleDto {
     Long id;
     Long numBien;
     Long idAgence;
+    Long idCreateur;
     String statutBien;
     String denominationBien;
     String nomBien;

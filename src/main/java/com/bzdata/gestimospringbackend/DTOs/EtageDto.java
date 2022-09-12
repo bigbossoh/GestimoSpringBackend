@@ -16,6 +16,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageDto {
     Long id;
+    Long idAgence;
+    Long idCreateur;
     String nomEtage;
     String AbrvEtage;
     int numEtage;

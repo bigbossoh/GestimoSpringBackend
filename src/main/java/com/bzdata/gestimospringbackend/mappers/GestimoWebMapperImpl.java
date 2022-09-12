@@ -6,8 +6,11 @@ import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
+
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.experimental.FieldDefaults;
+
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -15,41 +18,52 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@Slf4j
+
 @Transactional
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class GestimoWebMapperImpl {
 
-    private final AgenceImmobiliereRepository agenceImmobiliereRepository;
-    private final BienImmobilierRepository bienImmobilierRepository;
-    private final BailLocationRepository bailLocationRepository;
-    private final UtilisateurRepository utilisateurRepository;
-    private final AppelLoyerRepository appelLoyerRepository;
-    private final EtageRepository etageRepository;
-    //AppelLoyer
-    public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto){
-        AppelLoyer appelLoyer= new AppelLoyer();
-        BeanUtils.copyProperties(appelLoyersFactureDto,appelLoyer);
-        BailLocation bail= new BailLocation();
-        bail=bailLocationRepository.findById(appelLoyersFactureDto.getIdBailLocation()).orElse(null);
-        if(bail!=null)
-        appelLoyer.setBailLocationAppelLoyer(bail);
-         return appelLoyer;
+    final AgenceImmobiliereRepository agenceImmobiliereRepository;
+    final BienImmobilierRepository bienImmobilierRepository;
+    final BailLocationRepository bailLocationRepository;
+    final UtilisateurRepository utilisateurRepository;
+    final AppelLoyerRepository appelLoyerRepository;
+    final EtageRepository etageRepository;
+    final AppartementRepository appartementRepository;
+    final MagasinRepository magasinRepository;
+
+    // AppelLoyer
+    public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto) {
+        AppelLoyer appelLoyer = new AppelLoyer();
+        BeanUtils.copyProperties(appelLoyersFactureDto, appelLoyer);
+        BailLocation bail = new BailLocation();
+        bail = bailLocationRepository.findById(appelLoyersFactureDto.getIdBailLocation()).orElse(null);
+        if (bail != null)
+            appelLoyer.setBailLocationAppelLoyer(bail);
+        return appelLoyer;
     }
+
     public AppelLoyersFactureDto fromAppelLoyer(AppelLoyer appelLoyer) {
-        AppelLoyersFactureDto appelLoyersFactureDto= new AppelLoyersFactureDto();
-        BeanUtils.copyProperties(appelLoyer,appelLoyersFactureDto);
+        AppelLoyersFactureDto appelLoyersFactureDto = new AppelLoyersFactureDto();
+        BeanUtils.copyProperties(appelLoyer, appelLoyersFactureDto);
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
 
-      //LOCATAIRE
-        appelLoyersFactureDto.setPrenomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
-        appelLoyersFactureDto.setNomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
-        appelLoyersFactureDto.setGenreLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getGenre());
-        appelLoyersFactureDto.setEmailLocatire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getEmail());
+        // LOCATAIRE
+        appelLoyersFactureDto
+                .setPrenomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
+        appelLoyersFactureDto
+                .setNomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
+        appelLoyersFactureDto
+                .setGenreLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getGenre());
+        appelLoyersFactureDto
+                .setEmailLocatire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getEmail());
         appelLoyersFactureDto.setIdLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getId());
-        //AGENCE
-        AgenceImmobiliere agenceImmobiliere=agenceImmobiliereRepository.findById(appelLoyer.getIdAgence()).orElse(null);
-        if(agenceImmobiliere==null)
-            throw new EntityNotFoundException("Agence Immobilier  from GestimoMapper not found", ErrorCodes.AGENCE_NOT_FOUND);
+        // AGENCE
+        AgenceImmobiliere agenceImmobiliere = agenceImmobiliereRepository.findById(appelLoyer.getIdAgence())
+                .orElse(null);
+        if (agenceImmobiliere == null)
+            throw new EntityNotFoundException("Agence Immobilier  from GestimoMapper not found",
+                    ErrorCodes.AGENCE_NOT_FOUND);
         appelLoyersFactureDto.setNomAgence(agenceImmobiliere.getNomAgence());
         appelLoyersFactureDto.setTelAgence(agenceImmobiliere.getTelAgence());
         appelLoyersFactureDto.setCompteContribuableAgence(agenceImmobiliere.getCompteContribuable());
@@ -59,18 +73,21 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto.setFaxAgence(agenceImmobiliere.getFaxAgence());
         appelLoyersFactureDto.setSigleAgence(agenceImmobiliere.getSigleAgence());
 
-//        BienImmobilier
-        Bienimmobilier bienImmobilier=bienImmobilierRepository.findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId())
+        // BienImmobilier
+        Bienimmobilier bienImmobilier = bienImmobilierRepository
+                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId())
                 .orElse(null);
-        if(bienImmobilier == null)
-            throw new EntityNotFoundException("Bien immobilier from GestimoMapper not found", ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
+        if (bienImmobilier == null)
+            throw new EntityNotFoundException("Bien immobilier from GestimoMapper not found",
+                    ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
         appelLoyersFactureDto.setAbrvBienimmobilier(bienImmobilier.getAbrvBienimmobilier());
         StringBuilder str = new StringBuilder(bienImmobilier.getNomBien());
-        str.delete(0,14);
+        str.delete(0, 14);
         appelLoyersFactureDto.setBienImmobilierFullName(str.toString());
-        //Bail
-        BailLocation bailLocation=bailLocationRepository.findById(appelLoyer.getBailLocationAppelLoyer().getId()).orElse(null);
-        if(bailLocation==null)
+        // Bail
+        BailLocation bailLocation = bailLocationRepository.findById(appelLoyer.getBailLocationAppelLoyer().getId())
+                .orElse(null);
+        if (bailLocation == null)
             throw new EntityNotFoundException("bail from GestimoMapper not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
         appelLoyersFactureDto.setIdBailLocation(bailLocation.getId());
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
@@ -88,33 +105,40 @@ public class GestimoWebMapperImpl {
                 .findFirst()
                 .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
                 .orElse(null));
-    // Information sur le proprietaire
-        Utilisateur utilisateur=utilisateurRepository.findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getId()).orElse(null);
-        if(utilisateur==null)
-            throw new EntityNotFoundException("utilisateur from GestimoMapper not found", ErrorCodes.UTILISATEUR_NOT_FOUND);
+        // Information sur le proprietaire
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getId())
+                .orElse(null);
+        if (utilisateur == null)
+            throw new EntityNotFoundException("utilisateur from GestimoMapper not found",
+                    ErrorCodes.UTILISATEUR_NOT_FOUND);
         appelLoyersFactureDto.setNomPropietaire(utilisateur.getNom());
         appelLoyersFactureDto.setPrenomPropietaire(utilisateur.getPrenom());
         appelLoyersFactureDto.setGenrePropietaire(utilisateur.getGenre());
         return appelLoyersFactureDto;
     }
-    public AnneeAppelLoyersDto fromAppelLoyerForAnnee(AppelLoyer appelLoyer){
-        AnneeAppelLoyersDto anneeAppelLoyersDto=new AnneeAppelLoyersDto();
-        BeanUtils.copyProperties(appelLoyer,anneeAppelLoyersDto);
+
+    public AnneeAppelLoyersDto fromAppelLoyerForAnnee(AppelLoyer appelLoyer) {
+        AnneeAppelLoyersDto anneeAppelLoyersDto = new AnneeAppelLoyersDto();
+        BeanUtils.copyProperties(appelLoyer, anneeAppelLoyersDto);
         return anneeAppelLoyersDto;
     }
-    //AgenceImmobiliere
-    public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO){
-        AgenceImmobiliere agenceImmo= new AgenceImmobiliere();
-        BeanUtils.copyProperties(agenceImmobilierDTO,agenceImmo);
-        return  agenceImmo;
+
+    // AgenceImmobiliere
+    public AgenceImmobiliere fromAgenceImmobilierDTO(AgenceImmobilierDTO agenceImmobilierDTO) {
+        AgenceImmobiliere agenceImmo = new AgenceImmobiliere();
+        BeanUtils.copyProperties(agenceImmobilierDTO, agenceImmo);
+        return agenceImmo;
     }
-    public AgenceImmobilierDTO fromAgenceImmobilier(AgenceImmobiliere agenceImmobilier){
-        AgenceImmobilierDTO agenceImmoDTO= new AgenceImmobilierDTO();
-        BeanUtils.copyProperties(agenceImmobilier,agenceImmoDTO);
-        return  agenceImmoDTO;
+
+    public AgenceImmobilierDTO fromAgenceImmobilier(AgenceImmobiliere agenceImmobilier) {
+        AgenceImmobilierDTO agenceImmoDTO = new AgenceImmobilierDTO();
+        BeanUtils.copyProperties(agenceImmobilier, agenceImmoDTO);
+        return agenceImmoDTO;
 
     }
-    //Immeuble
+
+    // Immeuble
     public ImmeubleAfficheDto fromImmeuble(Immeuble immeuble) {
         ImmeubleAfficheDto immeubleAfficheDto = new ImmeubleAfficheDto();
         BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
@@ -128,31 +152,38 @@ public class GestimoWebMapperImpl {
         return immeubleAfficheDto;
 
     }
+
     public Immeuble fromImmeubleDTO(ImmeubleAfficheDto immeubleAfficheDto) {
         Immeuble immeuble = new Immeuble();
         BeanUtils.copyProperties(immeubleAfficheDto, immeuble);
         return immeuble;
 
     }
-    //Encaissement Principal
-    public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto){
-        EncaissementPrincipal encaissementPrincipal=new EncaissementPrincipal();
+
+    // Encaissement Principal
+    public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto) {
+        EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
         BeanUtils.copyProperties(encaissementPayloadDto, encaissementPrincipal);
-        //log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
+        // log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal
+        // {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
         // Information sur l'appel loyer
-        AppelLoyer appelLoyer=appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
-        if(appelLoyer==null)
-            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
+        AppelLoyer appelLoyer = appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
+        if (appelLoyer == null)
+            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found",
+                    ErrorCodes.APPELLOYER_NOT_FOUND);
         encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
         return encaissementPrincipal;
     }
-    public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal){
-        EncaissementPrincipalDTO encaissementPrincipalDTO= new EncaissementPrincipalDTO();
-        BeanUtils.copyProperties(encaissementPrincipal,encaissementPrincipalDTO);
-        encaissementPrincipalDTO.setAppelLoyersFactureDto(fromAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement()));
+
+    public EncaissementPrincipalDTO fromEncaissementPrincipal(EncaissementPrincipal encaissementPrincipal) {
+        EncaissementPrincipalDTO encaissementPrincipalDTO = new EncaissementPrincipalDTO();
+        BeanUtils.copyProperties(encaissementPrincipal, encaissementPrincipalDTO);
+        encaissementPrincipalDTO
+                .setAppelLoyersFactureDto(fromAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement()));
         return encaissementPrincipalDTO;
     }
-    //MAPPER DES ETAGES
+
+    // MAPPER DES ETAGES
     public EtageAfficheDto fromEtage(Etage etage) {
         EtageAfficheDto etageAfficheDto = new EtageAfficheDto();
         BeanUtils.copyProperties(etage, etageAfficheDto);
@@ -165,5 +196,45 @@ public class GestimoWebMapperImpl {
         etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateur().getNom());
         return etageAfficheDto;
 
+    }
+
+    public Appartement fromAppartementDto(AppartementDto appartementDto) {
+        Appartement appartement = new Appartement();
+        BeanUtils.copyProperties(appartementDto, appartement);
+        return appartement;
+    }
+
+    public AppartementDto fromAppartement(Appartement appartement) {
+        AppartementDto appartementDto = new AppartementDto();
+        BeanUtils.copyProperties(appartement, appartementDto);
+        Appartement appartementFound = appartementRepository.findById(appartement.getId()).orElse(null);
+        if (appartementFound == null) {
+            throw new EntityNotFoundException("Appartement not found",
+                    ErrorCodes.APPARTEMENT_NOT_FOUND);
+        }
+        appartementDto
+                .setProprietaire(appartementFound.getEtageAppartement().getImmeuble().getUtilisateur().getNom() + " " +
+                        appartementFound.getEtageAppartement().getImmeuble().getUtilisateur().getPrenom());
+        return appartementDto;
+    }
+
+    // MAGASIN
+    public MagasinDto fromMagasin(Magasin magasin) {
+        MagasinDto magasinDto = new MagasinDto();
+        BeanUtils.copyProperties(magasin, magasinDto);
+        Magasin magasinFound = magasinRepository.findById(magasin.getId()).orElse(null);
+        if (magasinFound == null) {
+            throw new EntityNotFoundException("Appartement not found",
+                    ErrorCodes.MAGASIN_NOT_FOUND);
+        }
+        magasinDto.setProprietaire(
+                magasinFound.getUtilisateur().getNom() + " " + magasinFound.getUtilisateur().getPrenom());
+       
+                return magasinDto;
+    }
+    public Magasin fromMagasinDto(MagasinDto magasinDto){
+        Magasin magasin=new Magasin();
+        BeanUtils.copyProperties(magasinDto, magasin);
+        return magasin;
     }
 }

@@ -12,7 +12,8 @@ import lombok.Data;
 // @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerDto {
     private Long id;
-    private Long idAgence;
+    Long idAgence;
+    Long idCreateur;
     private String periodeAppelLoyer;
     private String statusAppelLoyer;
     private LocalDate datePaiementPrevuAppelLoyer;

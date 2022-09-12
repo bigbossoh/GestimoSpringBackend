@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
@@ -24,9 +25,9 @@ public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Boolean> authenticateAgence(@RequestBody AgenceRequestDto request) {
+    public ResponseEntity<AgenceImmobilierDTO> authenticateAgence(@RequestBody AgenceRequestDto request) {
         log.info("We are going to save a new agence {}", request);
-        return ResponseEntity.ok(agenceImmobilierService.save(request));
+        return ResponseEntity.ok(agenceImmobilierService.saveUneAgence(request));
     }
 
     @GetMapping("/getagencebyid/{id}")
@@ -36,12 +37,12 @@ public class AgenceController {
     }
 
     @GetMapping("/getagencebyemail/{email}")
-    public ResponseEntity<AgenceResponseDto> getAgenceByEmailAgence(@PathVariable("email") String email) {
+    public ResponseEntity<AgenceImmobilierDTO> getAgenceByEmailAgence(@PathVariable("email") String email) {
         return ResponseEntity.ok(agenceImmobilierService.findAgenceByEmail(email));
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<AgenceResponseDto>> getAllAgenceByOrderAgence() {
+    public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence() {
         return ResponseEntity.ok(agenceImmobilierService.listOfAgenceOrderByNomAgenceAsc());
     }
 

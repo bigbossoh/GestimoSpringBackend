@@ -9,8 +9,8 @@ import java.time.LocalDate;
 
 @Data
 public class EncaissementPayloadDto {
-    private Long idAgence;
-    private Long idCreateur;
+   private Long idAgence;
+  private  Long idCreateur;
     private Long idAppelLoyer;
     private LocalDate dateEncaissement;
     private ModePaiement modePaiement;

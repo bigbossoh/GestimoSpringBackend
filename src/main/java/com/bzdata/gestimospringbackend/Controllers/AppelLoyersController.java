@@ -2,12 +2,7 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import com.bzdata.gestimospringbackend.DTOs.*;
-
-import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

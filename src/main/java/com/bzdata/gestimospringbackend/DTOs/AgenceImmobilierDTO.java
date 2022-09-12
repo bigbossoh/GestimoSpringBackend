@@ -1,10 +1,9 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-import com.bzdata.gestimospringbackend.Models.AbstractEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-
-import javax.persistence.Entity;
 
 @Getter
 @Setter

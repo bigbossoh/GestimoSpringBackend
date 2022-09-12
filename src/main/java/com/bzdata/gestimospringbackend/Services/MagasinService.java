@@ -9,7 +9,7 @@ import java.util.List;
 public interface MagasinService {
 
     boolean save(MagasinDto dto);
-
+    MagasinDto saveUnMagasin(MagasinDto dto);
     boolean delete(Long id);
 
     Long maxOfNumBienMagasin();

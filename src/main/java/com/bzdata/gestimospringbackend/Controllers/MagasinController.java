@@ -38,6 +38,12 @@ public class MagasinController {
         log.info("We are going to save a new Magasin {}", dto);
         return ResponseEntity.ok(magasinService.save(dto));
     }
+    @PostMapping("/savemagasin")
+    @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<MagasinDto> saveMagasinReturnDto(@RequestBody MagasinDto dto) {
+        log.info("We are going to save a new Magasin {}", dto);
+        return ResponseEntity.ok(magasinService.saveUnMagasin(dto));
+    }
 
     // TOUT LES Magasins
     @Operation(summary = "Liste de tous les Magasins", security = @SecurityRequirement(name = "bearerAuth"))
