@@ -1,7 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-
-
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -10,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class ImmeubleAfficheDto {
+    Long id;
     int nbrEtage;
     int nbrePieceImmeuble;
     String abrvNomImmeuble;
