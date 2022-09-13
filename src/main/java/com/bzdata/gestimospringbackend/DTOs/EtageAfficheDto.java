@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageAfficheDto {
+    Long id;
     String nomEtage;
     String AbrvEtage;
     int numEtage;

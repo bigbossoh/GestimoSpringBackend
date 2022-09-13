@@ -42,7 +42,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     final UtilisateurRepository utilisateurRepository;
     final GestimoWebMapperImpl gestimoWebMapperImpl;
     @Override
-    public ImmeubleDto save(ImmeubleDto dto) {
+    public ImmeubleAfficheDto save(ImmeubleDto dto) {
 
         int numeroDubien = immeubleRepository.getMaxNumImmeuble();
 
@@ -91,7 +91,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
                 oldimmeuble.get().setSuperficieBien(dto.getSuperficieBien());
 
                 Immeuble immeubleSave = immeubleRepository.save(oldimmeuble.get());
-                return ImmeubleDto.fromEntity(immeubleSave);
+                return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
             }
             Immeuble immeuble = new Immeuble();
             immeuble.setSite(site);
@@ -113,7 +113,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             immeuble.setSuperficieBien(dto.getSuperficieBien());
             immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
             Immeuble immeubleSave = immeubleRepository.save(immeuble);
-            return ImmeubleDto.fromEntity(immeubleSave);
+            return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),

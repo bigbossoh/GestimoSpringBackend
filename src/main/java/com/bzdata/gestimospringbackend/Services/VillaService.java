@@ -8,7 +8,7 @@ import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 public interface VillaService {
 
     boolean save(VillaDto dto);
-
+    VillaDto saveUneVilla(VillaDto dto);
     boolean delete(Long id);
 
     Long maxOfNumBien();

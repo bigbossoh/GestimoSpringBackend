@@ -42,7 +42,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public boolean saveutilisateur(UtilisateurRequestDto dto) {
+    public boolean saveUtilisateur(UtilisateurRequestDto dto) {
         log.info("We are going to create a new user with the role Locataire {}",
                 dto);
         Utilisateur newUser = new Utilisateur();
@@ -121,6 +121,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setActive(true);
             newUser.setActivated(true);
             newUser.setNonLocked(true);
+            newUser.setIdCreateur(dto.getIdCreateur());
             utilisateurRepository.save(newUser);
             return true;
         } catch (Exception e) {

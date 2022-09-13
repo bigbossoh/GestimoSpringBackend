@@ -11,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-
+import org.jfree.util.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -164,9 +164,7 @@ public class GestimoWebMapperImpl {
     public EncaissementPrincipal fromEncaissementPrincipalDto(EncaissementPayloadDto encaissementPayloadDto) {
         EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
         BeanUtils.copyProperties(encaissementPayloadDto, encaissementPrincipal);
-        // log.info("lobjet encaissementPayloadDto {}, et l objet EncaissementPrincipal
-        // {}",encaissementPayloadDto.toString(),encaissementPrincipal.toString());
-        // Information sur l'appel loyer
+
         AppelLoyer appelLoyer = appelLoyerRepository.findById(encaissementPayloadDto.getIdAppelLoyer()).orElse(null);
         if (appelLoyer == null)
             throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found",
@@ -191,9 +189,10 @@ public class GestimoWebMapperImpl {
         if (etageFound == null)
             throw new EntityNotFoundException("Etage from GestimoMapper not found",
                     ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
-
+        Log.info("Le id est le suivant {} " + etage.getId());
+        etageAfficheDto.setId(etage.getId());
         etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateur().getNom());
-        etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateur().getNom());
+        etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateur().getPrenom());
         return etageAfficheDto;
 
     }
@@ -229,12 +228,28 @@ public class GestimoWebMapperImpl {
         }
         magasinDto.setProprietaire(
                 magasinFound.getUtilisateur().getNom() + " " + magasinFound.getUtilisateur().getPrenom());
-       
-                return magasinDto;
+
+        return magasinDto;
     }
-    public Magasin fromMagasinDto(MagasinDto magasinDto){
-        Magasin magasin=new Magasin();
+
+    public Magasin fromMagasinDto(MagasinDto magasinDto) {
+        Magasin magasin = new Magasin();
         BeanUtils.copyProperties(magasinDto, magasin);
         return magasin;
+    }
+
+    // VILLA
+    public VillaDto fromVilla(Villa villa) {
+        VillaDto villaDto = new VillaDto();
+        BeanUtils.copyProperties(villa, villaDto);
+        villaDto.setIdSite(villa.getSite().getId());
+        villaDto.setIdUtilisateur(villa.getUtilisateur().getId());
+        villaDto.setProprietaire(villa.getUtilisateur().getNom()+" "+villa.getUtilisateur().getPrenom());
+        return villaDto;
+    }
+    public Villa fromVillaDto(VillaDto villaDto){
+        Villa villa =new Villa();
+        BeanUtils.copyProperties(villaDto, villa);
+        return villa;
     }
 }

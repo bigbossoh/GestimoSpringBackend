@@ -177,7 +177,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         return appelLoyerRepository.findAll()
                 .stream()
             //    .filter(appelLoyer -> !appelLoyer.isCloturer())
-                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
+                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer)) 
                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .collect(Collectors.toList());

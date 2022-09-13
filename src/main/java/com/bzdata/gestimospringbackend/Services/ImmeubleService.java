@@ -7,7 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 
 public interface ImmeubleService {
 
-    ImmeubleDto save(ImmeubleDto dto);
+    ImmeubleAfficheDto save(ImmeubleDto dto);
 
     boolean delete(Long id);
 

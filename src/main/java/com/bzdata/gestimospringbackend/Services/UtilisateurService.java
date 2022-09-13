@@ -12,7 +12,7 @@ public interface UtilisateurService {
     // boolean saveProprietaire(UtilisateurRequestDto dto);
 
     // UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto);
-    boolean saveutilisateur(UtilisateurRequestDto dto);
+    boolean saveUtilisateur(UtilisateurRequestDto dto);
 
     UtilisateurRequestDto findById(Long id);
 

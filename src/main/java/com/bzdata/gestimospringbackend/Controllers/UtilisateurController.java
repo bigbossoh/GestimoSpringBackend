@@ -26,7 +26,7 @@ public class UtilisateurController {
     @PostMapping("/save")
     public ResponseEntity<Boolean> saveUtilisateur(@RequestBody UtilisateurRequestDto request) {
         log.info("We are going to save a new locatire {}", request);
-        return ResponseEntity.ok(utilisateurService.saveutilisateur(request));
+        return ResponseEntity.ok(utilisateurService.saveUtilisateur(request));
     }
     // @PostMapping("/locataire/save")
     // public ResponseEntity<UtilisateurRequestDto> saveLocataire(@RequestBody

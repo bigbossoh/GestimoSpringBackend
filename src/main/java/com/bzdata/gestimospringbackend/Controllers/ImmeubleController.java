@@ -42,7 +42,7 @@ public class ImmeubleController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ImmeubleDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
+    public ResponseEntity<ImmeubleAfficheDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
         log.info("We are going to save a new Immeuble {}", dto);
         return ResponseEntity.ok(immeubleService.save(dto));
     }
