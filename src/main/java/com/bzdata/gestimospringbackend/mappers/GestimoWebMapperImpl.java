@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-
 @Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class GestimoWebMapperImpl {
@@ -31,6 +30,7 @@ public class GestimoWebMapperImpl {
     final EtageRepository etageRepository;
     final AppartementRepository appartementRepository;
     final MagasinRepository magasinRepository;
+
 
     // AppelLoyer
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto) {
