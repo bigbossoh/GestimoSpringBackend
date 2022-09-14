@@ -10,6 +10,10 @@ public interface ImmeubleService {
 
   ImmeubleAfficheDto save(ImmeubleDto dto);
 
+  ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);
+
+  ImmeubleDto updateImmeuble(ImmeubleDto dto);
+
   ImmeubleDto save(ImmeubleDto dto);
 
   ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);

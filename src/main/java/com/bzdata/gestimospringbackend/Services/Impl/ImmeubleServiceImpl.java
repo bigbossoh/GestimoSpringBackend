@@ -107,7 +107,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             Immeuble immeubleSave = immeubleRepository.save(immeuble);
             return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
             oldimmeuble.get().setNbrEtage(dto.getNbrEtage());
-            return ImmeubleDto.fromEntity(immeubleSave);
+            return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
