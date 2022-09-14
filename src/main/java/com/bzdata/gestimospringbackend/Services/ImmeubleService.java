@@ -14,11 +14,6 @@ public interface ImmeubleService {
 
   ImmeubleDto updateImmeuble(ImmeubleDto dto);
 
-  ImmeubleDto save(ImmeubleDto dto);
-
-  ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);
-
-  ImmeubleDto updateImmeuble(ImmeubleDto dto);
 
   boolean delete(Long id);
 
