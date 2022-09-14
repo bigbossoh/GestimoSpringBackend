@@ -4,10 +4,13 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
 
 public interface ImmeubleService {
 
     ImmeubleDto save(ImmeubleDto dto);
+    ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);
+    ImmeubleDto updateImmeuble(ImmeubleDto dto);
 
     boolean delete(Long id);
 
