@@ -3,14 +3,12 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.Locale;
 import java.util.LongSummaryStatistics;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-import com.bzdata.gestimospringbackend.Models.Role;
-import com.bzdata.gestimospringbackend.Models.Site;
-import com.bzdata.gestimospringbackend.Models.Utilisateur;
-import com.bzdata.gestimospringbackend.Models.Villa;
+import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -86,7 +84,8 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
             if (villaRepository.count() == 0) {
                 numBien = 1L;
             } else {
-                numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
+                //numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
+                numBien=nombreVillaByIdSite(recoverySite);
             }
 
             villa.setNumBien(numBien);
@@ -95,8 +94,8 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
 
                 villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
             } else {
-                villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
-                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomVilla() + "-" + numBien)
+                               villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
+                villa.setNomBien((recoverySite.getNomSite() + "-villa"+ "-" + numBien)
                         .toUpperCase(Locale.ROOT));
             }
             villa.setAbrvBienimmobilier(
@@ -109,6 +108,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
     }
+    //Not GOOD not used
     @Override
     public boolean save(VillaDto dto) {
         Villa villa = new Villa();
@@ -152,7 +152,9 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
             if (villaRepository.count() == 0) {
                 numBien = 1L;
             } else {
-                numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
+                //numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
+                numBien=nombreVillaByIdSite(recoverySite);
+                log.info("le numero de la villa est le nuivant {}",numBien);
             }
 
             villa.setNumBien(numBien);
@@ -161,8 +163,11 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
 
                 villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
             } else {
-                villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
-                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomVilla() + "-" + numBien)
+//                villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
+//                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomVilla() + "-" + numBien)
+//                        .toUpperCase(Locale.ROOT));
+                villa.setAbrvVilla("villa-"+ "-" + numBien);
+                villa.setNomBien((recoverySite.getNomSite() + "-villa-"+ "-" + numBien)
                         .toUpperCase(Locale.ROOT));
             }
             villa.setAbrvBienimmobilier(
@@ -256,5 +261,26 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
                 .filter((vil)->vil.isOccupied()==false)
                 .collect(Collectors.toList());
     }
+    @Override
+    public Map<Site, Long> getNumberVillaBySite() {
+        Map<Site, Long> numbreVillabySite = villaRepository.findAll()
+                .stream()
+                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
+        System.out.println(numbreVillabySite);
+        return numbreVillabySite;
 
+    }
+    private Long nombreVillaByIdSite(Site site){
+
+        for (Map.Entry m : getNumberVillaBySite().entrySet()) {
+            log.info("********************ID: {}",m.getKey(),", Nom: {}",m.getValue());
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 0L;
+    }
 }

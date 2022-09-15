@@ -1,9 +1,11 @@
 package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.Models.Site;
 
 public interface VillaService {
 
@@ -22,4 +24,6 @@ public interface VillaService {
     List<VillaDto> findAllBySite(SiteRequestDto siteRequestDto);
 
     List<VillaDto> findAllByIdSite(Long id);
+
+    Map<Site, Long> getNumberVillaBySite();
 }

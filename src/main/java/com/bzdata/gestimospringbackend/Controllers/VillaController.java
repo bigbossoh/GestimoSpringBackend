@@ -3,8 +3,10 @@ package com.bzdata.gestimospringbackend.Controllers;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.util.List;
+import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
+import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 
 import org.springframework.http.ResponseEntity;
@@ -49,4 +51,10 @@ public class VillaController {
      public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
          return ResponseEntity.ok(villaService.findAllLibre());
      }
+    // TOUS LES VILLA PAR SITE
+    @Operation(summary = "TOUS LES VILLA PAR SITE", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/allvillabysite")
+    public ResponseEntity<Map<Site, Long>> findAllVillabysite() {
+        return ResponseEntity.ok(villaService.getNumberVillaBySite());
+    }
 }
