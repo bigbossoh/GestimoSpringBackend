@@ -24,4 +24,7 @@ public class ImmeubleEtageDto  {
     boolean isOccupied;
     Long idSite;
     Long idUtilisateur;
+
+    String nomPropio;
+    String prenomProprio;
 }
