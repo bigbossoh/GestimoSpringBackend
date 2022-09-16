@@ -52,11 +52,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
             throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
                     ErrorCodes.VILLA_NOT_VALID, errors);
         }
-        Site recoverySite = siteRepository.findById(dto.getIdSite())
-                .orElseThrow(
-                        () -> new InvalidEntityException(
-                                "Aucun Site has been found with Code " + dto.getIdSite(),
-                                ErrorCodes.SITE_NOT_FOUND));
+        Site recoverySite = getSite(dto);
         Utilisateur utilisateurRequestDto = utilisateurRepository
                 .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
@@ -120,11 +116,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
             throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
                     ErrorCodes.VILLA_NOT_VALID, errors);
         }
-        Site recoverySite = siteRepository.findById(dto.getIdSite())
-                .orElseThrow(
-                        () -> new InvalidEntityException(
-                                "Aucun Site has been found with Code " + dto.getIdSite(),
-                                ErrorCodes.SITE_NOT_FOUND));
+        Site recoverySite = getSite(dto);
         Utilisateur utilisateurRequestDto = utilisateurRepository
                 .findById(dto.getIdUtilisateur())
                 .orElseThrow(() -> new InvalidEntityException(
@@ -180,6 +172,14 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
 
+    }
+
+    private Site getSite(VillaDto dto) {
+        return siteRepository.findById(dto.getIdSite())
+                .orElseThrow(
+                        () -> new InvalidEntityException(
+                                "Aucun Site has been found with Code " + dto.getIdSite(),
+                                ErrorCodes.SITE_NOT_FOUND));
     }
 
     @Override
@@ -266,14 +266,16 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
         Map<Site, Long> numbreVillabySite = villaRepository.findAll()
                 .stream()
                 .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
-        System.out.println(numbreVillabySite);
         return numbreVillabySite;
 
     }
     private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = villaRepository.findAll()
+                .stream()
+                .filter(e->e.getSite().equals(site))
+                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
 
-        for (Map.Entry m : getNumberVillaBySite().entrySet()) {
-            log.info("********************ID: {}",m.getKey(),", Nom: {}",m.getValue());
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
             if(m.getKey().equals(site)){
 
                 return (Long) m.getValue()+1L;
@@ -281,6 +283,6 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
             }
 
         }
-        return 0L;
+        return 1L;
     }
 }
