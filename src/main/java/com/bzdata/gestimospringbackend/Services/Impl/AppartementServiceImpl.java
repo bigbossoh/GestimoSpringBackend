@@ -1,12 +1,16 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Etage;
+import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.AppartementService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -100,11 +104,27 @@ public class AppartementServiceImpl implements AppartementService {
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
+    private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = appartementRepository.findAll()
+                .stream()
+                .filter(e->e.getEtageAppartement().getImmeuble().getSite().equals(site))
+                .collect(Collectors.groupingBy(e->e.getEtageAppartement().getImmeuble().getSite(), Collectors.counting()));
 
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 1L;
+    }
     @Override
     public AppartementDto save(AppartementDto dto) {
         Optional<Appartement> oldAppartement = appartementRepository.findById(dto.getId());
-        int numApp = appartementRepository.getMaxNumAppartement() + 1;
+       // int numApp = appartementRepository.getMaxNumAppartement() + 1;
+
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -112,9 +132,9 @@ public class AppartementServiceImpl implements AppartementService {
             throw new InvalidEntityException("Certain attributs de l'object Appartement sont null.",
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
-        Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
-                "Aucun Etage has been found with id " + dto.getIdEtage(),
-                ErrorCodes.APPARTEMENT_NOT_FOUND));
+        Etage etage = getEtage(dto);
+
+        int numApp = Math.toIntExact(nombreVillaByIdSite(etage.getImmeuble().getSite()));
         if (oldAppartement.isPresent()) {
             oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
             oldAppartement.get().setEtageAppartement(etage);
@@ -132,7 +152,7 @@ public class AppartementServiceImpl implements AppartementService {
         }
 
         Appartement appartement = new Appartement();
-        appartement.setAbrvNomApp(etage.getAbrvEtage() + "-" + "APPARTEMENT" + "-" + numApp);
+        appartement.setAbrvNomApp((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage() +"-APPRT" + "-" + numApp).toUpperCase());
         appartement.setEtageAppartement(etage);
         appartement.setMeubleApp(dto.isMeubleApp());
         appartement.setNbrPieceApp(dto.getNbrPieceApp());
@@ -149,11 +169,17 @@ public class AppartementServiceImpl implements AppartementService {
         return gestimoWebMapperImpl.fromAppartement(appartementSave);
     }
 
+    private Etage getEtage(AppartementDto dto) {
+        return etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
+                    "Aucun Etage has been found with id " + dto.getIdEtage(),
+                    ErrorCodes.APPARTEMENT_NOT_FOUND));
+    }
+
     @Override
     public List<AppartementDto> findAllLibre() {
         return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
                 .map(gestimoWebMapperImpl::fromAppartement)
-                .filter((app) -> app.isOccupied() == false)
+                .filter((app) -> !app.isOccupied())
                 .collect(Collectors.toList());
     }
 

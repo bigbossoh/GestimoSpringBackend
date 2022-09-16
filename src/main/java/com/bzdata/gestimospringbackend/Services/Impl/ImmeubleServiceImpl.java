@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -147,15 +148,23 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             throw new InvalidEntityException("Certain attributs de l'object Immeuble sont null.",
                     ErrorCodes.IMMEUBLE_NOT_VALID, errors);
         }
+        Long numBien = 0L;
+
         Immeuble immeuble = new Immeuble();
         immeuble.setSite(getSite(dto.getIdSite()));
         immeuble.setUtilisateur(getUtilisateur(dto.getIdUtilisateur()));
+        if (immeubleRepository.count() == 0) {
+            numBien = 1L;
+        } else {
+            numBien=nombreVillaByIdSite(getSite(dto.getIdSite()));
+           // log.info("le numero de la villa est le nuivant {}",numBien);
+        }
         immeuble.setAbrvBienimmobilier(
-                immeuble.getSite().getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
+                (immeuble.getSite().getAbrSite() + "-IMME-" + numBien).toUpperCase());
         immeuble.setAbrvNomImmeuble(
-                immeuble.getSite().getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
+                ( immeuble.getSite().getNomSite() + "-IMMEUBLE-" + numBien).toUpperCase());
         immeuble.setGarrage(dto.isGarrage());
-        immeuble.setNumBien(Long.valueOf(getNumeroDubien()));
+        immeuble.setNumBien(numBien);
         immeuble.setIdAgence(dto.getIdAgence());
         immeuble.setDescription(dto.getDescriptionImmeuble());
         immeuble.setNbrEtage(dto.getNbrEtage());
@@ -271,6 +280,23 @@ public class ImmeubleServiceImpl implements ImmeubleService {
                 .map(gestimoWebMapperImpl::fromImmeuble)
                 .collect(Collectors.toList());
 
+    }
+
+    private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = immeubleRepository.findAll()
+                .stream()
+                .filter(e->e.getSite().equals(site))
+                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
+
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 1L;
     }
 
 }
