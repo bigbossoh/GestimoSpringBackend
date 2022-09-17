@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
 
@@ -12,7 +13,7 @@ public interface UtilisateurService {
     // boolean saveProprietaire(UtilisateurRequestDto dto);
 
     // UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto);
-    boolean saveUtilisateur(UtilisateurRequestDto dto);
+    UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto);
 
     UtilisateurRequestDto findById(Long id);
 
@@ -20,15 +21,15 @@ public interface UtilisateurService {
 
     UtilisateurRequestDto findUtilisateurByUsername(String username);
 
-    List<UtilisateurRequestDto> listOfAllUtilisateurOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurOrderbyName();
 
-    List<UtilisateurRequestDto> listOfAllUtilisateurLocataireOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyName();
 
-    List<UtilisateurRequestDto> listOfAllUtilisateurProprietaireOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurProprietaireOrderbyName();
 
-    List<UtilisateurRequestDto> listOfAllUtilisateurGerantOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurGerantOrderbyName();
 
-    List<UtilisateurRequestDto> listOfAllUtilisateurSuperviseurOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurSuperviseurOrderbyName();
 
     void deleteLocatire(Long id);
 
