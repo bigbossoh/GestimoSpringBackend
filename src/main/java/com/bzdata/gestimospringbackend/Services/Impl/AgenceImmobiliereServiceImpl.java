@@ -164,7 +164,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         }
 
     }
-
     @Override
     public AgenceResponseDto findAgenceById(Long id) {
         log.info("We are going to get back the Agence Immobilière en fonction de l'ID {} du bien", id);
@@ -185,6 +184,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
         return agenceImmobiliereRepository.findAll().stream()
                 .map(gestimoWebMapperImpl::fromAgenceImmobilier)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
@@ -192,9 +192,10 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     public List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc() {
         log.info("We are going to take back all the agences order by agence name");
 
-        return agenceImmobiliereRepository.findAllAgenceImmo().stream()
+        return agenceImmobiliereRepository.findAll().stream()
                 .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
                 .map(gestimoWebMapperImpl::fromAgenceImmobilier)
+                .distinct()
                 .collect(Collectors.toList());
     }
 

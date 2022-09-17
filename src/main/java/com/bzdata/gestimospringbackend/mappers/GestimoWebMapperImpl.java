@@ -31,7 +31,6 @@ public class GestimoWebMapperImpl {
     final AppartementRepository appartementRepository;
     final MagasinRepository magasinRepository;
 
-
     // AppelLoyer
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto) {
         AppelLoyer appelLoyer = new AppelLoyer();
@@ -244,12 +243,20 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(villa, villaDto);
         villaDto.setIdSite(villa.getSite().getId());
         villaDto.setIdUtilisateur(villa.getUtilisateur().getId());
-        villaDto.setProprietaire(villa.getUtilisateur().getNom()+" "+villa.getUtilisateur().getPrenom());
+        villaDto.setProprietaire(villa.getUtilisateur().getNom() + " " + villa.getUtilisateur().getPrenom());
         return villaDto;
     }
-    public Villa fromVillaDto(VillaDto villaDto){
-        Villa villa =new Villa();
+
+    public Villa fromVillaDto(VillaDto villaDto) {
+        Villa villa = new Villa();
         BeanUtils.copyProperties(villaDto, villa);
         return villa;
+    }
+
+    // UTILISATEUR MAPPER
+    public UtilisateurAfficheDto fromUtilisateur(Utilisateur utilisateur) {
+        UtilisateurAfficheDto utilisateurAfficheDto = new UtilisateurAfficheDto();
+        BeanUtils.copyProperties(utilisateur, utilisateurAfficheDto);
+        return utilisateurAfficheDto;
     }
 }
