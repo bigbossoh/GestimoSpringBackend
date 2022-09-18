@@ -1,9 +1,6 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.util.List;
-import java.util.LongSummaryStatistics;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
@@ -44,74 +41,6 @@ public class MagasinServiceImpl implements MagasinService {
     final EtageRepository etageRepository;
     final GestimoWebMapperImpl gestimoWebMapperImpl;
 
-//    @Override
-//    public boolean save(MagasinDto dto) {
-//        Magasin magasin = new Magasin();
-//        log.info("We are going to create  a new Magasin {}", dto);
-//        List<String> errors = MagasinDtoValidator.validate(dto);
-//        if (!errors.isEmpty()) {
-//            log.error("Le magasin n'est pas valide {}", errors);
-//            throw new InvalidEntityException("Certain attributs de l'object Magasin sont null.",
-//                    ErrorCodes.MAGASIN_NOT_VALID, errors);
-//        }
-//        // magasin.setSite(dto.getIdSite());
-//        Optional<Site> recoverySite = siteRepository.findById(dto.getIdSite());
-//        if (recoverySite.isPresent()) {
-//            magasin.setSite(recoverySite.get());
-//        }
-//
-//        // magasin.setEtageMagasin(null);
-//        Optional<Etage> etage = etageRepository.findById(dto.getIdEtage());
-//        if (etage.isPresent()) {
-//            magasin.setEtageMagasin(etage.get());
-//        }
-//
-//        Utilisateur utilisateurRequestDto = getUtilisateur(dto);
-//        // System.out.println(utilisateurRequestDto.getUrole().getRoleName());
-//        if (utilisateurRequestDto.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-//            magasin.setIdAgence(dto.getIdAgence());
-//            Long numBien = 0L;
-//            if (magasinRepository.count() == 0) {
-//                numBien = 1L;
-//            } else {
-//                numBien = Long.valueOf(magasinRepository.getMaxNumMagasin() + 1);
-//            }
-//            magasin.setNumBien(numBien);
-//            magasin.setDescription(dto.getDescription().toUpperCase());
-//            magasin.setStatutBien(dto.getStatutBien());
-//            magasin.setSuperficieBien(dto.getSuperficieBien());
-//            magasin.setUtilisateur(utilisateurRequestDto);
-//
-//            if (!StringUtils.hasLength(dto.getAbrvNomMagasin())) {
-//                magasin.setAbrvNomMagasin("magasin-".toUpperCase() + numBien);
-//                magasin.setAbrvBienimmobilier("magasin-".toUpperCase() + numBien);
-//                magasin.setNomBien(
-//                        (recoverySite.get().getAbrSite() + "-magasin-" +
-//                                numBien).toUpperCase());
-//            } else {
-//                magasin.setAbrvBienimmobilier("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                        numBien);
-//                magasin.setAbrvNomMagasin("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                        numBien);
-//                magasin.setNomBien(
-//                        (recoverySite.get().getAbrSite() + "-magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                                numBien)
-//                                .toUpperCase());
-//            }
-//
-//            magasin.setAbrvNomMagasin(
-//                    (recoverySite.get().getAbrSite() + "-" +
-//                            dto.getAbrvNomMagasin()).toUpperCase());
-//
-//            magasinRepository.save(magasin);
-//
-//            return true;
-//        } else {
-//            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-//                    + utilisateurRequestDto.getUrole().getRoleName(),
-//                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
-//        }
-//    }
 
     @Override
     public boolean delete(Long id) {
@@ -200,8 +129,8 @@ public class MagasinServiceImpl implements MagasinService {
     public List<MagasinResponseDto> findAllLibre() {
         return magasinRepository.findAll().stream()
                 .map(MagasinResponseDto::fromEntity)
-        .filter((mag)-> !mag.isOccupied())
-        .collect(Collectors.toList());
+                .filter((mag) -> !mag.isOccupied())
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -215,47 +144,55 @@ public class MagasinServiceImpl implements MagasinService {
         }
 
         Magasin magasin = new Magasin();
-        Site recoverySite=getSite(dto);
-        Etage etage=getEtage(dto);
+        Site recoverySite ;
+        Etage etage;
+        if (dto.getIdEtage() != null) {
+            etage= getEtage(dto);
+        }else{
+            etage=null;
+        }
+        if(dto.getIdSite()!=null){
+            recoverySite= getSite(dto);
+        }else{
+            recoverySite=null;
+        }
         Utilisateur utilisateurRequestDto = getUtilisateur(dto);
         if (utilisateurRequestDto.getUrole().getRoleName().equals("PROPRIETAIRE")) {
             magasin.setIdAgence(dto.getIdAgence());
             Long numBien = 0L;
-            if (magasinRepository.count() == 0) {
+            int size = new ArrayList<>(magasinRepository.findAll()).size();
+            if (size== 0) {
                 numBien = 1L;
             } else {
-                numBien = nombreVillaByIdSite(recoverySite);
+                if(recoverySite!=null) {
+                    numBien = nombreVillaByIdSite(recoverySite);
+                }else{
+                    numBien=nombreVillaByIdSite(etage.getImmeuble().getSite());
+                }
             }
             magasin.setNumMagasin(numBien);
             magasin.setDescription(dto.getDescription().toUpperCase());
-//            magasin.setStatutBien(dto.getStatutBien());
             magasin.setSuperficieBien(dto.getSuperficieBien());
+            magasin.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
+            magasin.setNombrePieceMagasin(dto.getNombrePieceMagasin());
             magasin.setUtilisateurProprietaire(utilisateurRequestDto);
+            magasin.setIdCreateur(dto.getIdCreateur());
+            magasin.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+            magasin.setNumMagasin(numBien);
 
-          //  if (!StringUtils.hasLength(dto.getAbrvNomMagasin())) {
-             //   magasin.setAbrvNomMagasin((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage()
-                 //       +"-MAG" + "-" + numBien).toUpperCase());
-              //  magasin.set((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage()
-                //        +"-MAG" + "-" + numBien).toUpperCase());
-//                magasin.setNomBien(
-//                        (etage.getImmeuble().getNomBien() + "-" +etage.getNomEtage()
-//                                +"-MAGASIN" + "-" + numBien).toUpperCase());
-//            } else {
-//                magasin.setAbrvBienimmobilier("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                        numBien);
-//                magasin.setAbrvNomMagasin("magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                        numBien);
-//                magasin.setNomBien(
-//                        (recoverySite.getAbrSite() + "-magasin-".toUpperCase() + dto.getNomMagasin() + "-" +
-//                                numBien)
-//                                .toUpperCase());
-//            }
-//            magasin.setAbrvNomMagasin(
-//                    (recoverySite.getAbrSite() + "-" +
-//                            dto.getAbrvNomMagasin()).toUpperCase());
+            if (dto.getIdEtage() == null) {
+                magasin.setSite(recoverySite);
+            magasin.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-MAG-" + numBien).toUpperCase());
+            magasin.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-MAGASIN-" + numBien).toUpperCase());
+            }else{
+               magasin.setCodeAbrvBienImmobilier((etage.getCodeAbrvEtage() + "-MAG-" + numBien).toUpperCase());
+               magasin.setNomCompletBienImmobilier((etage.getNomCompletEtage() + "-MAGASIN-" + numBien).toUpperCase());
+                magasin.setSite(etage.getImmeuble().getSite());
+                magasin.setEtageMagasin(etage);
+            }
 
-         Magasin magasinSave=   magasinRepository.save(magasin);
-
+            Magasin magasinSave = magasinRepository.save(magasin);
+            log.info("les informations du magasin sont {}", magasin);
             return gestimoWebMapperImpl.fromMagasin(magasinSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
@@ -272,16 +209,16 @@ public class MagasinServiceImpl implements MagasinService {
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
-    private Long nombreVillaByIdSite(Site site){
+    private Long nombreVillaByIdSite(Site site) {
         Map<Site, Long> numbreVillabySite = magasinRepository.findAll()
                 .stream()
-                .filter(e->e.getSite().equals(site))
-                .collect(Collectors.groupingBy(e->e.getSite(), Collectors.counting()));
+                .filter(e -> e.getSite().equals(site))
+                .collect(Collectors.groupingBy(Magasin::getSite, Collectors.counting()));
 
         for (Map.Entry m : numbreVillabySite.entrySet()) {
-            if(m.getKey().equals(site)){
+            if (m.getKey().equals(site)) {
 
-                return (Long) m.getValue()+1L;
+                return (Long) m.getValue() + 1L;
 
             }
 
@@ -296,9 +233,12 @@ public class MagasinServiceImpl implements MagasinService {
                                 "Aucun Site has been found with Code " + dto.getIdSite(),
                                 ErrorCodes.SITE_NOT_FOUND));
     }
+
     private Etage getEtage(MagasinDto dto) {
-        return etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
-                "Aucun Etage has been found with id " + dto.getIdEtage(),
-                ErrorCodes.APPARTEMENT_NOT_FOUND));
+        Etage etage = etageRepository.findById(dto.getIdEtage()).orElse(null);
+        if (etage == null)
+            return null;
+        return etage;
+
     }
 }

@@ -63,6 +63,7 @@ public class VillaServiceImpl implements VillaService {
             villa.setSuperficieBien(dto.getSuperficieBien());
             villa.setNbrChambreVilla(dto.getNbrChambreVilla());
             villa.setNbrSalonVilla(dto.getNbrSalleEauVilla());
+            villa.setNbrePieceVilla(dto.getNbrePieceVilla());
             villa.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
             villa.setUtilisateurProprietaire(utilisateurRequestDto);
             Long numBien = 0L;
