@@ -52,9 +52,9 @@ public class VillaController {
          return ResponseEntity.ok(villaService.findAllLibre());
      }
     // TOUS LES VILLA PAR SITE
-    @Operation(summary = "TOUS LES VILLA PAR SITE", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/allvillabysite")
-    public ResponseEntity<Map<Site, Long>> findAllVillabysite() {
-        return ResponseEntity.ok(villaService.getNumberVillaBySite());
-    }
+//    @Operation(summary = "TOUS LES VILLA PAR SITE", security = @SecurityRequirement(name = "bearerAuth"))
+//    @GetMapping("/allvillabysite")
+//    public ResponseEntity<Map<Site, Long>> findAllVillabysite() {
+//        return ResponseEntity.ok(villaService.getNumberVillaBySite());
+//    }
 }

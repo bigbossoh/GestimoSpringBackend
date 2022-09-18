@@ -10,18 +10,14 @@ public class ImmeubleEtageDto  {
     Long id;
     private Long idAgence;
     private  Long idCreateur;
-    int nbrEtage;
-    int nbrePieceImmeuble;
-    String abrvNomImmeuble;
+    String codeNomAbrvImmeuble;
+    String nomCompletImmeuble;
+    String nomBaptiserImmeuble;
     String descriptionImmeuble;
-    int numeroImmeuble;
+    int numImmeuble;
+    int nbrEtage;
+    int nbrePiecesDansImmeuble;
     boolean isGarrage;
-    String statutBien;
-    String denominationBien;
-    String nomBien;
-    String etatBien;
-    double superficieBien;
-    boolean isOccupied;
     Long idSite;
     Long idUtilisateur;
 

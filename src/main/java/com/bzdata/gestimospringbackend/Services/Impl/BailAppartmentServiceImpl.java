@@ -88,7 +88,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
 
             BailLocation appartementBailSave = bailLocationRepository.save(bailLocation);
             appartementBail.setOccupied(true);
-            appartementBail.setStatutAppart("Occupied");
+           // appartementBail.setStatutAppart("Occupied");
             appartementRepository.save(appartementBail);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée

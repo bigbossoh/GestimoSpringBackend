@@ -25,20 +25,14 @@ public class ImmeubleMapperImpl {
 
     final SiteRepository siteRepository;
     final UtilisateurRepository utilisateurRepository;
-    final BienImmobilierRepository bienImmobilierRepository;
 
     public ImmeubleEtageDto fromImmeubleEtage(Immeuble immeuble) {
         ImmeubleEtageDto immeubleEtageDto = new ImmeubleEtageDto();
         BeanUtils.copyProperties(immeuble, immeubleEtageDto);
         immeubleEtageDto.setIdSite(immeuble.getSite().getId());
-        immeubleEtageDto.setIdUtilisateur(immeuble.getUtilisateur().getId());
-        Bienimmobilier bien = bienImmobilierRepository.findById(immeuble.getId()).orElse(null);
-        if (bien == null)
-            throw new EntityNotFoundException("Bien immobiier from GestimoMapper not found",
-                    ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
-
-        immeubleEtageDto.setNomPropio(bien.getUtilisateur().getNom());
-        immeubleEtageDto.setPrenomProprio(bien.getUtilisateur().getPrenom());
+        immeubleEtageDto.setIdUtilisateur(immeuble.getUtilisateurProprietaire().getId());
+        immeubleEtageDto.setNomPropio(immeuble.getUtilisateurProprietaire().getNom());
+        immeubleEtageDto.setPrenomProprio(immeuble.getUtilisateurProprietaire().getPrenom());
         return immeubleEtageDto;
     }
 
@@ -54,7 +48,7 @@ public class ImmeubleMapperImpl {
         if(immeubleEtageDto.getIdUtilisateur()!=null){
             Utilisateur utilisateur= utilisateurRepository.findById(immeubleEtageDto.getIdUtilisateur()).orElse(null);
             if(utilisateur!=null)
-                immeuble.setUtilisateur(utilisateur);
+                immeuble.setUtilisateurProprietaire(utilisateur);
         }
         return immeuble;
     }

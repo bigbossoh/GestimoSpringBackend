@@ -10,10 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface EtageRepository extends JpaRepository<Etage, Long> {
-    @Query("SELECT coalesce(max(eta.numEtage), 0) FROM Etage eta")
-    int getMaxNumEtage();
+//    @Query("SELECT coalesce(max(eta.numEtage), 0) FROM Etage eta")
+//    int getMaxNumEtage();
 
-    Optional<Etage> findByNomEtage(String nom);
+    Optional<Etage> findByNomCompletEtage(String nom);
 
     List<Etage> findByImmeuble(Immeuble entity);
 

@@ -17,13 +17,15 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 public class Etage extends AbstractEntity {
-    private String nomEtage;
-    private String AbrvEtage;
+    private String nomCompletEtage;
+    private String codeAbrvEtage;
+    private String nomBaptiserEtage;
     private int numEtage;
+    private int nombrePieceSurEtage;
     @OneToMany(mappedBy = "etageAppartement")
     private List<Appartement> appartements;
-    @OneToMany(mappedBy = "etageStudio")
-    private List<Studio> studios;
+//    @OneToMany(mappedBy = "etageStudio")
+//    private List<Studio> studios;
     @OneToMany(mappedBy = "etageMagasin")
     private List<Magasin> magasins;
     @ManyToOne

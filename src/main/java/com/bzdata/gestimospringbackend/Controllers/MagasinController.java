@@ -32,12 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MagasinController {
     final MagasinService magasinService;
 
-    @PostMapping("/save")
-    @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> saveMagasin(@RequestBody MagasinDto dto) {
-        log.info("We are going to save a new Magasin {}", dto);
-        return ResponseEntity.ok(magasinService.save(dto));
-    }
+//    @PostMapping("/save")
+//    @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
+//    public ResponseEntity<Boolean> saveMagasin(@RequestBody MagasinDto dto) {
+//        log.info("We are going to save a new Magasin {}", dto);
+//        return ResponseEntity.ok(magasinService.save(dto));
+//    }
     @PostMapping("/savemagasin")
     @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<MagasinDto> saveMagasinReturnDto(@RequestBody MagasinDto dto) {

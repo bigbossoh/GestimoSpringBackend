@@ -79,8 +79,8 @@ public class GestimoWebMapperImpl {
         if (bienImmobilier == null)
             throw new EntityNotFoundException("Bien immobilier from GestimoMapper not found",
                     ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
-        appelLoyersFactureDto.setAbrvBienimmobilier(bienImmobilier.getAbrvBienimmobilier());
-        StringBuilder str = new StringBuilder(bienImmobilier.getNomBien());
+        appelLoyersFactureDto.setAbrvBienimmobilier(bienImmobilier.getCodeAbrvBienImmobilier());
+        StringBuilder str = new StringBuilder(bienImmobilier.getNomCompletBienImmobilier());
         str.delete(0, 14);
         appelLoyersFactureDto.setBienImmobilierFullName(str.toString());
         // Bail
@@ -106,7 +106,7 @@ public class GestimoWebMapperImpl {
                 .orElse(null));
         // Information sur le proprietaire
         Utilisateur utilisateur = utilisateurRepository
-                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getId())
+                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getId())
                 .orElse(null);
         if (utilisateur == null)
             throw new EntityNotFoundException("utilisateur from GestimoMapper not found",
@@ -141,15 +141,9 @@ public class GestimoWebMapperImpl {
     public ImmeubleAfficheDto fromImmeuble(Immeuble immeuble) {
         ImmeubleAfficheDto immeubleAfficheDto = new ImmeubleAfficheDto();
         BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
-        Bienimmobilier bien = bienImmobilierRepository.findById(immeuble.getId()).orElse(null);
-        if (bien == null)
-            throw new EntityNotFoundException("Bien immobiier from GestimoMapper not found",
-                    ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
-
-        immeubleAfficheDto.setNomPropio(bien.getUtilisateur().getNom());
-        immeubleAfficheDto.setPrenomProprio(bien.getUtilisateur().getPrenom());
+        immeubleAfficheDto.setNomPropio(immeuble.getUtilisateurProprietaire().getNom());
+        immeubleAfficheDto.setPrenomProprio(immeuble.getUtilisateurProprietaire().getPrenom());
         return immeubleAfficheDto;
-
     }
 
     public Immeuble fromImmeubleDTO(ImmeubleAfficheDto immeubleAfficheDto) {
@@ -190,8 +184,8 @@ public class GestimoWebMapperImpl {
                     ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND);
         Log.info("Le id est le suivant {} " + etage.getId());
         etageAfficheDto.setId(etage.getId());
-        etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateur().getNom());
-        etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateur().getPrenom());
+        etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateurProprietaire().getNom());
+        etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateurProprietaire().getPrenom());
         return etageAfficheDto;
 
     }
@@ -211,8 +205,8 @@ public class GestimoWebMapperImpl {
                     ErrorCodes.APPARTEMENT_NOT_FOUND);
         }
         appartementDto
-                .setProprietaire(appartementFound.getEtageAppartement().getImmeuble().getUtilisateur().getNom() + " " +
-                        appartementFound.getEtageAppartement().getImmeuble().getUtilisateur().getPrenom());
+                .setProprietaire(appartementFound.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getNom() + " " +
+                        appartementFound.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getPrenom());
         return appartementDto;
     }
 
@@ -226,7 +220,7 @@ public class GestimoWebMapperImpl {
                     ErrorCodes.MAGASIN_NOT_FOUND);
         }
         magasinDto.setProprietaire(
-                magasinFound.getUtilisateur().getNom() + " " + magasinFound.getUtilisateur().getPrenom());
+                magasinFound.getUtilisateurProprietaire().getNom() + " " + magasinFound.getUtilisateurProprietaire().getPrenom());
 
         return magasinDto;
     }
@@ -242,8 +236,8 @@ public class GestimoWebMapperImpl {
         VillaDto villaDto = new VillaDto();
         BeanUtils.copyProperties(villa, villaDto);
         villaDto.setIdSite(villa.getSite().getId());
-        villaDto.setIdUtilisateur(villa.getUtilisateur().getId());
-        villaDto.setProprietaire(villa.getUtilisateur().getNom() + " " + villa.getUtilisateur().getPrenom());
+        villaDto.setIdUtilisateur(villa.getUtilisateurProprietaire().getId());
+        villaDto.setProprietaire(villa.getUtilisateurProprietaire().getNom() + " " + villa.getUtilisateurProprietaire().getPrenom());
         return villaDto;
     }
 

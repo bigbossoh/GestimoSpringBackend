@@ -9,7 +9,7 @@ import com.bzdata.gestimospringbackend.Models.Site;
 
 public interface VillaService {
 
-    boolean save(VillaDto dto);
+    //boolean save(VillaDto dto);
     VillaDto saveUneVilla(VillaDto dto);
     boolean delete(Long id);
 
@@ -25,5 +25,5 @@ public interface VillaService {
 
     List<VillaDto> findAllByIdSite(Long id);
 
-    Map<Site, Long> getNumberVillaBySite();
+  //  Map<Site, Long> getNumberVillaBySite();
 }

@@ -43,7 +43,7 @@ public class OperationDto {
                 .enCoursBail(operation.isEnCoursBail())
                 .abrvCodeBail(operation.getAbrvCodeBail())
                 .archiveBail(operation.isArchiveBail())
-                .bienImmobilierOperation(operation.getBienImmobilierOperation().getAbrvBienimmobilier())
+                .bienImmobilierOperation(operation.getBienImmobilierOperation().getCodeAbrvBienImmobilier())
                 .creationDate(operation.getCreationDate())
                 .designationBail(operation.getDesignationBail())
                 .montantCautionBail(operation.getMontantCautionBail())

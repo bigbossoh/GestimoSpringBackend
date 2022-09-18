@@ -90,7 +90,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
              * Mise a jour du status de l'object Magasin
              */
             magasinBail.setOccupied(true);
-            magasinBail.setStatutBien("Occupied");
+           // magasinBail.setStatutBien("Occupied");
             magasinRepository.save(magasinBail);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée

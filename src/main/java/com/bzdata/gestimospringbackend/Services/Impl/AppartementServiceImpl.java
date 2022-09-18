@@ -85,7 +85,7 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Appartement.");
             return null;
         }
-        return appartementRepository.findByNomApp(nom).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
+        return appartementRepository.findByNomCompletBienImmobilier(nom).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Appartement has been found with name " + nom,
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
@@ -104,22 +104,7 @@ public class AppartementServiceImpl implements AppartementService {
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
-    private Long nombreVillaByIdSite(Site site){
-        Map<Site, Long> numbreVillabySite = appartementRepository.findAll()
-                .stream()
-                .filter(e->e.getEtageAppartement().getImmeuble().getSite().equals(site))
-                .collect(Collectors.groupingBy(e->e.getEtageAppartement().getImmeuble().getSite(), Collectors.counting()));
 
-        for (Map.Entry m : numbreVillabySite.entrySet()) {
-            if(m.getKey().equals(site)){
-
-                return (Long) m.getValue()+1L;
-
-            }
-
-        }
-        return 1L;
-    }
     @Override
     public AppartementDto save(AppartementDto dto) {
         Optional<Appartement> oldAppartement = appartementRepository.findById(dto.getId());
@@ -136,32 +121,32 @@ public class AppartementServiceImpl implements AppartementService {
 
         int numApp = Math.toIntExact(nombreVillaByIdSite(etage.getImmeuble().getSite()));
         if (oldAppartement.isPresent()) {
-            oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
+          //  oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
             oldAppartement.get().setEtageAppartement(etage);
-            oldAppartement.get().setMeubleApp(dto.isMeubleApp());
+          //  oldAppartement.get().setMeubleApp(dto.isMeubleApp());
             oldAppartement.get().setNbrPieceApp(dto.getNbrPieceApp());
             oldAppartement.get().setNbreChambreApp(dto.getNbreChambreApp());
             oldAppartement.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
             oldAppartement.get().setNbreSalonApp(dto.getNbreSalonApp());
-            oldAppartement.get().setNomApp(dto.getNomApp());
+          //  oldAppartement.get().setNomApp(dto.getNomApp());
             // oldAppartement.get().setNumeroApp(dto.getNumeroApp());
-            oldAppartement.get().setResidence(dto.isResidence());
+          //  oldAppartement.get().setResidence(dto.isResidence());
 
             Appartement appartementSave = appartementRepository.save(oldAppartement.get());
             return gestimoWebMapperImpl.fromAppartement(appartementSave);
         }
 
         Appartement appartement = new Appartement();
-        appartement.setAbrvNomApp((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage() +"-APPRT" + "-" + numApp).toUpperCase());
+      // appartement.setAbrvNomApp((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage() +"-APPRT" + "-" + numApp).toUpperCase());
         appartement.setEtageAppartement(etage);
-        appartement.setMeubleApp(dto.isMeubleApp());
+      //  appartement.setMeubleApp(dto.isMeubleApp());
         appartement.setNbrPieceApp(dto.getNbrPieceApp());
         appartement.setNbreChambreApp(dto.getNbreChambreApp());
         appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
         appartement.setNbreSalonApp(dto.getNbreSalonApp());
-        appartement.setNomApp(dto.getNomApp());
-        appartement.setNumeroApp(numApp);
-        appartement.setResidence(dto.isResidence());
+       // appartement.setNomApp(dto.getNomApp());
+       // appartement.setNumeroApp(numApp);
+      // appartement.setResidence(dto.isResidence());
         appartement.setIdAgence(dto.getIdAgence());
         appartement.setIdCreateur(dto.getIdCreateur());
 
@@ -181,6 +166,22 @@ public class AppartementServiceImpl implements AppartementService {
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .filter((app) -> !app.isOccupied())
                 .collect(Collectors.toList());
+    }
+    private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = appartementRepository.findAll()
+                .stream()
+                .filter(e->e.getEtageAppartement().getImmeuble().getSite().equals(site))
+                .collect(Collectors.groupingBy(e->e.getEtageAppartement().getImmeuble().getSite(), Collectors.counting()));
+
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 1L;
     }
 
 }

@@ -28,16 +28,14 @@ import lombok.experimental.FieldDefaults;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "typeBienImmobilier", discriminatorType = DiscriminatorType.STRING)
 public abstract class Bienimmobilier extends AbstractEntity {
-    Long numBien;
-    String statutBien;
-    boolean isArchived= false;
-    String abrvBienimmobilier;
+
+    String codeAbrvBienImmobilier;
+    String nomCompletBienImmobilier;
+    String nomBaptiserBienImmobilier;
     String description;
-    String nomBien;
     double superficieBien;
+    boolean bienMeublerResidence;
     boolean isOccupied= false;
     @ManyToOne
-    Site site;
-    @ManyToOne
-    Utilisateur utilisateur;
+    Utilisateur utilisateurProprietaire;
 }
