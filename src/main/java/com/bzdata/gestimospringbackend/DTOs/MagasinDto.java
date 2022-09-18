@@ -10,21 +10,18 @@ public class MagasinDto {
     Long id;
     Long idAgence;
     Long idCreateur;
-    Long numBien;
-    String statutBien;
-    boolean isArchived;
-    String abrvBienimmobilier;
+    int nombrePieceMagasin;
+    Long numMagasin;
+    String codeAbrvBienImmobilier;
+    String nomCompletBienImmobilier;
+    String nomBaptiserBienImmobilier;
     String description;
-    String nomBien;
     double superficieBien;
-    boolean isOccupied;
+    boolean bienMeublerResidence;
+    boolean isOccupied= false;
     boolean isUnderBuildingMagasin;
-    String abrvNomMagasin;
-    int nmbrPieceMagasin;
-    String nomMagasin;
     Long idEtage;
     Long idSite;
     Long idUtilisateur;
     String proprietaire;
-
 }

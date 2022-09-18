@@ -214,14 +214,10 @@ public class GestimoWebMapperImpl {
     public MagasinDto fromMagasin(Magasin magasin) {
         MagasinDto magasinDto = new MagasinDto();
         BeanUtils.copyProperties(magasin, magasinDto);
-        Magasin magasinFound = magasinRepository.findById(magasin.getId()).orElse(null);
-        if (magasinFound == null) {
-            throw new EntityNotFoundException("Appartement not found",
-                    ErrorCodes.MAGASIN_NOT_FOUND);
-        }
-        magasinDto.setProprietaire(
-                magasinFound.getUtilisateurProprietaire().getNom() + " " + magasinFound.getUtilisateurProprietaire().getPrenom());
-
+        magasinDto.setIdSite(magasin.getSite().getId());
+        magasinDto.setIdUtilisateur(magasin.getUtilisateurProprietaire().getId());
+        magasinDto.setProprietaire(magasin.getUtilisateurProprietaire().getNom()+ " "
+                +magasin.getUtilisateurProprietaire().getPrenom());
         return magasinDto;
     }
 
