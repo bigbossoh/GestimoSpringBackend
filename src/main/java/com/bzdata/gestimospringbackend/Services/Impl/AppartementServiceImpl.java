@@ -107,8 +107,6 @@ public class AppartementServiceImpl implements AppartementService {
 
     @Override
     public AppartementDto save(AppartementDto dto) {
-        Optional<Appartement> oldAppartement = appartementRepository.findById(dto.getId());
-       // int numApp = appartementRepository.getMaxNumAppartement() + 1;
 
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
@@ -118,45 +116,32 @@ public class AppartementServiceImpl implements AppartementService {
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
         Etage etage = getEtage(dto);
+        Long numApp=nombreVillaByIdSite(etage.getImmeuble().getSite());
+        //int numApp = Math.toIntExact(nombreVillaByIdSite(etage.getImmeuble().getSite()));
 
-        int numApp = Math.toIntExact(nombreVillaByIdSite(etage.getImmeuble().getSite()));
-        if (oldAppartement.isPresent()) {
-          //  oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
-            oldAppartement.get().setEtageAppartement(etage);
-          //  oldAppartement.get().setMeubleApp(dto.isMeubleApp());
-            oldAppartement.get().setNbrPieceApp(dto.getNbrPieceApp());
-            oldAppartement.get().setNbreChambreApp(dto.getNbreChambreApp());
-            oldAppartement.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
-            oldAppartement.get().setNbreSalonApp(dto.getNbreSalonApp());
-          //  oldAppartement.get().setNomApp(dto.getNomApp());
-            // oldAppartement.get().setNumeroApp(dto.getNumeroApp());
-          //  oldAppartement.get().setResidence(dto.isResidence());
-
-            Appartement appartementSave = appartementRepository.save(oldAppartement.get());
-            return gestimoWebMapperImpl.fromAppartement(appartementSave);
-        }
 
         Appartement appartement = new Appartement();
-      // appartement.setAbrvNomApp((etage.getImmeuble().getAbrvBienimmobilier() + "-" +etage.getAbrvEtage() +"-APPRT" + "-" + numApp).toUpperCase());
         appartement.setEtageAppartement(etage);
-      //  appartement.setMeubleApp(dto.isMeubleApp());
         appartement.setNbrPieceApp(dto.getNbrPieceApp());
         appartement.setNbreChambreApp(dto.getNbreChambreApp());
         appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
         appartement.setNbreSalonApp(dto.getNbreSalonApp());
-       // appartement.setNomApp(dto.getNomApp());
-       // appartement.setNumeroApp(numApp);
-      // appartement.setResidence(dto.isResidence());
         appartement.setIdAgence(dto.getIdAgence());
         appartement.setIdCreateur(dto.getIdCreateur());
-
+        appartement.setNumApp(numApp);
+        appartement.setCodeAbrvBienImmobilier((etage.getCodeAbrvEtage()+"-APPT-"+numApp).toUpperCase());
+        appartement.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+        appartement.setNomCompletBienImmobilier(etage.getNomCompletEtage()+"-APPARTEMENT-"+numApp);
+        appartement.setBienMeublerResidence(dto.isBienMeublerResidence());
+        appartement.setDescription(dto.getDescription());
+        appartement.setSuperficieBien(dto.getSuperficieBien());
         Appartement appartementSave = appartementRepository.save(appartement);
         return gestimoWebMapperImpl.fromAppartement(appartementSave);
     }
 
     private Etage getEtage(AppartementDto dto) {
-        return etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
-                    "Aucun Etage has been found with id " + dto.getIdEtage(),
+        return etageRepository.findById(dto.getIdEtageAppartement()).orElseThrow(() -> new InvalidEntityException(
+                    "Aucun Etage has been found with id " + dto.getIdEtageAppartement(),
                     ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
 
