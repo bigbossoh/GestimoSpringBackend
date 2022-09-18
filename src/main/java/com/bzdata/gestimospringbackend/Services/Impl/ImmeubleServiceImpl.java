@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,76 +51,6 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     final ImmeubleMapperImpl immeubleMapper;
     final EtageRepository etageRepository;
 
-    @Override
-    public ImmeubleAfficheDto save(ImmeubleDto dto) {
-
-        int numeroDubien = getNumeroDubien();
-
-        Optional<Immeuble> oldimmeuble = immeubleRepository.findById(dto.getId());
-        log.info("We are going to create  a new Immeuble from layer service implemebtation {}", dto);
-        List<String> errors = ImmeubleDtoValidator.validate(dto);
-        if (!errors.isEmpty()) {
-            log.error("l'Immeuble n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object Immeuble sont null.",
-                    ErrorCodes.IMMEUBLE_NOT_VALID, errors);
-        }
-        /**
-         * Recherche du Site
-         */
-        Site site = getSite(dto.getIdSite());
-
-        /**
-         * Recherche du proprietaire
-         */
-        Utilisateur utilisateur = getUtilisateur(dto.getIdUtilisateur());
-        if (utilisateur.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-            if (oldimmeuble.isPresent()) {
-                oldimmeuble.get().setSite(site);
-                oldimmeuble.get().setUtilisateur(utilisateur);
-                oldimmeuble.get().setGarrage(dto.isGarrage());
-                oldimmeuble.get().setDescription(dto.getDescriptionImmeuble());
-                oldimmeuble.get().setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-                oldimmeuble.get().setNomBien(dto.getNomBien());
-                oldimmeuble.get().setNumeroImmeuble(dto.getNumeroImmeuble());
-                oldimmeuble.get().setOccupied(dto.isOccupied());
-                oldimmeuble.get().setStatutBien(dto.getStatutBien());
-                oldimmeuble.get().setSuperficieBien(dto.getSuperficieBien());
-
-                Immeuble immeubleSave = immeubleRepository.save(oldimmeuble.get());
-                return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
-            }
-            Immeuble immeuble = new Immeuble();
-            immeuble.setSite(site);
-            immeuble.setUtilisateur(utilisateur);
-            immeuble.setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
-            immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
-            immeuble.setGarrage(dto.isGarrage());
-            immeuble.setNumBien(Long.valueOf(numeroDubien));
-            immeuble.setIdAgence(dto.getIdAgence());
-            immeuble.setDescription(dto.getDescriptionImmeuble());
-            immeuble.setNbrEtage(dto.getNbrEtage());
-            immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-            immeuble.setNomBien(dto.getNomBien());
-            immeuble.setNumeroImmeuble(numeroDubien + 1);
-            immeuble.setOccupied(false);
-            immeuble.setStatutBien(dto.getStatutBien());
-            immeuble.setSuperficieBien(dto.getSuperficieBien());
-            immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
-            Immeuble immeubleSave = immeubleRepository.save(immeuble);
-            //return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
-            oldimmeuble.get().setNbrEtage(dto.getNbrEtage());
-            return gestimoWebMapperImpl.fromImmeuble(immeubleSave);
-        } else {
-            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateur.getUrole().getRoleName(),
-                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
-        }
-    }
-
-    private int getNumeroDubien() {
-        int numeroDubien = immeubleRepository.getMaxNumImmeuble();
-        return numeroDubien;
-    }
 
     private Utilisateur getUtilisateur(Long IdUtilisateur) {
         Utilisateur utilisateur = utilisateurRepository
@@ -152,43 +83,38 @@ public class ImmeubleServiceImpl implements ImmeubleService {
 
         Immeuble immeuble = new Immeuble();
         immeuble.setSite(getSite(dto.getIdSite()));
-        immeuble.setUtilisateur(getUtilisateur(dto.getIdUtilisateur()));
-        if (immeubleRepository.count() == 0) {
+        immeuble.setUtilisateurProprietaire(getUtilisateur(dto.getIdUtilisateur()));
+        int size = new ArrayList<>(immeubleRepository.findAll()).size();
+        if (size == 0) {
             numBien = 1L;
         } else {
             numBien=nombreVillaByIdSite(getSite(dto.getIdSite()));
-           // log.info("le numero de la villa est le nuivant {}",numBien);
         }
-        immeuble.setAbrvBienimmobilier(
+        immeuble.setCodeNomAbrvImmeuble(
                 (immeuble.getSite().getAbrSite() + "-IMME-" + numBien).toUpperCase());
-        immeuble.setAbrvNomImmeuble(
+        immeuble.setNomCompletImmeuble(
                 ( immeuble.getSite().getNomSite() + "-IMMEUBLE-" + numBien).toUpperCase());
         immeuble.setGarrage(dto.isGarrage());
-        immeuble.setNumBien(numBien);
+        immeuble.setNumImmeuble(Math.toIntExact(numBien));
         immeuble.setIdAgence(dto.getIdAgence());
-        immeuble.setDescription(dto.getDescriptionImmeuble());
+        immeuble.setIdCreateur(dto.getIdCreateur());
+        immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
         immeuble.setNbrEtage(dto.getNbrEtage());
-        immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-        immeuble.setNomBien(dto.getNomBien());
-        immeuble.setNumeroImmeuble(getNumeroDubien() + 1);
-        immeuble.setOccupied(false);
-        immeuble.setStatutBien(dto.getStatutBien());
-        immeuble.setSuperficieBien(dto.getSuperficieBien());
+        immeuble.setNbrePiecesDansImmeuble(dto.getNbrePiecesDansImmeuble());
+        immeuble.setNomBaptiserImmeuble(dto.getNomBaptiserImmeuble());
         immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
         Immeuble immeubleSave = immeubleRepository.save(immeuble);
         Etage etage;
         for (int i = 0; i <= immeubleSave.getNbrEtage(); i++) {
             etage = new Etage();
-
             etage.setIdAgence(immeubleSave.getIdAgence());
             etage.setIdCreateur(immeubleSave.getIdCreateur());
             if (i == 0) {
-                etage.setNomEtage("rez-de-chaussée");
-
+                etage.setNomCompletEtage((immeubleSave.getNomCompletImmeuble()+"-"+"rez-de-chaussée").toUpperCase());
             } else {
-                etage.setNomEtage("Etage N°" + i);
+                etage.setNomCompletEtage((immeubleSave.getNomCompletImmeuble()+"-"+"Etage N°" + i).toUpperCase());
             }
-            etage.setAbrvEtage("Etage" + i);
+            etage.setCodeAbrvEtage((immeubleSave.getCodeNomAbrvImmeuble()+"-Etage-" + i).toUpperCase());
             etage.setNumEtage(i);
             etage.setImmeuble(immeubleSave);
             etageRepository.save(etage);
@@ -286,7 +212,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
         Map<Site, Long> numbreVillabySite = immeubleRepository.findAll()
                 .stream()
                 .filter(e->e.getSite().equals(site))
-                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
+                .collect(Collectors.groupingBy(Immeuble::getSite, Collectors.counting()));
 
         for (Map.Entry m : numbreVillabySite.entrySet()) {
             if(m.getKey().equals(site)){

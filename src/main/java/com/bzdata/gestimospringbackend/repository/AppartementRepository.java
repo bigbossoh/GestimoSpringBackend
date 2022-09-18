@@ -10,10 +10,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface AppartementRepository extends JpaRepository<Appartement, Long> {
-    @Query("SELECT coalesce(max(appart.numeroApp), 0) FROM Appartement appart")
-    int getMaxNumAppartement();
+//    @Query("SELECT coalesce(max(appart.numeroApp), 0) FROM Appartement appart")
+//    int getMaxNumAppartement();
 
-    Optional<Appartement> findByNomApp(String nom);
+    Optional<Appartement> findByNomCompletBienImmobilier(String nom);
 
     List<Appartement> findByEtageAppartement(Etage entity);
 

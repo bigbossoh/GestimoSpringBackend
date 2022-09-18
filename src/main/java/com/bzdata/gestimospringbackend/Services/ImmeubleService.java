@@ -8,7 +8,7 @@ import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
 
 public interface ImmeubleService {
 
-  ImmeubleAfficheDto save(ImmeubleDto dto);
+
 
   ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);
 

@@ -40,7 +40,7 @@ public class EtageServiceImpl implements EtageService {
 
     @Override
     public EtageDto save(EtageDto dto) {
-        int numEt = etageRepository.getMaxNumEtage() + 1;
+      //  int numEt = etageRepository.getMaxNumEtage() + 1;
         Optional<Etage> oldEtage = etageRepository.findById(dto.getId());
         log.info("We are going to create  a new Etage {}", dto);
         List<String> errors = EtageDtoValidator.validate(dto);
@@ -54,19 +54,15 @@ public class EtageServiceImpl implements EtageService {
                         "Impossible de trouver l'immeuble.",
                         ErrorCodes.IMMEUBLE_NOT_FOUND, errors));
         if (oldEtage.isPresent()) {
-            // oldEtage.get().setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" +
-            // dto.getAbrvEtage());
-            oldEtage.get().setNomEtage(dto.getNomEtage());
-            // oldEtage.get().setNumEtage(dto.getNumEtage());
+            oldEtage.get().setNomCompletEtage(dto.getNomCompletEtage());
             oldEtage.get().setImmeuble(immeuble);
-
             Etage etageSave = etageRepository.save(oldEtage.get());
             return EtageDto.fromEntity(etageSave);
         }
         Etage etage = new Etage();
-        etage.setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" + dto.getAbrvEtage() + "-ETAGE-" + numEt);
-        etage.setNomEtage(dto.getNomEtage());
-        etage.setNumEtage(numEt);
+       // etage.setCodeAbrvEtage( dto.getCodeAbrvEtage() + "-ETAGE-" + numEt);
+        etage.setNomCompletEtage(dto.getNomCompletEtage());
+       // etage.setNumEtage(numEt);
         etage.setImmeuble(immeuble);
 
         Etage etageSave = etageRepository.save(etage);
@@ -87,8 +83,7 @@ public class EtageServiceImpl implements EtageService {
         }
         Optional<Etage> eta = etageRepository.findById(id);
         if (eta.isPresent()) {
-            if (!eta.get().getMagasins().isEmpty() || eta.get().getAppartements().size() != 0 || eta.get().getStudios()
-                    .size() != 0) {
+            if (!eta.get().getMagasins().isEmpty() || eta.get().getAppartements().size() != 0) {
                 throw new EntityNotFoundException("l'Etage avec l'ID = " + id + " "
                         + "n' est pas vide ", ErrorCodes.IMMEUBLE_ALREADY_IN_USE);
             }
@@ -123,7 +118,7 @@ public class EtageServiceImpl implements EtageService {
             log.error("you are not provided a Etage.");
             return null;
         }
-        return etageRepository.findByNomEtage(nom).map(EtageDto::fromEntity).orElseThrow(
+        return etageRepository.findByNomCompletEtage(nom).map(EtageDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucune Etage has been found with name " + nom,
                         ErrorCodes.ETAGE_NOT_FOUND));
     }

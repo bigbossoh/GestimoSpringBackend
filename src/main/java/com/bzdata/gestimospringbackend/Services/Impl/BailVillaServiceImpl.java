@@ -72,7 +72,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             bailLocationVilla.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationVilla.setVillaBail(villa);
             bailLocationVilla.setUtilisateurOperation(utilisateur);
-            bailLocationVilla.setAbrvCodeBail(utilisateur.getNom()+" "+utilisateur.getPrenom()+"/"+bienImmobilierOperation.getAbrvBienimmobilier());
+            bailLocationVilla.setAbrvCodeBail(utilisateur.getNom()+" "+utilisateur.getPrenom()+"/"+bienImmobilierOperation.getCodeAbrvBienImmobilier());
             bailLocationVilla.setArchiveBail(false);
             bailLocationVilla.setDateDebut(dto.getDateDebut());
             bailLocationVilla.setDateFin(dto.getDateFin());
@@ -86,7 +86,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             BailLocation villaBailSave = bailLocationRepository.save(bailLocationVilla);
 
             villa.setOccupied(true);
-            villa.setStatutBien("Occupied");
+           // villa.setStatutBien("Occupied");
             villaRepository.save(villa);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée

@@ -41,12 +41,12 @@ public class ImmeubleController {
         return ResponseEntity.ok(immeubleService.delete(id));
     }
 
-    @PostMapping("/save")
-    @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ImmeubleAfficheDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
-        log.info("We are going to save a new Immeuble {}", dto);
-        return ResponseEntity.ok(immeubleService.save(dto));
-    }
+//    @PostMapping("/save")
+//    @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
+//    public ResponseEntity<ImmeubleAfficheDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
+//        log.info("We are going to save a new Immeuble {}", dto);
+//        return ResponseEntity.ok(immeubleService.save(dto));
+//    }
 
     @PostMapping("/saveImeubleEtage")
     @Operation(summary = "Creation  d'une Immeuble et les etage qui vont avec etage", security = @SecurityRequirement(name = "bearerAuth"))

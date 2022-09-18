@@ -23,13 +23,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("Magasin")
 public class Magasin extends Bienimmobilier {
+
+    int nombrePieceMagasin;
+    Long numMagasin;
     boolean isUnderBuildingMagasin;
-    int nmbrPieceMagasin;
-    String nomMagasin;
-    String abrvNomMagasin;
     @ManyToOne(fetch = FetchType.LAZY)
     Etage etageMagasin;
     @OneToMany(mappedBy = "magasinBail")
     List<Operation> operationsMagasin;
+    @ManyToOne(fetch = FetchType.LAZY)
+    Site site;
     
 }

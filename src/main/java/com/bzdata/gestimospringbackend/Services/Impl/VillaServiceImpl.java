@@ -35,68 +35,46 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VillaServiceImpl implements VillaService {
-final GestimoWebMapperImpl gestimoWebMapperImpl;
+    final GestimoWebMapperImpl gestimoWebMapperImpl;
     final VillaRepository villaRepository;
     final SiteRepository siteRepository;
     final UtilisateurRepository utilisateurRepository;
     final RoleRepository roleRepository;
 
     @Override
-    public VillaDto saveUneVilla(VillaDto dto){
-        Villa villa = new Villa();
+    public VillaDto saveUneVilla(VillaDto dto) {
         log.info("We are going to create  a new Villa {}", dto);
-
         List<String> errors = VillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("la Villa n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
                     ErrorCodes.VILLA_NOT_VALID, errors);
         }
+        Villa villa = new Villa();
         Site recoverySite = getSite(dto);
-        Utilisateur utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
-                .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
-                        ErrorCodes.UTILISATEUR_NOT_FOUND));
-
-        Role leRole = roleRepository.findById(utilisateurRequestDto.getUrole().getId()).orElseThrow(
-                () -> new InvalidEntityException(
-                        "Aucun role has been found with Code " + utilisateurRequestDto.getRoleUsed(),
-                        ErrorCodes.SITE_NOT_FOUND));
+        Utilisateur utilisateurRequestDto = getUtilisateur(dto.getIdUtilisateur());
+        Role leRole = getRole(utilisateurRequestDto.getUrole().getId());
         if (leRole.getRoleName().equals("PROPRIETAIRE")) {
             villa.setIdAgence(dto.getIdAgence());
+            villa.setIdCreateur(dto.getIdCreateur());
             villa.setSite(recoverySite);
             villa.setDescription(dto.getDescription());
-            villa.setArchived(dto.isArchived());
             villa.setOccupied(dto.isOccupied());
-            villa.setStatutBien(dto.getStatutBien());
             villa.setSuperficieBien(dto.getSuperficieBien());
-            villa.setGarageVilla(dto.isGarageVilla());
             villa.setNbrChambreVilla(dto.getNbrChambreVilla());
             villa.setNbrSalonVilla(dto.getNbrSalleEauVilla());
-            villa.setNomVilla(dto.getNomVilla());
-            villa.setUtilisateur(utilisateurRequestDto);
+            villa.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+            villa.setUtilisateurProprietaire(utilisateurRequestDto);
             Long numBien = 0L;
             if (villaRepository.count() == 0) {
                 numBien = 1L;
             } else {
-                //numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
-                numBien=nombreVillaByIdSite(recoverySite);
+                numBien = nombreVillaByIdSite(recoverySite);
             }
-
-            villa.setNumBien(numBien);
-            if (!StringUtils.hasLength(dto.getAbrvVilla())) {
-                villa.setAbrvVilla("villa-".toUpperCase() + numBien);
-
-                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
-            } else {
-                               villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
-                villa.setNomBien((recoverySite.getNomSite() + "-villa"+ "-" + numBien)
-                        .toUpperCase(Locale.ROOT));
-            }
-            villa.setAbrvBienimmobilier(
-                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase()+ "-" + numBien);
-         Villa villaSave=   villaRepository.save(villa);
+            villa.setNumVilla(numBien);
+            villa.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
+            villa.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
+            Villa villaSave = villaRepository.save(villa);
             return gestimoWebMapperImpl.fromVilla(villaSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
@@ -104,74 +82,22 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
                     ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
         }
     }
-    //Not GOOD not used
-    @Override
-    public boolean save(VillaDto dto) {
-        Villa villa = new Villa();
-        log.info("We are going to create  a new Villa {}", dto);
 
-        List<String> errors = VillaDtoValidator.validate(dto);
-        if (!errors.isEmpty()) {
-            log.error("la Villa n'est pas valide {}", errors);
-            throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
-                    ErrorCodes.VILLA_NOT_VALID, errors);
-        }
-        Site recoverySite = getSite(dto);
-        Utilisateur utilisateurRequestDto = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
-                .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
-                        ErrorCodes.UTILISATEUR_NOT_FOUND));
-
-        Role leRole = roleRepository.findById(utilisateurRequestDto.getUrole().getId()).orElseThrow(
+    private Role getRole(Long idUrole) {
+        Role leRole = roleRepository.findById(idUrole).orElseThrow(
                 () -> new InvalidEntityException(
-                        "Aucun role has been found with Code " + utilisateurRequestDto.getRoleUsed(),
+                        "Aucun role has been found with Code " + idUrole,
                         ErrorCodes.SITE_NOT_FOUND));
-        if (leRole.getRoleName().equals("PROPRIETAIRE")) {
-            villa.setIdAgence(dto.getIdAgence());
-            villa.setSite(recoverySite);
-            villa.setDescription(dto.getDescription());
-            villa.setArchived(dto.isArchived());
-            villa.setOccupied(dto.isOccupied());
-            villa.setStatutBien(dto.getStatutBien());
-            villa.setSuperficieBien(dto.getSuperficieBien());
-            villa.setGarageVilla(dto.isGarageVilla());
-            villa.setNbrChambreVilla(dto.getNbrChambreVilla());
-            villa.setNbrSalonVilla(dto.getNbrSalleEauVilla());
-            villa.setNomVilla(dto.getNomVilla());
-            villa.setUtilisateur(utilisateurRequestDto);
-            Long numBien = 0L;
-            if (villaRepository.count() == 0) {
-                numBien = 1L;
-            } else {
-                //numBien = Long.valueOf(villaRepository.getMaxNumVilla() + 1);
-                numBien=nombreVillaByIdSite(recoverySite);
-                log.info("le numero de la villa est le nuivant {}",numBien);
-            }
+        return leRole;
+    }
 
-            villa.setNumBien(numBien);
-            if (!StringUtils.hasLength(dto.getAbrvVilla())) {
-                villa.setAbrvVilla("villa-".toUpperCase() + numBien);
-
-                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + numBien));
-            } else {
-//                villa.setAbrvVilla("villa-" + dto.getNomVilla() + "-" + numBien);
-//                villa.setNomBien((recoverySite.getNomSite() + "-villa-" + dto.getNomVilla() + "-" + numBien)
-//                        .toUpperCase(Locale.ROOT));
-                villa.setAbrvVilla("villa-"+ "-" + numBien);
-                villa.setNomBien((recoverySite.getNomSite() + "-villa-"+ "-" + numBien)
-                        .toUpperCase(Locale.ROOT));
-            }
-            villa.setAbrvBienimmobilier(
-                    (recoverySite.getAbrSite() + "-" + dto.getAbrvVilla()).toUpperCase()+ "-" + numBien);
-            villaRepository.save(villa);
-            return true;
-        } else {
-            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleUsed(),
-                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
-        }
-
+    private Utilisateur getUtilisateur(Long idUtilisateur) {
+        Utilisateur utilisateurRequestDto = utilisateurRepository
+                .findById(idUtilisateur)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with code " + idUtilisateur,
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        return utilisateurRequestDto;
     }
 
     private Site getSite(VillaDto dto) {
@@ -204,7 +130,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     public Long maxOfNumBien() {
 
         LongSummaryStatistics collectMaxNumBien = villaRepository.findAll().stream()
-                .collect(Collectors.summarizingLong(Villa::getNumBien));
+                .collect(Collectors.summarizingLong(Villa::getNumVilla));
         log.info(" countNberOfRecordVilla {}", collectMaxNumBien.getMax());
         return collectMaxNumBien.getMax();
     }
@@ -230,16 +156,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
 
     @Override
     public VillaDto findByName(String nom) {
-        // log.info("We are going to get back the Villa By {}", nom);
-        // if (!StringUtils.hasLength(nom)) {
-        // log.error("you are not provided a Studio.");
-        // return null;
-        // }
-        // return
-        // villaRepository.findByNomVilla(nom).map(VillaDto::fromEntity).orElseThrow(
-        // () -> new InvalidEntityException("Aucun Villa has been found with name " +
-        // nom,
-        // ErrorCodes.VILLA_NOT_FOUND));
+
         return null;
     }
 
@@ -258,27 +175,21 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     public List<VillaDto> findAllLibre() {
         return villaRepository.findAll().stream()
                 .map(gestimoWebMapperImpl::fromVilla)
-                .filter((vil)->vil.isOccupied()==false)
+                .filter((vil) -> vil.isOccupied() == false)
                 .collect(Collectors.toList());
     }
-    @Override
-    public Map<Site, Long> getNumberVillaBySite() {
-        Map<Site, Long> numbreVillabySite = villaRepository.findAll()
-                .stream()
-                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
-        return numbreVillabySite;
 
-    }
-    private Long nombreVillaByIdSite(Site site){
+    private Long nombreVillaByIdSite(Site site) {
         Map<Site, Long> numbreVillabySite = villaRepository.findAll()
                 .stream()
-                .filter(e->e.getSite().equals(site))
-                .collect(Collectors.groupingBy(Bienimmobilier::getSite, Collectors.counting()));
+                .filter(e -> e.getSite().equals(site))
+              //  .filter(proprio->proprio)
+                .collect(Collectors.groupingBy(Villa::getSite, Collectors.counting()));
 
         for (Map.Entry m : numbreVillabySite.entrySet()) {
-            if(m.getKey().equals(site)){
+            if (m.getKey().equals(site)) {
 
-                return (Long) m.getValue()+1L;
+                return (Long) m.getValue() + 1L;
 
             }
 

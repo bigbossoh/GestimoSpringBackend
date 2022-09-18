@@ -14,22 +14,18 @@ import lombok.experimental.FieldDefaults;
 public class MagasinResponseDto {
     Long id;
     Long idAgence;
-    Long numBien;
-    String statutBien;
-    boolean isArchived;
-    String abrvBienimmobilier;
-    String description;
-    String nomBien;
-    double superficieBien;
-    boolean isOccupied;
+    Long idCreateur;
+    int nombrePieceMagasin;
+    Long numMagasin;
     boolean isUnderBuildingMagasin;
-    String abrvNomMagasin;
-    int nmbrPieceMagasin;
-    String nomMagasin;
-
-    Utilisateur utilisateur;
+    String codeAbrvBienImmobilier;
+    String nomCompletBienImmobilier;
+    String nomBaptiserBienImmobilier;
+    String description;
+    double superficieBien;
+    boolean bienMeublerResidence;
+    boolean isOccupied;
     String proprietaire;
-
     public static MagasinResponseDto fromEntity(Magasin magasin) {
         if (magasin == null) {
             return null;
@@ -38,19 +34,18 @@ public class MagasinResponseDto {
         return MagasinResponseDto.builder()
                 .id(magasin.getId())
                 .idAgence(magasin.getIdAgence())
-                .numBien(magasin.getNumBien())
-                .statutBien(magasin.getStatutBien())
-                .isArchived(magasin.isArchived())
-                .abrvBienimmobilier(magasin.getAbrvBienimmobilier())
+                .idCreateur(magasin.getIdCreateur())
+                .nombrePieceMagasin(magasin.getNombrePieceMagasin())
+                .numMagasin(magasin.getNumMagasin())
+                .isUnderBuildingMagasin(magasin.isUnderBuildingMagasin())
+                .codeAbrvBienImmobilier(magasin.getCodeAbrvBienImmobilier())
                 .description(magasin.getDescription())
-                .nomBien(magasin.getNomBien())
+                .nomCompletBienImmobilier(magasin.getNomCompletBienImmobilier())
                 .superficieBien(magasin.getSuperficieBien())
                 .isOccupied(magasin.isOccupied())
-                .isUnderBuildingMagasin(magasin.isUnderBuildingMagasin())
-                .abrvNomMagasin(magasin.getAbrvNomMagasin())
-                .nmbrPieceMagasin(magasin.getNmbrPieceMagasin())
-                .nomMagasin(magasin.getNomMagasin())
-                .proprietaire(magasin.getUtilisateur().getNom()+" "+(magasin.getUtilisateur().getPrenom()))
+                .nomBaptiserBienImmobilier(magasin.getNomBaptiserBienImmobilier())
+                .bienMeublerResidence(magasin.isBienMeublerResidence())
+                .proprietaire(magasin.getUtilisateurProprietaire().getNom()+" "+(magasin.getUtilisateurProprietaire().getPrenom()))
                 .build();
     }
 }
