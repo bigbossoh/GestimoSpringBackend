@@ -199,14 +199,8 @@ public class GestimoWebMapperImpl {
     public AppartementDto fromAppartement(Appartement appartement) {
         AppartementDto appartementDto = new AppartementDto();
         BeanUtils.copyProperties(appartement, appartementDto);
-        Appartement appartementFound = appartementRepository.findById(appartement.getId()).orElse(null);
-        if (appartementFound == null) {
-            throw new EntityNotFoundException("Appartement not found",
-                    ErrorCodes.APPARTEMENT_NOT_FOUND);
-        }
-        appartementDto
-                .setProprietaire(appartementFound.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getNom() + " " +
-                        appartementFound.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getPrenom());
+        appartementDto.setFullNameProprio(appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getNom() + " " +
+                appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getPrenom());
         return appartementDto;
     }
 

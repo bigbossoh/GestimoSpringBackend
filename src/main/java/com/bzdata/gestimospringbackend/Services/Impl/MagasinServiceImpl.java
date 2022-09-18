@@ -178,7 +178,7 @@ public class MagasinServiceImpl implements MagasinService {
             magasin.setUtilisateurProprietaire(utilisateurRequestDto);
             magasin.setIdCreateur(dto.getIdCreateur());
             magasin.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
-            magasin.setNumMagasin(numBien);
+
 
             if (dto.getIdEtage() == null) {
                 magasin.setSite(recoverySite);
