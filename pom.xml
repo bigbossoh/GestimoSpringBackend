@@ -184,7 +184,7 @@
                             <!--Required parameters BEGIN-->
                             <springmvc>true</springmvc>
                             <locations>
-                                <!-- <location>com.bossoh.gmsscbackend.controller</location>-->
+                                
                                 <location>com.bzdata.gestimospringbackend.Controllers</location>
                             </locations>
                             <basePath>http://localhost:8284</basePath>

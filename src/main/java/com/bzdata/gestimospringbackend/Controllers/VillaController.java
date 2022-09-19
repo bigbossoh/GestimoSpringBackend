@@ -3,10 +3,8 @@ package com.bzdata.gestimospringbackend.Controllers;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.util.List;
-import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 
 import org.springframework.http.ResponseEntity;

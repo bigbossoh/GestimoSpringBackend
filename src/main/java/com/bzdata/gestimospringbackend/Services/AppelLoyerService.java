@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.Services;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
@@ -17,8 +16,6 @@ public interface AppelLoyerService {
     List<AppelLoyersFactureDto> findAll();
 
     List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
-
-    //List<AppelLoyersFactureDto> findAllAppelLoyerSuperieurPeriodePourCloture(LocalDate dateDebutMois);
 
     public double soldeArrierer(Long idBailLocation);
 
