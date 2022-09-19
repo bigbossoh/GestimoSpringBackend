@@ -1,21 +1,19 @@
 package com.bzdata.gestimospringbackend.mappers;
 
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
-import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
-import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
-import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
-import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @RequiredArgsConstructor
 @Service

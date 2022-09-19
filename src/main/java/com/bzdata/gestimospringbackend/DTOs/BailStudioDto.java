@@ -1,14 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-import java.time.LocalDate;
-
-import com.bzdata.gestimospringbackend.Models.BailLocation;
-
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
-
 //@Data
 //@Builder
 //@FieldDefaults(level = AccessLevel.PRIVATE)

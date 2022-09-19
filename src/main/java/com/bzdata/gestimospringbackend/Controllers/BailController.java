@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
-import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
