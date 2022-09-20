@@ -186,6 +186,9 @@ public class GestimoWebMapperImpl {
         etageAfficheDto.setId(etage.getId());
         etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateurProprietaire().getNom());
         etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateurProprietaire().getPrenom());
+       etageAfficheDto.setAbrvEtage(etage.getCodeAbrvEtage());
+       etageAfficheDto.setNomEtage(etage.getNomBaptiserEtage());
+       etageAfficheDto.setNomImmeuble(etage.getImmeuble().getNomBaptiserImmeuble());
         return etageAfficheDto;
 
     }
