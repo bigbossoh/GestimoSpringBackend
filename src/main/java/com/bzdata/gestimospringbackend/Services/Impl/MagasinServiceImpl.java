@@ -21,8 +21,6 @@ import com.bzdata.gestimospringbackend.validator.MagasinDtoValidator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -146,12 +144,12 @@ public class MagasinServiceImpl implements MagasinService {
         Magasin magasin = new Magasin();
         Site recoverySite ;
         Etage etage;
-        if (dto.getIdEtage() != null) {
+        if (dto.getIdEtage() != null && dto.getIdEtage()!=0) {
             etage= getEtage(dto);
         }else{
             etage=null;
         }
-        if(dto.getIdSite()!=null){
+        if(dto.getIdSite()!=null && dto.getIdSite()!=0){
             recoverySite= getSite(dto);
         }else{
             recoverySite=null;
@@ -180,7 +178,7 @@ public class MagasinServiceImpl implements MagasinService {
             magasin.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
 
 
-            if (dto.getIdEtage() == null) {
+            if (dto.getIdEtage() == null|| dto.getIdEtage() == 0) {
                 magasin.setSite(recoverySite);
             magasin.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-MAG-" + numBien).toUpperCase());
             magasin.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-MAGASIN-" + numBien).toUpperCase());

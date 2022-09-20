@@ -1,14 +1,11 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
-import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.AppartementService;

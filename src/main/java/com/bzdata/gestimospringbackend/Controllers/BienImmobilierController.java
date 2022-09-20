@@ -4,6 +4,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
 import com.bzdata.gestimospringbackend.DTOs.BienImmobilierDto;
 import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 
@@ -28,7 +29,7 @@ public class BienImmobilierController {
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<BienImmobilierDto>> findAllBien() {
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien() {
         return ResponseEntity.ok(bienImmobilierService.findAll());
     }
 }
