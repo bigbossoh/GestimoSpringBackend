@@ -30,8 +30,8 @@ public class Villa extends Bienimmobilier {
     int nbrSalleEauVilla;
     Long numVilla;
     boolean garageVilla = false;
-    @OneToMany(mappedBy = "villaBail")
-    List<Operation> operationsVilla;
+//    @OneToMany(mappedBy = "villaBail")
+//    List<Operation> operationsVilla;
     @ManyToOne
     Site site;
 }

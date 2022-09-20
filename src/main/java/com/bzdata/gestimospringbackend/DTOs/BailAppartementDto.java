@@ -41,7 +41,7 @@ public class BailAppartementDto {
                 .designationBail(bailLocation.getDesignationBail())
                 .enCoursBail(bailLocation.isEnCoursBail())
                 .id(bailLocation.getId())
-                .idAppartement(bailLocation.getAppartementBail().getId())
+              //  .idAppartement(bailLocation.getAppartementBail().getId())
                 .montantCautionBail(bailLocation.getMontantCautionBail())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
                 .idUtilisateur(bailLocation.getUtilisateurOperation().getId())

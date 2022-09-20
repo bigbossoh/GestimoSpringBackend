@@ -41,29 +41,10 @@ public class BailMagasinDto {
                 .designationBail(bailLocation.getDesignationBail())
                 .enCoursBail(bailLocation.isEnCoursBail())
                 .id(bailLocation.getId())
-                .idMagasin(bailLocation.getMagasinBail().getId())
+               // .idMagasin(bailLocation.getMagasinBail().getId())
                 .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
                 .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
                 .build();
     }
-    // public static BailLocation toEntity(BailMagasinDto bailMagasinDto) {
-    // if (bailMagasinDto == null) {
-    // return null;
-    // }
-    // BailLocation bailLocation = new BailLocation();
-    // bailLocation.setAbrvCodeBail(bailMagasinDto.getAbrvCodeBail());
-    // bailLocation.setIdAgence(bailMagasinDto.getIdAgence());
-    // bailLocation.setArchiveBail(bailLocation.isArchiveBail());
-    // bailLocation.setBienImmobilierOperation(MagasinDto.toEntity(bailMagasinDto.getMagasinDto()));
-    // bailLocation.setDateDebut(bailMagasinDto.getDateDebut());
-    // bailLocation.setDateFin(bailMagasinDto.getDateFin());
-    // bailLocation.setDesignationBail(bailMagasinDto.getDesignationBail());
-    // bailLocation.setEnCoursBail(bailMagasinDto.isEnCoursBail());
-    // bailLocation.setId(bailMagasinDto.getId());
-    // bailLocation.setMontantCautionBail(bailMagasinDto.getMontantCautionBail());
-    // bailLocation.setNbreMoisCautionBail(bailMagasinDto.getNbreMoisCautionBail());
-    // bailLocation.setUtilisateurOperation(UtilisateurRequestDto.toEntity(bailMagasinDto.getUtilisateurRequestDto()));
 
-    // return bailLocation;
-    // }
 }

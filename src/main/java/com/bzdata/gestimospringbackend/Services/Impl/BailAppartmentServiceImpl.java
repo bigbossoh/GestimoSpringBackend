@@ -73,7 +73,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                             "Aucun Bien has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
             bailLocation.setIdAgence(dto.getIdAgence());
-            bailLocation.setAppartementBail(appartementBail);
+          //  bailLocation.setAppartementBail(appartementBail);
             bailLocation.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocation.setUtilisateurOperation(utilisateur);
             bailLocation.setArchiveBail(false);
