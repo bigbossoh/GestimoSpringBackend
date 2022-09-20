@@ -106,7 +106,8 @@ public class GestimoWebMapperImpl {
                 .orElse(null));
         // Information sur le proprietaire
         Utilisateur utilisateur = utilisateurRepository
-                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getId())
+                .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation()
+                        .getUtilisateurProprietaire().getId())
                 .orElse(null);
         if (utilisateur == null)
             throw new EntityNotFoundException("utilisateur from GestimoMapper not found",
@@ -186,9 +187,9 @@ public class GestimoWebMapperImpl {
         etageAfficheDto.setId(etage.getId());
         etageAfficheDto.setNomPropio(etageFound.getImmeuble().getUtilisateurProprietaire().getNom());
         etageAfficheDto.setPrenomProprio(etageFound.getImmeuble().getUtilisateurProprietaire().getPrenom());
-       etageAfficheDto.setAbrvEtage(etage.getCodeAbrvEtage());
-       etageAfficheDto.setNomEtage(etage.getNomBaptiserEtage());
-       etageAfficheDto.setNomImmeuble(etage.getImmeuble().getNomBaptiserImmeuble());
+        etageAfficheDto.setAbrvEtage(etage.getCodeAbrvEtage());
+        etageAfficheDto.setNomEtage(etage.getNomBaptiserEtage());
+        etageAfficheDto.setNomImmeuble(etage.getImmeuble().getNomBaptiserImmeuble());
         return etageAfficheDto;
 
     }
@@ -202,8 +203,9 @@ public class GestimoWebMapperImpl {
     public AppartementDto fromAppartement(Appartement appartement) {
         AppartementDto appartementDto = new AppartementDto();
         BeanUtils.copyProperties(appartement, appartementDto);
-        appartementDto.setFullNameProprio(appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getNom() + " " +
-                appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getPrenom());
+        appartementDto.setFullNameProprio(
+                appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getNom() + " " +
+                        appartement.getEtageAppartement().getImmeuble().getUtilisateurProprietaire().getPrenom());
         return appartementDto;
     }
 
@@ -213,8 +215,8 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(magasin, magasinDto);
         magasinDto.setIdSite(magasin.getSite().getId());
         magasinDto.setIdUtilisateur(magasin.getUtilisateurProprietaire().getId());
-        magasinDto.setProprietaire(magasin.getUtilisateurProprietaire().getNom()+ " "
-                +magasin.getUtilisateurProprietaire().getPrenom());
+        magasinDto.setProprietaire(magasin.getUtilisateurProprietaire().getNom() + " "
+                + magasin.getUtilisateurProprietaire().getPrenom());
         return magasinDto;
     }
 
@@ -230,7 +232,8 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(villa, villaDto);
         villaDto.setIdSite(villa.getSite().getId());
         villaDto.setIdUtilisateur(villa.getUtilisateurProprietaire().getId());
-        villaDto.setProprietaire(villa.getUtilisateurProprietaire().getNom() + " " + villa.getUtilisateurProprietaire().getPrenom());
+        villaDto.setProprietaire(
+                villa.getUtilisateurProprietaire().getNom() + " " + villa.getUtilisateurProprietaire().getPrenom());
         return villaDto;
     }
 
@@ -245,5 +248,14 @@ public class GestimoWebMapperImpl {
         UtilisateurAfficheDto utilisateurAfficheDto = new UtilisateurAfficheDto();
         BeanUtils.copyProperties(utilisateur, utilisateurAfficheDto);
         return utilisateurAfficheDto;
+    }
+
+    // BIEN IMMOBILIER MAPPER
+    public BienImmobilierAffiheDto fromBienImmobilier(Bienimmobilier bienimmobilier) {
+        BienImmobilierAffiheDto bienImmobilierAffiheDto = new BienImmobilierAffiheDto();
+        BeanUtils.copyProperties(bienimmobilier, bienImmobilierAffiheDto);
+        bienImmobilierAffiheDto.setNomPrenomProprio(bienimmobilier.getUtilisateurProprietaire().getNom() + " "
+                + bienimmobilier.getUtilisateurProprietaire().getPrenom());
+        return bienImmobilierAffiheDto;
     }
 }
