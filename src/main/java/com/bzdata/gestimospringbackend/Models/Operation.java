@@ -1,13 +1,9 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -35,12 +31,5 @@ public abstract class Operation extends AbstractEntity {
     Utilisateur utilisateurOperation;
     @ManyToOne
     Bienimmobilier bienImmobilierOperation;
-//    @ManyToOne
-//    Studio studioBail;
-    @ManyToOne
-    Appartement appartementBail;
-    @ManyToOne
-    Magasin magasinBail;
-    @ManyToOne
-    Villa villaBail;
+
 }

@@ -29,8 +29,6 @@ public class Magasin extends Bienimmobilier {
     boolean isUnderBuildingMagasin;
     @ManyToOne(fetch = FetchType.LAZY)
     Etage etageMagasin;
-    @OneToMany(mappedBy = "magasinBail")
-    List<Operation> operationsMagasin;
     @ManyToOne(fetch = FetchType.LAZY)
     Site site;
     

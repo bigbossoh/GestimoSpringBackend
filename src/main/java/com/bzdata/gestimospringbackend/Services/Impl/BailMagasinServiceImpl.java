@@ -83,7 +83,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             bailLocationMagasin.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
 
             bailLocationMagasin.setBienImmobilierOperation(bienImmobilierOperation);
-            bailLocationMagasin.setMagasinBail(magasinBail);
+           // bailLocationMagasin.setMagasinBail(magasinBail);
             bailLocationMagasin.setUtilisateurOperation(utilisateur);
             BailLocation magasinBailSave = bailLocationRepository.save(bailLocationMagasin);
             /**

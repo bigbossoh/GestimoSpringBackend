@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
+//@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailVillaDto {
     Long id;
@@ -25,28 +25,29 @@ public class BailVillaDto {
     double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
-    Long idVilla;
-    Long idUtilisateur;
+    Long idBienImmobilier;
+    Long idLocataire;
+    String fullNomLocatire;
 
-    public static BailVillaDto fromEntity(BailLocation bailLocation) {
-        if (bailLocation == null) {
-            return null;
-        }
-        return BailVillaDto.builder()
-                .abrvCodeBail(bailLocation.getAbrvCodeBail())
-                .archiveBail(bailLocation.isArchiveBail())
-                .idAgence(bailLocation.getIdAgence())
-                .dateDebut(bailLocation.getDateDebut())
-                .dateFin(bailLocation.getDateFin())
-                .designationBail(bailLocation.getDesignationBail())
-                .enCoursBail(bailLocation.isEnCoursBail())
-                .id(bailLocation.getId())
-                .idVilla(bailLocation.getVillaBail().getId())
-                .montantCautionBail(bailLocation.getMontantCautionBail())
-                .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
-                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
-                .build();
-    }
+//    public static BailVillaDto fromEntity(BailLocation bailLocation) {
+//        if (bailLocation == null) {
+//            return null;
+//        }
+//        return BailVillaDto.builder()
+//                .abrvCodeBail(bailLocation.getAbrvCodeBail())
+//                .archiveBail(bailLocation.isArchiveBail())
+//                .idAgence(bailLocation.getIdAgence())
+//                .dateDebut(bailLocation.getDateDebut())
+//                .dateFin(bailLocation.getDateFin())
+//                .designationBail(bailLocation.getDesignationBail())
+//                .enCoursBail(bailLocation.isEnCoursBail())
+//                .id(bailLocation.getId())
+//              //  .idVilla(bailLocation.getVillaBail().getId())
+//                .montantCautionBail(bailLocation.getMontantCautionBail())
+//                .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
+//                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
+//                .build();
+//    }
 
     // public static BailLocation toEntity(BailVillaDto bailVillaDto) {
     // if (bailVillaDto == null) {
