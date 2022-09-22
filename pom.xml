@@ -86,11 +86,17 @@
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
-        <dependency>
+        <!-- <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
-        </dependency>
+        </dependency> -->
+<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-swagger2</artifactId>
+    <version>3.0.0</version>
+</dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -184,7 +190,7 @@
                             <!--Required parameters BEGIN-->
                             <springmvc>true</springmvc>
                             <locations>
-                                
+
                                 <location>com.bzdata.gestimospringbackend.Controllers</location>
                             </locations>
                             <basePath>http://localhost:8284</basePath>
