@@ -132,6 +132,7 @@ public class AppartementServiceImpl implements AppartementService {
         appartement.setBienMeublerResidence(dto.isBienMeublerResidence());
         appartement.setDescription(dto.getDescription());
         appartement.setSuperficieBien(dto.getSuperficieBien());
+        appartement.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
         Appartement appartementSave = appartementRepository.save(appartement);
         return gestimoWebMapperImpl.fromAppartement(appartementSave);
     }
