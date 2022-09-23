@@ -1,5 +1,7 @@
 package com.bzdata.gestimospringbackend.mappers;
 
+import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class BailMapperImpl {
+    //BAIL VILLA MAPPER
     public BailVillaDto fromVilla(BailLocation bailLocation){
         BailVillaDto bailLocaDto= new BailVillaDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
@@ -19,4 +22,25 @@ public class BailMapperImpl {
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
         return bailLocaDto;
     }
+    //BAIL MAGASIN MAPPER
+    public BailMagasinDto fromMagasin(BailLocation bailLocation){
+        BailMagasinDto bailLocaDto= new BailMagasinDto();
+        BeanUtils.copyProperties(bailLocation, bailLocaDto);
+        bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+        bailLocaDto.setNomPrenomLocataire(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom());
+        bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
+        bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+        return bailLocaDto;
+    }
+        //BAIL MAGASIN MAPPER
+        public BailAppartementDto fromAppartement(BailLocation bailLocation){
+            BailAppartementDto bailLocaDto= new BailAppartementDto();
+            BeanUtils.copyProperties(bailLocation, bailLocaDto);
+            bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+            bailLocaDto.setNomLocataire(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom());
+            bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
+            bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+        
+            return bailLocaDto;
+        }
 }

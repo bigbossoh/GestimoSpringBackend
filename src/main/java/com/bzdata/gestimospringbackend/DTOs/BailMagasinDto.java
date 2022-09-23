@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailMagasinDto {
     Long id;
@@ -25,26 +24,11 @@ public class BailMagasinDto {
     double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
+    Long idBienImmobilier;
     Long idMagasin;
-    Long idUtilisateur;
+    String nomPrenomLocataire;
+    long idLocataire;
 
-    public static BailMagasinDto fromEntity(BailLocation bailLocation) {
-        if (bailLocation == null) {
-            return null;
-        }
-        return BailMagasinDto.builder()
-                .abrvCodeBail(bailLocation.getAbrvCodeBail())
-                .idAgence(bailLocation.getIdAgence())
-                .archiveBail(bailLocation.isArchiveBail())
-                .dateDebut(bailLocation.getDateDebut())
-                .dateFin(bailLocation.getDateFin())
-                .designationBail(bailLocation.getDesignationBail())
-                .enCoursBail(bailLocation.isEnCoursBail())
-                .id(bailLocation.getId())
-               // .idMagasin(bailLocation.getMagasinBail().getId())
-                .nbreMoisCautionBail(bailLocation.getNbreMoisCautionBail())
-                .idUtilisateur(bailLocation.getUtilisateurOperation().getId())
-                .build();
-    }
+    String codeBien;
 
 }
