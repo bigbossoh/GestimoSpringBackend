@@ -145,7 +145,7 @@ public class AppartementServiceImpl implements AppartementService {
 
     @Override
     public List<AppartementDto> findAllLibre() {
-        return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
+        return appartementRepository.findAll(Sort.by(Direction.ASC, "codeAbrvBienImmobilier")).stream()
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .filter((app) -> !app.isOccupied())
                 .collect(Collectors.toList());
