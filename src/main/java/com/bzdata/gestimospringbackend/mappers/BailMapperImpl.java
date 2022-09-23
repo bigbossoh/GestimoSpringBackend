@@ -13,34 +13,38 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class BailMapperImpl {
-    //BAIL VILLA MAPPER
-    public BailVillaDto fromVilla(BailLocation bailLocation){
-        BailVillaDto bailLocaDto= new BailVillaDto();
+    // BAIL VILLA MAPPER
+    public BailVillaDto fromBailVilla(BailLocation bailLocation) {
+        BailVillaDto bailLocaDto = new BailVillaDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
         bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
-        bailLocaDto.setFullNomLocatire(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom());
+        bailLocaDto.setFullNomLocatire(bailLocation.getUtilisateurOperation().getNom() + " "
+                + bailLocation.getUtilisateurOperation().getPrenom());
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
         return bailLocaDto;
     }
-    //BAIL MAGASIN MAPPER
-    public BailMagasinDto fromMagasin(BailLocation bailLocation){
-        BailMagasinDto bailLocaDto= new BailMagasinDto();
+
+    // BAIL MAGASIN MAPPER
+    public BailMagasinDto fromBailMagasin(BailLocation bailLocation) {
+        BailMagasinDto bailLocaDto = new BailMagasinDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
         bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
-        bailLocaDto.setNomPrenomLocataire(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom());
+        bailLocaDto.setNomPrenomLocataire(bailLocation.getUtilisateurOperation().getNom() + " "
+                + bailLocation.getUtilisateurOperation().getPrenom());
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
         bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
         return bailLocaDto;
     }
-        //BAIL MAGASIN MAPPER
-        public BailAppartementDto fromAppartement(BailLocation bailLocation){
-            BailAppartementDto bailLocaDto= new BailAppartementDto();
-            BeanUtils.copyProperties(bailLocation, bailLocaDto);
-            bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
-            bailLocaDto.setNomLocataire(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom());
-            bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
-            bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
-        
-            return bailLocaDto;
-        }
+
+    // BAIL MAGASIN MAPPER
+    public BailAppartementDto fromBailAppartement(BailLocation bailLocation) {
+        BailAppartementDto bailLocaDto = new BailAppartementDto();
+        BeanUtils.copyProperties(bailLocation, bailLocaDto);
+        bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+        bailLocaDto.setNomLocataire(bailLocation.getUtilisateurOperation().getNom() + " "
+                + bailLocation.getUtilisateurOperation().getPrenom());
+        bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
+        bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+        return bailLocaDto;
+    }
 }

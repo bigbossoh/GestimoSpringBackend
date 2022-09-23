@@ -110,7 +110,7 @@ public class BailVillaServiceImpl implements BailVillaService {
 
 
             appelLoyerService.save(appelLoyerRequestDto);
-                return bailMapper.fromVilla(villaBailSave);
+                return bailMapper.fromBailVilla(villaBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
@@ -139,7 +139,7 @@ public class BailVillaServiceImpl implements BailVillaService {
     @Override
     public List<BailVillaDto> findAll() {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-                .map(bailMapper::fromVilla)
+                .map(bailMapper::fromBailVilla)
                 .collect(Collectors.toList());
     }
 
@@ -150,7 +150,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findById(id).map(bailMapper::fromVilla).orElseThrow(
+        return bailLocationRepository.findById(id).map(bailMapper::fromBailVilla).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with Code " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
@@ -162,7 +162,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             log.error("you are not provided a Bail.");
             return null;
         }
-        return bailLocationRepository.findByDesignationBail(nom).map(bailMapper::fromVilla).orElseThrow(
+        return bailLocationRepository.findByDesignationBail(nom).map(bailMapper::fromBailVilla).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }

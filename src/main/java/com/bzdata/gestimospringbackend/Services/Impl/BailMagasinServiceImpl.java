@@ -15,6 +15,8 @@ import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
@@ -45,6 +47,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
     final BienImmobilierRepository bienImmobilierRepository;
+    final BailMapperImpl bailMapperImpl;
 
     @Override
     public BailMagasinDto save(BailMagasinDto dto)  {
@@ -58,9 +61,9 @@ public class BailMagasinServiceImpl implements BailMagasinService {
         }
 
         Utilisateur utilisateur = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
+                .findById(dto.getIdLocataire())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdLocataire(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
             Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdMagasin())
@@ -111,7 +114,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             appelLoyerRequestDto.setIdAgence(magasinBailSave.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
-            return BailMagasinDto.fromEntity(magasinBailSave);
+            return bailMapperImpl.fromBailMagasin(magasinBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
@@ -140,7 +143,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     @Override
     public List<BailMagasinDto> findAll() {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-                .map(BailMagasinDto::fromEntity)
+                .map(bailMapperImpl::fromBailMagasin)
                 .collect(Collectors.toList());
     }
 
@@ -151,7 +154,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findById(id).map(BailMagasinDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findById(id).map(bailMapperImpl::fromBailMagasin).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with Code " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
@@ -163,7 +166,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findByDesignationBail(nom).map(BailMagasinDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findByDesignationBail(nom).map(bailMapperImpl::fromBailMagasin).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }

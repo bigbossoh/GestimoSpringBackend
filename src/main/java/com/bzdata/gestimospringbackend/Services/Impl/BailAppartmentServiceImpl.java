@@ -110,7 +110,7 @@ final BailMapperImpl bailMapperImpl;
             appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
             // appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
             appelLoyerService.save(appelLoyerRequestDto);
-            return bailMapperImpl.fromAppartement(appartementBailSave);
+            return bailMapperImpl.fromBailAppartement(appartementBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
@@ -138,7 +138,7 @@ final BailMapperImpl bailMapperImpl;
     @Override
     public List<BailAppartementDto> findAll() {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-                .map(bailMapperImpl::fromAppartement)
+                .map(bailMapperImpl::fromBailAppartement)
                 .collect(Collectors.toList());
     }
 
@@ -149,7 +149,7 @@ final BailMapperImpl bailMapperImpl;
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findById(id).map(bailMapperImpl::fromAppartement).orElseThrow(
+        return bailLocationRepository.findById(id).map(bailMapperImpl::fromBailAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with Code " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
@@ -161,7 +161,7 @@ final BailMapperImpl bailMapperImpl;
             log.error("you are not provided a Bail.");
             return null;
         }
-        return bailLocationRepository.findByDesignationBail(nom).map(bailMapperImpl::fromAppartement).orElseThrow(
+        return bailLocationRepository.findByDesignationBail(nom).map(bailMapperImpl::fromBailAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
