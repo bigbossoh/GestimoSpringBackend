@@ -16,7 +16,7 @@ public class SecurityConstant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
-            "/**/envoimail/**","**/bail/**",
+            "/**/envoimail/**","**/bail/**","/actuator/**",
             "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login",
             "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**", "/**/bienImmobilier/**"
     };
