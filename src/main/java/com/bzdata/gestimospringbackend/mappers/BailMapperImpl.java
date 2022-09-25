@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.mappers;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +18,7 @@ public class BailMapperImpl {
     public BailVillaDto fromBailVilla(BailLocation bailLocation) {
         BailVillaDto bailLocaDto = new BailVillaDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
-        bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+        bailLocaDto.setIdVilla(bailLocation.getBienImmobilierOperation().getId());
         bailLocaDto.setFullNomLocatire(bailLocation.getUtilisateurOperation().getNom() + " "
                 + bailLocation.getUtilisateurOperation().getPrenom());
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
@@ -28,8 +29,8 @@ public class BailMapperImpl {
     public BailMagasinDto fromBailMagasin(BailLocation bailLocation) {
         BailMagasinDto bailLocaDto = new BailMagasinDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
-        bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
-        bailLocaDto.setNomPrenomLocataire(bailLocation.getUtilisateurOperation().getNom() + " "
+       
+        bailLocaDto.setNomLocataire(bailLocation.getUtilisateurOperation().getNom() + " "
                 + bailLocation.getUtilisateurOperation().getPrenom());
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
         bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
@@ -47,4 +48,15 @@ public class BailMapperImpl {
         bailLocaDto.setCodeBien(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
         return bailLocaDto;
     }
+        // BAIL MAGASIN MAPPER
+        public OperationDto fromOperation(BailLocation bailLocation) {
+            OperationDto bailLocaDto = new OperationDto();
+            BeanUtils.copyProperties(bailLocation, bailLocaDto);
+            bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+            bailLocaDto.setUtilisateurOperation(bailLocation.getUtilisateurOperation().getNom() + " "
+                    + bailLocation.getUtilisateurOperation().getPrenom());
+            bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
+            bailLocaDto.setCodeAbrvBienImmobilier(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+            return bailLocaDto;
+        }
 }

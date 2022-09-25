@@ -3,9 +3,10 @@ package com.bzdata.gestimospringbackend.Services;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 
 public interface BailAppartementService {
-    BailAppartementDto save(BailAppartementDto dto);
+    OperationDto save(BailAppartementDto dto);
 
     boolean delete(Long id);
 

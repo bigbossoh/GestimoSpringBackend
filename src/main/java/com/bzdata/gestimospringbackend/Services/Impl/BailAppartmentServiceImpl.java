@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
@@ -48,7 +49,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     final BienImmobilierRepository bienImmobilierRepository;
 final BailMapperImpl bailMapperImpl;
     @Override
-    public BailAppartementDto save(BailAppartementDto dto) {
+    public OperationDto save(BailAppartementDto dto) {
         BailLocation bailLocation = new BailLocation();
         log.info("We are going to create  a new Bail Appartement {}", dto);
         List<String> errors = BailAppartementDtoValidator.validate(dto);
@@ -110,7 +111,7 @@ final BailMapperImpl bailMapperImpl;
             appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
             // appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
             appelLoyerService.save(appelLoyerRequestDto);
-            return bailMapperImpl.fromBailAppartement(appartementBailSave);
+            return bailMapperImpl.fromOperation(appartementBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),

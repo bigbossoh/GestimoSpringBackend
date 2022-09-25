@@ -1,8 +1,6 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.Period;
 import java.util.List;
 
 import javax.persistence.Entity;

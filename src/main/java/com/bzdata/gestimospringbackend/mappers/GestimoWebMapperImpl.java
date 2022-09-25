@@ -28,9 +28,6 @@ public class GestimoWebMapperImpl {
     final UtilisateurRepository utilisateurRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final EtageRepository etageRepository;
-    final AppartementRepository appartementRepository;
-    final MagasinRepository magasinRepository;
-
     // AppelLoyer
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto) {
         AppelLoyer appelLoyer = new AppelLoyer();
@@ -46,7 +43,6 @@ public class GestimoWebMapperImpl {
         AppelLoyersFactureDto appelLoyersFactureDto = new AppelLoyersFactureDto();
         BeanUtils.copyProperties(appelLoyer, appelLoyersFactureDto);
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
-
         // LOCATAIRE
         appelLoyersFactureDto
                 .setPrenomLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
@@ -144,6 +140,7 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
         immeubleAfficheDto.setNomPropio(immeuble.getUtilisateurProprietaire().getNom());
         immeubleAfficheDto.setPrenomProprio(immeuble.getUtilisateurProprietaire().getPrenom());
+       immeubleAfficheDto.setAbrvNomImmeuble(immeuble.getCodeNomAbrvImmeuble());
         return immeubleAfficheDto;
     }
 

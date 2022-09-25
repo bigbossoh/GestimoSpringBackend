@@ -22,7 +22,7 @@ public class BailVillaDto {
     double nouveauMontantLoyer;
     LocalDate dateDebut;
     LocalDate dateFin;
-    Long idBienImmobilier;
+    Long idVilla;
     Long idLocataire;
     String fullNomLocatire;
     String codeBien;
