@@ -15,6 +15,8 @@ public interface AppelLoyerService {
 
     List<AppelLoyersFactureDto> findAll();
 
+    List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(Long id);
+
     List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
 
     public double soldeArrierer(Long idBailLocation);

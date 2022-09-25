@@ -47,7 +47,7 @@ public class BailVillaServiceImpl implements BailVillaService {
     final BailMapperImpl bailMapper;
 
     @Override
-    public BailVillaDto saveNewBailVilla(BailVillaDto dto) {
+    public OperationDto saveNewBailVilla(BailVillaDto dto) {
         BailLocation bailLocationVilla = new BailLocation();
         log.info("We are going to create  a new Bail Villa {}", dto);
         List<String> errors = BailVillaDtoValidator.validate(dto);
@@ -63,13 +63,13 @@ public class BailVillaServiceImpl implements BailVillaService {
                         "Aucun Utilisateur has been found with code " + dto.getIdLocataire(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
-            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdBienImmobilier())
+            Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdVilla())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucun Bien has been found with code " + dto.getIdBienImmobilier(),
+                            "Aucun Bien has been found with code " + dto.getIdVilla(),
                             ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND));
-            Villa villa = villaRepository.findById(dto.getIdBienImmobilier())
+            Villa villa = villaRepository.findById(dto.getIdVilla())
                     .orElseThrow(() -> new InvalidEntityException(
-                            "Aucune Villa has been found with code " + dto.getIdBienImmobilier(),
+                            "Aucune Villa has been found with code " + dto.getIdVilla(),
                             ErrorCodes.VILLE_NOT_FOUND));
             bailLocationVilla.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocationVilla.setUtilisateurOperation(utilisateur);
@@ -110,7 +110,7 @@ public class BailVillaServiceImpl implements BailVillaService {
 
 
             appelLoyerService.save(appelLoyerRequestDto);
-                return bailMapper.fromBailVilla(villaBailSave);
+                return bailMapper.fromOperation(villaBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),

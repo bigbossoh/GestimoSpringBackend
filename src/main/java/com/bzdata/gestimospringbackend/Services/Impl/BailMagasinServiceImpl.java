@@ -50,7 +50,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     final BailMapperImpl bailMapperImpl;
 
     @Override
-    public BailMagasinDto save(BailMagasinDto dto)  {
+    public OperationDto save(BailMagasinDto dto)  {
         BailLocation bailLocationMagasin = new BailLocation();
         log.info("We are going to create  a new Bail Magasin in the service layer {}", dto);
         List<String> errors = BailMagasinDtoValidator.validate(dto);
@@ -114,7 +114,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             appelLoyerRequestDto.setIdAgence(magasinBailSave.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
-            return bailMapperImpl.fromBailMagasin(magasinBailSave);
+            return bailMapperImpl.fromOperation(magasinBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
