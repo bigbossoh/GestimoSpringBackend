@@ -166,17 +166,4 @@ final BailMapperImpl bailMapperImpl;
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
-
-    @Override
-    public List<BailAppartementDto> findAllByIdBienImmobilier(Long id) {
-
-        return null;
-    }
-
-    @Override
-    public List<BailAppartementDto> findAllByIdLocataire(Long id) {
-
-        return null;
-    }
-
 }

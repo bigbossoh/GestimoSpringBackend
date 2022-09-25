@@ -255,4 +255,12 @@ public class GestimoWebMapperImpl {
                 + bienimmobilier.getUtilisateurProprietaire().getPrenom());
         return bienImmobilierAffiheDto;
     }
+        //PERIODE BAIL APPEL
+        public PeriodeDto fromPeriodeAppel(AppelLoyer appelLoyer) {
+            PeriodeDto periodeDto = new PeriodeDto();
+            BeanUtils.copyProperties(appelLoyer, periodeDto);
+            periodeDto.setPeriodeAppelLoyer(appelLoyer.getPeriodeAppelLoyer());
+            periodeDto.setPeriodeLettre(appelLoyer.getPeriodeLettre());
+            return periodeDto;
+        }
 }

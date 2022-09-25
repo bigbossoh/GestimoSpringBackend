@@ -16,7 +16,5 @@ public interface BailAppartementService {
 
     BailAppartementDto findByName(String nom);
 
-    List<BailAppartementDto> findAllByIdBienImmobilier(Long id);
 
-    List<BailAppartementDto> findAllByIdLocataire(Long id);
 }
