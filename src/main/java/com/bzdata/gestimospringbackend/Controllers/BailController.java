@@ -1,5 +1,8 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.BailService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(APP_ROOT + "/bail")
@@ -36,5 +41,15 @@ public class BailController {
     public ResponseEntity<Integer> nombrebailactif() {
         log.info("nombre de baux actifs");
         return ResponseEntity.ok(bailService.nombreBauxActifs());
+    }
+    @Operation(summary = "All Bail By BienImmobilier", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/getallbailbybien/{id}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> listDesBauxPourUnBienImmobilier(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(bailService.findAllByIdBienImmobilier(id));
+    }
+    @Operation(summary = "All Bail By BienImmobilier", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/getallbailbylocataire/{id}")
+    public ResponseEntity<List<OperationDto>> listDesBauxPourUnLocataire(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(bailService.findAllByIdLocataire(id));
     }
 }

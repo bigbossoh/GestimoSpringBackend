@@ -4,6 +4,8 @@ import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
+import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
+import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +31,7 @@ public class BailMapperImpl {
     public BailMagasinDto fromBailMagasin(BailLocation bailLocation) {
         BailMagasinDto bailLocaDto = new BailMagasinDto();
         BeanUtils.copyProperties(bailLocation, bailLocaDto);
-       
+
         bailLocaDto.setNomLocataire(bailLocation.getUtilisateurOperation().getNom() + " "
                 + bailLocation.getUtilisateurOperation().getPrenom());
         bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
@@ -56,7 +58,9 @@ public class BailMapperImpl {
             bailLocaDto.setUtilisateurOperation(bailLocation.getUtilisateurOperation().getNom() + " "
                     + bailLocation.getUtilisateurOperation().getPrenom());
             bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
-            bailLocaDto.setCodeAbrvBienImmobilier(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+            bailLocaDto
+                    .setCodeAbrvBienImmobilier(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
             return bailLocaDto;
         }
+    
 }

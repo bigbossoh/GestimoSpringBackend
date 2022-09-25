@@ -16,6 +16,7 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,7 +78,7 @@ public class AppelLoyersController {
 
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllPeriodeByAnnee/{annee}")
-    public ResponseEntity<List<String>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee) {
+    public ResponseEntity<List<PeriodeDto>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee) {
         log.info("Find Appelperiode by annee {}", annee);
         return ResponseEntity.ok(appelLoyerService.listOfPerodesByAnnee(annee));
     }
@@ -106,4 +107,10 @@ public class AppelLoyersController {
 //        log.info("Find Appel by periode {}", dateDebut);
 //        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerSuperieurPeriodePourCloture(dateDebut));
 //    }
+@Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
+@GetMapping("/findAllAppelloyerBybienAndPeriode/{idBien}/{periode}")
+public ResponseEntity<List<AppelLoyersFactureDto>> getFirstLoyerImpayerByBien(@PathVariable("idBien") Long idBien,@PathVariable("periode") String periode) {
+    log.info("Find Appel by periode {}", periode);
+    return ResponseEntity.ok(appelLoyerService.getFirstLoyerImpayerByBien(idBien,periode));
+}
 }

@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
@@ -198,12 +199,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<String> listOfPerodesByAnnee(Integer annee) {
-        List<String> collectPeriodeDistinct = appelLoyerRepository
+    public List<PeriodeDto> listOfPerodesByAnnee(Integer annee) {
+        List<PeriodeDto> collectPeriodeDistinct = appelLoyerRepository
                 .findAll()
                 .stream()
                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
-                .map(AppelLoyer::getPeriodeLettre)
+                .map(gestimoWebMapper::fromPeriodeAppel)
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -281,7 +282,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(Long id) {
+    public List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(Long id,String periode) {
         Bienimmobilier bienImmobilier = bienImmobilierRepository.findById(id)
                 .orElseThrow(() -> new InvalidEntityException("Aucun Bien a été trouvé avec l'adresse " +
                         id,
@@ -290,7 +291,8 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         return lesLoyers.stream()
                 .filter(bien -> bien.getBailLocationAppelLoyer().getBienImmobilierOperation().equals(bienImmobilier))
-                .filter(loyers -> loyers.getMontantLoyerBailLPeriode() > 0)
+                        .filter(loyers -> loyers.getMontantLoyerBailLPeriode() > 0)
+                .filter(perio->perio.getPeriodeAppelLoyer().compareTo(periode)<0)
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .collect(Collectors.toList());
     }
