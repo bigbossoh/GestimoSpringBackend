@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
-import com.bzdata.gestimospringbackend.DTOs.BienImmobilierDto;
+import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
@@ -30,6 +30,15 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
         return bienImmobilierRepository.findAll().stream()
                 .map(gestimoWebMapperImpl::fromBienImmobilier)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<BienImmobilierAffiheDto> findAllBienOccuper() {
+        return bienImmobilierRepository.findAll().stream()
+                .filter(Bienimmobilier::isOccupied)
+                .map(gestimoWebMapperImpl::fromBienImmobilier)
+                .collect(Collectors.toList());
+
     }
 
 }

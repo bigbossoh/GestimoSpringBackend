@@ -6,4 +6,5 @@ import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
 
 public interface BienImmobilierService {
     List<BienImmobilierAffiheDto> findAll();
+    List<BienImmobilierAffiheDto> findAllBienOccuper();
 }

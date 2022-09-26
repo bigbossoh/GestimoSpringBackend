@@ -167,6 +167,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence) {
+        log.info("We are going to take back all the locataires order by locataires name");
+
+        return utilisateurRepository.findAll().stream()
+                .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
+                .filter(agence-> agence.getIdAgence().equals(idAgence))
+                .sorted(Comparator.comparing(Utilisateur::getNom))
+                .map(gestimoWebMapperImpl::fromUtilisateur)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UtilisateurRequestDto findById(Long id) {
         log.info("We are going to get back the utilisateur en fonction de l'ID {} de l'utilisateur ", id);
         if (id == null) {
