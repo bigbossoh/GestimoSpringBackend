@@ -31,4 +31,10 @@ public class BienImmobilierController {
     public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien() {
         return ResponseEntity.ok(bienImmobilierService.findAll());
     }
+
+    @Operation(summary = "Liste de toutes les bien immobiliers oqpq", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/allBienOccuper")
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp() {
+        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper());
+    }
 }

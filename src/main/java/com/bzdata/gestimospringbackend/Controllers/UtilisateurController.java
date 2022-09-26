@@ -44,6 +44,10 @@ public class UtilisateurController {
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByUsername(@PathVariable("username") String username) {
         return ResponseEntity.ok(utilisateurService.findUtilisateurByUsername(username));
     }
+    @GetMapping("/getAllutilisateurbyAgence/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getUtilisateurByAgence(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyNameByAgence(idAgence));
+    }
     //findUtilisateurByUsername
     @GetMapping("/all")
     public ResponseEntity<List<UtilisateurAfficheDto>> getAllUtilisateursByOrder() {
