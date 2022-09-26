@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.mappers;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
@@ -62,5 +63,6 @@ public class BailMapperImpl {
                     .setCodeAbrvBienImmobilier(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
             return bailLocaDto;
         }
+  
     
 }

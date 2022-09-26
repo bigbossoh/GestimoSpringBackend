@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -282,17 +283,17 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(Long id,String periode) {
-        Bienimmobilier bienImmobilier = bienImmobilierRepository.findById(id)
+    public List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(BienPeriodeDto bienPeriodeDto) {
+        Bienimmobilier bienImmobilier = bienImmobilierRepository.findById(bienPeriodeDto.getIdBien())
                 .orElseThrow(() -> new InvalidEntityException("Aucun Bien a été trouvé avec l'adresse " +
-                        id,
+                bienPeriodeDto.getIdBien(),
                         ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND));
         List<AppelLoyer> lesLoyers = appelLoyerRepository.findAll();
 
         return lesLoyers.stream()
                 .filter(bien -> bien.getBailLocationAppelLoyer().getBienImmobilierOperation().equals(bienImmobilier))
                         .filter(loyers -> loyers.getMontantLoyerBailLPeriode() > 0)
-                .filter(perio->perio.getPeriodeAppelLoyer().compareTo(periode)<0)
+                .filter(perio->perio.getPeriodeAppelLoyer().compareTo(bienPeriodeDto.getPeriode())<0)
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .collect(Collectors.toList());
     }

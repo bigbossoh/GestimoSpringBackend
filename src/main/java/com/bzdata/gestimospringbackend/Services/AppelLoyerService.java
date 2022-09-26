@@ -6,6 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 
 public interface AppelLoyerService {
@@ -16,7 +17,7 @@ public interface AppelLoyerService {
 
     List<AppelLoyersFactureDto> findAll();
 
-    List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(Long id,String periode);
+    List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(BienPeriodeDto bienPeriodeDto);
 
     List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
 
