@@ -283,18 +283,19 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     }
 
     @Override
-    public List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(BienPeriodeDto bienPeriodeDto) {
-        Bienimmobilier bienImmobilier = bienImmobilierRepository.findById(bienPeriodeDto.getIdBien())
+    public AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bien) {
+        Bienimmobilier bienImmobilier = bienImmobilierRepository.findById(bien)
                 .orElseThrow(() -> new InvalidEntityException("Aucun Bien a été trouvé avec l'adresse " +
-                bienPeriodeDto.getIdBien(),
+                bien,
                         ErrorCodes.BIEN_IMMOBILIER_NOT_FOUND));
         List<AppelLoyer> lesLoyers = appelLoyerRepository.findAll();
 
         return lesLoyers.stream()
-                .filter(bien -> bien.getBailLocationAppelLoyer().getBienImmobilierOperation().equals(bienImmobilier))
+                .filter(bienTrouver -> bienTrouver.getBailLocationAppelLoyer().getBienImmobilierOperation().equals(bienImmobilier))
                         .filter(loyers -> loyers.getMontantLoyerBailLPeriode() > 0)
-                .filter(perio->perio.getPeriodeAppelLoyer().compareTo(bienPeriodeDto.getPeriode())<0)
-                .map(gestimoWebMapper::fromAppelLoyer)
-                .collect(Collectors.toList());
+               // .filter(perio->perio.getPeriodeAppelLoyer().compareTo(bienPeriodeDto.getPeriode())<0)
+                        .map(gestimoWebMapper::fromAppelLoyer)
+                        .findFirst().orElseThrow(null);
+               // .collect(Collectors.toList());
     }
 }

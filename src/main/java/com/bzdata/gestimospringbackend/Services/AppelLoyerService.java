@@ -17,7 +17,7 @@ public interface AppelLoyerService {
 
     List<AppelLoyersFactureDto> findAll();
 
-    List<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(BienPeriodeDto bienPeriodeDto);
+    AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bienImmobilier);
 
     List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
 
