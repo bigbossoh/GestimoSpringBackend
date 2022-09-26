@@ -109,9 +109,9 @@ public class AppelLoyersController {
 //        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerSuperieurPeriodePourCloture(dateDebut));
 //    }
 @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
-@GetMapping("/findAllAppelloyerBybienAndPeriode/")
-public ResponseEntity<List<AppelLoyersFactureDto>> getFirstLoyerImpayerByBien(@RequestBody BienPeriodeDto dto) {
-    log.info("Find Appel by periode {}", dto.getPeriode());
-    return ResponseEntity.ok(appelLoyerService.getFirstLoyerImpayerByBien(dto));
+@GetMapping("/findAllAppelloyerBybien/{id}")
+public ResponseEntity<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(@PathVariable("id") Long id) {
+    log.info("Find Appel by loy {}", id);
+    return ResponseEntity.ok(appelLoyerService.getFirstLoyerImpayerByBien(id));
 }
 }
