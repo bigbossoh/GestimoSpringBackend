@@ -69,6 +69,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
                 encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setSoldeEncaissement(0);
                 encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
@@ -94,6 +95,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
                 encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setSoldeEncaissement(montantPayer);
                 encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
                 encaissementPrincipal.setDateEncaissement(LocalDate.now());
                 encaissementPrincipal.setMontantEncaissement(montantVerser);
