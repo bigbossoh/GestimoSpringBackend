@@ -16,6 +16,7 @@ public class EncaissementPrincipalDTO {
   private  Long idCreateur;
     private Instant creationDate;
     private ModePaiement modePaiement;
+  double soldeEncaissement;
     private OperationType operationType;
     private LocalDate dateEncaissement;
     private double montantEncaissement;
