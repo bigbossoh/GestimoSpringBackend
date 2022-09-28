@@ -133,4 +133,12 @@ public class BailServiceImpl implements BailService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<OperationDto> findAllBauxLocation() {
+       // BailLocation
+       // bailLocationRepository.findAll()
+
+        return null;
+    }
+
 }
