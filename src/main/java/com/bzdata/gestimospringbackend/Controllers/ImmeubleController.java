@@ -63,7 +63,7 @@ public class ImmeubleController {
 
     @Operation(summary = "Liste de tous les Immeubles avec leur proprietaire ", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/affichetoutlesimmeubles")
-    public ResponseEntity<List<ImmeubleAfficheDto>> affichageDesImmeubles() {
+    public ResponseEntity<List<ImmeubleEtageDto>> affichageDesImmeubles() {
         return ResponseEntity.ok(immeubleService.findAllPourAffichageImmeuble());
     }
     @Operation(summary = "Trouver une Immeuble par son ID", security = @SecurityRequirement(name = "bearerAuth"))

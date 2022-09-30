@@ -6,23 +6,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
-import com.bzdata.gestimospringbackend.Models.*;
+import com.bzdata.gestimospringbackend.Models.Etage;
+import com.bzdata.gestimospringbackend.Models.Immeuble;
+import com.bzdata.gestimospringbackend.Models.Site;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
-import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.mappers.ImmeubleMapperImpl;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
-import com.bzdata.gestimospringbackend.validator.ImmeubleDtoValidator;
-
 import com.bzdata.gestimospringbackend.validator.ImmeubleEtageDtoValidator;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -34,9 +34,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-
 @Service
 @Slf4j
 @Transactional
@@ -47,7 +44,6 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     final SiteRepository siteRepository;
     final ImmeubleRepository immeubleRepository;
     final UtilisateurRepository utilisateurRepository;
-    final GestimoWebMapperImpl gestimoWebMapperImpl;
     final ImmeubleMapperImpl immeubleMapper;
     final EtageRepository etageRepository;
 
@@ -200,10 +196,10 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     }
 
     @Override
-    public List<ImmeubleAfficheDto> findAllPourAffichageImmeuble() {
+    public List<ImmeubleEtageDto> findAllPourAffichageImmeuble() {
 
         return immeubleRepository.findAll(Sort.by(Direction.ASC, "descriptionImmeuble")).stream()
-                .map(gestimoWebMapperImpl::fromImmeuble)
+                .map(immeubleMapper::fromImmeubleEtage)
                 .collect(Collectors.toList());
 
     }

@@ -19,7 +19,7 @@ public interface ImmeubleService {
 
   List<ImmeubleDto> findAll();
 
-  List<ImmeubleAfficheDto> findAllPourAffichageImmeuble();
+  List<ImmeubleEtageDto> findAllPourAffichageImmeuble();
 
   ImmeubleDto findById(Long id);
 
