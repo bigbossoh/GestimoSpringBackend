@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 
@@ -39,11 +41,18 @@ public class ImmeubleController {
         return ResponseEntity.ok(immeubleService.delete(id));
     }
 
-    @PostMapping("/save")
-    @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ImmeubleDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
+//    @PostMapping("/save")
+//    @Operation(summary = "Creation et mise à jour d'une Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
+//    public ResponseEntity<ImmeubleAfficheDto> saveImmeuble(@RequestBody ImmeubleDto dto) {
+//        log.info("We are going to save a new Immeuble {}", dto);
+//        return ResponseEntity.ok(immeubleService.save(dto));
+//    }
+
+    @PostMapping("/saveImeubleEtage")
+    @Operation(summary = "Creation  d'une Immeuble et les etage qui vont avec etage", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ImmeubleEtageDto> saveImmeubleEtage(@RequestBody ImmeubleEtageDto dto) {
         log.info("We are going to save a new Immeuble {}", dto);
-        return ResponseEntity.ok(immeubleService.save(dto));
+        return ResponseEntity.ok(immeubleService.saveImmeubleEtageDto(dto));
     }
 
     @Operation(summary = "Liste de toutes les Immeubles", security = @SecurityRequirement(name = "bearerAuth"))
@@ -52,6 +61,11 @@ public class ImmeubleController {
         return ResponseEntity.ok(immeubleService.findAll());
     }
 
+    @Operation(summary = "Liste de tous les Immeubles avec leur proprietaire ", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/affichetoutlesimmeubles")
+    public ResponseEntity<List<ImmeubleEtageDto>> affichageDesImmeubles() {
+        return ResponseEntity.ok(immeubleService.findAllPourAffichageImmeuble());
+    }
     @Operation(summary = "Trouver une Immeuble par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<ImmeubleDto> findImmeubleByID(@PathVariable("id") Long id) {

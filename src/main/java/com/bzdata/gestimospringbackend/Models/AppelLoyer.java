@@ -22,16 +22,19 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyer extends AbstractEntity {
     String periodeAppelLoyer;
+    String periodeLettre;
     String statusAppelLoyer;
     LocalDate datePaiementPrevuAppelLoyer;
     LocalDate dateDebutMoisAppelLoyer;
     LocalDate dateFinMoisAppelLoyer;
     int anneeAppelLoyer;
     int moisChiffreAppelLoyer;
+    String moisUniquementLettre;
     String descAppelLoyer;
-    double montantBailLPeriode;
+    double montantLoyerBailLPeriode;
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
+    boolean isCloturer;
 
     @ManyToOne
     BailLocation bailLocationAppelLoyer;

@@ -12,9 +12,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaysDto {
     Long id;
+    Long idAgence;
+    Long idCreateur;
     String abrvPays;
     String nomPays;
-    private Long idAgence;
+    
 
     public static PaysDto fromEntity(Pays pays) {
         if (pays == null) {

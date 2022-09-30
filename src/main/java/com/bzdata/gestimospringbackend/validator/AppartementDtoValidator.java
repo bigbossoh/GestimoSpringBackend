@@ -14,20 +14,11 @@ public class AppartementDtoValidator {
         if (dto == null) {
             errors.add("Aucune données à enregistrer.");
             errors.add("Veuillez selectionner un etage");
-            errors.add("Veuillez renseigner le nom.");
-            errors.add("Veuillez renseigner l'abréviation.");
             return errors;
         }
-        if (!StringUtils.hasLength(dto.getAbrvNomApp())) {
-            errors.add("Veuillez renseigner l'abréviation.");
-        }
-        if (!StringUtils.hasLength(dto.getNomApp())) {
-            errors.add("Veuillez renseigner le nom.");
-        }
-        if (dto.getIdEtage() == null) {
+        if (dto.getIdEtageAppartement() == null) {
             errors.add("Veuillez selectionner un etage");
         }
-
         return errors;
     }
 }

@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @Getter
@@ -21,21 +22,21 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "typeBienImmobilier", discriminatorType = DiscriminatorType.STRING)
 public abstract class Bienimmobilier extends AbstractEntity {
-    Long numBien;
-    String statutBien;
-    boolean isArchived= false;
-    String abrvBienimmobilier;
+
+    String codeAbrvBienImmobilier;
+    String nomCompletBienImmobilier;
+    String nomBaptiserBienImmobilier;
     String description;
-    String nomBien;
     double superficieBien;
+    boolean bienMeublerResidence;
     boolean isOccupied= false;
     @ManyToOne
-    Site site;
-    @ManyToOne
-    Utilisateur utilisateur;
+    Utilisateur utilisateurProprietaire;
+
 }

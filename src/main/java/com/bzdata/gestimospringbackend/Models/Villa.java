@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.AccessLevel;
@@ -22,14 +23,15 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @DiscriminatorValue("Villa")
 public class Villa extends Bienimmobilier {
+
+    int nbrePieceVilla;
     int nbrChambreVilla;
-    int nbrePiece;
     int nbrSalonVilla;
     int nbrSalleEauVilla;
-    String nomVilla;
-    String abrvVilla;
+    Long numVilla;
     boolean garageVilla = false;
-    int nbreVoitureGarageVilla;
-    @OneToMany(mappedBy = "villaBail")
-    List<Operation> operationsVilla;
+//    @OneToMany(mappedBy = "villaBail")
+//    List<Operation> operationsVilla;
+    @ManyToOne
+    Site site;
 }

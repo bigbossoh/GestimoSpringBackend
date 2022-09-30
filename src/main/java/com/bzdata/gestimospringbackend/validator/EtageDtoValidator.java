@@ -19,10 +19,10 @@ public class EtageDtoValidator {
 
             return errors;
         }
-        if (!StringUtils.hasLength(dto.getAbrvEtage())) {
+        if (!StringUtils.hasLength(dto.getCodeAbrvEtage())) {
             errors.add("Veuillez renseigner l'abreviation");
         }
-        if (!StringUtils.hasLength(dto.getNomEtage())) {
+        if (!StringUtils.hasLength(dto.getNomCompletEtage())) {
             errors.add("Veuillez renseigner le nom");
         }
         if (dto.getIdImmeuble() == null) {

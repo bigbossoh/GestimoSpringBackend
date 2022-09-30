@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface MagasinService {
 
-    boolean save(MagasinDto dto);
-
+   // boolean save(MagasinDto dto);
+    MagasinDto saveUnMagasin(MagasinDto dto);
     boolean delete(Long id);
 
     Long maxOfNumBienMagasin();
 
     List<MagasinResponseDto> findAll();
-
+    List<MagasinResponseDto> findAllLibre();
     MagasinDto findById(Long id);
 
     MagasinDto findByName(String nom);

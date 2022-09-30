@@ -44,7 +44,7 @@ public class BailAppartementController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Bail Appartement", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<BailAppartementDto> saveBailAppartement(@RequestBody BailAppartementDto dto) {
+    public ResponseEntity<OperationDto> saveBailAppartement(@RequestBody BailAppartementDto dto) {
         log.info("We are going to save a new Bail Appartement {}", dto);
         return ResponseEntity.ok(bailAppartementService.save(dto));
     }

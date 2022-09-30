@@ -13,12 +13,11 @@ public class BailVillaDtoValidator {
 
         if (dto == null) {
             errors.add("Veuillez renseigner le nom");
-            errors.add("Veuillez renseigner l'abréviation ");
             errors.add("Veuillez renseigner le montant du bail");
             return errors;
         }
-        if (!StringUtils.hasLength(dto.getAbrvCodeBail())) {
-            errors.add("Veuillez renseigner l'abreviation");
+        if (dto.getDateDebut().compareTo(dto.getDateFin()) >= 0){
+            errors.add("La date de debut est plus avancée ou egale à la date de fin");
         }
         if (!StringUtils.hasLength(dto.getDesignationBail())) {
             errors.add("Veuillez renseigner la désignation");

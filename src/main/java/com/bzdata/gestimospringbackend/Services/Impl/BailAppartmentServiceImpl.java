@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
@@ -16,6 +17,7 @@ import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
@@ -45,9 +47,9 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
     final BienImmobilierRepository bienImmobilierRepository;
-
+final BailMapperImpl bailMapperImpl;
     @Override
-    public BailAppartementDto save(BailAppartementDto dto) {
+    public OperationDto save(BailAppartementDto dto) {
         BailLocation bailLocation = new BailLocation();
         log.info("We are going to create  a new Bail Appartement {}", dto);
         List<String> errors = BailAppartementDtoValidator.validate(dto);
@@ -58,9 +60,9 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
         }
 
         Utilisateur utilisateur = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
+                .findById(dto.getIdLocataire())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdLocataire(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
 
@@ -73,7 +75,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
                             "Aucun Bien has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
             bailLocation.setIdAgence(dto.getIdAgence());
-            bailLocation.setAppartementBail(appartementBail);
+          //  bailLocation.setAppartementBail(appartementBail);
             bailLocation.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocation.setUtilisateurOperation(utilisateur);
             bailLocation.setArchiveBail(false);
@@ -88,7 +90,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
 
             BailLocation appartementBailSave = bailLocationRepository.save(bailLocation);
             appartementBail.setOccupied(true);
-            appartementBail.setStatutAppart("Occupied");
+           // appartementBail.setStatutAppart("Occupied");
             appartementRepository.save(appartementBail);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
@@ -109,7 +111,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             appelLoyerRequestDto.setIdAgence(dto.getIdAgence());
             // appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
             appelLoyerService.save(appelLoyerRequestDto);
-            return BailAppartementDto.fromEntity(appartementBailSave);
+            return bailMapperImpl.fromOperation(appartementBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
@@ -137,7 +139,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     @Override
     public List<BailAppartementDto> findAll() {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-                .map(BailAppartementDto::fromEntity)
+                .map(bailMapperImpl::fromBailAppartement)
                 .collect(Collectors.toList());
     }
 
@@ -148,7 +150,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findById(id).map(BailAppartementDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findById(id).map(bailMapperImpl::fromBailAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with Code " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
@@ -160,21 +162,8 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
             log.error("you are not provided a Bail.");
             return null;
         }
-        return bailLocationRepository.findByDesignationBail(nom).map(BailAppartementDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findByDesignationBail(nom).map(bailMapperImpl::fromBailAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
-
-    @Override
-    public List<BailAppartementDto> findAllByIdBienImmobilier(Long id) {
-
-        return null;
-    }
-
-    @Override
-    public List<BailAppartementDto> findAllByIdLocataire(Long id) {
-
-        return null;
-    }
-
 }

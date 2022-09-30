@@ -1,16 +1,18 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.Etage;
+import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Services.AppartementService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.validator.AppartementDtoValidator;
@@ -32,7 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppartementServiceImpl implements AppartementService {
-    public final AppartementRepository appartementRepository;
+   final GestimoWebMapperImpl gestimoWebMapperImpl;
+     final AppartementRepository appartementRepository;
 
     final EtageRepository etageRepository;
 
@@ -55,8 +58,8 @@ public class AppartementServiceImpl implements AppartementService {
 
     @Override
     public List<AppartementDto> findAll() {
-        return appartementRepository.findAll(Sort.by(Direction.ASC, "nomApp")).stream()
-                .map(AppartementDto::fromEntity)
+        return appartementRepository.findAll().stream()
+                .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +70,7 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Appartement.");
             return null;
         }
-        return appartementRepository.findById(id).map(AppartementDto::fromEntity).orElseThrow(
+        return appartementRepository.findById(id).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Appartement has been found with Code " + id,
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
@@ -79,7 +82,7 @@ public class AppartementServiceImpl implements AppartementService {
             log.error("you are not provided a Appartement.");
             return null;
         }
-        return appartementRepository.findByNomApp(nom).map(AppartementDto::fromEntity).orElseThrow(
+        return appartementRepository.findByNomCompletBienImmobilier(nom).map(gestimoWebMapperImpl::fromAppartement).orElseThrow(
                 () -> new InvalidEntityException("Aucun Appartement has been found with name " + nom,
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
     }
@@ -95,14 +98,13 @@ public class AppartementServiceImpl implements AppartementService {
                 "Aucun Appartement has been found with id " + id,
                 ErrorCodes.APPARTEMENT_NOT_FOUND));
         return appartementRepository.findByEtageAppartement(etage).stream()
-                .map(AppartementDto::fromEntity)
+                .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
 
     @Override
     public AppartementDto save(AppartementDto dto) {
-        Optional<Appartement> oldAppartement = appartementRepository.findById(dto.getId());
-        int numApp = appartementRepository.getMaxNumAppartement() + 1;
+
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -110,39 +112,59 @@ public class AppartementServiceImpl implements AppartementService {
             throw new InvalidEntityException("Certain attributs de l'object Appartement sont null.",
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
-        Etage etage = etageRepository.findById(dto.getIdEtage()).orElseThrow(() -> new InvalidEntityException(
-                "Aucun Etage has been found with id " + dto.getIdEtage(),
-                ErrorCodes.APPARTEMENT_NOT_FOUND));
-        if (oldAppartement.isPresent()) {
-            oldAppartement.get().setAbrvNomApp(dto.getAbrvNomApp());
-            oldAppartement.get().setEtageAppartement(etage);
-            oldAppartement.get().setMeubleApp(dto.isMeubleApp());
-            oldAppartement.get().setNbrPieceApp(dto.getNbrPieceApp());
-            oldAppartement.get().setNbreChambreApp(dto.getNbreChambreApp());
-            oldAppartement.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
-            oldAppartement.get().setNbreSalonApp(dto.getNbreSalonApp());
-            oldAppartement.get().setNomApp(dto.getNomApp());
-            // oldAppartement.get().setNumeroApp(dto.getNumeroApp());
-            oldAppartement.get().setResidence(dto.isResidence());
+        Etage etage = getEtage(dto);
+        Long numApp=nombreVillaByIdSite(etage.getImmeuble().getSite());
+        //int numApp = Math.toIntExact(nombreVillaByIdSite(etage.getImmeuble().getSite()));
 
-            Appartement appartementSave = appartementRepository.save(oldAppartement.get());
-            return AppartementDto.fromEntity(appartementSave);
-        }
 
         Appartement appartement = new Appartement();
-        appartement.setAbrvNomApp(etage.getAbrvEtage() + "-" + "APPARTEMENT" + "-" + numApp);
         appartement.setEtageAppartement(etage);
-        appartement.setMeubleApp(dto.isMeubleApp());
         appartement.setNbrPieceApp(dto.getNbrPieceApp());
         appartement.setNbreChambreApp(dto.getNbreChambreApp());
         appartement.setNbreSalleEauApp(dto.getNbreSalleEauApp());
         appartement.setNbreSalonApp(dto.getNbreSalonApp());
-        appartement.setNomApp(dto.getNomApp());
-        appartement.setNumeroApp(numApp);
-        appartement.setResidence(dto.isResidence());
-
+        appartement.setIdAgence(dto.getIdAgence());
+        appartement.setIdCreateur(dto.getIdCreateur());
+        appartement.setNumApp(numApp);
+        appartement.setCodeAbrvBienImmobilier((etage.getCodeAbrvEtage()+"-APPT-"+numApp).toUpperCase());
+        appartement.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+        appartement.setNomCompletBienImmobilier(etage.getNomCompletEtage()+"-APPARTEMENT-"+numApp);
+        appartement.setBienMeublerResidence(dto.isBienMeublerResidence());
+        appartement.setDescription(dto.getDescription());
+        appartement.setSuperficieBien(dto.getSuperficieBien());
+        appartement.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
         Appartement appartementSave = appartementRepository.save(appartement);
-        return AppartementDto.fromEntity(appartementSave);
+        return gestimoWebMapperImpl.fromAppartement(appartementSave);
+    }
+
+    private Etage getEtage(AppartementDto dto) {
+        return etageRepository.findById(dto.getIdEtageAppartement()).orElseThrow(() -> new InvalidEntityException(
+                    "Aucun Etage has been found with id " + dto.getIdEtageAppartement(),
+                    ErrorCodes.APPARTEMENT_NOT_FOUND));
+    }
+
+    @Override
+    public List<AppartementDto> findAllLibre() {
+        return appartementRepository.findAll(Sort.by(Direction.ASC, "codeAbrvBienImmobilier")).stream()
+                .map(gestimoWebMapperImpl::fromAppartement)
+                .filter((app) -> !app.isOccupied())
+                .collect(Collectors.toList());
+    }
+    private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = appartementRepository.findAll()
+                .stream()
+                .filter(e->e.getEtageAppartement().getImmeuble().getSite().equals(site))
+                .collect(Collectors.groupingBy(e->e.getEtageAppartement().getImmeuble().getSite(), Collectors.counting()));
+
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 1L;
     }
 
 }

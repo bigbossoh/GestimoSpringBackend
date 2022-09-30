@@ -2,19 +2,28 @@ package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
 
 public interface ImmeubleService {
 
-    ImmeubleDto save(ImmeubleDto dto);
 
-    boolean delete(Long id);
 
-    List<ImmeubleDto> findAll();
+  ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto);
 
-    ImmeubleDto findById(Long id);
+  ImmeubleDto updateImmeuble(ImmeubleDto dto);
 
-    ImmeubleDto findByName(String nom);
 
-    List<ImmeubleDto> findAllByIdSite(Long id);
+  boolean delete(Long id);
+
+  List<ImmeubleDto> findAll();
+
+  List<ImmeubleEtageDto> findAllPourAffichageImmeuble();
+
+  ImmeubleDto findById(Long id);
+
+  ImmeubleDto findByName(String nom);
+
+  List<ImmeubleDto> findAllByIdSite(Long id);
 }

@@ -52,7 +52,11 @@ public class AppartementController {
     public ResponseEntity<List<AppartementDto>> findAllAppartement() {
         return ResponseEntity.ok(appartementService.findAll());
     }
-
+    @Operation(summary = "Liste de toutes les Appartements Libres", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/alllibre")
+    public ResponseEntity<List<AppartementDto>> findAllAppartementLibre() {
+        return ResponseEntity.ok(appartementService.findAllLibre());
+    }
     @Operation(summary = "Trouver un Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<AppartementDto> findByIDAppartement(@PathVariable("id") Long id) {

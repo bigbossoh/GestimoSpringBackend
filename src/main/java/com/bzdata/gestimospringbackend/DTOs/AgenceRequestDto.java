@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 public class AgenceRequestDto {
      Long id;
      Long idAgence;
+     Long idCreateur;
     String nomAgence;
     String telAgence;
     String compteContribuable;
@@ -43,7 +44,7 @@ public class AgenceRequestDto {
                 .regimeFiscaleAgence(agenceImmobiliere.getRegimeFiscaleAgence())
                 .faxAgence(agenceImmobiliere.getFaxAgence())
                 .sigleAgence(agenceImmobiliere.getSigleAgence())
-                .idUtilisateurCreateur(agenceImmobiliere.getCreateur().getId())
+                // .idUtilisateurCreateur(agenceImmobiliere.getCreateur().getId())
                 .idAgence(agenceImmobiliere.getIdAgence())
                 .build();
     }

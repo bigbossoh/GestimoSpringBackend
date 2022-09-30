@@ -2,9 +2,7 @@ package com.bzdata.gestimospringbackend.Models;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,20 +17,16 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Appartement extends AbstractEntity {
-    boolean meubleApp;
+@DiscriminatorValue("Appartement")
+public class Appartement extends Bienimmobilier {
+
     int nbrPieceApp;
     int nbreChambreApp;
     int nbreSalonApp;
     int nbreSalleEauApp;
-    boolean isResidence;
-    boolean occupied;
-    String statutAppart;
-    int numeroApp;
-    String abrvNomApp;
-    String nomApp;
-    @ManyToOne
+    Long numApp;
+//    @OneToMany(mappedBy = "appartementBail")
+//    List<Operation> operationsApp;
+    @ManyToOne(fetch = FetchType.LAZY)
     Etage etageAppartement;
-    @OneToMany(mappedBy = "appartementBail")
-    List<Operation> operationsApp;
 }

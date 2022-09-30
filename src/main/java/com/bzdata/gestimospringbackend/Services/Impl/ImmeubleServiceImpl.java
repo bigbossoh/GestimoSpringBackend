@@ -1,10 +1,14 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
+import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
@@ -12,10 +16,12 @@ import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.ImmeubleMapperImpl;
+import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.repository.SiteRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
-import com.bzdata.gestimospringbackend.validator.ImmeubleDtoValidator;
+import com.bzdata.gestimospringbackend.validator.ImmeubleEtageDtoValidator;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
@@ -38,85 +44,83 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     final SiteRepository siteRepository;
     final ImmeubleRepository immeubleRepository;
     final UtilisateurRepository utilisateurRepository;
+    final ImmeubleMapperImpl immeubleMapper;
+    final EtageRepository etageRepository;
+
+
+    private Utilisateur getUtilisateur(Long IdUtilisateur) {
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(IdUtilisateur)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with code " + IdUtilisateur,
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
+        return utilisateur;
+    }
+
+    private Site getSite(Long idSite) {
+        return siteRepository.findById(idSite).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Site has been found with Code " + idSite,
+                        ErrorCodes.SITE_NOT_FOUND));
+    }
 
     @Override
-    public ImmeubleDto save(ImmeubleDto dto) {
-
-        int numeroDubien = immeubleRepository.getMaxNumImmeuble();
-
-        Optional<Immeuble> oldimmeuble = immeubleRepository.findById(dto.getId());
-        log.info("We are going to create  a new Immeuble from layer service implemebtation {}", dto);
-        List<String> errors = ImmeubleDtoValidator.validate(dto);
+    public ImmeubleEtageDto saveImmeubleEtageDto(ImmeubleEtageDto dto) {
+        log.info(
+                "We are going to create  a new Immeuble and the number of etage belong to the immeuble from layer service implemebtation {}",
+                dto);
+        List<String> errors = ImmeubleEtageDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("l'Immeuble n'est pas valide {}", errors);
             throw new InvalidEntityException("Certain attributs de l'object Immeuble sont null.",
                     ErrorCodes.IMMEUBLE_NOT_VALID, errors);
         }
-        /**
-         * Recherche du Site
-         */
-        Site site = siteRepository.findById(dto.getIdSite()).orElseThrow(
-                () -> new InvalidEntityException(
-                        "Aucun Site has been found with Code " + dto.getIdSite(),
-                        ErrorCodes.SITE_NOT_FOUND));
+        Long numBien = 0L;
 
-        /**
-         * Recherche du proprietaire
-         */
-        Utilisateur utilisateur = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
-                .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
-                        ErrorCodes.UTILISATEUR_NOT_FOUND));
-        if (utilisateur.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-            if (oldimmeuble.isPresent()) {
-                oldimmeuble.get().setSite(site);
-                oldimmeuble.get().setUtilisateur(utilisateur);
-                // oldimmeuble.get()
-                // .setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + (numeroDubien + 1));
-                oldimmeuble.get().setGarrage(dto.isGarrage());
-                // oldimmeuble.get().setArchived(dto.i);
-                oldimmeuble.get().setDescription(dto.getDescriptionImmeuble());
-                // immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + (numeroDubien +
-                // 1));
-                oldimmeuble.get().setNbrEtage(dto.getNbrEtage());
-                oldimmeuble.get().setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-                oldimmeuble.get().setNomBien(dto.getNomBien());
-                // oldimmeuble.get().setNumBien(n);// a changer
-                oldimmeuble.get().setNumeroImmeuble(dto.getNumeroImmeuble());
-                oldimmeuble.get().setOccupied(dto.isOccupied());
-                oldimmeuble.get().setStatutBien(dto.getStatutBien());
-                oldimmeuble.get().setSuperficieBien(dto.getSuperficieBien());
-
-                Immeuble immeubleSave = immeubleRepository.save(oldimmeuble.get());
-                return ImmeubleDto.fromEntity(immeubleSave);
-            }
-            Immeuble immeuble = new Immeuble();
-            immeuble.setSite(site);
-            immeuble.setUtilisateur(utilisateur);
-            immeuble.setAbrvBienimmobilier(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
-            immeuble.setAbrvNomImmeuble(site.getAbrSite() + "-IMME-" + dto.getAbrvNomImmeuble().toUpperCase());
-            immeuble.setGarrage(dto.isGarrage());
-            immeuble.setNumBien(Long.valueOf(numeroDubien));
-            immeuble.setIdAgence(dto.getIdAgence());
-            // immeuble.setArchived(immeuble.isArchived());
-            immeuble.setDescription(dto.getDescriptionImmeuble());
-            immeuble.setNbrEtage(dto.getNbrEtage());
-            immeuble.setNbrePieceImmeuble(dto.getNbrePieceImmeuble());
-            immeuble.setNomBien(dto.getNomBien());
-            // immeuble.setNumBien(n);// a changer
-            immeuble.setNumeroImmeuble(numeroDubien + 1);
-            immeuble.setOccupied(false);
-            immeuble.setStatutBien(dto.getStatutBien());
-            immeuble.setSuperficieBien(dto.getSuperficieBien());
-            immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
-            Immeuble immeubleSave = immeubleRepository.save(immeuble);
-            return ImmeubleDto.fromEntity(immeubleSave);
+        Immeuble immeuble = new Immeuble();
+        immeuble.setSite(getSite(dto.getIdSite()));
+        immeuble.setUtilisateurProprietaire(getUtilisateur(dto.getIdUtilisateur()));
+        int size = new ArrayList<>(immeubleRepository.findAll()).size();
+        if (size == 0) {
+            numBien = 1L;
         } else {
-            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateur.getUrole().getRoleName(),
-                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
+            numBien=nombreVillaByIdSite(getSite(dto.getIdSite()));
         }
+        immeuble.setCodeNomAbrvImmeuble(
+                (immeuble.getSite().getAbrSite() + "-IMME-" + numBien).toUpperCase());
+        immeuble.setNomCompletImmeuble(
+                ( immeuble.getSite().getNomSite() + "-IMMEUBLE-" + numBien).toUpperCase());
+        immeuble.setGarrage(dto.isGarrage());
+        immeuble.setNumImmeuble(Math.toIntExact(numBien));
+        immeuble.setIdAgence(dto.getIdAgence());
+        immeuble.setIdCreateur(dto.getIdCreateur());
+        immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
+        immeuble.setNbrEtage(dto.getNbrEtage());
+        immeuble.setNbrePiecesDansImmeuble(dto.getNbrePiecesDansImmeuble());
+        immeuble.setNomBaptiserImmeuble(dto.getNomBaptiserImmeuble());
+        immeuble.setDescriptionImmeuble(dto.getDescriptionImmeuble());
+        Immeuble immeubleSave = immeubleRepository.save(immeuble);
+        Etage etage;
+        for (int i = 0; i <= immeubleSave.getNbrEtage(); i++) {
+            etage = new Etage();
+            etage.setIdAgence(immeubleSave.getIdAgence());
+            etage.setIdCreateur(immeubleSave.getIdCreateur());
+            if (i == 0) {
+                etage.setNomCompletEtage((immeubleSave.getNomCompletImmeuble()+"-"+"rez-de-chaussée").toUpperCase());
+            } else {
+                etage.setNomCompletEtage((immeubleSave.getNomCompletImmeuble()+"-"+"Etage N°" + i).toUpperCase());
+            }
+            etage.setCodeAbrvEtage((immeubleSave.getCodeNomAbrvImmeuble()+"-Etage-" + i).toUpperCase());
+            etage.setNumEtage(i);
+            etage.setImmeuble(immeubleSave);
+            etageRepository.save(etage);
+        }
+        return immeubleMapper.fromImmeubleEtage(immeubleSave);
+    }
+
+    @Override
+    public ImmeubleDto updateImmeuble(ImmeubleDto dto) {
+        return null;
     }
 
     @Override
@@ -181,10 +185,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
             log.error("you are not provided a Immeuble.");
             return null;
         }
-        Site site = siteRepository.findById(id).orElseThrow(
-                () -> new InvalidEntityException(
-                        "Aucun Site has been found with Code " + id,
-                        ErrorCodes.SITE_NOT_FOUND));
+        Site site = getSite(id);
         if (site == null) {
             log.error("Immeuble not found for the Site.");
             return null;
@@ -192,6 +193,32 @@ public class ImmeubleServiceImpl implements ImmeubleService {
         return immeubleRepository.findBySite(site).stream()
                 .map(ImmeubleDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ImmeubleEtageDto> findAllPourAffichageImmeuble() {
+
+        return immeubleRepository.findAll(Sort.by(Direction.ASC, "descriptionImmeuble")).stream()
+                .map(immeubleMapper::fromImmeubleEtage)
+                .collect(Collectors.toList());
+
+    }
+
+    private Long nombreVillaByIdSite(Site site){
+        Map<Site, Long> numbreVillabySite = immeubleRepository.findAll()
+                .stream()
+                .filter(e->e.getSite().equals(site))
+                .collect(Collectors.groupingBy(Immeuble::getSite, Collectors.counting()));
+
+        for (Map.Entry m : numbreVillabySite.entrySet()) {
+            if(m.getKey().equals(site)){
+
+                return (Long) m.getValue()+1L;
+
+            }
+
+        }
+        return 1L;
     }
 
 }

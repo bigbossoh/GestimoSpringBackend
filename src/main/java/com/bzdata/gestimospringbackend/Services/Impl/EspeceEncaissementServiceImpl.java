@@ -68,7 +68,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
 
         EspeceEncaissement especeEncaissementSave = encaissementRepository.save(especeEncaissement);
         // calcul des soldes
-        soldeLoyer = appelLoyer.getMontantBailLPeriode() - dto.getMontantEncaissement();
+        soldeLoyer = appelLoyer.getMontantLoyerBailLPeriode() - dto.getMontantEncaissement();
         appelLoyer.setSoldeAppelLoyer(soldeLoyer);
         if (soldeLoyer == 0) {
             appelLoyer.setSolderAppelLoyer(true);
@@ -80,7 +80,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         quittance.setAnneeLoyer(appelLoyerQuittance.getAnneeAppelLoyer());
         // quittance.setChargeLoyer(especeEncaissementSave.get);
         quittance.setCodeBien(
-                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getAbrvBienimmobilier());
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
         quittance.setEnvoiParMail(true);
         quittance.setEnvoiParMail(true);
         quittance.setEnvoiParSms(true);
@@ -91,9 +91,9 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
                         .getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom();
         quittance.setNomLocataire(nomPrenoms);
         quittance.setNomProprietaire(
-                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getNom()
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getNom()
                         + " " + appelLoyerQuittance
-                                .getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateur().getPrenom());
+                                .getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getPrenom());
         quittance.setSoldeLoyer(appelLoyerQuittance.getSoldeAppelLoyer());
         quittanceRepository.save(quittance);
         return EspeceEncaissementDto.fromEntity(especeEncaissementSave);

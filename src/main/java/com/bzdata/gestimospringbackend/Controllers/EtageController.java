@@ -20,6 +20,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.EtageAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 import com.bzdata.gestimospringbackend.Services.EtageService;
 
@@ -68,8 +69,8 @@ public class EtageController {
 
     @Operation(summary = "Trouver une Etage par l'Id de la Immeuble", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdImmeuble/{id}")
-    public ResponseEntity<List<EtageDto>> findEtageByIdPays(@PathVariable("id") Long id) {
+    public ResponseEntity<List<EtageAfficheDto>> affichageDesEtageParImmeuble(@PathVariable("id") Long id) {
         log.info("Find Etage By Id Immeuble {}", id);
-        return ResponseEntity.ok(etageService.findAllByIdImmeuble(id));
+        return ResponseEntity.ok(etageService.affichageDesEtageParImmeuble(id));
     }
 }

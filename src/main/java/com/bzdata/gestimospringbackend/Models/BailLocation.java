@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -27,6 +28,7 @@ public class BailLocation extends Operation {
     boolean archiveBail;
     double montantCautionBail;
     int nbreMoisCautionBail;
+    LocalDate dateCloture;
     @OneToMany(mappedBy = "bailLocation")
     List<MontantLoyerBail> montantLoyerBail;
     @OneToMany(mappedBy = "bailLocataireCharge")

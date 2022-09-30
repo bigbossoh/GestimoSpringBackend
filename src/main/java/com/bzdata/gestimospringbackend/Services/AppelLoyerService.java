@@ -1,10 +1,13 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-
-import java.util.List;
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
+import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 
 public interface AppelLoyerService {
 
@@ -12,9 +15,23 @@ public interface AppelLoyerService {
 
     boolean deleteAppelDto(Long id);
 
-    List<AppelLoyer> findAll();
+    List<AppelLoyersFactureDto> findAll();
 
-    AppelLoyer findById(Long id);
+    AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bienImmobilier);
+
+    List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer);
+
+    public double soldeArrierer(Long idBailLocation);
+
+    AppelLoyersFactureDto findById(Long id);
 
     List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
+
+    List<Integer> listOfDistinctAnnee();
+
+    List<PeriodeDto> listOfPerodesByAnnee(Integer annee);
+
+    List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
+
+    List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
 }

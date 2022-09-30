@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.CommuneRequestDto;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
 import com.bzdata.gestimospringbackend.DTOs.CommuneResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.PaysDto;
 import com.bzdata.gestimospringbackend.DTOs.VilleDto;
@@ -17,12 +22,6 @@ import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
 import com.bzdata.gestimospringbackend.validator.VilleDtoValidator;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

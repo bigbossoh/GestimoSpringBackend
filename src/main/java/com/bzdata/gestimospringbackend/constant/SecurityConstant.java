@@ -2,7 +2,7 @@ package com.bzdata.gestimospringbackend.constant;
 
 public class SecurityConstant {
 
-    public static final long EXPIRATION_TIME = 432_000_000; // 5 days expressed
+    public static final long EXPIRATION_TIME = 864_000_000; // 10 days expressed
     public static final String APP_ROOT = "gestimoweb/api/v1";
     public static final String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
     public static final String ACTIVATION_EMAIL = "http://localhost:8284/" + APP_ROOT + "/auth/accountVerification";
@@ -16,7 +16,7 @@ public class SecurityConstant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
-
+            "/**/envoimail/**","**/bail/**","/actuator/**",
             "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login",
             "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**", "/**/bienImmobilier/**"
     };

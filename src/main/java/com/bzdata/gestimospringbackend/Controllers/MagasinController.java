@@ -32,11 +32,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MagasinController {
     final MagasinService magasinService;
 
-    @PostMapping("/save")
+    @PostMapping("/savemagasin")
     @Operation(summary = "Creation et mise à jour d'une Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> saveMagasin(@RequestBody MagasinDto dto) {
+    public ResponseEntity<MagasinDto> saveMagasinReturnDto(@RequestBody MagasinDto dto) {
         log.info("We are going to save a new Magasin {}", dto);
-        return ResponseEntity.ok(magasinService.save(dto));
+        return ResponseEntity.ok(magasinService.saveUnMagasin(dto));
     }
 
     // TOUT LES Magasins
@@ -45,7 +45,12 @@ public class MagasinController {
     public ResponseEntity<List<MagasinResponseDto>> findAllMagasin() {
         return ResponseEntity.ok(magasinService.findAll());
     }
-
+ // TOUT LES Magasins
+ @Operation(summary = "Liste de tous les Magasins libres", security = @SecurityRequirement(name = "bearerAuth"))
+ @GetMapping("/alllibre")
+ public ResponseEntity<List<MagasinResponseDto>> findAllMagasinLibre() {
+     return ResponseEntity.ok(magasinService.findAllLibre());
+ }
     @Operation(summary = "Trouver un Magasin par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findmagasinById/{id}")
     public ResponseEntity<MagasinDto> findByIDMagasin(@PathVariable("id") Long id) {

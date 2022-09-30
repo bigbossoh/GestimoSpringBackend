@@ -32,16 +32,27 @@ public class VillaController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'une Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<Boolean> saveVilla(@RequestBody VillaDto dto) {
+    public ResponseEntity<VillaDto> saveVilla(@RequestBody VillaDto dto) {
         log.info("We are going to save a new Villa {}", dto);
-        return ResponseEntity.ok(villaService.save(dto));
+        return ResponseEntity.ok(villaService.saveUneVilla(dto));
     }
-
     // TOUT LES VILLA
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-
     public ResponseEntity<List<VillaDto>> findAllVilla() {
         return ResponseEntity.ok(villaService.findAll());
     }
+     // TOUT LES VILLAS LIBRES
+     @Operation(summary = "Liste de tous les villas libres ", security = @SecurityRequirement(name = "bearerAuth"))
+     @GetMapping("/alllibre")
+
+     public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
+         return ResponseEntity.ok(villaService.findAllLibre());
+     }
+    // TOUS LES VILLA PAR SITE
+//    @Operation(summary = "TOUS LES VILLA PAR SITE", security = @SecurityRequirement(name = "bearerAuth"))
+//    @GetMapping("/allvillabysite")
+//    public ResponseEntity<Map<Site, Long>> findAllVillabysite() {
+//        return ResponseEntity.ok(villaService.getNumberVillaBySite());
+//    }
 }

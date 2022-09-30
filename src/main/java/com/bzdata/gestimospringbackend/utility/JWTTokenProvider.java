@@ -1,13 +1,26 @@
 package com.bzdata.gestimospringbackend.utility;
 
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.AUTHORITIES;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.BZDATA_ADMINISTRATION;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.BZDATA_SARL;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.EXPIRATION_TIME;
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.TOKEN_CANNOT_BE_VERIFIED;
+import static java.util.Arrays.stream;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
-import io.jsonwebtoken.Claims;
-import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,16 +29,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.bzdata.gestimospringbackend.constant.SecurityConstant.*;
-import static java.util.Arrays.stream;
-@Slf4j
 @Component
 public class JWTTokenProvider {
 
@@ -39,6 +42,7 @@ public class JWTTokenProvider {
                 .withIssuedAt(new Date())
                 .withSubject(userPrincipal.getUsername())
                 .withClaim("idAgence",userPrincipal.getIdAgence())
+//                .withClaim("idCreateur",userPrincipal.getIdCreateur())
                 .withArrayClaim(AUTHORITIES,claims)
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(secret.getBytes()));
@@ -67,15 +71,13 @@ public class JWTTokenProvider {
     //
     public Claim extractIdAgnece(String token) {
         JWTVerifier verifier=getJWTVerifier();
-        log.info("extractIdAgnece {}", verifier.verify(token).getClaim("idAgence"));
-
         return verifier.verify(token).getClaim("idAgence");
 
-//        final Claims claims = extractAllClaims(token);
-//
-//        return claims.get("idEntreprise", String.class);
     }
-    //
+//    public Claim extractIdCreateur(String token) {
+//        JWTVerifier verifier=getJWTVerifier();
+//        return verifier.verify(token).getClaim("idCreateur");
+//    }
 
     private boolean isTokenExpired(JWTVerifier verifier, String token) {
         Date expiration=verifier.verify(token).getExpiresAt();

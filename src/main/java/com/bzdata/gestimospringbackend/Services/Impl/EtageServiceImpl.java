@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.EtageAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.EtageDto;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Immeuble;
@@ -11,12 +12,11 @@ import com.bzdata.gestimospringbackend.Services.EtageService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.repository.ImmeubleRepository;
 import com.bzdata.gestimospringbackend.validator.EtageDtoValidator;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,12 +33,12 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageServiceImpl implements EtageService {
     final EtageRepository etageRepository;
-
+    final GestimoWebMapperImpl gestimoWebMapperImpl;
     final ImmeubleRepository immeubleRepository;
 
     @Override
     public EtageDto save(EtageDto dto) {
-        int numEt = etageRepository.getMaxNumEtage() + 1;
+      //  int numEt = etageRepository.getMaxNumEtage() + 1;
         Optional<Etage> oldEtage = etageRepository.findById(dto.getId());
         log.info("We are going to create  a new Etage {}", dto);
         List<String> errors = EtageDtoValidator.validate(dto);
@@ -52,19 +52,15 @@ public class EtageServiceImpl implements EtageService {
                         "Impossible de trouver l'immeuble.",
                         ErrorCodes.IMMEUBLE_NOT_FOUND, errors));
         if (oldEtage.isPresent()) {
-            // oldEtage.get().setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" +
-            // dto.getAbrvEtage());
-            oldEtage.get().setNomEtage(dto.getNomEtage());
-            // oldEtage.get().setNumEtage(dto.getNumEtage());
+            oldEtage.get().setNomCompletEtage(dto.getNomCompletEtage());
             oldEtage.get().setImmeuble(immeuble);
-
             Etage etageSave = etageRepository.save(oldEtage.get());
             return EtageDto.fromEntity(etageSave);
         }
         Etage etage = new Etage();
-        etage.setAbrvEtage(immeuble.getAbrvBienimmobilier() + "-" + dto.getAbrvEtage() + "-ETAGE-" + numEt);
-        etage.setNomEtage(dto.getNomEtage());
-        etage.setNumEtage(numEt);
+       // etage.setCodeAbrvEtage( dto.getCodeAbrvEtage() + "-ETAGE-" + numEt);
+        etage.setNomCompletEtage(dto.getNomCompletEtage());
+       // etage.setNumEtage(numEt);
         etage.setImmeuble(immeuble);
 
         Etage etageSave = etageRepository.save(etage);
@@ -85,8 +81,7 @@ public class EtageServiceImpl implements EtageService {
         }
         Optional<Etage> eta = etageRepository.findById(id);
         if (eta.isPresent()) {
-            if (eta.get().getMagasins().size() != 0 || eta.get().getAppartements().size() != 0 || eta.get().getStudios()
-                    .size() != 0) {
+            if (!eta.get().getMagasins().isEmpty() || eta.get().getAppartements().size() != 0) {
                 throw new EntityNotFoundException("l'Etage avec l'ID = " + id + " "
                         + "n' est pas vide ", ErrorCodes.IMMEUBLE_ALREADY_IN_USE);
             }
@@ -97,7 +92,7 @@ public class EtageServiceImpl implements EtageService {
 
     @Override
     public List<EtageDto> findAll() {
-        return etageRepository.findAll(Sort.by(Direction.ASC, "nomEtage")).stream()
+        return etageRepository.findAll().stream()
                 .map(EtageDto::fromEntity)
                 .collect(Collectors.toList());
     }
@@ -121,7 +116,7 @@ public class EtageServiceImpl implements EtageService {
             log.error("you are not provided a Etage.");
             return null;
         }
-        return etageRepository.findByNomEtage(nom).map(EtageDto::fromEntity).orElseThrow(
+        return etageRepository.findByNomCompletEtage(nom).map(EtageDto::fromEntity).orElseThrow(
                 () -> new InvalidEntityException("Aucune Etage has been found with name " + nom,
                         ErrorCodes.ETAGE_NOT_FOUND));
     }
@@ -130,7 +125,7 @@ public class EtageServiceImpl implements EtageService {
     public List<EtageDto> findAllByIdImmeuble(Long id) {
 
         log.info("We are going to get back the Etage By {}", id);
-        if (id == null) {
+        if (id == null || id == 0) {
             log.error("you are not provided a Etage.");
             return null;
         }
@@ -141,6 +136,23 @@ public class EtageServiceImpl implements EtageService {
 
         return etageRepository.findByImmeuble(immeuble).stream()
                 .map(EtageDto::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EtageAfficheDto> affichageDesEtageParImmeuble(Long id) {
+        log.info("We are going to get back the Etage By {}", id);
+        if (id == null || id == 0) {
+            log.error("you are not provided a Etage.");
+            return null;
+        }
+        Immeuble immeuble = immeubleRepository.findById(id)
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Impossible de trouver l'immeuble.",
+                        ErrorCodes.IMMEUBLE_NOT_FOUND));
+
+        return etageRepository.findByImmeuble(immeuble).stream()
+                .map(gestimoWebMapperImpl::fromEtage)
                 .collect(Collectors.toList());
     }
 

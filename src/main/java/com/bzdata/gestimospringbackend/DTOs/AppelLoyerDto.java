@@ -1,18 +1,19 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.time.LocalDate;
+
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
-import com.bzdata.gestimospringbackend.Models.BailLocation;
+
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
 // @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerDto {
     private Long id;
-    private Long idAgence;
+    Long idAgence;
+    Long idCreateur;
     private String periodeAppelLoyer;
     private String statusAppelLoyer;
     private LocalDate datePaiementPrevuAppelLoyer;
@@ -41,7 +42,7 @@ public class AppelLoyerDto {
                 .anneeAppelLoyer(appelLoyer.getAnneeAppelLoyer())
                 .moisChiffreAppelLoyer(appelLoyer.getMoisChiffreAppelLoyer())
                 .descAppelLoyer(appelLoyer.getDescAppelLoyer())
-                .montantBailLPeriode(appelLoyer.getMontantBailLPeriode())
+                .montantBailLPeriode(appelLoyer.getMontantLoyerBailLPeriode())
                 .bailLocationAppelLoyer(appelLoyer.getBailLocationAppelLoyer().getId())
                 .soldeAppelLoyer(appelLoyer.getSoldeAppelLoyer())
                 .isSolderAppelLoyer(appelLoyer.isSolderAppelLoyer())

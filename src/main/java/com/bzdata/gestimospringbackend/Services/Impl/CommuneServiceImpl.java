@@ -18,8 +18,6 @@ import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.VilleRepository;
 import com.bzdata.gestimospringbackend.validator.CommuneValidator;
 
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -94,7 +92,7 @@ public class CommuneServiceImpl implements CommuneService {
     @Override
     public List<CommuneRequestDto> findAll() {
         return communeRepository.findAll()
-//                Sort.by(Direction.ASC, "nomCommune"))
+                // Sort.by(Direction.ASC, "nomCommune"))
                 .stream()
                 .sorted(Comparator.comparing(Commune::getNomCommune))
                 .map(CommuneRequestDto::fromEntity)
@@ -133,24 +131,27 @@ public class CommuneServiceImpl implements CommuneService {
             return null;
         }
 
-        return communeRepository.findByVille(villeDto.getId()).stream().map(CommuneRequestDto::fromEntity)
+        return communeRepository.findByVille(villeDto).stream().map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<CommuneResponseDto> findAllByIdVille(Long id) {
+        Optional<Ville>  v = villeRepository.findById(id);
 
         log.info("We are going to get back the Ville By {}", id);
+
         if (id == null) {
             log.error("you are not provided a Ville.");
             return null;
         }
-        Optional<Ville> v = villeRepository.findById(id);
+
         if (!v.isPresent()) {
             log.error("Commune not found for the Ville.");
             return null;
         }
-        return communeRepository.findByVille(id).stream()
+        log.info("We are going to get back the Ville  {}",v.get());
+        return communeRepository.findByVille(v.get()).stream()
                 .map(CommuneResponseDto::fromEntity)
                 .collect(Collectors.toList());
     }

@@ -15,6 +15,8 @@ import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
+import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
@@ -45,9 +47,10 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
     final BienImmobilierRepository bienImmobilierRepository;
+    final BailMapperImpl bailMapperImpl;
 
     @Override
-    public BailMagasinDto save(BailMagasinDto dto) {
+    public OperationDto save(BailMagasinDto dto)  {
         BailLocation bailLocationMagasin = new BailLocation();
         log.info("We are going to create  a new Bail Magasin in the service layer {}", dto);
         List<String> errors = BailMagasinDtoValidator.validate(dto);
@@ -58,9 +61,9 @@ public class BailMagasinServiceImpl implements BailMagasinService {
         }
 
         Utilisateur utilisateur = utilisateurRepository
-                .findById(dto.getIdUtilisateur())
+                .findById(dto.getIdLocataire())
                 .orElseThrow(() -> new InvalidEntityException(
-                        "Aucun Utilisateur has been found with code " + dto.getIdUtilisateur(),
+                        "Aucun Utilisateur has been found with code " + dto.getIdLocataire(),
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
         if (utilisateur.getUrole().getRoleName().equals("LOCATAIRE")) {
             Bienimmobilier bienImmobilierOperation = bienImmobilierRepository.findById(dto.getIdMagasin())
@@ -83,7 +86,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             bailLocationMagasin.setNbreMoisCautionBail(dto.getNbreMoisCautionBail());
 
             bailLocationMagasin.setBienImmobilierOperation(bienImmobilierOperation);
-            bailLocationMagasin.setMagasinBail(magasinBail);
+           // bailLocationMagasin.setMagasinBail(magasinBail);
             bailLocationMagasin.setUtilisateurOperation(utilisateur);
             BailLocation magasinBailSave = bailLocationRepository.save(bailLocationMagasin);
 
@@ -91,7 +94,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
              * Mise a jour du status de l'object Magasin
              */
             magasinBail.setOccupied(true);
-            magasinBail.setStatutBien("Occupied");
+           // magasinBail.setStatutBien("Occupied");
             magasinRepository.save(magasinBail);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
@@ -99,7 +102,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(magasinBailSave);
-            montantLoyerBail.setIdAgence(magasinBail.getIdAgence());
+            montantLoyerBail.setIdAgence(magasinBailSave.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
                     dto.getNouveauMontantLoyer(), 0.0, magasinBailSave.getId(), dto.getIdAgence());
             /**
@@ -107,12 +110,12 @@ public class BailMagasinServiceImpl implements BailMagasinService {
              */
             AppelLoyerRequestDto appelLoyerRequestDto = new AppelLoyerRequestDto();
 
-            appelLoyerRequestDto.setIdBailLocation(magasinBail.getId());
+            appelLoyerRequestDto.setIdBailLocation(magasinBailSave.getId());
             appelLoyerRequestDto.setMontantLoyerEnCours(dto.getNouveauMontantLoyer());
-            appelLoyerRequestDto.setIdAgence(magasinBail.getIdAgence());
+            appelLoyerRequestDto.setIdAgence(magasinBailSave.getIdAgence());
 
             appelLoyerService.save(appelLoyerRequestDto);
-            return BailMagasinDto.fromEntity(magasinBailSave);
+            return bailMapperImpl.fromOperation(magasinBailSave);
         } else {
             throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
                     + utilisateur.getUrole().getRoleName(),
@@ -141,7 +144,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     @Override
     public List<BailMagasinDto> findAll() {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-                .map(BailMagasinDto::fromEntity)
+                .map(bailMapperImpl::fromBailMagasin)
                 .collect(Collectors.toList());
     }
 
@@ -152,7 +155,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findById(id).map(BailMagasinDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findById(id).map(bailMapperImpl::fromBailMagasin).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with Code " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }
@@ -164,7 +167,7 @@ public class BailMagasinServiceImpl implements BailMagasinService {
             log.error("you are not provided a Studio.");
             return null;
         }
-        return bailLocationRepository.findByDesignationBail(nom).map(BailMagasinDto::fromEntity).orElseThrow(
+        return bailLocationRepository.findByDesignationBail(nom).map(bailMapperImpl::fromBailMagasin).orElseThrow(
                 () -> new InvalidEntityException("Aucun Bail has been found with name " + nom,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
     }

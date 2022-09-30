@@ -4,16 +4,12 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -24,34 +20,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
+@CrossOrigin("*")
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
     @PostMapping("/save")
-    public ResponseEntity<Boolean> saveUtilisateur(@RequestBody UtilisateurRequestDto request) {
+    public ResponseEntity<UtilisateurAfficheDto> saveUtilisateur(@RequestBody UtilisateurRequestDto request) {
         log.info("We are going to save a new locatire {}", request);
-        return ResponseEntity.ok(utilisateurService.saveutilisateur(request));
+        return ResponseEntity.ok(utilisateurService.saveUtilisateur(request));
     }
-    // @PostMapping("/locataire/save")
-    // public ResponseEntity<UtilisateurRequestDto> saveLocataire(@RequestBody
-    // UtilisateurRequestDto request) {
-    // log.info("We are going to save a new locatire {}", request);
-    // return ResponseEntity.ok(utilisateurService.saveLocataire(request));
-    // }
-
-    // @PostMapping("/proprietaire/save")
-    // public ResponseEntity<Boolean> saveProprietaire(@RequestBody
-    // UtilisateurRequestDto request) {
-    // log.info("We are going to save a new Proprietaire {}", request);
-    // return ResponseEntity.ok(utilisateurService.saveProprietaire(request));
-    // }
-
-    // @PostMapping("/gerant/save")
-    // public ResponseEntity<UtilisateurRequestDto> saveGerant(@RequestBody
-    // UtilisateurRequestDto request) {
-    // log.info("We are going to save a new Gerant {}", request);
-    // return ResponseEntity.ok(utilisateurService.saveGerant(request));
-    // }
 
     @GetMapping("/getutilisateurbyid/{id}")
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByID(@PathVariable("id") Long id) {
@@ -67,29 +44,33 @@ public class UtilisateurController {
     public ResponseEntity<UtilisateurRequestDto> getUtilisateurByUsername(@PathVariable("username") String username) {
         return ResponseEntity.ok(utilisateurService.findUtilisateurByUsername(username));
     }
+    @GetMapping("/getAllutilisateurbyAgence/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getUtilisateurByAgence(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyNameByAgence(idAgence));
+    }
     //findUtilisateurByUsername
     @GetMapping("/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllUtilisateursByOrder() {
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllUtilisateursByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurOrderbyName());
     }
 
     @GetMapping("/locataires/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllLocatairesByOrder() {
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllLocatairesByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyName());
     }
 
     @GetMapping("/proprietaires/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllProprietaireByOrder() {
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllProprietaireByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurProprietaireOrderbyName());
     }
 
     @GetMapping("/gerants/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllGerantsByOrder() {
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllGerantsByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurGerantOrderbyName());
     }
 
     @GetMapping("/superviseurs/all")
-    public ResponseEntity<List<UtilisateurRequestDto>> getAllSuperviseursByOrder() {
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllSuperviseursByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurSuperviseurOrderbyName());
     }
 }

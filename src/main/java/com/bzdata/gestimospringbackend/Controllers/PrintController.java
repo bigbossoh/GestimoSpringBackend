@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 
 @RestController
@@ -24,8 +26,10 @@ import net.sf.jasperreports.engine.JRException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
+@Slf4j
 public class PrintController {
     final PrintService printService;
+
 
     @GetMapping("/quittance/{id}")
     public ResponseEntity<byte[]> sampleQuitance(@PathVariable("id") Long id)
@@ -34,5 +38,13 @@ public class PrintController {
         byte[] donnees = printService.quittanceLoyer(id);
         System.out.println(donnees);
         return ResponseEntity.ok(donnees);
+    }
+
+    @GetMapping(path = "/quittancegrouper/{periode}",produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> quittancePeriode(
+            @PathVariable("periode") String periode)
+            throws FileNotFoundException, JRException, SQLException {
+                log.info("Periode {}", periode);
+        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode));
     }
 }

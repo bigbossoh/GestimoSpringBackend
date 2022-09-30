@@ -35,13 +35,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
     public boolean saveNewMontantLoyerBail(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
             double ancienMontantLoyer, Long idBailLocation, Long idAgence) {
         log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation, idAgence);
-        // List<String> errors = MontantLoyerBailDtoValidator.validate(dto);
-        // if (!errors.isEmpty()) {
-        // log.error("le montant loyer bail n'est pas valide {}", errors);
-        // throw new InvalidEntityException("Certain attributs de l'object Montant loyer
-        // bail sont null.",
-        // ErrorCodes.MONTANTLOYERBAIL_NOT_VALID, errors);
-        // }
+   
 
         try {
 

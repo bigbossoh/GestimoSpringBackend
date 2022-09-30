@@ -21,6 +21,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
+import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.BailMagasinService;
 
 @RestController
@@ -41,7 +42,7 @@ public class BailMagasinController {
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Bail Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<BailMagasinDto> saveBailMagasin(@RequestBody BailMagasinDto dto) {
+    public ResponseEntity<OperationDto> saveBailMagasin(@RequestBody BailMagasinDto dto) {
         log.info("We are going to save a new Bail Magasin {}", dto);
         return ResponseEntity.ok(bailMagasinService.save(dto));
     }

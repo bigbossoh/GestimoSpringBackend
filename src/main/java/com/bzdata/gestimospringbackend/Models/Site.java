@@ -21,6 +21,6 @@ public class Site extends AbstractEntity {
     String nomSite;
     @ManyToOne
     Quartier quartier;
-    @OneToMany(mappedBy = "site")
-    List<Bienimmobilier> bienImmobiliers;
+//    @OneToMany(mappedBy = "site")
+//    List<Bienimmobilier> bienImmobiliers;
 }

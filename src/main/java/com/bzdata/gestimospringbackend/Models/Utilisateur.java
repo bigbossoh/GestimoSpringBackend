@@ -48,11 +48,11 @@ public class Utilisateur extends AbstractEntity {
     private String[] authorities;
     private boolean isActive;
     private boolean isNonLocked;
-    @ManyToOne
-    AgenceImmobiliere agence;
+    // @ManyToOne
+    // AgenceImmobiliere agenceImmobilier;
 
-    @OneToMany(mappedBy = "createur")
-    List<AgenceImmobiliere> listeAgence;
+    // @OneToMany(mappedBy = "createur")
+    // List<AgenceImmobiliere> createurAgenceImmobiliere;
 
     @ManyToOne(fetch = FetchType.EAGER)
     Role urole;
@@ -62,6 +62,6 @@ public class Utilisateur extends AbstractEntity {
     List<Operation> operationUser;
     @OneToMany(mappedBy = "utilisateurEncaissement")
     List<Encaissement> encaissementsUtilisateur;
-    @OneToMany(mappedBy = "utilisateur")
+    @OneToMany(mappedBy = "utilisateurProprietaire")
     List<Bienimmobilier> biensUtilisateur;
 }

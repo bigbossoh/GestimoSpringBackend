@@ -16,10 +16,14 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtageDto {
     Long id;
-    String nomEtage;
-    String AbrvEtage;
+    Long idAgence;
+    Long idCreateur;
     int numEtage;
     Long idImmeuble;
+    String nomCompletEtage;
+     String codeAbrvEtage;
+    String nomBaptiserEtage;
+     int nombrePieceSurEtage;
 
     public static EtageDto fromEntity(Etage etage) {
         if (etage == null) {
@@ -27,23 +31,16 @@ public class EtageDto {
         }
         return EtageDto.builder()
                 .id(etage.getId())
-                .AbrvEtage(etage.getAbrvEtage())
-                .nomEtage(etage.getNomEtage())
+                .idAgence(etage.getIdAgence())
+                .idCreateur(etage.getIdCreateur())
                 .numEtage(etage.getNumEtage())
                 .idImmeuble(etage.getImmeuble().getId())
+                .nomCompletEtage(etage.getNomCompletEtage())
+                .codeAbrvEtage(etage.getCodeAbrvEtage())
+                .nomBaptiserEtage(etage.getNomBaptiserEtage())
+                .nombrePieceSurEtage(etage.getNombrePieceSurEtage())
                 .build();
     }
 
-    // public static Etage toEntity(EtageDto etageDto) {
-    // if (etageDto == null) {
-    // return null;
-    // }
-    // Etage etage = new Etage();
-    // etage.setId(etageDto.getId());
-    // etage.setAbrvEtage(etageDto.getAbrvEtage());
-    // etage.setNomEtage(etageDto.getNomEtage());
-    // etage.setNumEtage(etageDto.getNumEtage());
-    // etage.setImmeuble(ImmeubleDto.toEntity(etageDto.getImmeubleDto()));
-    // return etage;
-    // }
+
 }

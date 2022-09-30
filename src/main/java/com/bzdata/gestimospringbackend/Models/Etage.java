@@ -1,15 +1,15 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Getter
 @Setter
@@ -17,13 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class Etage extends AbstractEntity {
-    private String nomEtage;
-    private String AbrvEtage;
+    private String nomCompletEtage;
+    private String codeAbrvEtage;
+    private String nomBaptiserEtage;
     private int numEtage;
+    private int nombrePieceSurEtage;
     @OneToMany(mappedBy = "etageAppartement")
     private List<Appartement> appartements;
-    @OneToMany(mappedBy = "etageStudio")
-    private List<Studio> studios;
+//    @OneToMany(mappedBy = "etageStudio")
+//    private List<Studio> studios;
     @OneToMany(mappedBy = "etageMagasin")
     private List<Magasin> magasins;
     @ManyToOne

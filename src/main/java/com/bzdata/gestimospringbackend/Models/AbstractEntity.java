@@ -20,8 +20,8 @@ public class AbstractEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false,updatable = false)
     private Long id;
-
     private Long idAgence;
+    private Long idCreateur;
     @CreatedDate
     @Column(name = "creationDate", nullable = false, updatable = false)
     private Instant creationDate;
