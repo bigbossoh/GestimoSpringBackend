@@ -41,8 +41,8 @@ public class AppelLoyersController {
     }
 
     @Operation(summary = "Trouver un Quartier par son ID", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAppelsByIdBail/{id}")
-    public ResponseEntity<List<AppelLoyerDto>> findAllAppelByIdBail(@PathVariable("id") Long id) {
+    @GetMapping("/findAppelsByBail/{id}")
+    public ResponseEntity<List<AppelLoyerDto>> listDesLoyersParBail(@PathVariable("id") Long id) {
         log.info("Find Appel by ID Bail {}", id);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByBailId(id));
     }
