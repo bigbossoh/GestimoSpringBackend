@@ -227,9 +227,10 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id) {
-
+        Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
+                .comparing(EncaissementPrincipal::getId);
         return encaissementPrincipalRepository.findAll()
-        .stream()
+        .stream().sorted(compareBydatecreation.reversed())
         .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getId(), id))
         .map(gestimoWebMapper::fromEncaissementPrincipal)
         .collect(Collectors.toList());
