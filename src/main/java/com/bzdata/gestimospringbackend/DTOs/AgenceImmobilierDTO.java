@@ -20,8 +20,4 @@ public class AgenceImmobilierDTO {
     String faxAgence;
     String sigleAgence;
     Long idAgence;
-
-
-
-
-}
+    }
