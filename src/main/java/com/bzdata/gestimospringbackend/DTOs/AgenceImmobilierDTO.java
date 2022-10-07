@@ -20,4 +20,10 @@ public class AgenceImmobilierDTO {
     String faxAgence;
     String sigleAgence;
     Long idAgence;
+    String profileAgenceUrl;
+    String adresseAgence;
+    private Long idImage;
+    private String nameImage;
+    private String typeImage;
+
     }

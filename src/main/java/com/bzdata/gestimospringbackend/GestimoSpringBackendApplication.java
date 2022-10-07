@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend;
 
+import static com.bzdata.gestimospringbackend.constant.FileConstant.FOLDER_PATH;
 import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
@@ -65,7 +66,8 @@ public class GestimoSpringBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
-        new File(USER_FOLDER).mkdirs();
+        new File(FOLDER_PATH).mkdirs();
+       // new File(FOLDER_PATH).mkdirs();
     }
 
     @Bean

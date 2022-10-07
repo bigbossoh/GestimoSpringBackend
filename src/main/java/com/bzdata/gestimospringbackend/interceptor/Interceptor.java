@@ -35,6 +35,8 @@ public class Interceptor extends EmptyInterceptor {
               && !entityName.toLowerCase().contains("immeuble")
               && !entityName.toLowerCase().contains("montantloy")
               && !entityName.toLowerCase().contains("encaissement_princi")
+              && !entityName.toLowerCase().contains("imagedata")
+              && !entityName.toLowerCase().contains("fileData")
           && !entityName.toLowerCase().contains("studio")
           && !entityName.toLowerCase().contains("appartemen")
               && !entityName.toLowerCase().contains("appelloye")

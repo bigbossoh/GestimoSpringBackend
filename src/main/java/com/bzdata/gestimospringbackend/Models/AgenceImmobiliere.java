@@ -1,6 +1,9 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,10 +26,8 @@ public class AgenceImmobiliere extends AbstractEntity {
     String regimeFiscaleAgence;
     String faxAgence;
     String sigleAgence;
-
-    // @OneToMany(mappedBy = "agenceImmobilier")
-    // List<Utilisateur> utilisateursAgence;
-    // @ManyToOne
-    // Utilisateur createur;
+    String adresseAgence;
+    @OneToOne
+    ImageData imageData;
 
 }

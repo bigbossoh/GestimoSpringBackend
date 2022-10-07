@@ -70,10 +70,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
         if (utilisateurByMobile == null) {
             // get back the connected user
-            Utilisateur userCreate = utilisateurRepository.findById(dto.getIdUtilisateurCreateur()).orElseThrow(
-                    () -> new InvalidEntityException(
-                            "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
-                            ErrorCodes.UTILISATEUR_NOT_FOUND));
+            Utilisateur userCreate = getUserCreate(dto);
             //agenceImmobiliere.setCreateur(userCreate);
             agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
             agenceImmobiliere.setCapital(dto.getCapital());
@@ -251,10 +248,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
             if (utilisateurByMobile == null) {
                 // get back the connected user
-                Utilisateur userCreate = utilisateurRepository.findById(dto.getIdUtilisateurCreateur()).orElseThrow(
-                        () -> new InvalidEntityException(
-                                "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
-                                ErrorCodes.UTILISATEUR_NOT_FOUND));
+                Utilisateur userCreate = getUserCreate(dto);
                 //agenceImmobiliere.setCreateur(userCreate);
                 agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
                 agenceImmobiliere.setCapital(dto.getCapital());
@@ -326,6 +320,13 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             AgenceImmobiliere save = agenceImmobiliereRepository.save(agenceImmobiliere1);
             return gestimoWebMapperImpl.fromAgenceImmobilier(save);
         }
+    }
+
+    private Utilisateur getUserCreate(AgenceRequestDto dto) {
+        return utilisateurRepository.findById(dto.getIdUtilisateurCreateur()).orElseThrow(
+                () -> new InvalidEntityException(
+                        "Aucun Utilisateur has been found with Code " + dto.getIdUtilisateurCreateur(),
+                        ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
 

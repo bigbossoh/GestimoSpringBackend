@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GestimoWebMapperImpl {
 
     final AgenceImmobiliereRepository agenceImmobiliereRepository;
+    final StorageRepository storageRepository;
     final BienImmobilierRepository bienImmobilierRepository;
     final BailLocationRepository bailLocationRepository;
     final UtilisateurRepository utilisateurRepository;
@@ -127,12 +128,32 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(agenceImmobilierDTO, agenceImmo);
         return agenceImmo;
     }
+    public AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere){
+        AgenceRequestDto agenceImmobilierDTO = new AgenceRequestDto();
+        BeanUtils.copyProperties(agenceImmobiliere, agenceImmobilierDTO);
+        ImageData imageData = getImageData(agenceImmobiliere);
+        agenceImmobilierDTO.setIdImage(imageData.getId());
+        agenceImmobilierDTO.setTypeImage(imageData.getTypeImage());
+        agenceImmobilierDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
+        return agenceImmobilierDTO;
+    }
+
+    private ImageData getImageData(AgenceImmobiliere agenceImmobiliere) {
+        ImageData imageData = storageRepository.findById(agenceImmobiliere.getImageData().getId()).orElse(null);
+        if (imageData == null)
+            throw new EntityNotFoundException("Image from GestimoMapper not found",
+                    ErrorCodes.IMAGE_NOT_FOUND);
+        return imageData;
+    }
 
     public AgenceImmobilierDTO fromAgenceImmobilier(AgenceImmobiliere agenceImmobilier) {
         AgenceImmobilierDTO agenceImmoDTO = new AgenceImmobilierDTO();
         BeanUtils.copyProperties(agenceImmobilier, agenceImmoDTO);
+        ImageData imageData = getImageData(agenceImmobilier);
+        agenceImmoDTO.setIdImage(imageData.getId());
+        agenceImmoDTO.setTypeImage(imageData.getTypeImage());
+        agenceImmoDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
         return agenceImmoDTO;
-
     }
 
     // Immeuble

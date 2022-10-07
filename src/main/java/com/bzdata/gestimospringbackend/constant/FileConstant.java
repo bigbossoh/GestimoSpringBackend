@@ -5,6 +5,7 @@ public class FileConstant {
     public static final String GLOBAL_URL = "/api/v1";
     public static final String JPG_EXTENSION = "jpg";
     public static final String USER_FOLDER = System.getProperty("user.home") + "/gestimoweb/user/";
+    public static final String FOLDER_PATH = System.getProperty("user.home") + "/gestimoweb/file_dossier/";
     public static final String DIRECTORY_CREATED = "Created directory for: ";
     public static final String DEFAULT_USER_IMAGE_PATH = "/gestimoweb/api/v1/user/image/profile/";
     public static final String FILE_SAVED_IN_FILE_SYSTEM = "Saved file in file system by name: ";
