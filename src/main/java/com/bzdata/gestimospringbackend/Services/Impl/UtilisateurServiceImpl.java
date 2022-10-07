@@ -46,34 +46,29 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto) {
-        log.info("We are going to create a new user with the role Locataire {}",
-                dto);
-        Utilisateur newUser = new Utilisateur();
-        List<String> errors = UtilisateurDtoValiditor.validate(dto);
-        if (!errors.isEmpty()) {
-            log.error("l'utilisateur n'est pas valide {}", errors);
-            throw new InvalidEntityException(
-                    "Certain attributs de l'object utiliateur avec pour role locataire sont null.",
-                    ErrorCodes.UTILISATEUR_NOT_VALID, errors);
-        }
-        try {
-
-            Optional<Utilisateur> userExiste = utilisateurRepository.findById(dto.getId());
-            if (userExiste.isPresent()) {
-                newUser.setId(userExiste.get().getId());
+        if (dto.getId() == 0 || dto.getId() == null) {
+            log.info("We are going to create a new user with the role Locataire {}", dto);
+            Utilisateur newUser = new Utilisateur();
+            List<String> errors = UtilisateurDtoValiditor.validate(dto);
+            if (!errors.isEmpty()) {
+                log.error("l'utilisateur n'est pas valide {}", errors);
+                throw new InvalidEntityException(
+                        "Certain attributs de l'object utiliateur avec pour role locataire sont null.",
+                        ErrorCodes.UTILISATEUR_NOT_VALID, errors);
             }
-
+            //L'utilisateur createur
             Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
                     () -> new InvalidEntityException(
                             "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
                             ErrorCodes.UTILISATEUR_NOT_FOUND));
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
+            Role leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed()).orElseThrow(() -> new InvalidEntityException(
+                    "Aucun role has been found with Code " + dto.getRoleUsed(),
+                    ErrorCodes.ROLE_NOT_FOUND));
 
-            Optional<Role> leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed());
-            if (leRole.isPresent()) {
-                newUser.setUrole(leRole.get());
-                switch (leRole.get().getRoleName()) {
+                newUser.setUrole(leRole);
+                switch (leRole.getRoleName()) {
                     case "SUPERVISEUR":
                         newUser.setRoleUsed(ROLE_SUPERVISEUR.name());
                         newUser.setAuthorities(ROLE_SUPERVISEUR.getAuthorities());
@@ -93,45 +88,59 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     default:
                         log.error(
                                 "You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",
-                                leRole.get().getRoleName());
+                                leRole.getRoleName());
                         break;
                 }
-            }
+                newUser.setIdAgence(dto.getIdAgence());
+                newUser.setNom(dto.getNom());
+                newUser.setUtilisateurIdApp(generateUserId());
+                newUser.setPrenom(dto.getPrenom());
+                newUser.setEmail(dto.getEmail());
+                newUser.setMobile(dto.getMobile());
+                newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+                newUser.setUsername(dto.getMobile());
+                newUser.setProfileImageUrl(dto.getProfileImageUrl());
+                newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
+                newUser.setJoinDate(new Date());
+                newUser.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
+                newUser.setNationalité(dto.getNationalité());
+                newUser.setLieuNaissance(dto.getLieuNaissance());
+                newUser.setGenre(dto.getGenre());
+                newUser.setDateFinPiece(dto.getDateFinPiece());
+                newUser.setDateDeNaissance(dto.getDateDeNaissance());
+                newUser.setDateDebutPiece(dto.getDateDebutPiece());
+                newUser.setActive(true);
+                newUser.setActivated(true);
+                newUser.setNonLocked(true);
+                newUser.setIdCreateur(dto.getIdCreateur());
+                Utilisateur userSave = utilisateurRepository.save(newUser);
+                return gestimoWebMapperImpl.fromUtilisateur(userSave);
 
-            Optional<AgenceImmobiliere> agenceImmobiliere = agenceImmobiliereRepository.findById(dto.getAgenceDto());
-            if (agenceImmobiliere.isPresent()) {
-                // newUser.setAgenceImmobilier(agenceImmobiliere.get());
-            }
-
-            newUser.setIdAgence(dto.getIdAgence());
-            newUser.setNom(dto.getNom());
-            newUser.setUtilisateurIdApp(generateUserId());
-            newUser.setPrenom(dto.getPrenom());
-            newUser.setEmail(dto.getEmail());
-            newUser.setMobile(dto.getMobile());
-            newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
-            newUser.setUsername(dto.getMobile());
-            newUser.setProfileImageUrl(dto.getProfileImageUrl());
-            newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
-            newUser.setJoinDate(new Date());
-            newUser.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
-            newUser.setNationalité(dto.getNationalité());
-            newUser.setLieuNaissance(dto.getLieuNaissance());
-            newUser.setGenre(dto.getGenre());
-            newUser.setDateFinPiece(dto.getDateFinPiece());
-            newUser.setDateDeNaissance(dto.getDateDeNaissance());
-            newUser.setDateDebutPiece(dto.getDateDebutPiece());
-            newUser.setActive(true);
-            newUser.setActivated(true);
-            newUser.setNonLocked(true);
-            newUser.setIdCreateur(dto.getIdCreateur());
-            Utilisateur userSave = utilisateurRepository.save(newUser);
-            return gestimoWebMapperImpl.fromUtilisateur(userSave);
-        } catch (Exception e) {
-            log.error("Save Error", e.getMessage());
-            throw new EntityNotFoundException("Error in Saving " +
-                    e.getMessage(),
-                    ErrorCodes.UTILISATEUR_NOT_VALID);
+        } else {
+            log.info("WE ARE GOING TO MAKE A UDPDATE OF utilisateur");
+            Utilisateur utilisateurUpdate = utilisateurRepository.findById(dto.getId()).orElseThrow(() -> new InvalidEntityException(
+                    "Aucun Utlisateur has been found with id " + dto.getId(),
+                    ErrorCodes.UTILISATEUR_NOT_FOUND));
+            utilisateurUpdate.setIdAgence(dto.getIdAgence());
+            utilisateurUpdate.setNom(dto.getNom());
+            utilisateurUpdate.setUtilisateurIdApp(generateUserId());
+            utilisateurUpdate.setPrenom(dto.getPrenom());
+            utilisateurUpdate.setEmail(dto.getEmail());
+            utilisateurUpdate.setUsername(dto.getMobile());
+            utilisateurUpdate.setProfileImageUrl(dto.getProfileImageUrl());
+            utilisateurUpdate.setTypePieceIdentite(dto.getTypePieceIdentite());
+            utilisateurUpdate.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
+            utilisateurUpdate.setNationalité(dto.getNationalité());
+            utilisateurUpdate.setLieuNaissance(dto.getLieuNaissance());
+            utilisateurUpdate.setGenre(dto.getGenre());
+            utilisateurUpdate.setDateFinPiece(dto.getDateFinPiece());
+            utilisateurUpdate.setDateDeNaissance(dto.getDateDeNaissance());
+            utilisateurUpdate.setDateDebutPiece(dto.getDateDebutPiece());
+            utilisateurUpdate.setActive(dto.isActive());
+            utilisateurUpdate.setActivated(dto.isActivated());
+            utilisateurUpdate.setNonLocked(dto.isNonLocked());
+            Utilisateur UpdateUtilisateur = utilisateurRepository.save(utilisateurUpdate);
+            return gestimoWebMapperImpl.fromUtilisateur(UpdateUtilisateur);
         }
 
     }
