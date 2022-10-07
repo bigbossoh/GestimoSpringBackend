@@ -7,6 +7,7 @@ import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.OperationService;
+import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
@@ -34,7 +35,7 @@ final BailMapperImpl bailMapperImpl;
 
     @Override
     public List<OperationDto> getAllOperation() {
-      
+
         return bailLocationRepository.findAll().stream()
                 .map(bailMapperImpl::fromOperation)
                 .collect(Collectors.toList());
@@ -62,5 +63,6 @@ final BailMapperImpl bailMapperImpl;
         .filter(utilis->utilis.getBienImmobilierOperation().equals(bienImmobilier))
         .collect(Collectors.toList());
     }
+
 
 }

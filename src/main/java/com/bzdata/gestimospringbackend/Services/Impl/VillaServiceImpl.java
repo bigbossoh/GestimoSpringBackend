@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
@@ -51,35 +52,33 @@ public class VillaServiceImpl implements VillaService {
             throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
                     ErrorCodes.VILLA_NOT_VALID, errors);
         }
-        Villa villatrouve=villaRepository.findById(dto.getId()).orElseThrow(
-            () -> new InvalidEntityException("Aucun Studio has been found with Code " + dto.getId(),
-                        ErrorCodes.VILLA_NOT_FOUND));
-                        if (villatrouve!=null) {
+        Optional<Villa> villatrouve = villaRepository.findById(dto.getId());
+                        if (villatrouve.isPresent()) {
                             Site recoverySite = getSite(dto);
                             Utilisateur utilisateurRequestDto = getUtilisateur(dto.getIdUtilisateur());
                             Role leRole = getRole(utilisateurRequestDto.getUrole().getId());
                             if (leRole.getRoleName().equals("PROPRIETAIRE")) {
-                                villatrouve.setIdAgence(dto.getIdAgence());
-                                villatrouve.setIdCreateur(dto.getIdCreateur());
-                                villatrouve.setSite(recoverySite);
-                                villatrouve.setDescription(dto.getDescription());
-                                villatrouve.setOccupied(dto.isOccupied());
-                                villatrouve.setSuperficieBien(dto.getSuperficieBien());
-                                villatrouve.setNbrChambreVilla(dto.getNbrChambreVilla());
-                                villatrouve.setNbrSalonVilla(dto.getNbrSalleEauVilla());
-                                villatrouve.setNbrePieceVilla(dto.getNbrePieceVilla());
-                                villatrouve.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
-                                villatrouve.setUtilisateurProprietaire(utilisateurRequestDto);
+                                villatrouve.get().setIdAgence(dto.getIdAgence());
+                                villatrouve.get().setIdCreateur(dto.getIdCreateur());
+                                villatrouve.get().setSite(recoverySite);
+                                villatrouve.get().setDescription(dto.getDescription());
+                                villatrouve.get().setOccupied(dto.isOccupied());
+                                villatrouve.get().setSuperficieBien(dto.getSuperficieBien());
+                                villatrouve.get().setNbrChambreVilla(dto.getNbrChambreVilla());
+                                villatrouve.get().setNbrSalonVilla(dto.getNbrSalleEauVilla());
+                                villatrouve.get().setNbrePieceVilla(dto.getNbrePieceVilla());
+                                villatrouve.get().setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+                                villatrouve.get().setUtilisateurProprietaire(utilisateurRequestDto);
                                 Long numBien = 0L;
                                 if (villaRepository.count() == 0) {
                                     numBien = 1L;
                                 } else {
                                     numBien = nombreVillaByIdSite(recoverySite);
                                 }
-                                villatrouve.setNumVilla(numBien);
-                                villatrouve.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
-                                villatrouve.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
-                                Villa villaSave = villaRepository.save(villatrouve);
+                                villatrouve.get().setNumVilla(numBien);
+                                villatrouve.get().setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
+                                villatrouve.get().setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
+                                Villa villaSave = villaRepository.save(villatrouve.get());
                                 return gestimoWebMapperImpl.fromVilla(villaSave);
                             } else {
                                 throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "

@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
@@ -113,31 +114,29 @@ public class AppartementServiceImpl implements AppartementService {
             throw new InvalidEntityException("Certain attributs de l'object Appartement sont null.",
                     ErrorCodes.APPARTEMENT_NOT_VALID, errors);
         }
-        Appartement unAppartementTrouve = appartementRepository.findById(dto.getId()).orElseThrow(
-                () -> new InvalidEntityException("Aucun Appartement has been found with Code " + dto.getId(),
-                        ErrorCodes.APPARTEMENT_NOT_FOUND));
-        if (unAppartementTrouve != null) {
+        Optional<Appartement> unAppartementTrouve = appartementRepository.findById(dto.getId());
+        if (unAppartementTrouve.isPresent()) {
             // Etage etage = getEtage(dto);
             // Long numApp = nombreVillaByIdSite(etage.getImmeuble().getSite());
 
             // unAppartementTrouve.setEtageAppartement(etage);
-            unAppartementTrouve.setNbrPieceApp(dto.getNbrPieceApp());
-            unAppartementTrouve.setNbreChambreApp(dto.getNbreChambreApp());
-            unAppartementTrouve.setNbreSalleEauApp(dto.getNbreSalleEauApp());
-            unAppartementTrouve.setNbreSalonApp(dto.getNbreSalonApp());
-            unAppartementTrouve.setIdAgence(dto.getIdAgence());
-            unAppartementTrouve.setIdCreateur(dto.getIdCreateur());
+            unAppartementTrouve.get().setNbrPieceApp(dto.getNbrPieceApp());
+            unAppartementTrouve.get().setNbreChambreApp(dto.getNbreChambreApp());
+            unAppartementTrouve.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
+            unAppartementTrouve.get().setNbreSalonApp(dto.getNbreSalonApp());
+            unAppartementTrouve.get().setIdAgence(dto.getIdAgence());
+            unAppartementTrouve.get().setIdCreateur(dto.getIdCreateur());
             // unAppartementTrouve.setNumApp(numApp);
             // unAppartementTrouve.setCodeAbrvBienImmobilier((etage.getCodeAbrvEtage() +
             // "-APPT-" + numApp).toUpperCase());
-            unAppartementTrouve.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+            unAppartementTrouve.get().setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
             // unAppartementTrouve.setNomCompletBienImmobilier(etage.getNomCompletEtage() +
             // "-APPARTEMENT-" + numApp);
-            unAppartementTrouve.setBienMeublerResidence(dto.isBienMeublerResidence());
-            unAppartementTrouve.setDescription(dto.getDescription());
-            unAppartementTrouve.setSuperficieBien(dto.getSuperficieBien());
+            unAppartementTrouve.get().setBienMeublerResidence(dto.isBienMeublerResidence());
+            unAppartementTrouve.get().setDescription(dto.getDescription());
+            unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
             // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
-            Appartement appartementSave = appartementRepository.save(unAppartementTrouve);
+            Appartement appartementSave = appartementRepository.save(unAppartementTrouve.get());
             return gestimoWebMapperImpl.fromAppartement(appartementSave);
         } else {
             Etage etage = getEtage(dto);

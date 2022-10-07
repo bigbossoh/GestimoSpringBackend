@@ -133,11 +133,8 @@ public class MagasinServiceImpl implements MagasinService {
     // ENREGISTRER UN MAGASIN
     @Override
     public MagasinDto saveUnMagasin(MagasinDto dto) {
-        Magasin magasinFind = magasinRepository.findById(dto.getId()).orElseThrow(
-                () -> new InvalidEntityException("Aucun Studio has been found with Code " + dto.getId(),
-                        ErrorCodes.MAGASIN_NOT_FOUND));
-                        log.info("We are going to find   a new Magasin {}", magasinFind);
-        if (magasinFind != null) {
+        Optional<Magasin> magasinFind = magasinRepository.findById(dto.getId());
+        if (magasinFind.isPresent()) {
             log.info("We are going to create  a new Magasin {}", dto);
             List<String> errors = MagasinDtoValidator.validate(dto);
             if (!errors.isEmpty()) {
@@ -161,7 +158,7 @@ public class MagasinServiceImpl implements MagasinService {
             // }
             Utilisateur utilisateurRequestDto = getUtilisateur(dto);
             if (utilisateurRequestDto.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-                magasinFind.setIdAgence(dto.getIdAgence());
+                magasinFind.get().setIdAgence(dto.getIdAgence());
                 Long numBien = 0L;
                 int size = new ArrayList<>(magasinRepository.findAll()).size();
                 if (size == 0) {
@@ -173,14 +170,14 @@ public class MagasinServiceImpl implements MagasinService {
                     //     numBien = nombreVillaByIdSite(etage.getImmeuble().getSite());
                     // }
                 }
-                magasinFind.setNumMagasin(numBien);
-                magasinFind.setDescription(dto.getDescription().toUpperCase());
-                magasinFind.setSuperficieBien(dto.getSuperficieBien());
-                magasinFind.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
-                magasinFind.setNombrePieceMagasin(dto.getNombrePieceMagasin());
-                magasinFind.setUtilisateurProprietaire(utilisateurRequestDto);
-                magasinFind.setIdCreateur(dto.getIdCreateur());
-                magasinFind.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+                magasinFind.get().setNumMagasin(numBien);
+                magasinFind.get().setDescription(dto.getDescription().toUpperCase());
+                magasinFind.get().setSuperficieBien(dto.getSuperficieBien());
+                magasinFind.get().setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
+                magasinFind.get().setNombrePieceMagasin(dto.getNombrePieceMagasin());
+                magasinFind.get().setUtilisateurProprietaire(utilisateurRequestDto);
+                magasinFind.get().setIdCreateur(dto.getIdCreateur());
+                magasinFind.get().setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
 
                 // if (dto.getIdEtage() == null || dto.getIdEtage() == 0) {
                 //     magasinFind.setSite(recoverySite);
@@ -197,7 +194,7 @@ public class MagasinServiceImpl implements MagasinService {
                 //             magasinFind.setEtageMagasin(etage);
                 // }
 
-                Magasin magasinSave = magasinRepository.save(magasinFind);
+                Magasin magasinSave = magasinRepository.save(magasinFind.get());
                 log.info("les informations du magasin sont {}", magasinFind);
                 return gestimoWebMapperImpl.fromMagasin(magasinSave);
             } else {

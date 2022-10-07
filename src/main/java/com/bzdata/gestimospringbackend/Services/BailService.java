@@ -11,5 +11,5 @@ public interface BailService {
     List<AppelLoyersFactureDto> findAllByIdBienImmobilier(Long id);
     List<OperationDto> findAllByIdLocataire(Long id);
     List<OperationDto> findAllBauxLocation();
-
+    boolean deleteOperationById(Long id);
 }

@@ -140,5 +140,20 @@ public class BailServiceImpl implements BailService {
 
         return null;
     }
+    @Override
+    public boolean deleteOperationById(Long id) {
+       // log.info("We are going to delete a Appartement with the ID {}", id);
+        if (id == null) {
+         //   log.error("you are provided a null ID for the Appartement");
+            return false;
+        }
+        boolean exist = bailLocationRepository.existsById(id);
+        if (!exist) {
+            throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
+                    + "n' ete trouve dans la BDD", ErrorCodes.APPARTEMENT_NOT_FOUND);
+        }
 
+        bailLocationRepository.deleteById(id);
+        return true;
+    }
 }
