@@ -149,10 +149,10 @@ public class GestimoWebMapperImpl {
     public AgenceImmobilierDTO fromAgenceImmobilier(AgenceImmobiliere agenceImmobilier) {
         AgenceImmobilierDTO agenceImmoDTO = new AgenceImmobilierDTO();
         BeanUtils.copyProperties(agenceImmobilier, agenceImmoDTO);
-        ImageData imageData = getImageData(agenceImmobilier);
-        agenceImmoDTO.setIdImage(imageData.getId());
-        agenceImmoDTO.setTypeImage(imageData.getTypeImage());
-        agenceImmoDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
+//        ImageData imageData = getImageData(agenceImmobilier);
+//        agenceImmoDTO.setIdImage(imageData.getId());
+//        agenceImmoDTO.setTypeImage(imageData.getTypeImage());
+//        agenceImmoDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
         return agenceImmoDTO;
     }
 

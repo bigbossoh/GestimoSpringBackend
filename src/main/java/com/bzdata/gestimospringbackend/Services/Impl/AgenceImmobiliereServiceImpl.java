@@ -294,8 +294,10 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                                 "ci-dessous pour activer votre account: " + ACTIVATION_EMAIL + "/" + token + "\n");
                 mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",
                         saveUser.getEmail(), message));
-                log.info("We are same a gerant user and Agence also !!!");
-                return gestimoWebMapperImpl.fromAgenceImmobilier(saveAgenceUpdate);
+                log.info("We are same a gerant user and Agence also {}",saveAgenceUpdate);
+                AgenceImmobilierDTO agenceImmobilierDTO = gestimoWebMapperImpl.fromAgenceImmobilier(saveAgenceUpdate);
+                return agenceImmobilierDTO;
+
             } else {
                 log.error("This user is already exist");
                 throw new EntityNotFoundException("The username or mobile is already exist in db " + dto.getMobileAgence(),
