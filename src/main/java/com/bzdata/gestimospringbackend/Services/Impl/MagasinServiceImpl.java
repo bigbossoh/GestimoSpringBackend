@@ -136,7 +136,7 @@ public class MagasinServiceImpl implements MagasinService {
         Magasin magasinFind = magasinRepository.findById(dto.getId()).orElseThrow(
                 () -> new InvalidEntityException("Aucun Studio has been found with Code " + dto.getId(),
                         ErrorCodes.MAGASIN_NOT_FOUND));
-
+                        log.info("We are going to find   a new Magasin {}", magasinFind);
         if (magasinFind != null) {
             log.info("We are going to create  a new Magasin {}", dto);
             List<String> errors = MagasinDtoValidator.validate(dto);
@@ -146,59 +146,59 @@ public class MagasinServiceImpl implements MagasinService {
                         ErrorCodes.MAGASIN_NOT_VALID, errors);
             }
 
-            Magasin magasin = new Magasin();
-            Site recoverySite;
-            Etage etage;
-            if (dto.getIdEtage() != null && dto.getIdEtage() != 0) {
-                etage = getEtage(dto);
-            } else {
-                etage = null;
-            }
-            if (dto.getIdSite() != null && dto.getIdSite() != 0) {
-                recoverySite = getSite(dto);
-            } else {
-                recoverySite = null;
-            }
+
+            // Site recoverySite;
+            // Etage etage;
+            // if (dto.getIdEtage() != null && dto.getIdEtage() != 0) {
+            //     etage = getEtage(dto);
+            // } else {
+            //     etage = null;
+            // }
+            // if (dto.getIdSite() != null && dto.getIdSite() != 0) {
+            //     recoverySite = getSite(dto);
+            // } else {
+            //     recoverySite = null;
+            // }
             Utilisateur utilisateurRequestDto = getUtilisateur(dto);
             if (utilisateurRequestDto.getUrole().getRoleName().equals("PROPRIETAIRE")) {
-                magasin.setIdAgence(dto.getIdAgence());
+                magasinFind.setIdAgence(dto.getIdAgence());
                 Long numBien = 0L;
                 int size = new ArrayList<>(magasinRepository.findAll()).size();
                 if (size == 0) {
                     numBien = 1L;
                 } else {
-                    if (recoverySite != null) {
-                        numBien = nombreVillaByIdSite(recoverySite);
-                    } else {
-                        numBien = nombreVillaByIdSite(etage.getImmeuble().getSite());
-                    }
+                    // if (recoverySite != null) {
+                    //     numBien = nombreVillaByIdSite(recoverySite);
+                    // } else {
+                    //     numBien = nombreVillaByIdSite(etage.getImmeuble().getSite());
+                    // }
                 }
-                magasin.setNumMagasin(numBien);
-                magasin.setDescription(dto.getDescription().toUpperCase());
-                magasin.setSuperficieBien(dto.getSuperficieBien());
-                magasin.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
-                magasin.setNombrePieceMagasin(dto.getNombrePieceMagasin());
-                magasin.setUtilisateurProprietaire(utilisateurRequestDto);
-                magasin.setIdCreateur(dto.getIdCreateur());
-                magasin.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+                magasinFind.setNumMagasin(numBien);
+                magasinFind.setDescription(dto.getDescription().toUpperCase());
+                magasinFind.setSuperficieBien(dto.getSuperficieBien());
+                magasinFind.setUnderBuildingMagasin(dto.isUnderBuildingMagasin());
+                magasinFind.setNombrePieceMagasin(dto.getNombrePieceMagasin());
+                magasinFind.setUtilisateurProprietaire(utilisateurRequestDto);
+                magasinFind.setIdCreateur(dto.getIdCreateur());
+                magasinFind.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
 
-                if (dto.getIdEtage() == null || dto.getIdEtage() == 0) {
-                    magasin.setSite(recoverySite);
-                    magasin.setCodeAbrvBienImmobilier(
-                            (recoverySite.getAbrSite() + "-MAG-" + numBien).toUpperCase());
-                    magasin.setNomCompletBienImmobilier(
-                            (recoverySite.getNomSite() + "-MAGASIN-" + numBien).toUpperCase());
-                } else {
-                    magasin.setCodeAbrvBienImmobilier(
-                            (etage.getCodeAbrvEtage() + "-MAG-" + numBien).toUpperCase());
-                    magasin.setNomCompletBienImmobilier(
-                            (etage.getNomCompletEtage() + "-MAGASIN-" + numBien).toUpperCase());
-                    magasin.setSite(etage.getImmeuble().getSite());
-                    magasin.setEtageMagasin(etage);
-                }
+                // if (dto.getIdEtage() == null || dto.getIdEtage() == 0) {
+                //     magasinFind.setSite(recoverySite);
+                //     magasinFind.setCodeAbrvBienImmobilier(
+                //             (recoverySite.getAbrSite() + "-MAG-" + numBien).toUpperCase());
+                //             magasinFind.setNomCompletBienImmobilier(
+                //             (recoverySite.getNomSite() + "-MAGASIN-" + numBien).toUpperCase());
+                // } else {
+                //     magasinFind.setCodeAbrvBienImmobilier(
+                //             (etage.getCodeAbrvEtage() + "-MAG-" + numBien).toUpperCase());
+                //             magasinFind.setNomCompletBienImmobilier(
+                //             (etage.getNomCompletEtage() + "-MAGASIN-" + numBien).toUpperCase());
+                //             magasinFind.setSite(etage.getImmeuble().getSite());
+                //             magasinFind.setEtageMagasin(etage);
+                // }
 
-                Magasin magasinSave = magasinRepository.save(magasin);
-                log.info("les informations du magasin sont {}", magasin);
+                Magasin magasinSave = magasinRepository.save(magasinFind);
+                log.info("les informations du magasin sont {}", magasinFind);
                 return gestimoWebMapperImpl.fromMagasin(magasinSave);
             } else {
                 throw new InvalidEntityException(

@@ -16,9 +16,9 @@ public class AppartementDtoValidator {
             errors.add("Veuillez selectionner un etage");
             return errors;
         }
-        if (dto.getIdEtageAppartement() == null) {
-            errors.add("Veuillez selectionner un etage");
-        }
+        // if (dto.getIdEtageAppartement() == null) {
+        //     errors.add("Veuillez selectionner un etage");
+        // }
         return errors;
     }
 }
