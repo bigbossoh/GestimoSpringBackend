@@ -61,6 +61,7 @@ public class AgenceController {
 
     @GetMapping("/all")
     public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence() {
+        log.info("get all agence by Order");
         return ResponseEntity.ok(agenceImmobilierService.listOfAgenceOrderByNomAgenceAsc());
     }
 
