@@ -52,4 +52,10 @@ public class BailController {
     public ResponseEntity<List<OperationDto>> listDesBauxPourUnLocataire(@PathVariable("id") Long id) {
         return ResponseEntity.ok(bailService.findAllByIdLocataire(id));
     }
+    @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/supprimerBail/{id}")
+    public ResponseEntity<Boolean> supprimerBail(@PathVariable("id") Long id) {
+        log.info("cloture du bail by ID Bail {}", id);
+        return ResponseEntity.ok(bailService.deleteOperationById(id));
+    }
 }

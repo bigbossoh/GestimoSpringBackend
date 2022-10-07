@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Models;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -29,10 +30,10 @@ public class BailLocation extends Operation {
     double montantCautionBail;
     int nbreMoisCautionBail;
     LocalDate dateCloture;
-    @OneToMany(mappedBy = "bailLocation")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST,mappedBy = "bailLocation")
     List<MontantLoyerBail> montantLoyerBail;
-    @OneToMany(mappedBy = "bailLocataireCharge")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST,mappedBy = "bailLocataireCharge")
     List<Charges> charges;
-    @OneToMany(mappedBy = "bailLocationAppelLoyer")
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST,mappedBy = "bailLocationAppelLoyer")
     List<AppelLoyer> listAppelsLoyers;
 }
