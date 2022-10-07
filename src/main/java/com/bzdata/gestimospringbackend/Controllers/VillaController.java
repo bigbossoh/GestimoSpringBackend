@@ -9,6 +9,7 @@ import com.bzdata.gestimospringbackend.Services.VillaService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,23 +37,26 @@ public class VillaController {
         log.info("We are going to save a new Villa {}", dto);
         return ResponseEntity.ok(villaService.saveUneVilla(dto));
     }
+
     // TOUT LES VILLA
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
     public ResponseEntity<List<VillaDto>> findAllVilla() {
         return ResponseEntity.ok(villaService.findAll());
     }
-     // TOUT LES VILLAS LIBRES
-     @Operation(summary = "Liste de tous les villas libres ", security = @SecurityRequirement(name = "bearerAuth"))
-     @GetMapping("/alllibre")
 
-     public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
-         return ResponseEntity.ok(villaService.findAllLibre());
-     }
-    // TOUS LES VILLA PAR SITE
-//    @Operation(summary = "TOUS LES VILLA PAR SITE", security = @SecurityRequirement(name = "bearerAuth"))
-//    @GetMapping("/allvillabysite")
-//    public ResponseEntity<Map<Site, Long>> findAllVillabysite() {
-//        return ResponseEntity.ok(villaService.getNumberVillaBySite());
-//    }
+    // TOUT LES VILLAS LIBRES
+    @Operation(summary = "Liste de tous les villas libres ", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/alllibre")
+
+    public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
+        return ResponseEntity.ok(villaService.findAllLibre());
+    }
+
+    @GetMapping("/findVillaById/{id}")
+    @Operation(summary = "Creation et mise à jour d'une Villa", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<VillaDto> findVillaById(@PathVariable("id") Long id) {
+        log.info("We are going to save a new Villa {}", id);
+        return ResponseEntity.ok(villaService.findById(id));
+    }
 }

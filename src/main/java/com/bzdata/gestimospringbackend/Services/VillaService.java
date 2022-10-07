@@ -5,7 +5,6 @@ import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-import com.bzdata.gestimospringbackend.Models.Site;
 
 public interface VillaService {
 
