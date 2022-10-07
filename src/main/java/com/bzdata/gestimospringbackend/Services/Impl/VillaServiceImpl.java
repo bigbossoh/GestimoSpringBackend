@@ -1,14 +1,16 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
-import com.bzdata.gestimospringbackend.Models.*;
+import com.bzdata.gestimospringbackend.Models.Role;
+import com.bzdata.gestimospringbackend.Models.Site;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
+import com.bzdata.gestimospringbackend.Models.Villa;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -22,7 +24,6 @@ import com.bzdata.gestimospringbackend.validator.VillaDtoValidator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,40 +51,78 @@ public class VillaServiceImpl implements VillaService {
             throw new InvalidEntityException("Certain attributs de l'object Villa sont null.",
                     ErrorCodes.VILLA_NOT_VALID, errors);
         }
-        Villa villa = new Villa();
-        Site recoverySite = getSite(dto);
-        Utilisateur utilisateurRequestDto = getUtilisateur(dto.getIdUtilisateur());
-        Role leRole = getRole(utilisateurRequestDto.getUrole().getId());
-        if (leRole.getRoleName().equals("PROPRIETAIRE")) {
-            villa.setIdAgence(dto.getIdAgence());
-            villa.setIdCreateur(dto.getIdCreateur());
-            villa.setSite(recoverySite);
-            villa.setDescription(dto.getDescription());
-            villa.setOccupied(dto.isOccupied());
-            villa.setSuperficieBien(dto.getSuperficieBien());
-            villa.setNbrChambreVilla(dto.getNbrChambreVilla());
-            villa.setNbrSalonVilla(dto.getNbrSalleEauVilla());
-            villa.setNbrePieceVilla(dto.getNbrePieceVilla());
-            villa.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
-            villa.setUtilisateurProprietaire(utilisateurRequestDto);
-            Long numBien = 0L;
-            if (villaRepository.count() == 0) {
-                numBien = 1L;
-            } else {
-                numBien = nombreVillaByIdSite(recoverySite);
-            }
-            villa.setNumVilla(numBien);
-            villa.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
-            villa.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
-            Villa villaSave = villaRepository.save(villa);
-            return gestimoWebMapperImpl.fromVilla(villaSave);
-        } else {
-            throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
-                    + utilisateurRequestDto.getRoleUsed(),
-                    ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
-        }
-    }
+        Villa villatrouve=villaRepository.findById(dto.getId()).orElseThrow(
+            () -> new InvalidEntityException("Aucun Studio has been found with Code " + dto.getId(),
+                        ErrorCodes.VILLA_NOT_FOUND));
+                        if (villatrouve!=null) {
+                            Site recoverySite = getSite(dto);
+                            Utilisateur utilisateurRequestDto = getUtilisateur(dto.getIdUtilisateur());
+                            Role leRole = getRole(utilisateurRequestDto.getUrole().getId());
+                            if (leRole.getRoleName().equals("PROPRIETAIRE")) {
+                                villatrouve.setIdAgence(dto.getIdAgence());
+                                villatrouve.setIdCreateur(dto.getIdCreateur());
+                                villatrouve.setSite(recoverySite);
+                                villatrouve.setDescription(dto.getDescription());
+                                villatrouve.setOccupied(dto.isOccupied());
+                                villatrouve.setSuperficieBien(dto.getSuperficieBien());
+                                villatrouve.setNbrChambreVilla(dto.getNbrChambreVilla());
+                                villatrouve.setNbrSalonVilla(dto.getNbrSalleEauVilla());
+                                villatrouve.setNbrePieceVilla(dto.getNbrePieceVilla());
+                                villatrouve.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+                                villatrouve.setUtilisateurProprietaire(utilisateurRequestDto);
+                                Long numBien = 0L;
+                                if (villaRepository.count() == 0) {
+                                    numBien = 1L;
+                                } else {
+                                    numBien = nombreVillaByIdSite(recoverySite);
+                                }
+                                villatrouve.setNumVilla(numBien);
+                                villatrouve.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
+                                villatrouve.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
+                                Villa villaSave = villaRepository.save(villatrouve);
+                                return gestimoWebMapperImpl.fromVilla(villaSave);
+                            } else {
+                                throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+                                        + utilisateurRequestDto.getRoleUsed(),
+                                        ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
+                            }
+                        } else {
+                            Villa villa = new Villa();
+                            Site recoverySite = getSite(dto);
+                            Utilisateur utilisateurRequestDto = getUtilisateur(dto.getIdUtilisateur());
+                            Role leRole = getRole(utilisateurRequestDto.getUrole().getId());
+                            if (leRole.getRoleName().equals("PROPRIETAIRE")) {
+                                villa.setIdAgence(dto.getIdAgence());
+                                villa.setIdCreateur(dto.getIdCreateur());
+                                villa.setSite(recoverySite);
+                                villa.setDescription(dto.getDescription());
+                                villa.setOccupied(dto.isOccupied());
+                                villa.setSuperficieBien(dto.getSuperficieBien());
+                                villa.setNbrChambreVilla(dto.getNbrChambreVilla());
+                                villa.setNbrSalonVilla(dto.getNbrSalleEauVilla());
+                                villa.setNbrePieceVilla(dto.getNbrePieceVilla());
+                                villa.setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
+                                villa.setUtilisateurProprietaire(utilisateurRequestDto);
+                                Long numBien = 0L;
+                                if (villaRepository.count() == 0) {
+                                    numBien = 1L;
+                                } else {
+                                    numBien = nombreVillaByIdSite(recoverySite);
+                                }
+                                villa.setNumVilla(numBien);
+                                villa.setCodeAbrvBienImmobilier((recoverySite.getAbrSite() + "-VILLA-" + numBien).toUpperCase());
+                                villa.setNomCompletBienImmobilier((recoverySite.getNomSite() + "-VILLA-" + numBien).toUpperCase());
+                                Villa villaSave = villaRepository.save(villa);
+                                return gestimoWebMapperImpl.fromVilla(villaSave);
+                            } else {
+                                throw new InvalidEntityException("L'utilisateur choisi n'a pas un rôle propriétaire, mais pluôt "
+                                        + utilisateurRequestDto.getRoleUsed(),
+                                        ErrorCodes.UTILISATEUR_NOT_GOOD_ROLE);
+                            }
+                        }
 
+    }
+//FIN DE SAVE VILLA
     private Role getRole(Long idUrole) {
         Role leRole = roleRepository.findById(idUrole).orElseThrow(
                 () -> new InvalidEntityException(
