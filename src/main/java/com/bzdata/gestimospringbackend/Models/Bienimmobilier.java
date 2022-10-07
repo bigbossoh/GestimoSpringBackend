@@ -38,5 +38,6 @@ public abstract class Bienimmobilier extends AbstractEntity {
     boolean isOccupied= false;
     @ManyToOne
     Utilisateur utilisateurProprietaire;
+    int nombrePieceBien;
 
 }

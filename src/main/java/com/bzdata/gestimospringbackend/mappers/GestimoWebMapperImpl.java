@@ -28,6 +28,7 @@ public class GestimoWebMapperImpl {
     final UtilisateurRepository utilisateurRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final EtageRepository etageRepository;
+
     // AppelLoyer
     public AppelLoyer fromAppelLoyerDto(AppelLoyersFactureDto appelLoyersFactureDto) {
         AppelLoyer appelLoyer = new AppelLoyer();
@@ -140,7 +141,7 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(immeuble, immeubleAfficheDto);
         immeubleAfficheDto.setNomPropio(immeuble.getUtilisateurProprietaire().getNom());
         immeubleAfficheDto.setPrenomProprio(immeuble.getUtilisateurProprietaire().getPrenom());
-       immeubleAfficheDto.setAbrvNomImmeuble(immeuble.getCodeNomAbrvImmeuble());
+        immeubleAfficheDto.setAbrvNomImmeuble(immeuble.getCodeNomAbrvImmeuble());
         return immeubleAfficheDto;
     }
 
@@ -227,10 +228,12 @@ public class GestimoWebMapperImpl {
     public VillaDto fromVilla(Villa villa) {
         VillaDto villaDto = new VillaDto();
         BeanUtils.copyProperties(villa, villaDto);
+        if (villa.getUtilisateurProprietaire().getId() != null || villa.getUtilisateurProprietaire().getId() != 0) {
+            villaDto.setIdUtilisateur(villa.getUtilisateurProprietaire().getId());
+            villaDto.setProprietaire(
+                    villa.getUtilisateurProprietaire().getNom() + " " + villa.getUtilisateurProprietaire().getPrenom());
+        }
         villaDto.setIdSite(villa.getSite().getId());
-        villaDto.setIdUtilisateur(villa.getUtilisateurProprietaire().getId());
-        villaDto.setProprietaire(
-                villa.getUtilisateurProprietaire().getNom() + " " + villa.getUtilisateurProprietaire().getPrenom());
         return villaDto;
     }
 
@@ -255,12 +258,13 @@ public class GestimoWebMapperImpl {
                 + bienimmobilier.getUtilisateurProprietaire().getPrenom());
         return bienImmobilierAffiheDto;
     }
-        //PERIODE BAIL APPEL
-        public PeriodeDto fromPeriodeAppel(AppelLoyer appelLoyer) {
-            PeriodeDto periodeDto = new PeriodeDto();
-            BeanUtils.copyProperties(appelLoyer, periodeDto);
-            periodeDto.setPeriodeAppelLoyer(appelLoyer.getPeriodeAppelLoyer());
-            periodeDto.setPeriodeLettre(appelLoyer.getPeriodeLettre());
-            return periodeDto;
-        }
+
+    // PERIODE BAIL APPEL
+    public PeriodeDto fromPeriodeAppel(AppelLoyer appelLoyer) {
+        PeriodeDto periodeDto = new PeriodeDto();
+        BeanUtils.copyProperties(appelLoyer, periodeDto);
+        periodeDto.setPeriodeAppelLoyer(appelLoyer.getPeriodeAppelLoyer());
+        periodeDto.setPeriodeLettre(appelLoyer.getPeriodeLettre());
+        return periodeDto;
+    }
 }
