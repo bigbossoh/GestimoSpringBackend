@@ -4,6 +4,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
@@ -57,6 +58,10 @@ public class UtilisateurController {
     @GetMapping("/locataires/all")
     public ResponseEntity<List<UtilisateurAfficheDto>> getAllLocatairesByOrder() {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyName());
+    }
+    @GetMapping("/locataires/ayanbail")
+    public ResponseEntity<List<LocataireEncaisDTO>> getAllLocatairesAvecBail() {
+        return ResponseEntity.ok(utilisateurService.listOfLocataireAyantunbail());
     }
 
     @GetMapping("/proprietaires/all")

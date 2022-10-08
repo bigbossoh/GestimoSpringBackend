@@ -51,6 +51,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         log.info("le bail concerner est {}", bailLocation.getId());
         List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService.findAllAppelLoyerImpayerByBailId(bailLocation.getId());
         double montantVerser = dto.getMontantEncaissement();
+
         log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(), listAppelImpayerParBail.size());
         EncaissementPrincipal encaissementPrincipal;
         for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {

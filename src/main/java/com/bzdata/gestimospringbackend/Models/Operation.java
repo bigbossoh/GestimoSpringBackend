@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import java.time.LocalDate;
+import java.util.Collection;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -35,5 +36,8 @@ public abstract class Operation extends AbstractEntity {
     Utilisateur utilisateurOperation;
     @ManyToOne
     Bienimmobilier bienImmobilierOperation;
+    public Collection<String> findAll() {
+        return null;
+    }
 
 }

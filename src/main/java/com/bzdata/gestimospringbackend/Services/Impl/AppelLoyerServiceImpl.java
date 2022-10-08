@@ -265,13 +265,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
         List<AppelLoyer> lesLoyers = appelLoyerRepository.findAllByBailLocationAppelLoyer(bailLocation);
         // first date debut du mois
-        Comparator<AppelLoyer> AppelLoyerByDateDebutAppelLoyer = Comparator
+        Comparator<AppelLoyer> appelLoyerByDateDebutAppelLoyer = Comparator
                 .comparing(AppelLoyer::getDateDebutMoisAppelLoyer);
         return lesLoyers.stream()
                 .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                 .filter(bail -> !bail.isSolderAppelLoyer())
-                .sorted(AppelLoyerByDateDebutAppelLoyer)
+                .sorted(appelLoyerByDateDebutAppelLoyer)
                 .map(gestimoWebMapper::fromAppelLoyer)
                 .collect(Collectors.toList());
     }

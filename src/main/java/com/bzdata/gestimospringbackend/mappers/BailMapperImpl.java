@@ -4,6 +4,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
@@ -53,16 +54,26 @@ public class BailMapperImpl {
     }
         // BAIL MAGASIN MAPPER
         public OperationDto fromOperation(BailLocation bailLocation) {
-            OperationDto bailLocaDto = new OperationDto();
-            BeanUtils.copyProperties(bailLocation, bailLocaDto);
-            bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
-            bailLocaDto.setUtilisateurOperation(bailLocation.getUtilisateurOperation().getNom() + " "
-                    + bailLocation.getUtilisateurOperation().getPrenom());
-            bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
-            bailLocaDto
-                    .setCodeAbrvBienImmobilier(bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
-            return bailLocaDto;
+                OperationDto bailLocaDto = new OperationDto();
+                BeanUtils.copyProperties(bailLocation, bailLocaDto);
+                bailLocaDto.setIdBienImmobilier(bailLocation.getBienImmobilierOperation().getId());
+                bailLocaDto.setUtilisateurOperation(bailLocation.getUtilisateurOperation().getNom() + " "
+                                + bailLocation.getUtilisateurOperation().getPrenom());
+                bailLocaDto.setIdLocataire(bailLocation.getUtilisateurOperation().getId());
+                bailLocaDto
+                                .setCodeAbrvBienImmobilier(
+                                                bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                return bailLocaDto;
         }
-  
-    
+
+        public LocataireEncaisDTO fromOperationBailLocation(BailLocation bailLocation) {
+                LocataireEncaisDTO locataireEncaisDTO = new LocataireEncaisDTO();
+                locataireEncaisDTO.setId(bailLocation.getUtilisateurOperation().getId());
+             
+                locataireEncaisDTO.setNom(bailLocation.getUtilisateurOperation().getNom());
+                locataireEncaisDTO.setPrenom(bailLocation.getUtilisateurOperation().getPrenom());
+                return locataireEncaisDTO;
+        }
+
+
 }
