@@ -26,6 +26,7 @@ public class ImageDataController {
     final StorageService storageService;
     @PostMapping
     public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        log.info("we are here upload image");
         String uploadImage = storageService.uploadImage(file);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
