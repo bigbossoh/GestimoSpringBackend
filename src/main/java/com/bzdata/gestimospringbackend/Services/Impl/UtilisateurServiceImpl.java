@@ -8,6 +8,7 @@ import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPERVISEUR;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.*;
@@ -16,8 +17,10 @@ import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
+import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
@@ -43,6 +46,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final GestimoWebMapperImpl gestimoWebMapperImpl;
+    private final BailLocationRepository bailrepository;
+    private final BailMapperImpl bailMapper;
 
     @Override
     public UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto) {
@@ -56,71 +61,73 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                         "Certain attributs de l'object utiliateur avec pour role locataire sont null.",
                         ErrorCodes.UTILISATEUR_NOT_VALID, errors);
             }
-            //L'utilisateur createur
+            // L'utilisateur createur
             Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
                     () -> new InvalidEntityException(
                             "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
                             ErrorCodes.UTILISATEUR_NOT_FOUND));
             newUser.setUserCreate(userCreate);
             // GERER LES ROLES
-            Role leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed()).orElseThrow(() -> new InvalidEntityException(
-                    "Aucun role has been found with Code " + dto.getRoleUsed(),
-                    ErrorCodes.ROLE_NOT_FOUND));
+            Role leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun role has been found with Code " + dto.getRoleUsed(),
+                            ErrorCodes.ROLE_NOT_FOUND));
 
-                newUser.setUrole(leRole);
-                switch (leRole.getRoleName()) {
-                    case "SUPERVISEUR":
-                        newUser.setRoleUsed(ROLE_SUPERVISEUR.name());
-                        newUser.setAuthorities(ROLE_SUPERVISEUR.getAuthorities());
-                        break;
-                    case "GERANT":
-                        newUser.setRoleUsed(ROLE_GERANT.name());
-                        newUser.setAuthorities(ROLE_GERANT.getAuthorities());
-                        break;
-                    case "PROPRIETAIRE":
-                        newUser.setRoleUsed(ROLE_PROPRIETAIRE.name());
-                        newUser.setAuthorities(ROLE_PROPRIETAIRE.getAuthorities());
-                        break;
-                    case "LOCATAIRE":
-                        newUser.setRoleUsed(ROLE_LOCATAIRE.name());
-                        newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
-                        break;
-                    default:
-                        log.error(
-                                "You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",
-                                leRole.getRoleName());
-                        break;
-                }
-                newUser.setIdAgence(dto.getIdAgence());
-                newUser.setNom(dto.getNom());
-                newUser.setUtilisateurIdApp(generateUserId());
-                newUser.setPrenom(dto.getPrenom());
-                newUser.setEmail(dto.getEmail());
-                newUser.setMobile(dto.getMobile());
-                newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
-                newUser.setUsername(dto.getMobile());
-                newUser.setProfileImageUrl(dto.getProfileImageUrl());
-                newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
-                newUser.setJoinDate(new Date());
-                newUser.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
-                newUser.setNationalité(dto.getNationalité());
-                newUser.setLieuNaissance(dto.getLieuNaissance());
-                newUser.setGenre(dto.getGenre());
-                newUser.setDateFinPiece(dto.getDateFinPiece());
-                newUser.setDateDeNaissance(dto.getDateDeNaissance());
-                newUser.setDateDebutPiece(dto.getDateDebutPiece());
-                newUser.setActive(true);
-                newUser.setActivated(true);
-                newUser.setNonLocked(true);
-                newUser.setIdCreateur(dto.getIdCreateur());
-                Utilisateur userSave = utilisateurRepository.save(newUser);
-                return gestimoWebMapperImpl.fromUtilisateur(userSave);
+            newUser.setUrole(leRole);
+            switch (leRole.getRoleName()) {
+                case "SUPERVISEUR":
+                    newUser.setRoleUsed(ROLE_SUPERVISEUR.name());
+                    newUser.setAuthorities(ROLE_SUPERVISEUR.getAuthorities());
+                    break;
+                case "GERANT":
+                    newUser.setRoleUsed(ROLE_GERANT.name());
+                    newUser.setAuthorities(ROLE_GERANT.getAuthorities());
+                    break;
+                case "PROPRIETAIRE":
+                    newUser.setRoleUsed(ROLE_PROPRIETAIRE.name());
+                    newUser.setAuthorities(ROLE_PROPRIETAIRE.getAuthorities());
+                    break;
+                case "LOCATAIRE":
+                    newUser.setRoleUsed(ROLE_LOCATAIRE.name());
+                    newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
+                    break;
+                default:
+                    log.error(
+                            "You should give a role in this list (superviseur, gerant, proprietaire,locataire) but in this cas the role is not wel given {}",
+                            leRole.getRoleName());
+                    break;
+            }
+            newUser.setIdAgence(dto.getIdAgence());
+            newUser.setNom(dto.getNom());
+            newUser.setUtilisateurIdApp(generateUserId());
+            newUser.setPrenom(dto.getPrenom());
+            newUser.setEmail(dto.getEmail());
+            newUser.setMobile(dto.getMobile());
+            newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
+            newUser.setUsername(dto.getMobile());
+            newUser.setProfileImageUrl(dto.getProfileImageUrl());
+            newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
+            newUser.setJoinDate(new Date());
+            newUser.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
+            newUser.setNationalité(dto.getNationalité());
+            newUser.setLieuNaissance(dto.getLieuNaissance());
+            newUser.setGenre(dto.getGenre());
+            newUser.setDateFinPiece(dto.getDateFinPiece());
+            newUser.setDateDeNaissance(dto.getDateDeNaissance());
+            newUser.setDateDebutPiece(dto.getDateDebutPiece());
+            newUser.setActive(true);
+            newUser.setActivated(true);
+            newUser.setNonLocked(true);
+            newUser.setIdCreateur(dto.getIdCreateur());
+            Utilisateur userSave = utilisateurRepository.save(newUser);
+            return gestimoWebMapperImpl.fromUtilisateur(userSave);
 
         } else {
             log.info("WE ARE GOING TO MAKE A UDPDATE OF utilisateur");
-            Utilisateur utilisateurUpdate = utilisateurRepository.findById(dto.getId()).orElseThrow(() -> new InvalidEntityException(
-                    "Aucun Utlisateur has been found with id " + dto.getId(),
-                    ErrorCodes.UTILISATEUR_NOT_FOUND));
+            Utilisateur utilisateurUpdate = utilisateurRepository.findById(dto.getId())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucun Utlisateur has been found with id " + dto.getId(),
+                            ErrorCodes.UTILISATEUR_NOT_FOUND));
             utilisateurUpdate.setIdAgence(dto.getIdAgence());
             utilisateurUpdate.setNom(dto.getNom());
             utilisateurUpdate.setUtilisateurIdApp(generateUserId());
@@ -181,7 +188,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
-                .filter(agence-> agence.getIdAgence().equals(idAgence))
+                .filter(agence -> agence.getIdAgence().equals(idAgence))
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
                 .collect(Collectors.toList());
@@ -236,6 +243,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
+
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
                 .collect(Collectors.toList());
@@ -281,6 +289,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public void deleteProprietaire(Long id) {
 
+    }
+
+    @Override
+    public List<LocataireEncaisDTO> listOfLocataireAyantunbail() {
+        return bailrepository.findAll().stream()
+                .map(bailMapper::fromOperationBailLocation)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
 }

@@ -23,6 +23,7 @@ import lombok.experimental.FieldDefaults;
 @DiscriminatorValue("BailLocation")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailLocation extends Operation {
+    public static Object getUtilisateurOperation;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;

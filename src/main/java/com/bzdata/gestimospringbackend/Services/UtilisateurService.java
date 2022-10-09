@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.VerificationToken;
@@ -40,5 +41,7 @@ public interface UtilisateurService {
     void feachUserAndEnable(VerificationToken verificationToken);
 
     List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence);
+
+    List<LocataireEncaisDTO> listOfLocataireAyantunbail();
 
 }
