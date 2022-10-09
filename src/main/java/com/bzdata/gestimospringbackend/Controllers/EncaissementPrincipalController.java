@@ -40,6 +40,13 @@ public class EncaissementPrincipalController {
         //log.info("We are going to save a new encaissement {}", dto);
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissement(dto));
     }
+
+    @PostMapping("/saveencaissementavecretour")
+    @Operation(summary = "Creation et encaissement", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<List<EncaissementPrincipalDTO>>saveEncaissementAvecretourDeListe(@RequestBody EncaissementPayloadDto dto) {
+        //log.info("We are going to save a new encaissement {}", dto);
+        return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementAvecRetourDeList(dto));
+    }
     @PostMapping("/saveencaissementmasse")
     @Operation(summary = "Creation d'un encaissement e masse", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Boolean> saveEncaissementMasse(@RequestBody List<EncaissementPayloadDto> dtos) {

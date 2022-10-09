@@ -5,15 +5,13 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailService;
@@ -25,16 +23,23 @@ import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
+import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @Transactional
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailServiceImpl implements BailService {
 
     final BailLocationRepository bailLocationRepository;
@@ -45,6 +50,7 @@ public class BailServiceImpl implements BailService {
     final GestimoWebMapperImpl gestimoWebMapperImpl;
     final UtilisateurRepository utilisateurRepository;
     final AppelLoyerRepository appelLoyerRepository;
+    final EncaissementPrincipalRepository encaissementRepository;
 
     @Override
     public boolean closeBail(Long id) {
@@ -135,16 +141,17 @@ public class BailServiceImpl implements BailService {
 
     @Override
     public List<OperationDto> findAllBauxLocation() {
-       // BailLocation
-       // bailLocationRepository.findAll()
+        // BailLocation
+        // bailLocationRepository.findAll()
 
         return null;
     }
+
     @Override
     public boolean deleteOperationById(Long id) {
-       // log.info("We are going to delete a Appartement with the ID {}", id);
+        // log.info("We are going to delete a Appartement with the ID {}", id);
         if (id == null) {
-         //   log.error("you are provided a null ID for the Appartement");
+            // log.error("you are provided a null ID for the Appartement");
             return false;
         }
         boolean exist = bailLocationRepository.existsById(id);
@@ -152,7 +159,22 @@ public class BailServiceImpl implements BailService {
             throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
                     + "n' ete trouve dans la BDD", ErrorCodes.APPARTEMENT_NOT_FOUND);
         }
-
+        List<EncaissementPrincipalDTO> encaissement = encaissementRepository.findAll().stream()
+                .filter(operation -> operation.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getId()
+                        .equals(id))
+                .map(gestimoWebMapperImpl::fromEncaissementPrincipal)
+                .collect(Collectors.toList());
+        if (!encaissement.isEmpty()) {
+            throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
+                    + "Il existe des encaissement our ce bail", ErrorCodes.APPARTEMENT_NOT_FOUND);
+        }
+        Operation operation = bailLocationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
+                        + "Il existe des encaissement our ce bail", ErrorCodes.APPARTEMENT_NOT_FOUND));
+        Bienimmobilier bienAModifier = bienImmobilierRepository
+                .findById(operation.getBienImmobilierOperation().getId()).get();
+        bienAModifier.setOccupied(false);
+        bienImmobilierRepository.save(bienAModifier);
         bailLocationRepository.deleteById(id);
         return true;
     }
