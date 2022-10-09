@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -46,18 +45,21 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         }
         AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer()).orElse(null);
         if (appelLoyer == null)
-            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
+            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found",
+                    ErrorCodes.APPELLOYER_NOT_FOUND);
         BailLocation bailLocation = appelLoyer.getBailLocationAppelLoyer();
         log.info("le bail concerner est {}", bailLocation.getId());
-        List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService.findAllAppelLoyerImpayerByBailId(bailLocation.getId());
+        List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService
+                .findAllAppelLoyerImpayerByBailId(bailLocation.getId());
         double montantVerser = dto.getMontantEncaissement();
 
-        log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(), listAppelImpayerParBail.size());
+        log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(),
+                listAppelImpayerParBail.size());
         EncaissementPrincipal encaissementPrincipal;
         for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
-            encaissementPrincipal= new EncaissementPrincipal();
+            encaissementPrincipal = new EncaissementPrincipal();
             if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
-                //Total des encaissement percu pour le mois en cours;
+                // Total des encaissement percu pour le mois en cours;
                 double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
                 montantVerser = montantVerser - montantAPayerLeMois;
@@ -77,21 +79,19 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
                 EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(encaissementPrincipal);
-                if(montantVerser<=0){
+                if (montantVerser <= 0) {
                     break;
                 }
-            }
-            else
-            {
-                //Total des encaissement percu pour le mois en cours;
+            } else {
+                // Total des encaissement percu pour le mois en cours;
                 double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
-                double montantPayer =  montantAPayerLeMois-montantVerser;
+                double montantPayer = montantAPayerLeMois - montantVerser;
                 appelLoyerDto.setStatusAppelLoyer("partiellement payé");
                 appelLoyerDto.setSolderAppelLoyer(false);
                 appelLoyerDto.setSoldeAppelLoyer(montantPayer);
                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
-                //EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
+                // EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
                 encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
@@ -107,14 +107,13 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
             }
         }
 
-
         return true;
 
     }
 
     @Override
     public boolean saveEncaissementMasse(List<EncaissementPayloadDto> dtos) {
-        for(EncaissementPayloadDto dto: dtos){
+        for (EncaissementPayloadDto dto : dtos) {
             log.info("We are going to create  a new encaissement EncaissementPrincipalServiceImpl {}", dtos);
             List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
             if (!errors.isEmpty()) {
@@ -124,17 +123,21 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
             }
             AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer()).orElse(null);
             if (appelLoyer == null)
-                throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found", ErrorCodes.APPELLOYER_NOT_FOUND);
+                throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found",
+                        ErrorCodes.APPELLOYER_NOT_FOUND);
             BailLocation bailLocation = appelLoyer.getBailLocationAppelLoyer();
             log.info("le bail concerner est {}", bailLocation.getId());
-            List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService.findAllAppelLoyerImpayerByBailId(bailLocation.getId());
+            List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService
+                    .findAllAppelLoyerImpayerByBailId(bailLocation.getId());
             double montantVerser = dto.getMontantEncaissement();
-            log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(), listAppelImpayerParBail.size());
+            log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(),
+                    listAppelImpayerParBail.size());
             for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
                 if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
-                    //Total des encaissement percu pour le mois en cours;
+                    // Total des encaissement percu pour le mois en cours;
                     double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
-                    double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
+                    double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
+                            - totalEncaissementByIdAppelLoyer;
                     montantVerser = montantVerser - montantAPayerLeMois;
                     appelLoyerDto.setStatusAppelLoyer("Payé");
                     appelLoyerDto.setSolderAppelLoyer(true);
@@ -150,17 +153,17 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                     encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                     encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                     encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                    EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(encaissementPrincipal);
-                    if(montantVerser<=0){
+                    EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                            .save(encaissementPrincipal);
+                    if (montantVerser <= 0) {
                         break;
                     }
-                }
-                else
-                {
-                    //Total des encaissement percu pour le mois en cours;
+                } else {
+                    // Total des encaissement percu pour le mois en cours;
                     double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
-                    double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
-                    double montantPayer =  montantAPayerLeMois-montantVerser;
+                    double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
+                            - totalEncaissementByIdAppelLoyer;
+                    double montantPayer = montantAPayerLeMois - montantVerser;
                     appelLoyerDto.setStatusAppelLoyer("partiellement payé");
                     appelLoyerDto.setSolderAppelLoyer(false);
                     appelLoyerDto.setSoldeAppelLoyer(montantPayer);
@@ -175,13 +178,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                     encaissementPrincipal.setMontantEncaissement(montantVerser);
                     encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                     encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                    EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(encaissementPrincipal);
+                    EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                            .save(encaissementPrincipal);
                     break;
                 }
             }
-
-
-
 
         }
         return true;
@@ -224,30 +225,116 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         return gestimoWebMapper.fromEncaissementPrincipal(encaissementPrincipal);
     }
 
-
-
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdBienImmobilier(Long id) {
         Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                 .comparing(EncaissementPrincipal::getId);
         return encaissementPrincipalRepository.findAll()
-        .stream().sorted(compareBydatecreation.reversed())
-        .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getId(), id))
-        .map(gestimoWebMapper::fromEncaissementPrincipal)
-        .collect(Collectors.toList());
+                .stream().sorted(compareBydatecreation.reversed())
+                .filter(bien -> Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer()
+                        .getBienImmobilierOperation().getId(), id))
+                .map(gestimoWebMapper::fromEncaissementPrincipal)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<EncaissementPrincipalDTO> findAllEncaissementByIdLocataire(Long id) {
 
-        return  encaissementPrincipalRepository.findAll()
-        .stream()
-        .filter(bien->Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId(), id))
-        .map(gestimoWebMapper::fromEncaissementPrincipal)
-        .collect(Collectors.toList());
+        return encaissementPrincipalRepository.findAll()
+                .stream()
+                .filter(bien -> Objects.equals(
+                        bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getUtilisateurOperation().getId(),
+                        id))
+                .map(gestimoWebMapper::fromEncaissementPrincipal)
+                .collect(Collectors.toList());
     }
+
     @Override
     public boolean delete(Long id) {
         return false;
+    }
+
+    @Override
+    public List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(EncaissementPayloadDto dto) {
+        log.info("We are going to create  a new encaissement EncaissementPrincipalServiceImpl {}", dto);
+        List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
+        if (!errors.isEmpty()) {
+            log.error("L'encaissement n'est pas valide {}", errors);
+            throw new InvalidEntityException("Certain attributs de l'object site sont null.",
+                    ErrorCodes.ENCAISSEMENT_NOT_VALID, errors);
+        }
+        AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer()).orElse(null);
+        if (appelLoyer == null)
+            throw new EntityNotFoundException("AppelLoyer from GestimoMapper not found",
+                    ErrorCodes.APPELLOYER_NOT_FOUND);
+        BailLocation bailLocation = appelLoyer.getBailLocationAppelLoyer();
+        log.info("le bail concerner est {}", bailLocation.getId());
+        List<AppelLoyersFactureDto> listAppelImpayerParBail = appelLoyerService
+                .findAllAppelLoyerImpayerByBailId(bailLocation.getId());
+        double montantVerser = dto.getMontantEncaissement();
+
+        log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(),
+                listAppelImpayerParBail.size());
+        EncaissementPrincipal encaissementPrincipal;
+        for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
+            encaissementPrincipal = new EncaissementPrincipal();
+            if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
+                // Total des encaissement percu pour le mois en cours;
+                double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
+                double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
+                montantVerser = montantVerser - montantAPayerLeMois;
+                appelLoyerDto.setStatusAppelLoyer("Payé");
+                appelLoyerDto.setSolderAppelLoyer(true);
+                appelLoyerDto.setSoldeAppelLoyer(0);
+                appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+
+                encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+                encaissementPrincipal.setModePaiement(dto.getModePaiement());
+                encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setSoldeEncaissement(0);
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
+                encaissementPrincipal.setDateEncaissement(LocalDate.now());
+                encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
+                encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
+                encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
+                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(encaissementPrincipal);
+                if (montantVerser <= 0) {
+                    break;
+                }
+            } else {
+                // Total des encaissement percu pour le mois en cours;
+                double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(appelLoyerDto.getId());
+                double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer() - totalEncaissementByIdAppelLoyer;
+                double montantPayer = montantAPayerLeMois - montantVerser;
+                appelLoyerDto.setStatusAppelLoyer("partiellement payé");
+                appelLoyerDto.setSolderAppelLoyer(false);
+                appelLoyerDto.setSoldeAppelLoyer(montantPayer);
+                appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+                // EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
+                encaissementPrincipal.setAppelLoyerEncaissement(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+                encaissementPrincipal.setModePaiement(dto.getModePaiement());
+                encaissementPrincipal.setOperationType(dto.getOperationType());
+                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                encaissementPrincipal.setSoldeEncaissement(montantPayer);
+                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
+                encaissementPrincipal.setDateEncaissement(LocalDate.now());
+                encaissementPrincipal.setMontantEncaissement(montantVerser);
+                encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
+                encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
+                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(encaissementPrincipal);
+                break;
+            }
+        }
+        Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
+                .comparing(EncaissementPrincipal::getId);
+        return encaissementPrincipalRepository.findAll()
+                .stream().sorted(compareBydatecreation.reversed())
+                .filter(bien -> Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer()
+                        .getBienImmobilierOperation().getId(),
+                        appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId()))
+                .map(gestimoWebMapper::fromEncaissementPrincipal)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

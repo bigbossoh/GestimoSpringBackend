@@ -11,14 +11,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -36,6 +32,9 @@ import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -63,7 +62,6 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     final MontantLoyerBailRepository montantLoyerBailRepository;
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerRepository appelLoyerRepository;
-    final EncaissementPrincipalRepository encaissementPrincipalRepository;
     final TwilioSmsSender twilioSmsSender;
     final GestimoWebMapperImpl gestimoWebMapper;
     final BienImmobilierRepository bienImmobilierRepository;

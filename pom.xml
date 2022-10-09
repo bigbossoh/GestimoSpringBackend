@@ -96,12 +96,12 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
         </dependency> -->
-<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
-<dependency>
-    <groupId>io.springfox</groupId>
-    <artifactId>springfox-swagger2</artifactId>
-    <version>3.0.0</version>
-</dependency>
+        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>3.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -202,7 +202,7 @@
                             <info>
                                 <title>Swagger GESTIMOWEB REST API</title>
                                 <version>${project.version}</version>
-                                <description>Swagger API pour GESTIMOWEB REST API </description>
+                                <description>Swagger API pour GESTIMOWEB REST API</description>
                                 <contact>
                                     <name>bzadata</name>
                                     <email>michel.bossoh@outlook.fr</email>
