@@ -67,7 +67,7 @@ public class GestimoSpringBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
         new File(FOLDER_PATH).mkdirs();
-       // new File(FOLDER_PATH).mkdirs();
+       
     }
 
     @Bean
