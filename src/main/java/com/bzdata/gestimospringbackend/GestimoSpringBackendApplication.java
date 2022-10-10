@@ -101,18 +101,15 @@ public class GestimoSpringBackendApplication {
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
-     //   SmsOrangeConfig envoiSmsOrange
-
      try {
         String leTok = envoiSmsOrange.getHttpCon();
-       // envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0103833350","Sms Societe");
+        envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0556918763","Sms Societe");
           System.out.println("Le toke toke est : "+leTok);
       } catch (Exception e) {
         System.err.println(e.getMessage());
       }
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
-
         return (args) -> {
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE

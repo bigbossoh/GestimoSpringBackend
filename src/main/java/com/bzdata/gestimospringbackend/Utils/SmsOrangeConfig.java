@@ -57,7 +57,7 @@ public class SmsOrangeConfig {
         int responseCode = conn.getResponseCode();
         System.out.println("POST Response Code :: " + responseCode);
 
-        if (responseCode == HttpURLConnection.HTTP_OK) { // success
+        if (responseCode == HttpURLConnection.HTTP_CREATED) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     conn.getInputStream()));
             String inputLine;
@@ -67,6 +67,7 @@ public class SmsOrangeConfig {
                 response.append(inputLine);
             }
             in.close();
+ System.out.println("POST request worked");
 
             System.out.println(this.accessToken);
         } else {
