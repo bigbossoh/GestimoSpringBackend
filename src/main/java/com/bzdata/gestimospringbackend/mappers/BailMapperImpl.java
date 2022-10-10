@@ -1,18 +1,17 @@
 package com.bzdata.gestimospringbackend.mappers;
 
-import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
-import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
-import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -69,7 +68,7 @@ public class BailMapperImpl {
         public LocataireEncaisDTO fromOperationBailLocation(BailLocation bailLocation) {
                 LocataireEncaisDTO locataireEncaisDTO = new LocataireEncaisDTO();
                 locataireEncaisDTO.setId(bailLocation.getUtilisateurOperation().getId());
-             
+
                 locataireEncaisDTO.setNom(bailLocation.getUtilisateurOperation().getNom());
                 locataireEncaisDTO.setPrenom(bailLocation.getUtilisateurOperation().getPrenom());
                 return locataireEncaisDTO;

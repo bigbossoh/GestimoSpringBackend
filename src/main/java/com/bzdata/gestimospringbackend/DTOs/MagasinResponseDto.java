@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
 import com.bzdata.gestimospringbackend.Models.Magasin;
-import com.bzdata.gestimospringbackend.Models.Utilisateur;
 
 import lombok.AccessLevel;
 import lombok.Builder;

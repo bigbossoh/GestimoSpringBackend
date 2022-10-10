@@ -20,6 +20,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20220924</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -128,6 +135,14 @@
             <version>2.2</version>
             <scope>compile</scope>
         </dependency>
+<!-- https://mvnrepository.com/artifact/javax.json/javax.json-api -->
+<!-- https://mvnrepository.com/artifact/org.glassfish/javax.json -->
+<dependency>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.json</artifactId>
+    <version>1.1.4</version>
+</dependency>
+
 
         <dependency>
             <groupId>org.assertj</groupId>

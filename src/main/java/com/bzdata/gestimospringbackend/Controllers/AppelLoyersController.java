@@ -16,7 +16,6 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 

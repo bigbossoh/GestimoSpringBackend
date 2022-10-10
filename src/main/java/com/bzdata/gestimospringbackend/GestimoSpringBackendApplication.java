@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend;
 
 import static com.bzdata.gestimospringbackend.constant.FileConstant.FOLDER_PATH;
-import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 import java.io.File;
@@ -20,6 +19,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
@@ -67,7 +67,7 @@ public class GestimoSpringBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
         new File(FOLDER_PATH).mkdirs();
-       
+
     }
 
     @Bean
@@ -94,19 +94,23 @@ public class GestimoSpringBackendApplication {
 
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
-            RoleRepository roleRepository,
+            RoleRepository roleRepository, SmsOrangeConfig envoiSmsOrange,
             UtilisateurRepository utilisateurRepository,
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
-
+        // try {
+        //     String leTok = envoiSmsOrange.getTokenSmsOrange();
+        //     envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0556918763", "Sms Societe");
+        //     System.out.println("Le toke toke est : " + leTok);
+        // } catch (Exception e) {
+        //     System.err.println(e.getMessage());
+        // }
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
-
         return (args) -> {
-
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");
@@ -305,11 +309,12 @@ public class GestimoSpringBackendApplication {
 
         };
     }
+
     @Bean
-    public HttpTraceRepository htttpTraceRepository()
-    {
+    public HttpTraceRepository htttpTraceRepository() {
         return new InMemoryHttpTraceRepository();
     }
+
     private String generateUserId() {
         return "User-" + RandomStringUtils.randomAlphanumeric(5);
     }

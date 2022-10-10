@@ -1,6 +1,13 @@
 package com.bzdata.gestimospringbackend.Controllers;
 
+import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
+
+import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
 import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
+import com.bzdata.gestimospringbackend.Services.ImmeubleService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +23,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
-
-import java.util.List;
-
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleAfficheDto;
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
-import com.bzdata.gestimospringbackend.Services.ImmeubleService;
 
 @RestController
 @RequestMapping(APP_ROOT + "/immeuble")

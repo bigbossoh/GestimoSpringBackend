@@ -9,9 +9,7 @@ import com.bzdata.gestimospringbackend.DTOs.Auth.AuthRequestDto;
 import com.bzdata.gestimospringbackend.Models.UserPrincipal;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
-import com.bzdata.gestimospringbackend.Services.AuthRequestService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
-import com.bzdata.gestimospringbackend.Services.Impl.TwilioSmsSender;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -39,14 +37,11 @@ import lombok.extern.slf4j.Slf4j;
 @SecurityRequirement(name = "gestimoapi")
 public class AuthenticationController {
 
-    private final AuthRequestService authRequestService;
     private final AgenceImmobilierService AgenceImmobilierService;
     private final UtilisateurService utilisateurService;
     private final AuthenticationManager authenticationManager;
     private final JWTTokenProvider jwtTokenProvider;
     private final UtilisateurRepository utilisateurRepository;
-    private final TwilioSmsSender twilioSmsSender;
-
     @PostMapping("/login")
     public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
 
