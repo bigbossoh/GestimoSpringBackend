@@ -343,7 +343,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 String token = smsOrangeConfig.getTokenSmsOrange();
                 String numeroLocataire = bailLocation.getUtilisateurOperation().getMobile();
-              String message = agence.getNomAgence().toUpperCase() +  " accuse bonne réception de la somme de "+dto.getMontantEncaissement()+" F CFA pour le reglement de votre loyer. /n"+"Merci.";
+              String message = agence.getNomAgence().toUpperCase() +  " accuse bonne reception de la somme de "+dto.getMontantEncaissement()+" F CFA pour le reglement de votre loyer.";
               boolean isEnvoyer = smsOrangeConfig.sendSms(token, message, "+2250000", numeroLocataire, "Sms Societe");
               if (isEnvoyer) {
                   log.info("est envoyer token message numeroLocatire {}, {},{}", token, numeroLocataire,message);
