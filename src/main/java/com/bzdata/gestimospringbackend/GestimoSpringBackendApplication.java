@@ -94,20 +94,20 @@ public class GestimoSpringBackendApplication {
 
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
-            RoleRepository roleRepository,SmsOrangeConfig envoiSmsOrange,
+            RoleRepository roleRepository, SmsOrangeConfig envoiSmsOrange,
             UtilisateurRepository utilisateurRepository,
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
-     try {
-        String leTok = envoiSmsOrange.getHttpCon();
-        envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0556918763","Sms Societe");
-          System.out.println("Le toke toke est : "+leTok);
-      } catch (Exception e) {
-        System.err.println(e.getMessage());
-      }
+        // try {
+        //     String leTok = envoiSmsOrange.getTokenSmsOrange();
+        //     envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0556918763", "Sms Societe");
+        //     System.out.println("Le toke toke est : " + leTok);
+        // } catch (Exception e) {
+        //     System.err.println(e.getMessage());
+        // }
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
         return (args) -> {
@@ -309,11 +309,12 @@ public class GestimoSpringBackendApplication {
 
         };
     }
+
     @Bean
-    public HttpTraceRepository htttpTraceRepository()
-    {
+    public HttpTraceRepository htttpTraceRepository() {
         return new InMemoryHttpTraceRepository();
     }
+
     private String generateUserId() {
         return "User-" + RandomStringUtils.randomAlphanumeric(5);
     }

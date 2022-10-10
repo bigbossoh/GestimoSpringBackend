@@ -25,21 +25,21 @@ public class SmsOrangeConfig {
     String messageEnvyer;
     String accessToken;
 
-    public void sendSms(String accessToken, String sms, String telEnvoi, String telRecepteur, String nomSociete)
+    public boolean sendSms(String accessToken, String sms, String telEnvoi, String telRecepteur, String nomSociete)
             throws Exception {
         System.out.println("Les données à prendre en compte");
         System.out.println(accessToken + " " + sms + " " + telEnvoi + " " + " " + telRecepteur + " " + nomSociete);
         System.out.println("Le json est le suivant : ");
         JsonObject dataJson = Json.createObjectBuilder().add("outboundSMSMessageRequest", Json.createObjectBuilder()
-                .add("address", "tel:+225"+telRecepteur)
+                .add("address", "tel:+225" + telRecepteur)
                 .add("senderAddress", "tel:+2250000")
-                .add("senderName",nomSociete)
+                .add("senderName", nomSociete)
                 .add("outboundSMSTextMessage", Json.createObjectBuilder().add("message", sms)))
                 .build();
-                String POST_PARAMS =dataJson.toString();
-        // data.put("outboundSMSMessageRequest", data.put("address", "tel"));
+        String postParams = dataJson.toString();
+
         System.out.println("Le json est le suivant II : ");
-        System.out.println(POST_PARAMS);
+        System.out.println(postParams);
         URL obj = new URL("https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B2250000/requests");
         HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
         conn.setRequestMethod("POST");
@@ -49,7 +49,7 @@ public class SmsOrangeConfig {
         conn.setDoOutput(true);
 
         OutputStream os = conn.getOutputStream();
-        os.write(POST_PARAMS.getBytes());
+        os.write(postParams.getBytes());
         os.flush();
         os.close();
         // For POST only - END
@@ -67,15 +67,18 @@ public class SmsOrangeConfig {
                 response.append(inputLine);
             }
             in.close();
- System.out.println("POST request worked");
+            System.out.println("POST request worked");
 
             System.out.println(this.accessToken);
+            return true;
         } else {
             System.out.println("POST request not worked");
+            return false;
         }
+        
     }
 
-    public String getHttpCon() throws Exception {
+    public String getTokenSmsOrange() throws Exception {
 
         String POST_PARAMS = "grant_type=client_credentials";
         URL obj = new URL("https://api.orange.com/oauth/v3/token");
