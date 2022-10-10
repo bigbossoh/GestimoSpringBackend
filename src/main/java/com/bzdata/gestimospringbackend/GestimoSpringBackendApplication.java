@@ -20,6 +20,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
@@ -67,7 +68,7 @@ public class GestimoSpringBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
         new File(FOLDER_PATH).mkdirs();
-       
+
     }
 
     @Bean
@@ -94,13 +95,24 @@ public class GestimoSpringBackendApplication {
 
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
-            RoleRepository roleRepository,
+            RoleRepository roleRepository,SmsOrangeConfig envoiSmsOrange,
             UtilisateurRepository utilisateurRepository,
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
+     //   SmsOrangeConfig envoiSmsOrange
+
+     try {
+        String leTok = envoiSmsOrange.getHttpCon();
+        envoiSmsOrange.sendSms(leTok, "bonjour monsieur", "+2250000", "0708771317","Sms Societe");
+
+          System.out.println("Le toke toke est : "+leTok);
+      } catch (Exception e) {
+        System.err.println(e.getMessage());
+      }
+
 
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
