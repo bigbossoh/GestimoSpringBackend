@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend;
 
 import static com.bzdata.gestimospringbackend.constant.FileConstant.FOLDER_PATH;
-import static com.bzdata.gestimospringbackend.constant.FileConstant.USER_FOLDER;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 import java.io.File;
@@ -106,19 +105,15 @@ public class GestimoSpringBackendApplication {
 
      try {
         String leTok = envoiSmsOrange.getHttpCon();
-        envoiSmsOrange.sendSms(leTok, "bonjour monsieur", "+2250000", "0708771317","Sms Societe");
-
+       // envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0103833350","Sms Societe");
           System.out.println("Le toke toke est : "+leTok);
       } catch (Exception e) {
         System.err.println(e.getMessage());
       }
-
-
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
 
         return (args) -> {
-
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D4IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");

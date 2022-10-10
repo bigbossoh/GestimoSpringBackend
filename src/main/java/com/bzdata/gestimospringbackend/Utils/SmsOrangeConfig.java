@@ -1,14 +1,13 @@
 package com.bzdata.gestimospringbackend.Utils;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.json.Json;
+import javax.json.JsonObject;
 
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -26,32 +25,31 @@ public class SmsOrangeConfig {
     String messageEnvyer;
     String accessToken;
 
-    public void sendSms(String accessToken,String sms,String telEnvoi,String telRecepteur,String nomSociete) throws Exception {
-
-    String json = "{\r\n" +
-            "  \"outboundSMSMessageRequest\": {\r\n" +
-            "  \"address\": \"tel:+225"+telRecepteur+"\",\r\n" +
-            "  \"senderAddress\": \"tel:"+telEnvoi+"\",\r\n" +
-            "  \"senderName\": \""+nomSociete+"\",\r\n" +
-            "  \"outboundSMSTextMessage\": {\r\n" +
-            "  \"message\": \""+sms+"\"\r\n" +
-            "  }\r\n }\r\n" +
-
-            "}";
-    System.out.println("Le Json est :");
-System.out.println(json);
-
+    public void sendSms(String accessToken, String sms, String telEnvoi, String telRecepteur, String nomSociete)
+            throws Exception {
+        System.out.println("Les données à prendre en compte");
+        System.out.println(accessToken + " " + sms + " " + telEnvoi + " " + " " + telRecepteur + " " + nomSociete);
+        System.out.println("Le json est le suivant : ");
+        JsonObject dataJson = Json.createObjectBuilder().add("outboundSMSMessageRequest", Json.createObjectBuilder()
+                .add("address", "tel:+225"+telRecepteur)
+                .add("senderAddress", "tel:+2250000")
+                .add("senderName",nomSociete)
+                .add("outboundSMSTextMessage", Json.createObjectBuilder().add("message", sms)))
+                .build();
+                String POST_PARAMS =dataJson.toString();
+        // data.put("outboundSMSMessageRequest", data.put("address", "tel"));
+        System.out.println("Le json est le suivant II : ");
+        System.out.println(POST_PARAMS);
         URL obj = new URL("https://api.orange.com/smsmessaging/v1/outbound/tel%3A%2B2250000/requests");
         HttpURLConnection conn = (HttpURLConnection) obj.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Authorization",
-                "Bearer "+accessToken);
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("Accept", "application/json");
-
+                "Bearer " + accessToken);
+        conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
+
         OutputStream os = conn.getOutputStream();
-        os.write(json.getBytes());
+        os.write(POST_PARAMS.getBytes());
         os.flush();
         os.close();
         // For POST only - END
@@ -59,7 +57,7 @@ System.out.println(json);
         int responseCode = conn.getResponseCode();
         System.out.println("POST Response Code :: " + responseCode);
 
-        if (responseCode == HttpURLConnection.HTTP_OK) { //success
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     conn.getInputStream()));
             String inputLine;
@@ -70,13 +68,13 @@ System.out.println(json);
             }
             in.close();
 
-
-           System.out.println( this.accessToken );
+            System.out.println(this.accessToken);
         } else {
             System.out.println("POST request not worked");
         }
     }
-    public String getHttpCon() throws Exception{
+
+    public String getHttpCon() throws Exception {
 
         String POST_PARAMS = "grant_type=client_credentials";
         URL obj = new URL("https://api.orange.com/oauth/v3/token");
@@ -97,7 +95,7 @@ System.out.println(json);
         int responseCode = conn.getResponseCode();
         System.out.println("POST Response Code :: " + responseCode);
 
-        if (responseCode == HttpURLConnection.HTTP_OK) { //success
+        if (responseCode == HttpURLConnection.HTTP_OK) { // success
             BufferedReader in = new BufferedReader(new InputStreamReader(
                     conn.getInputStream()));
             String inputLine;
@@ -108,10 +106,10 @@ System.out.println(json);
             }
             in.close();
             JSONObject json = new JSONObject(response.toString());
-            //Object tok=Json
+            // Object tok=Json
             this.accessToken = json.getString("access_token");
 
-           System.out.println( this.accessToken );
+            System.out.println(this.accessToken);
         } else {
             System.out.println("POST request not worked");
         }
