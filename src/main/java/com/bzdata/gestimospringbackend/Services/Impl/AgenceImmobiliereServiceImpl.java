@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +15,9 @@ import java.util.stream.Stream;
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
+import com.bzdata.gestimospringbackend.DTOs.ImageLogoDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
+import com.bzdata.gestimospringbackend.Models.ImageData;
 import com.bzdata.gestimospringbackend.Models.NotificationEmail;
 import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
@@ -27,6 +30,7 @@ import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.exceptions.InvalidOperationException;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
+import com.bzdata.gestimospringbackend.repository.ImageRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
@@ -37,6 +41,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +58,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     private PasswordEncoder passwordEncoder;
     private final MailContentBuilder mailContentBuilder;
     private final MailService mailService;
+    private ImageRepository imageRepository;
     private GestimoWebMapperImpl gestimoWebMapperImpl;
 
     @Override
@@ -71,7 +77,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         if (utilisateurByMobile == null) {
             // get back the connected user
             Utilisateur userCreate = getUserCreate(dto);
-            //agenceImmobiliere.setCreateur(userCreate);
+            // agenceImmobiliere.setCreateur(userCreate);
             agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
             agenceImmobiliere.setCapital(dto.getCapital());
             agenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
@@ -91,11 +97,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             Utilisateur newUtilisateur = new Utilisateur();
             newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
             newUtilisateur.setNom(dto.getNomPrenomGerant());
-            //newUtilisateur.setPrenom(dto.getNomAgence());
+            // newUtilisateur.setPrenom(dto.getNomAgence());
             newUtilisateur.setEmail(dto.getEmailAgence());
             newUtilisateur.setMobile(dto.getMobileAgence());
             newUtilisateur.setPassword(passwordEncoder.encode(dto.getMotdepasse()));
-            //newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
+            // newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
             Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
             if (newRole.isPresent()) {
                 newUtilisateur.setUrole(newRole.get());
@@ -161,6 +167,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         }
 
     }
+
     @Override
     public AgenceResponseDto findAgenceById(Long id) {
         log.info("We are going to get back the Agence Immobilière en fonction de l'ID {} du bien", id);
@@ -233,8 +240,8 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     }
 
     @Override
-    public AgenceImmobilierDTO  saveUneAgence(AgenceRequestDto dto) {
-        if(dto.getId()==0 || dto.getId()==null) {
+    public AgenceImmobilierDTO saveUneAgence(AgenceRequestDto dto) {
+        if (dto.getId() == 0 || dto.getId() == null) {
             AgenceImmobiliere agenceImmobiliere = new AgenceImmobiliere();
             log.info("We are going to create  a new agence from the service layer {}", dto);
             List<String> errors = AgenceDtoValidator.validate(dto);
@@ -249,7 +256,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             if (utilisateurByMobile == null) {
                 // get back the connected user
                 Utilisateur userCreate = getUserCreate(dto);
-                //agenceImmobiliere.setCreateur(userCreate);
+                // agenceImmobiliere.setCreateur(userCreate);
                 agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
                 agenceImmobiliere.setCapital(dto.getCapital());
                 agenceImmobiliere.setCompteContribuable(dto.getCompteContribuable());
@@ -269,11 +276,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                 Utilisateur newUtilisateur = new Utilisateur();
                 newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
                 newUtilisateur.setNom(dto.getNomPrenomGerant());
-                //newUtilisateur.setPrenom(dto.getNomAgence());
+                // newUtilisateur.setPrenom(dto.getNomAgence());
                 newUtilisateur.setEmail(dto.getEmailAgence());
                 newUtilisateur.setMobile(dto.getMobileAgence());
                 newUtilisateur.setPassword(passwordEncoder.encode(dto.getMotdepasse()));
-                //newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
+                // newUtilisateur.setAgenceImmobilier(saveAgenceUpdate);
                 Optional<Role> newRole = roleRepository.findRoleByRoleName("GERANT");
                 if (newRole.isPresent()) {
                     newUtilisateur.setUrole(newRole.get());
@@ -294,16 +301,17 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                                 "ci-dessous pour activer votre account: " + ACTIVATION_EMAIL + "/" + token + "\n");
                 mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",
                         saveUser.getEmail(), message));
-                log.info("We are same a gerant user and Agence also {}",saveAgenceUpdate);
+                log.info("We are same a gerant user and Agence also {}", saveAgenceUpdate);
                 AgenceImmobilierDTO agenceImmobilierDTO = gestimoWebMapperImpl.fromAgenceImmobilier(saveAgenceUpdate);
                 return agenceImmobilierDTO;
 
             } else {
                 log.error("This user is already exist");
-                throw new EntityNotFoundException("The username or mobile is already exist in db " + dto.getMobileAgence(),
+                throw new EntityNotFoundException(
+                        "The username or mobile is already exist in db " + dto.getMobileAgence(),
                         ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
             }
-        }else{
+        } else {
             log.info("WE ARE GOING TO MAKE A UDPDATE OF AGENCE");
             AgenceImmobiliere agenceImmobiliere1 = agenceImmobiliereRepository.findById(dto.getId()).orElseThrow(
                     () -> new InvalidEntityException(
@@ -331,5 +339,36 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
+    @Override
+    public String uploadLogoAgence(ImageLogoDto dto) throws IOException {
+        AgenceImmobiliere agenceImmobilier = agenceImmobiliereRepository.findById(dto.getAgenceImmobiliere())
+                .orElseThrow(() -> new InvalidEntityException(
+                        "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
+                        ErrorCodes.AGENCE_NOT_FOUND));
+        try {
+            ImageData imageDataFound = imageRepository.findById(dto.getIdImage())
+                    .orElseThrow(() -> new InvalidEntityException(
+                            "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
+                            ErrorCodes.AGENCE_NOT_FOUND));
+            if (imageDataFound != null) {
+
+                imageDataFound.setAgenceImmobiliere(agenceImmobilier);
+                imageDataFound.setNameImage(agenceImmobilier.getSigleAgence());
+                imageDataFound.setImageData(dto.getFile().getBytes());
+                imageRepository.save(imageDataFound);
+            } else {
+                ImageData imageData = new ImageData();
+                imageData.setAgenceImmobiliere(agenceImmobilier);
+                imageData.setNameImage(agenceImmobilier.getSigleAgence());
+                imageData.setImageData(dto.getFile().getBytes());
+                imageRepository.save(imageData);
+            }
+
+            return "Images dowload";
+        } catch (Exception e) {
+            return "Echec du téléchargement";
+        }
+
+    }
 
 }

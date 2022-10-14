@@ -26,4 +26,5 @@ public class ImageData extends AbstractEntity{
     private byte[] imageData;
     @OneToOne(mappedBy = "imageData")
     private AgenceImmobiliere agenceImmobiliere;
+    
 }
