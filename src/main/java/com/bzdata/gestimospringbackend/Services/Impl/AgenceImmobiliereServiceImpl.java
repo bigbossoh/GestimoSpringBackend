@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -15,9 +14,7 @@ import java.util.stream.Stream;
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
-import com.bzdata.gestimospringbackend.DTOs.ImageLogoDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
-import com.bzdata.gestimospringbackend.Models.ImageData;
 import com.bzdata.gestimospringbackend.Models.NotificationEmail;
 import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
@@ -30,7 +27,6 @@ import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.exceptions.InvalidOperationException;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
-import com.bzdata.gestimospringbackend.repository.ImageRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.repository.VerificationTokenRepository;
@@ -41,7 +37,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +53,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     private PasswordEncoder passwordEncoder;
     private final MailContentBuilder mailContentBuilder;
     private final MailService mailService;
-    private ImageRepository imageRepository;
     private GestimoWebMapperImpl gestimoWebMapperImpl;
 
     @Override
@@ -339,36 +333,36 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                         ErrorCodes.UTILISATEUR_NOT_FOUND));
     }
 
-    @Override
-    public String uploadLogoAgence(ImageLogoDto dto) throws IOException {
-        AgenceImmobiliere agenceImmobilier = agenceImmobiliereRepository.findById(dto.getAgenceImmobiliere())
-                .orElseThrow(() -> new InvalidEntityException(
-                        "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
-                        ErrorCodes.AGENCE_NOT_FOUND));
-        try {
-            ImageData imageDataFound = imageRepository.findById(dto.getIdImage())
-                    .orElseThrow(() -> new InvalidEntityException(
-                            "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
-                            ErrorCodes.AGENCE_NOT_FOUND));
-            if (imageDataFound != null) {
+    // @Override
+    // public String uploadLogoAgence(ImageLogoDto dto) throws IOException {
+    //     AgenceImmobiliere agenceImmobilier = agenceImmobiliereRepository.findById(dto.getAgenceImmobiliere())
+    //             .orElseThrow(() -> new InvalidEntityException(
+    //                     "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
+    //                     ErrorCodes.AGENCE_NOT_FOUND));
+    //     try {
+    //         ImageData imageDataFound = imageRepository.findById(dto.getIdImage())
+    //                 .orElseThrow(() -> new InvalidEntityException(
+    //                         "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
+    //                         ErrorCodes.AGENCE_NOT_FOUND));
+    //         if (imageDataFound != null) {
 
-                imageDataFound.setAgenceImmobiliere(agenceImmobilier);
-                imageDataFound.setNameImage(agenceImmobilier.getSigleAgence());
-                imageDataFound.setImageData(dto.getFile().getBytes());
-                imageRepository.save(imageDataFound);
-            } else {
-                ImageData imageData = new ImageData();
-                imageData.setAgenceImmobiliere(agenceImmobilier);
-                imageData.setNameImage(agenceImmobilier.getSigleAgence());
-                imageData.setImageData(dto.getFile().getBytes());
-                imageRepository.save(imageData);
-            }
+    //             imageDataFound.setAgenceImmobiliere(agenceImmobilier);
+    //             imageDataFound.setNameImage(agenceImmobilier.getSigleAgence());
+    //             imageDataFound.setImageData(dto.getFile().getBytes());
+    //             imageRepository.save(imageDataFound);
+    //         } else {
+    //             ImageData imageData = new ImageData();
+    //             imageData.setAgenceImmobiliere(agenceImmobilier);
+    //             imageData.setNameImage(agenceImmobilier.getSigleAgence());
+    //             imageData.setImageData(dto.getFile().getBytes());
+    //             imageRepository.save(imageData);
+    //         }
 
-            return "Images dowload";
-        } catch (Exception e) {
-            return "Echec du téléchargement";
-        }
+    //         return "Images dowload";
+    //     } catch (Exception e) {
+    //         return "Echec du téléchargement";
+    //     }
 
-    }
+    // }
 
 }

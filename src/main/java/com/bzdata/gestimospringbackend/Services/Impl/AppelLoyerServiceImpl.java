@@ -61,7 +61,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     final MontantLoyerBailRepository montantLoyerBailRepository;
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerRepository appelLoyerRepository;
-    final TwilioSmsSender twilioSmsSender;
+
     final GestimoWebMapperImpl gestimoWebMapper;
     final BienImmobilierRepository bienImmobilierRepository;
 
@@ -137,7 +137,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         log.info("we are going lo launch sms to the user ");
         SmsRequest sms = new SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),
                 "Vôtre baillocation a été créé avec succès.");
-        twilioSmsSender.sendSms(sms);
+    
         log.info("Sms sent");
         return appelLoyerList
                 .stream()

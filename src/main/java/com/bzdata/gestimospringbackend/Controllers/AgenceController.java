@@ -2,13 +2,11 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
-import com.bzdata.gestimospringbackend.DTOs.ImageLogoDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 
 import org.springframework.http.ResponseEntity;
@@ -36,11 +34,11 @@ public class AgenceController {
         log.info("We are going to save a new agence {}", request);
         return ResponseEntity.ok(agenceImmobilierService.saveUneAgence(request));
     }
-    @PostMapping("/uploadlogo")
-    public ResponseEntity<String> uploadLog(@RequestBody ImageLogoDto logo) throws IOException {
-        log.info("We are going to save a new agence {}", logo);
-        return ResponseEntity.ok(agenceImmobilierService.uploadLogoAgence(logo));
-    }
+    // @PostMapping("/uploadlogo")
+    // public ResponseEntity<String> uploadLog(@RequestBody ImageLogoDto logo) throws IOException {
+    //     log.info("We are going to save a new agence {}", logo);
+    //     return ResponseEntity.ok(agenceImmobilierService.uploadLogoAgence(logo));
+    // }
 
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {

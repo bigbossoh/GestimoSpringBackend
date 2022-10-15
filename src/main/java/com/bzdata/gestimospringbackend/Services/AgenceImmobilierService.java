@@ -30,5 +30,5 @@ public interface AgenceImmobilierService {
 
     void feachUserAndEnable(VerificationToken verificationToken);
 
-    String uploadLogoAgence(ImageLogoDto dto)throws IOException;
+    // String uploadLogoAgence(ImageLogoDto dto)throws IOException;
 }
