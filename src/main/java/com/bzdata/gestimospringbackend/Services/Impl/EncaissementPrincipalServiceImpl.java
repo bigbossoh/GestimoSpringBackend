@@ -335,29 +335,26 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 break;
             }
         }
-        try {
-            AgenceImmobiliere agence = agenceImmobiliereRepository.findById(dto.getIdAgence()).orElseThrow(() -> {
-                throw new EntityNotFoundException("Agence not found",
-                ErrorCodes.AGENCE_NOT_FOUND);
-            });
+        // try {
+        //     AgenceImmobiliere agence = agenceImmobiliereRepository.findById(dto.getIdAgence()).orElseThrow(() -> {
+        //         throw new EntityNotFoundException("Agence not found",
+        //         ErrorCodes.AGENCE_NOT_FOUND);
+        //     });
 
-                String token = smsOrangeConfig.getTokenSmsOrange();
-                String numeroLocataire = bailLocation.getUtilisateurOperation().getMobile();
-              String message = agence.getNomAgence().toUpperCase() +  " accuse bonne reception de la somme de "+dto.getMontantEncaissement()+" F CFA pour le reglement de votre loyer.";
-              boolean isEnvoyer = smsOrangeConfig.sendSms(token, message, "+2250000", numeroLocataire, "Sms Societe");
-              if (isEnvoyer) {
-                  log.info("est envoyer token message numeroLocatire {}, {},{}", token, numeroLocataire,message);
-              } else {
-                log.info("est pas envoyer token {}, numeroLocatire {},message {}", token, numeroLocataire,message);
+        //         String token = smsOrangeConfig.getTokenSmsOrange();
+        //         String numeroLocataire = bailLocation.getUtilisateurOperation().getMobile();
+        //       String message = agence.getNomAgence().toUpperCase() +  " accuse bonne reception de la somme de "+dto.getMontantEncaissement()+" F CFA pour le reglement de votre loyer.";
+        //       boolean isEnvoyer = smsOrangeConfig.sendSms(token, message, "+2250000", numeroLocataire, "Sms Societe");
+        //       if (isEnvoyer) {
+        //           log.info("est envoyer token message numeroLocatire {}, {},{}", token, numeroLocataire,message);
+        //       } else {
+        //         log.info("est pas envoyer token {}, numeroLocatire {},message {}", token, numeroLocataire,message);
 
-             }
-
-
-
-           // System.out.println("Le toke toke est : " + leTok);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        //      }
+        //    // System.out.println("Le toke toke est : " + leTok);
+        // } catch (Exception e) {
+        //     System.err.println(e.getMessage());
+        // }
 
         Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                 .comparing(EncaissementPrincipal::getId);
