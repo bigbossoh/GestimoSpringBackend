@@ -34,4 +34,18 @@ public interface AppelLoyerService {
     List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
 
     List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
+
+    double impayeParPeriode(String periode);
+
+    double payeParPeriode(String periode);
+
+    double impayeParAnnee(String annee);
+
+    double payeParAnnee(String annee);
+
+    Long nombreBauxImpaye(String periode);
+
+    Long nombreBauxPaye(String periode);
+
+    double montantBeauxImpayer(String periode);
 }

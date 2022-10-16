@@ -34,6 +34,11 @@ public class AgenceController {
         log.info("We are going to save a new agence {}", request);
         return ResponseEntity.ok(agenceImmobilierService.saveUneAgence(request));
     }
+    // @PostMapping("/uploadlogo")
+    // public ResponseEntity<String> uploadLog(@RequestBody ImageLogoDto logo) throws IOException {
+    //     log.info("We are going to save a new agence {}", logo);
+    //     return ResponseEntity.ok(agenceImmobilierService.uploadLogoAgence(logo));
+    // }
 
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {
