@@ -80,17 +80,13 @@ public class GestimoSpringBackendApplication {
     // http://44.201.35.91/
     @Bean
     public CorsFilter corsFilter() {
-        log.info("We are inside the crosFilter");
+
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        // corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
-        // http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com/
-        // corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         corsConfiguration.setAllowedOriginPatterns(
                 Arrays.asList("*", "http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com:4200",
                         "http://localhost:4200"));
-        // corsConfiguration.setAllowedOrigins(Collections.singletonList("http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com:4200"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));
