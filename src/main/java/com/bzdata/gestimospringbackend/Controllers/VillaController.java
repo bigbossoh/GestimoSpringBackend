@@ -8,6 +8,7 @@ import com.bzdata.gestimospringbackend.DTOs.VillaDto;
 import com.bzdata.gestimospringbackend.Services.VillaService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
+@CrossOrigin(origins="*")
 public class VillaController {
     final VillaService villaService;
 

@@ -6,6 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.SiteResponseDto;
 import com.bzdata.gestimospringbackend.Services.SiteService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
+@CrossOrigin(origins="*")
 public class SiteController {
     final SiteService siteService;
 

@@ -52,9 +52,11 @@ import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@Slf4j
 @EnableAsync
 @RequiredArgsConstructor
 @OpenAPIDefinition(info = @Info(title = "Gestimo API", version = "2.0", description = "Description de Gestimo"))
@@ -75,12 +77,20 @@ public class GestimoSpringBackendApplication {
         return new BCryptPasswordEncoder();
     }
 
+    // http://44.201.35.91/
     @Bean
     public CorsFilter corsFilter() {
+        log.info("We are inside the crosFilter");
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        // corsConfiguration.setAllowedOriginPatterns(Arrays.asList("*"));
+        // http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com/
+        // corsConfiguration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        corsConfiguration.setAllowedOriginPatterns(
+                Arrays.asList("*", "http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com:4200",
+                        "http://localhost:4200"));
+        // corsConfiguration.setAllowedOrigins(Collections.singletonList("http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com:4200"));
         corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
                 "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
                 "Access-Control-Request-Method", "Access-Control-Request-Headers"));
@@ -102,11 +112,12 @@ public class GestimoSpringBackendApplication {
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
         // try {
-        //     String leTok = envoiSmsOrange.getTokenSmsOrange();
-        //     envoiSmsOrange.sendSms(leTok, "bonjour  ...", "+2250000", "0556918763", "Sms Societe");
-        //     System.out.println("Le toke toke est : " + leTok);
+        // String leTok = envoiSmsOrange.getTokenSmsOrange();
+        // envoiSmsOrange.sendSms(leTok, "bonjour ...", "+2250000", "0556918763", "Sms
+        // Societe");
+        // System.out.println("Le toke toke est : " + leTok);
         // } catch (Exception e) {
-        //     System.err.println(e.getMessage());
+        // System.err.println(e.getMessage());
         // }
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();

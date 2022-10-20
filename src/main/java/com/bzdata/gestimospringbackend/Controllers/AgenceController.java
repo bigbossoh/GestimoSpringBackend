@@ -10,6 +10,7 @@ import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
+@CrossOrigin(origins="*")
 public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
     @PostMapping("/signup")

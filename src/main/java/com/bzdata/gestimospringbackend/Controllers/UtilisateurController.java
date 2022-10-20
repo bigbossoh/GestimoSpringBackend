@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
-@CrossOrigin("*")
+@CrossOrigin(origins="*")
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 
