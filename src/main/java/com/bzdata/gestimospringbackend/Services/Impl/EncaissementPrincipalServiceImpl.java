@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
-import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
@@ -369,5 +368,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 .map(gestimoWebMapper::fromEncaissementPrincipal)
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public double sommeEncaisserParJour(String jour) {
+        // TODO Auto-generated method stub
+        return 0;
     }
 }

@@ -22,5 +22,7 @@ public interface EncaissementPrincipalService {
 
     List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(EncaissementPayloadDto dto);
 
+    double sommeEncaisserParJour(String jour);
+
     boolean delete(Long id);
 }
