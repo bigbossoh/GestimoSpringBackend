@@ -72,13 +72,10 @@ public class GestimoSpringBackendApplication {
         new File(FOLDER_PATH).mkdirs();
 
     }
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    // http://44.201.35.91/
     @Bean
     public CorsFilter corsFilter() {
 

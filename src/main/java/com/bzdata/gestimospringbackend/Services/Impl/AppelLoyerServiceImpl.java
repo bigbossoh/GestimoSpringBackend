@@ -315,13 +315,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public double impayeParAnnee(String annee) {
+        public double impayeParAnnee(int annee) {
 
                 return appelLoyerRepository.impayerParAnnee(annee);
         }
 
         @Override
-        public double payeParAnnee(String annee) {
+        public double payeParAnnee(int annee) {
 
                 return appelLoyerRepository.payeParAnnee(annee);
         }
@@ -330,7 +330,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         public Long nombreBauxImpaye(String periode) {
 
                 return appelLoyerRepository.findAll().stream()
-                
+
                 .count();
         }
 
@@ -344,5 +344,18 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         public double montantBeauxImpayer(String periode) {
 
                 return 0;
+        }
+
+        @Override
+        public List<PeriodeDto> findAllPeriode() {
+                List<PeriodeDto> collectPeriodeDistinct = appelLoyerRepository
+                .findAll()
+                .stream()
+
+                .map(gestimoWebMapper::fromPeriodeAppel)
+                .distinct()
+                                .collect(Collectors.toList());
+                return collectPeriodeDistinct;
+
         }
 }

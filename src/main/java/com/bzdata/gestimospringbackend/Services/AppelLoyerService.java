@@ -6,7 +6,6 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
-import com.bzdata.gestimospringbackend.DTOs.BienPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 
 public interface AppelLoyerService {
@@ -31,6 +30,8 @@ public interface AppelLoyerService {
 
     List<PeriodeDto> listOfPerodesByAnnee(Integer annee);
 
+    List<PeriodeDto> findAllPeriode();
+
     List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
 
     List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
@@ -39,9 +40,9 @@ public interface AppelLoyerService {
 
     double payeParPeriode(String periode);
 
-    double impayeParAnnee(String annee);
+    double impayeParAnnee(int annee);
 
-    double payeParAnnee(String annee);
+    double payeParAnnee(int annee);
 
     Long nombreBauxImpaye(String periode);
 
