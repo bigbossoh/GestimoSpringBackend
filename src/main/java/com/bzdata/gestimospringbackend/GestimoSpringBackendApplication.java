@@ -69,12 +69,10 @@ public class GestimoSpringBackendApplication {
         new File(FOLDER_PATH).mkdirs();
 
     }
-
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();

@@ -10,8 +10,8 @@
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
 	<parameter name="NOM_PROPRIO" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT 
- gestimoweb.appel_loyer.id , 
+		<![CDATA[SELECT
+ gestimoweb.appel_loyer.id ,
  gestimoweb.bienimmobilier.type_bien_immobilier ,
   gestimoweb.appel_loyer.id_agence ,
    gestimoweb.appel_loyer.id_createur ,
@@ -28,7 +28,7 @@
           gestimoweb.bienimmobilier.code_abrv_bien_immobilier ,
            gestimoweb.bienimmobilier.nom_complet_bien_immobilier ,
             gestimoweb.operation.id as idBailLocation,
-             gestimoweb.operation.abrv_code_bail ,     
+             gestimoweb.operation.abrv_code_bail ,
         gestimoweb.appel_loyer.mois_chiffre_appel_loyer,
     gestimoweb.appel_loyer.desc_appel_loyer ,
      gestimoweb.appel_loyer.montant_loyer_baillperiode ,
@@ -45,17 +45,17 @@
    gestimoweb.agence_immobiliere.compte_contribuable ,
   gestimoweb.agence_immobiliere.email_agence ,
    gestimoweb.agence_immobiliere.mobile_agence ,
-    gestimoweb.agence_immobiliere.regime_fiscale_agence 
-FROM gestimoweb.appel_loyer, 
+    gestimoweb.agence_immobiliere.regime_fiscale_agence
+FROM gestimoweb.appel_loyer,
 gestimoweb.agence_immobiliere ,
 	gestimoweb.operation,
 	gestimoweb.utilisateur,
-	gestimoweb.bienimmobilier 
-WHERE 
- gestimoweb.bienimmobilier.id = gestimoweb.operation.bien_immobilier_operation_id 
- AND  gestimoweb.utilisateur.id_agence = gestimoweb.agence_immobiliere.id 
- AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id 
-AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id 
+	gestimoweb.bienimmobilier
+WHERE
+ gestimoweb.bienimmobilier.id = gestimoweb.operation.bien_immobilier_operation_id
+ AND  gestimoweb.utilisateur.id_agence = gestimoweb.agence_immobiliere.id
+ AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id
+AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id
 AND    gestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
  AND gestimoweb.appel_loyer.is_solder_appel_loyer =0
 ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, gestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
@@ -360,7 +360,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#080707"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Bell MT" size="12" isBold="true" isItalic="true"/>
+					<font fontName="Arial" size="12" isBold="true" isItalic="true"/>
 					<paragraph lineSpacing="Double" leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Désignation]]></text>
@@ -376,7 +376,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#080707"/>
 				</box>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Bell MT" size="12" isBold="true" isItalic="true"/>
+					<font fontName="Arial" size="12" isBold="true" isItalic="true"/>
 					<paragraph lineSpacing="Double" leftIndent="5"/>
 				</textElement>
 				<text><![CDATA[Montant loyer]]></text>

@@ -20,8 +20,8 @@ public interface AppelLoyerRepository extends JpaRepository<AppelLoyer, Long> {
     double payeParMois(@Param("periode") String periode);
 
     @Query("select sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee")
-    double impayerParAnnee(@Param("annee") String periode);
+    double impayerParAnnee(@Param("annee") int periode);
 
     @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee")
-    double payeParAnnee(@Param("annee") String periode);
+    double payeParAnnee(@Param("annee") int periode);
 }
