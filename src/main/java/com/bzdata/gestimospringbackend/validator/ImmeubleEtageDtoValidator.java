@@ -1,10 +1,9 @@
 package com.bzdata.gestimospringbackend.validator;
 
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleDto;
-import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.bzdata.gestimospringbackend.DTOs.ImmeubleEtageDto;
 
 public class ImmeubleEtageDtoValidator {
     public static List<String> validate(ImmeubleEtageDto dto) {
