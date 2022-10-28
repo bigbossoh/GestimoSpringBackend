@@ -18,7 +18,7 @@ public class Scheduler {
       LocalDateTime current= LocalDateTime.now();
       DateTimeFormatter format=DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
       String formattedDateTime=current.format(format);
-      log.info("Sheduler time-----> {}",formattedDateTime);
+     // log.info("Sheduler time-----> {}",formattedDateTime);
       
    }
   

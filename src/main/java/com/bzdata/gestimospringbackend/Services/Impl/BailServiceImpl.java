@@ -178,4 +178,12 @@ public class BailServiceImpl implements BailService {
         bailLocationRepository.deleteById(id);
         return true;
     }
+
+    @Override
+    public int nombreBauxNonActifs() {
+        return (int) bailLocationRepository.findAll()
+                .stream()
+                .filter(encourrs -> encourrs.isEnCoursBail()==false)
+                .count();
+    }
 }
