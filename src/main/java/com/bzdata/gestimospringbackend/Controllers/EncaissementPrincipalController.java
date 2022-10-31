@@ -85,8 +85,15 @@ public class EncaissementPrincipalController {
 // GET ALL ENCAISSEMENTS BY ID BIEN IMMOBILIER
     @Operation(summary = "Total des encaissements par IdBienImmobilioer d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allencaissementByIdBien/{id}")
-    public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(@PathVariable("id") Long id) {
+    public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(
+            @PathVariable("id") Long id) {
         log.info(" find All Encaissement By IdBienImmobilier  {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdBienImmobilier(id));
+    }
+    @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/totalencaissementjournalier/{jour}")
+    public ResponseEntity<Double> totalEncaissementParJour(@PathVariable("jour") String jour) {
+        log.info("Find totalencaissement by ID AppelLoyer {}", jour);
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour));
     }
 }
