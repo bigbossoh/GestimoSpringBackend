@@ -21,7 +21,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
-        
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -220,7 +220,7 @@
 
                                 <location>com.bzdata.gestimospringbackend.Controllers</location>
                             </locations>
-                            <basePath>http://localhost:8284</basePath>
+                            <basePath>http://localhost:5000</basePath>
                             <info>
                                 <title>Swagger GESTIMOWEB REST API</title>
                                 <version>${project.version}</version>

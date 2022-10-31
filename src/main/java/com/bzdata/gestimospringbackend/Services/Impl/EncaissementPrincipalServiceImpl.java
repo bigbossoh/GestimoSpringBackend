@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
@@ -337,26 +338,6 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 break;
             }
         }
-        // try {
-        //     AgenceImmobiliere agence = agenceImmobiliereRepository.findById(dto.getIdAgence()).orElseThrow(() -> {
-        //         throw new EntityNotFoundException("Agence not found",
-        //         ErrorCodes.AGENCE_NOT_FOUND);
-        //     });
-
-        //         String token = smsOrangeConfig.getTokenSmsOrange();
-        //         String numeroLocataire = bailLocation.getUtilisateurOperation().getMobile();
-        //       String message = agence.getNomAgence().toUpperCase() +  " accuse bonne reception de la somme de "+dto.getMontantEncaissement()+" F CFA pour le reglement de votre loyer.";
-        //       boolean isEnvoyer = smsOrangeConfig.sendSms(token, message, "+2250000", numeroLocataire, "Sms Societe");
-        //       if (isEnvoyer) {
-        //           log.info("est envoyer token message numeroLocatire {}, {},{}", token, numeroLocataire,message);
-        //       } else {
-        //         log.info("est pas envoyer token {}, numeroLocatire {},message {}", token, numeroLocataire,message);
-
-        //      }
-        //    // System.out.println("Le toke toke est : " + leTok);
-        // } catch (Exception e) {
-        //     System.err.println(e.getMessage());
-        // }
 
         Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                 .comparing(EncaissementPrincipal::getId);
@@ -372,7 +353,13 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
     @Override
     public double sommeEncaisserParJour(String jour) {
-        // TODO Auto-generated method stub
-        return 0;
+        List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
+                // .map(EncaissementPrincipal::getMontantEncaissement)
+                .filter(leJour -> leJour.getDateEncaissement().equals(jour)).collect(Collectors.toList());
+        List<Double> listEncaissDouble = listEncaissent.stream()
+                .map(EncaissementPrincipal::getMontantEncaissement).collect(Collectors.toList());
+
+        Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
+        return totalEncaissement;
     }
 }
