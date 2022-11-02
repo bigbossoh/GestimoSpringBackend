@@ -137,8 +137,9 @@ final BailMapperImpl bailMapperImpl;
     }
 
     @Override
-    public List<BailAppartementDto> findAll() {
+    public List<BailAppartementDto> findAll(Long idAgence) {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .map(bailMapperImpl::fromBailAppartement)
                 .collect(Collectors.toList());
     }

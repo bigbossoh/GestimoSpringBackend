@@ -50,15 +50,15 @@ public class BailAppartementController {
     }
 
     @Operation(summary = "Liste de toutes les Baux Appartement", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<BailAppartementDto>> findAllBailAppartement() {
-        return ResponseEntity.ok(bailAppartementService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<BailAppartementDto>> findAllBailAppartement(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(bailAppartementService.findAll(idAgence));
     }
 
     @Operation(summary = "Liste de toutes les Opération", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/alloperation")
-    public ResponseEntity<List<OperationDto>> findAllOperations() {
-        return ResponseEntity.ok(operationService.getAllOperation());
+    @GetMapping("/alloperation/{idAgence}")
+    public ResponseEntity<List<OperationDto>> findAllOperations(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(operationService.getAllOperation(idAgence));
     }
 
     @Operation(summary = "Trouver un Bail Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))

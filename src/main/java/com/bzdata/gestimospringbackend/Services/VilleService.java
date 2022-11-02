@@ -10,7 +10,7 @@ public interface VilleService {
 
     boolean delete(Long id);
 
-    List<VilleDto> findAll();
+    List<VilleDto> findAll(Long idAgence);
 
     VilleDto findById(Long id);
 

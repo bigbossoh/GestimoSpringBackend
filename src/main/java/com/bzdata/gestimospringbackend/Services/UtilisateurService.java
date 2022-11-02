@@ -22,13 +22,13 @@ public interface UtilisateurService {
 
     UtilisateurRequestDto findUtilisateurByUsername(String username);
 
-    List<UtilisateurAfficheDto> listOfAllUtilisateurOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurOrderbyName(Long idAgence);
 
-    List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyName(Long idAgence);
 
-    List<UtilisateurAfficheDto> listOfAllUtilisateurProprietaireOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurProprietaireOrderbyName(Long idAgence);
 
-    List<UtilisateurAfficheDto> listOfAllUtilisateurGerantOrderbyName();
+    List<UtilisateurAfficheDto> listOfAllUtilisateurGerantOrderbyName(Long idAgence);
 
     List<UtilisateurAfficheDto> listOfAllUtilisateurSuperviseurOrderbyName();
 

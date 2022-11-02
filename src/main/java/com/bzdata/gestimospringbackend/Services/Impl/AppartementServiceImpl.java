@@ -58,8 +58,9 @@ public class AppartementServiceImpl implements AppartementService {
     }
 
     @Override
-    public List<AppartementDto> findAll() {
+    public List<AppartementDto> findAll(Long idAgence) {
         return appartementRepository.findAll().stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }
@@ -171,10 +172,11 @@ public class AppartementServiceImpl implements AppartementService {
     }
 
     @Override
-    public List<AppartementDto> findAllLibre() {
+    public List<AppartementDto> findAllLibre(Long idAgence) {
         return appartementRepository.findAll(Sort.by(Direction.ASC, "codeAbrvBienImmobilier")).stream()
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .filter((app) -> !app.isOccupied())
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

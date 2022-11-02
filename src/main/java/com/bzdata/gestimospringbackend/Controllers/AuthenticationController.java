@@ -46,7 +46,7 @@ public class AuthenticationController {
     private final UtilisateurRepository utilisateurRepository;
     @PostMapping("/login")
     public ResponseEntity<Utilisateur> login(@RequestBody AuthRequestDto request) {
-
+        log.info("Les valeurs qui viennent sont {},{}", request.getUsername(), request.getPassword());
         authenticate(request.getUsername(), request.getPassword());
         UtilisateurRequestDto utilisateurByUsername = utilisateurService
                 .findUtilisateurByUsername(request.getUsername());
@@ -59,10 +59,7 @@ public class AuthenticationController {
         UserPrincipal userPrincipal = new UserPrincipal(loginUser);
         log.info("depuis la method principale login : {}", userPrincipal.toString());
         HttpHeaders jwtHeader = getJwtHeader(userPrincipal);
-       //  log.info("we are going lo launch sms to the user ");
-//         SmsRequest sms =new SmsRequest("+2550103833350","Le "+loginUser.getUrole()+" "+loginUser.getNom() +" "+"a été connecté avec succès");
-//         twilioSmsSender.sendSms(sms);
-       //  log.info("Sms sent");
+
         return new ResponseEntity<>(loginUser, jwtHeader, OK);
     }
 

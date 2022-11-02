@@ -35,7 +35,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
     public boolean saveNewMontantLoyerBail(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
             double ancienMontantLoyer, Long idBailLocation, Long idAgence) {
         log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation, idAgence);
-   
+
 
         try {
 
@@ -109,7 +109,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
     }
 
     @Override
-    public List<MontantLoyerBailDto> findAll() {
+    public List<MontantLoyerBailDto> findAll(Long idAgence) {
 
         return null;
     }

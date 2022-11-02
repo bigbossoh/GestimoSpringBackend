@@ -8,14 +8,14 @@ import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 public interface BailService {
     boolean closeBail(Long id);
 
-    int nombreBauxActifs();
-    int nombreBauxNonActifs();
+    int nombreBauxActifs(Long idAgence);
+    int nombreBauxNonActifs(Long idAgence);
 
     List<AppelLoyersFactureDto> findAllByIdBienImmobilier(Long id);
 
     List<OperationDto> findAllByIdLocataire(Long id);
 
-    List<OperationDto> findAllBauxLocation();
+    List<OperationDto> findAllBauxLocation(Long idAgence);
 
     boolean deleteOperationById(Long id);
 

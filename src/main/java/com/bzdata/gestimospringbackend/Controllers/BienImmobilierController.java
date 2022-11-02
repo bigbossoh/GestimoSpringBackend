@@ -9,6 +9,7 @@ import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,14 +28,14 @@ public class BienImmobilierController {
     final BienImmobilierService bienImmobilierService;
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien() {
-        return ResponseEntity.ok(bienImmobilierService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(bienImmobilierService.findAll(idAgence));
     }
 
     @Operation(summary = "Liste de toutes les bien immobiliers oqpq", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/allBienOccuper")
-    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp() {
-        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper());
+    @GetMapping("/allBienOccuper/{idAgence}")
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper(idAgence));
     }
 }

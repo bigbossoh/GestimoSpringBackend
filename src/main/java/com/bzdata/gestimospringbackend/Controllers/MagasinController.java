@@ -41,15 +41,15 @@ public class MagasinController {
 
     // TOUT LES Magasins
     @Operation(summary = "Liste de tous les Magasins", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<MagasinResponseDto>> findAllMagasin() {
-        return ResponseEntity.ok(magasinService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<MagasinResponseDto>> findAllMagasin(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(magasinService.findAll( idAgence));
     }
  // TOUT LES Magasins
  @Operation(summary = "Liste de tous les Magasins libres", security = @SecurityRequirement(name = "bearerAuth"))
- @GetMapping("/alllibre")
- public ResponseEntity<List<MagasinResponseDto>> findAllMagasinLibre() {
-     return ResponseEntity.ok(magasinService.findAllLibre());
+ @GetMapping("/alllibre/{idAgence}")
+ public ResponseEntity<List<MagasinResponseDto>> findAllMagasinLibre(@PathVariable("idAgence") Long idAgence) {
+     return ResponseEntity.ok(magasinService.findAllLibre(idAgence));
  }
     @Operation(summary = "Trouver un Magasin par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findmagasinById/{id}")

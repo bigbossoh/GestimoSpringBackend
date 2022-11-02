@@ -13,9 +13,9 @@ public interface MontantLoyerBailService {
 
     boolean delete(Long id);
 
-    List<MontantLoyerBailDto> findAll();
+    List<MontantLoyerBailDto> findAll(Long idAgence);
 
-    MontantLoyerBailDto findById(Long id); 
+    MontantLoyerBailDto findById(Long id);
 
     List<MontantLoyerBailDto> findAllMontantLoyerBailByBailId(Long idBailLocation);
 }

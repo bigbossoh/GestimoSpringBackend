@@ -147,9 +147,10 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     }
 
     @Override
-    public List<ImmeubleDto> findAll() {
+    public List<ImmeubleDto> findAll(Long idAgence) {
         return immeubleRepository.findAll(Sort.by(Direction.ASC, "descriptionImmeuble")).stream()
                 .map(ImmeubleDto::fromEntity)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 
@@ -196,10 +197,11 @@ public class ImmeubleServiceImpl implements ImmeubleService {
     }
 
     @Override
-    public List<ImmeubleEtageDto> findAllPourAffichageImmeuble() {
+    public List<ImmeubleEtageDto> findAllPourAffichageImmeuble(Long idAgence) {
 
         return immeubleRepository.findAll(Sort.by(Direction.ASC, "descriptionImmeuble")).stream()
                 .map(immeubleMapper::fromImmeubleEtage)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
 
     }

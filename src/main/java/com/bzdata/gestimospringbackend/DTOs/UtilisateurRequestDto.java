@@ -1,14 +1,19 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UtilisateurRequestDto {
     private Long id;
     Long idAgence;

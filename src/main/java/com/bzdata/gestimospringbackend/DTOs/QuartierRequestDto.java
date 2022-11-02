@@ -2,12 +2,16 @@ package com.bzdata.gestimospringbackend.DTOs;
 
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuartierRequestDto {
     Long id;
@@ -16,7 +20,7 @@ public class QuartierRequestDto {
     String abrvQuartier;
     String nomQuartier;
     Long idCommune;
-   
+
 
     public static QuartierRequestDto fromEntity(Quartier quartier) {
         if (quartier == null) {

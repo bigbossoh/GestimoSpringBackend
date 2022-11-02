@@ -205,11 +205,12 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
     }
 
     @Override
-    public List<EncaissementPrincipalDTO> findAllEncaissement() {
+    public List<EncaissementPrincipalDTO> findAllEncaissement(Long idAgence) {
         Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                 .comparing(EncaissementPrincipal::getCreationDate);
         return encaissementPrincipalRepository.findAll()
                 .stream()
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .sorted(compareBydatecreation)
                 .map(gestimoWebMapper::fromEncaissementPrincipal)
                 .collect(Collectors.toList());
@@ -347,6 +348,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 .comparing(EncaissementPrincipal::getId);
         return encaissementPrincipalRepository.findAll()
                 .stream().sorted(compareBydatecreation.reversed())
+                .filter(agence->agence.getIdAgence()==dto.getIdAgence())
                 .filter(bien -> Objects.equals(bien.getAppelLoyerEncaissement().getBailLocationAppelLoyer()
                         .getBienImmobilierOperation().getId(),
                         appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId()))
@@ -356,16 +358,18 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
     }
 
     @Override
-    public double sommeEncaisserParJour(String jour) {
+    public double sommeEncaisserParJour(String jour, Long idAgence) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-        .withLocale(Locale.FRENCH);
-        LocalDate localDate = LocalDate.parse(jour,formatter);
-        System.out.println(" -----------------------------------" );
+                .withLocale(Locale.FRENCH);
+        LocalDate localDate = LocalDate.parse(jour, formatter);
+        System.out.println(" -----------------------------------");
         System.out.println("La date est la suivante : " + localDate);
 
         List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
                 // .map(EncaissementPrincipal::getMontantEncaissement)
-                .filter(leJour -> leJour.getDateEncaissement().equals(localDate)).collect(Collectors.toList());
+                .filter(leJour -> leJour.getDateEncaissement().equals(localDate))
+.filter(agence->agence.getIdAgence()==idAgence)
+                .collect(Collectors.toList());
         List<Double> listEncaissDouble = listEncaissent.stream()
                 .map(EncaissementPrincipal::getMontantEncaissement).collect(Collectors.toList());
 

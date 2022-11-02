@@ -11,7 +11,7 @@ public interface EtageService {
 
     boolean delete(Long id);
 
-    List<EtageDto> findAll();
+    List<EtageDto> findAll(Long idAgence);
 
     EtageDto findById(Long id);
 

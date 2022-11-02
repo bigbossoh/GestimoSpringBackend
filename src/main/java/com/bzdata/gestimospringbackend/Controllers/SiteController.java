@@ -58,10 +58,9 @@ public class SiteController {
 
     // TOUT LES SITE
     @Operation(summary = "Liste de tous les Sites", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-
-    public ResponseEntity<List<SiteResponseDto>> findAllSites() {
-        return ResponseEntity.ok(siteService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<SiteResponseDto>> findAllSites(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(siteService.findAll(idAgence));
     }
 
     // GET Site BY ID

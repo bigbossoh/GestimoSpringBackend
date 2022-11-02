@@ -55,15 +55,15 @@ public class ImmeubleController {
     }
 
     @Operation(summary = "Liste de toutes les Immeubles", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<ImmeubleDto>> findAllImmeuble() {
-        return ResponseEntity.ok(immeubleService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<ImmeubleDto>> findAllImmeuble(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(immeubleService.findAll(idAgence));
     }
 
     @Operation(summary = "Liste de tous les Immeubles avec leur proprietaire ", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/affichetoutlesimmeubles")
-    public ResponseEntity<List<ImmeubleEtageDto>> affichageDesImmeubles() {
-        return ResponseEntity.ok(immeubleService.findAllPourAffichageImmeuble());
+    @GetMapping("/affichetoutlesimmeubles/{idAgence}")
+    public ResponseEntity<List<ImmeubleEtageDto>> affichageDesImmeubles(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(immeubleService.findAllPourAffichageImmeuble(idAgence));
     }
     @Operation(summary = "Trouver une Immeuble par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")

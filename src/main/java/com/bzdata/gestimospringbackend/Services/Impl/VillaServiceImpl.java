@@ -166,17 +166,19 @@ public class VillaServiceImpl implements VillaService {
     }
 
     @Override
-    public Long maxOfNumBien() {
+    public Long maxOfNumBien(Long idAgence) {
 
         LongSummaryStatistics collectMaxNumBien = villaRepository.findAll().stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.summarizingLong(Villa::getNumVilla));
         log.info(" countNberOfRecordVilla {}", collectMaxNumBien.getMax());
         return collectMaxNumBien.getMax();
     }
 
     @Override
-    public List<VillaDto> findAll() {
+    public List<VillaDto> findAll(Long idAgence) {
         return villaRepository.findAll().stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .map(gestimoWebMapperImpl::fromVilla)
                 .collect(Collectors.toList());
     }
@@ -211,8 +213,9 @@ public class VillaServiceImpl implements VillaService {
     }
 
     @Override
-    public List<VillaDto> findAllLibre() {
+    public List<VillaDto> findAllLibre(Long idAgence) {
         return villaRepository.findAll().stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .map(gestimoWebMapperImpl::fromVilla)
                 .filter((vil) -> vil.isOccupied() == false)
                 .collect(Collectors.toList());

@@ -10,7 +10,7 @@ public interface EncaissementPrincipalService {
 
     boolean saveEncaissementMasse(List<EncaissementPayloadDto> dtos);
 
-    List<EncaissementPrincipalDTO> findAllEncaissement();
+    List<EncaissementPrincipalDTO> findAllEncaissement(Long idAgence);
 
     double getTotalEncaissementByIdAppelLoyer(Long idAppelLoyer);
 
@@ -22,7 +22,7 @@ public interface EncaissementPrincipalService {
 
     List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(EncaissementPayloadDto dto);
 
-    double sommeEncaisserParJour(String jour);
+    double sommeEncaisserParJour(String jour,Long idAgence);
 
     boolean delete(Long id);
 }

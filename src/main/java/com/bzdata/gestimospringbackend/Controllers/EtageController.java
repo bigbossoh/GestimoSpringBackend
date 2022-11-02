@@ -48,9 +48,9 @@ public class EtageController {
     }
 
     @Operation(summary = "Liste de toutes les Etages", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<EtageDto>> findAllEtage() {
-        return ResponseEntity.ok(etageService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<EtageDto>> findAllEtage(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(etageService.findAll(idAgence));
     }
 
     @Operation(summary = "Trouver un Etage par son ID", security = @SecurityRequirement(name = "bearerAuth"))
