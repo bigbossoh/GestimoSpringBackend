@@ -11,7 +11,7 @@ public interface BailVillaService {
 
     boolean delete(Long id);
 
-    List<BailVillaDto> findAll();
+    List<BailVillaDto> findAll(Long idAgence);
 
     BailVillaDto findById(Long id);
 

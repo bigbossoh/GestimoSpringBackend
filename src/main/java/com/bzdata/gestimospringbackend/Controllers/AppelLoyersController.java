@@ -79,39 +79,39 @@ public class AppelLoyersController {
     }
 
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllPeriodeByAnnee/{annee}")
-    public ResponseEntity<List<PeriodeDto>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee) {
+    @GetMapping("/findAllPeriodeByAnnee/{annee}/{idAgence}")
+    public ResponseEntity<List<PeriodeDto>> findAllPeriodeByAnnee(@PathVariable("annee") Integer annee,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appelperiode by annee {}", annee);
-        return ResponseEntity.ok(appelLoyerService.listOfPerodesByAnnee(annee));
+        return ResponseEntity.ok(appelLoyerService.listOfPerodesByAnnee(annee,idAgence));
     }
 
     @Operation(summary = "Trouver tous les période des appel", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllPeriodeAppel")
-    public ResponseEntity<List<PeriodeDto>> findAllPeriode() {
+    @GetMapping("/findAllPeriodeAppel/{idAgence}")
+    public ResponseEntity<List<PeriodeDto>> findAllPeriode(@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appelperiode by annee {}");
-        return ResponseEntity.ok(appelLoyerService.findAllPeriode());
+        return ResponseEntity.ok(appelLoyerService.findAllPeriode(idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllPeriodeChiffreEtLettreByAnnee/{annee}")
+    @GetMapping("/findAllPeriodeChiffreEtLettreByAnnee/{annee}/{idAgence}")
     public ResponseEntity<List<AnneeAppelLoyersDto>> findAllPeriodeChiffreEtLettreByAnnee(
-            @PathVariable("annee") Integer annee) {
+            @PathVariable("annee") Integer annee,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appelperiode by annee {}", annee);
-        return ResponseEntity.ok(appelLoyerService.listOfAppelLoyerByAnnee(annee));
+        return ResponseEntity.ok(appelLoyerService.listOfAppelLoyerByAnnee(annee,idAgence));
     }
 
     @Operation(summary = "Trouver toutes les années appels loyers ", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/listOfDistinctAnneeAppel")
-    public ResponseEntity<List<Integer>> listOfDistinctAnneeAppel() {
+    @GetMapping("/listOfDistinctAnneeAppel/{idAgence}")
+    public ResponseEntity<List<Integer>> listOfDistinctAnneeAppel(@PathVariable("idAgence") Long idAgence) {
         log.info("Find liste des annees Appel periode.");
-        return ResponseEntity.ok(appelLoyerService.listOfDistinctAnnee());
+        return ResponseEntity.ok(appelLoyerService.listOfDistinctAnnee(idAgence));
     }
 
     @Operation(summary = "Lister tous les appels de BD", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllAppelsLoyer")
-    public ResponseEntity<List<AppelLoyersFactureDto>> listTousAppelsLoyers() {
+    @GetMapping("/findAllAppelsLoyer/{idAgence}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> listTousAppelsLoyers(@PathVariable("idAgence") Long idAgence) {
         log.info("Liste de tous les appels ");
-        return ResponseEntity.ok(appelLoyerService.findAll());
+        return ResponseEntity.ok(appelLoyerService.findAll(idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
@@ -122,30 +122,30 @@ public class AppelLoyersController {
     }
 
     @Operation(summary = "Trouver tous les appels loyers impayé par periode", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/impayeParMois/{periode}")
-    public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode) {
+    @GetMapping("/impayeParMois/{periode}/{idAgence}")
+    public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by loy {}", periode);
-        return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode));
+        return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode,idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/payeParMois/{periode}")
-    public ResponseEntity<Double> payeLoyerParMois(@PathVariable("periode") String periode) {
+    @GetMapping("/payeParMois/{periode}/{idAgence}")
+    public ResponseEntity<Double> payeLoyerParMois(@PathVariable("periode") String periode,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by loy {}", periode);
-        return ResponseEntity.ok(appelLoyerService.payeParPeriode(periode));
+        return ResponseEntity.ok(appelLoyerService.payeParPeriode(periode,idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers payé par Année", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/payeParAnnee/{annee}")
-    public ResponseEntity<Double> payeLoyerParAnnee(@PathVariable("annee") int annee) {
+    @GetMapping("/payeParAnnee/{annee}/{idAgence}")
+    public ResponseEntity<Double> payeLoyerParAnnee(@PathVariable("annee") int annee,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by loy {}", annee);
-        return ResponseEntity.ok(appelLoyerService.payeParAnnee(annee));
+        return ResponseEntity.ok(appelLoyerService.payeParAnnee(annee,idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers payé par Année", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/impayeParAnnee/{annee}")
-    public ResponseEntity<Double> impayeLoyerParAnnee(@PathVariable("annee") int annee) {
+    @GetMapping("/impayeParAnnee/{annee}/{idAgence}")
+    public ResponseEntity<Double> impayeLoyerParAnnee(@PathVariable("annee") int annee,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by loy {}", annee);
-        return ResponseEntity.ok(appelLoyerService.impayeParAnnee(annee));
+        return ResponseEntity.ok(appelLoyerService.impayeParAnnee(annee,idAgence));
     }
 }

@@ -124,9 +124,10 @@ public class SiteServiceImpl implements SiteService {
     }
 
     @Override
-    public List<SiteResponseDto> findAll() {
-        return siteRepository.findAll(Sort.by(Sort.Direction.ASC, "nomSite")).stream()
+    public List<SiteResponseDto> findAll(Long idAgence) {
+        return siteRepository.findAll().stream()
                 .map(SiteResponseDto::fromEntity)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

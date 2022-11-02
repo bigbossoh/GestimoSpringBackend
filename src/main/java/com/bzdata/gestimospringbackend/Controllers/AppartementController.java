@@ -48,14 +48,14 @@ public class AppartementController {
     }
 
     @Operation(summary = "Liste de toutes les Appartement", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<AppartementDto>> findAllAppartement() {
-        return ResponseEntity.ok(appartementService.findAll());
+    @GetMapping("/all/{id}")
+    public ResponseEntity<List<AppartementDto>> findAllAppartement(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(appartementService.findAll(id));
     }
     @Operation(summary = "Liste de toutes les Appartements Libres", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/alllibre")
-    public ResponseEntity<List<AppartementDto>> findAllAppartementLibre() {
-        return ResponseEntity.ok(appartementService.findAllLibre());
+    @GetMapping("/alllibre/{id}")
+    public ResponseEntity<List<AppartementDto>> findAllAppartementLibre(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(appartementService.findAllLibre(id));
     }
     @Operation(summary = "Trouver un Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")

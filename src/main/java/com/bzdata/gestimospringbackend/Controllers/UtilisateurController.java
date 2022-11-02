@@ -50,28 +50,28 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyNameByAgence(idAgence));
     }
     //findUtilisateurByUsername
-    @GetMapping("/all")
-    public ResponseEntity<List<UtilisateurAfficheDto>> getAllUtilisateursByOrder() {
-        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurOrderbyName());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllUtilisateursByOrder(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurOrderbyName(idAgence));
     }
 
-    @GetMapping("/locataires/all")
-    public ResponseEntity<List<UtilisateurAfficheDto>> getAllLocatairesByOrder() {
-        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyName());
+    @GetMapping("/locataires/all/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllLocatairesByOrder(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurLocataireOrderbyName(idAgence));
     }
     @GetMapping("/locataires/ayanbail")
     public ResponseEntity<List<LocataireEncaisDTO>> getAllLocatairesAvecBail() {
         return ResponseEntity.ok(utilisateurService.listOfLocataireAyantunbail());
     }
 
-    @GetMapping("/proprietaires/all")
-    public ResponseEntity<List<UtilisateurAfficheDto>> getAllProprietaireByOrder() {
-        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurProprietaireOrderbyName());
+    @GetMapping("/proprietaires/all/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllProprietaireByOrder(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurProprietaireOrderbyName(idAgence));
     }
 
-    @GetMapping("/gerants/all")
-    public ResponseEntity<List<UtilisateurAfficheDto>> getAllGerantsByOrder() {
-        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurGerantOrderbyName());
+    @GetMapping("/gerants/all/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> getAllGerantsByOrder(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurGerantOrderbyName(idAgence));
     }
 
     @GetMapping("/superviseurs/all")

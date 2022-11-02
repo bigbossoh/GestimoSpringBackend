@@ -5,6 +5,6 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
 
 public interface BienImmobilierService {
-    List<BienImmobilierAffiheDto> findAll();
-    List<BienImmobilierAffiheDto> findAllBienOccuper();
+    List<BienImmobilierAffiheDto> findAll(Long idAgence);
+    List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence);
 }

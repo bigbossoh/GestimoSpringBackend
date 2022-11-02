@@ -11,7 +11,7 @@ public interface CommuneService {
 
     boolean delete(Long id);
 
-    List<CommuneRequestDto> findAll();
+    List<CommuneRequestDto> findAll(Long idAgence);
 
     CommuneRequestDto findById(Long id);
 

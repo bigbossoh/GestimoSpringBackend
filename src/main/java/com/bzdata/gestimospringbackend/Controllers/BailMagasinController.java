@@ -48,9 +48,9 @@ public class BailMagasinController {
     }
 
     @Operation(summary = "Liste de toutes les Baux Magasin", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<BailMagasinDto>> findAllBailMagasin() {
-        return ResponseEntity.ok(bailMagasinService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<BailMagasinDto>> findAllBailMagasin(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(bailMagasinService.findAll(idAgence));
     }
 
     @Operation(summary = "Trouver un Bail Magain par son ID", security = @SecurityRequirement(name = "bearerAuth"))

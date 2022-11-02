@@ -90,10 +90,11 @@ public class CommuneServiceImpl implements CommuneService {
     }
 
     @Override
-    public List<CommuneRequestDto> findAll() {
+    public List<CommuneRequestDto> findAll(Long idAgence) {
         return communeRepository.findAll()
                 // Sort.by(Direction.ASC, "nomCommune"))
                 .stream()
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .sorted(Comparator.comparing(Commune::getNomCommune))
                 .map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());

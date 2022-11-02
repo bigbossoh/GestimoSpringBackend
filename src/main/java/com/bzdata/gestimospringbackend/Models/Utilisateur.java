@@ -56,8 +56,8 @@ public class Utilisateur extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     Role urole;
-    @ManyToOne
-    Utilisateur userCreate;
+    // @ManyToOne
+    // Utilisateur userCreate;
     @OneToMany(mappedBy = "utilisateurOperation")
     List<Operation> operationUser;
     @OneToMany(mappedBy = "utilisateurEncaissement")

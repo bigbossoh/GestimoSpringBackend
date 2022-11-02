@@ -42,17 +42,17 @@ public class VillaController {
 
     // TOUT LES VILLA
     @Operation(summary = "Liste de tous les villas", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<VillaDto>> findAllVilla() {
-        return ResponseEntity.ok(villaService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<VillaDto>> findAllVilla(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(villaService.findAll(idAgence));
     }
 
     // TOUT LES VILLAS LIBRES
     @Operation(summary = "Liste de tous les villas libres ", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/alllibre")
+    @GetMapping("/alllibre/{idAgence}")
 
-    public ResponseEntity<List<VillaDto>> findAllVillaLibre() {
-        return ResponseEntity.ok(villaService.findAllLibre());
+    public ResponseEntity<List<VillaDto>> findAllVillaLibre(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(villaService.findAllLibre(idAgence));
     }
 
     @GetMapping("/findVillaById/{id}")

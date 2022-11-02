@@ -10,7 +10,7 @@ public interface BailAppartementService {
 
     boolean delete(Long id);
 
-    List<BailAppartementDto> findAll();
+    List<BailAppartementDto> findAll(Long idAgence);
 
     BailAppartementDto findById(Long id);
 

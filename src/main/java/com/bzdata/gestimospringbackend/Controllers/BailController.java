@@ -37,16 +37,16 @@ public class BailController {
         return ResponseEntity.ok(bailService.closeBail(id));
     }
     @Operation(summary = "nombre de bail actif", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/nombrebailactif")
-    public ResponseEntity<Integer> nombrebailactif() {
+    @GetMapping("/nombrebailactif/{idAgence}")
+    public ResponseEntity<Integer> nombrebailactif(@PathVariable("idAgence") Long idAgence) {
         log.info("nombre de baux actifs");
-        return ResponseEntity.ok(bailService.nombreBauxActifs());
+        return ResponseEntity.ok(bailService.nombreBauxActifs(idAgence));
     }
     @Operation(summary = "nombre de bail non actif", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/nombrebailnonactif")
-    public ResponseEntity<Integer> nombrebailnonactif() {
+    @GetMapping("/nombrebailnonactif/{idAgence}")
+    public ResponseEntity<Integer> nombrebailnonactif(@PathVariable("idAgence") Long idAgence) {
         log.info("nombre de baux non actifs");
-        return ResponseEntity.ok(bailService.nombreBauxNonActifs());
+        return ResponseEntity.ok(bailService.nombreBauxNonActifs(idAgence));
     }
     @Operation(summary = "All Bail By BienImmobilier", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/getallbailbybien/{id}")

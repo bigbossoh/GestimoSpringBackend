@@ -137,9 +137,10 @@ public class BailVillaServiceImpl implements BailVillaService {
     }
 
     @Override
-    public List<BailVillaDto> findAll() {
+    public List<BailVillaDto> findAll(Long idAgence) {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
                 .map(bailMapper::fromBailVilla)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

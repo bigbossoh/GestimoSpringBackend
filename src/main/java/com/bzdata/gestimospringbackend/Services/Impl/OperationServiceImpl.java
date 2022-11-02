@@ -33,10 +33,11 @@ public class OperationServiceImpl implements OperationService {
 final BailMapperImpl bailMapperImpl;
 
     @Override
-    public List<OperationDto> getAllOperation() {
+    public List<OperationDto> getAllOperation(Long idAgence) {
 
         return bailLocationRepository.findAll().stream()
                 .map(bailMapperImpl::fromOperation)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
 
     }

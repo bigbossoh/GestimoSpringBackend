@@ -52,9 +52,9 @@ public class VilleController {
 
     // TOUTES LES VILLES
     @Operation(summary = "Liste de toutes les villes", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<VilleDto>> findAllVilles() {
-        return ResponseEntity.ok(villeService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<VilleDto>> findAllVilles(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(villeService.findAll(idAgence));
     }
 
     // GET VILLE BY ID

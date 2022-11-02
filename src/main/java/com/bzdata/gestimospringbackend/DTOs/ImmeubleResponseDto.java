@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ImmeubleResponseDto {
 //    Long id;

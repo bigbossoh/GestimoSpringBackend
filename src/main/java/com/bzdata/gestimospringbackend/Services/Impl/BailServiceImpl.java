@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
+import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
@@ -81,15 +82,15 @@ public class BailServiceImpl implements BailService {
             System.out.println("La date de debut dateClotureEffectif est: " + dateClotureEffectif);
             // Determinons la liste des appels loyers dont la date de debut est superieur a
             // la dateClotureEffecture
-            List<AppelLoyersFactureDto> listeAppelLoyerAyantDateDebutSupDateCloture = appelLoyerService.findAll()
+            List<AppelLoyer> listeAppelLoyerAyantDateDebutSupDateCloture = appelLoyerRepository.findAll()
                     .stream()
-                    .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getIdBailLocation() == newBailLocation
+                    .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getBailLocationAppelLoyer().getId() == newBailLocation
                             .getId())
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getDateDebutMoisAppelLoyer()
                             .isAfter(dateClotureEffectif))
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getSoldeAppelLoyer() == montantBail)
                     .collect(Collectors.toList());
-            for (AppelLoyersFactureDto dto : listeAppelLoyerAyantDateDebutSupDateCloture) {
+            for (AppelLoyer dto : listeAppelLoyerAyantDateDebutSupDateCloture) {
                 System.out.println(dto);
                 appelLoyerService.deleteAppelDto(dto.getId());
             }
@@ -99,10 +100,11 @@ public class BailServiceImpl implements BailService {
     }
 
     @Override
-    public int nombreBauxActifs() {
+    public int nombreBauxActifs(Long idAgence) {
 
         return (int) bailLocationRepository.findAll()
                 .stream()
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .filter(encourrs -> encourrs.isEnCoursBail())
                 .count();
     }
@@ -140,7 +142,7 @@ public class BailServiceImpl implements BailService {
     }
 
     @Override
-    public List<OperationDto> findAllBauxLocation() {
+    public List<OperationDto> findAllBauxLocation(Long idAgence) {
         // BailLocation
         // bailLocationRepository.findAll()
 
@@ -180,9 +182,10 @@ public class BailServiceImpl implements BailService {
     }
 
     @Override
-    public int nombreBauxNonActifs() {
+    public int nombreBauxNonActifs(Long idAgence) {
         return (int) bailLocationRepository.findAll()
                 .stream()
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .filter(encourrs -> encourrs.isEnCoursBail()==false)
                 .count();
     }

@@ -91,9 +91,10 @@ public class EtageServiceImpl implements EtageService {
     }
 
     @Override
-    public List<EtageDto> findAll() {
+    public List<EtageDto> findAll(Long idAgence) {
         return etageRepository.findAll().stream()
                 .map(EtageDto::fromEntity)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 
