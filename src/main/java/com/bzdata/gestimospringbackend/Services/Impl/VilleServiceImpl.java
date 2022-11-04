@@ -96,10 +96,10 @@ public class VilleServiceImpl implements VilleService {
     }
 
     @Override
-    public List<VilleDto> findAll(Long idAgence) {
+    public List<VilleDto> findAll() {
         return villeRepository.findAll(Sort.by(Direction.ASC, "nomVille")).stream()
                 .map(VilleDto::fromEntity)
-                .filter(agence->agence.getIdAgence()==idAgence)
+                
                 .collect(Collectors.toList());
     }
 

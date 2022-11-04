@@ -52,9 +52,9 @@ public class CommuneController {
 
     // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Communes", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all/{idAgence}")
-    public ResponseEntity<List<CommuneRequestDto>> findAllCommune(@PathVariable("idAgence") Long idAgence) {
-        return ResponseEntity.ok(communeService.findAll(idAgence));
+    @GetMapping("/all")
+    public ResponseEntity<List<CommuneRequestDto>> findAllCommune() {
+        return ResponseEntity.ok(communeService.findAll());
     }
 
     @Operation(summary = "Trouver une commune par son ID", security = @SecurityRequirement(name = "bearerAuth"))
