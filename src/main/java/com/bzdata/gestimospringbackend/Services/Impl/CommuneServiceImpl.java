@@ -90,11 +90,11 @@ public class CommuneServiceImpl implements CommuneService {
     }
 
     @Override
-    public List<CommuneRequestDto> findAll(Long idAgence) {
+    public List<CommuneRequestDto> findAll() {
         return communeRepository.findAll()
                 // Sort.by(Direction.ASC, "nomCommune"))
                 .stream()
-                .filter(agence->agence.getIdAgence()==idAgence)
+
                 .sorted(Comparator.comparing(Commune::getNomCommune))
                 .map(CommuneRequestDto::fromEntity)
                 .collect(Collectors.toList());
@@ -138,7 +138,7 @@ public class CommuneServiceImpl implements CommuneService {
 
     @Override
     public List<CommuneResponseDto> findAllByIdVille(Long id) {
-        Optional<Ville>  v = villeRepository.findById(id);
+        Optional<Ville> v = villeRepository.findById(id);
 
         log.info("We are going to get back the Ville By {}", id);
 
@@ -151,7 +151,7 @@ public class CommuneServiceImpl implements CommuneService {
             log.error("Commune not found for the Ville.");
             return null;
         }
-        log.info("We are going to get back the Ville  {}",v.get());
+        log.info("We are going to get back the Ville  {}", v.get());
         return communeRepository.findByVille(v.get()).stream()
                 .map(CommuneResponseDto::fromEntity)
                 .collect(Collectors.toList());
