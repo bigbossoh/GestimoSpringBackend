@@ -3,12 +3,16 @@ package com.bzdata.gestimospringbackend.DTOs;
 import com.bzdata.gestimospringbackend.Models.Pays;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PaysDto {
     Long id;
@@ -16,7 +20,7 @@ public class PaysDto {
     Long idCreateur;
     String abrvPays;
     String nomPays;
-    
+
 
     public static PaysDto fromEntity(Pays pays) {
         if (pays == null) {

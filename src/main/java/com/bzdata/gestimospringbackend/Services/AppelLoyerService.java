@@ -14,7 +14,7 @@ public interface AppelLoyerService {
 
     boolean deleteAppelDto(Long id);
 
-    List<AppelLoyersFactureDto> findAll();
+    List<AppelLoyersFactureDto> findAll(Long idAgence);
 
     AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bienImmobilier);
 
@@ -26,27 +26,27 @@ public interface AppelLoyerService {
 
     List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
 
-    List<Integer> listOfDistinctAnnee();
+    List<Integer> listOfDistinctAnnee( Long idAgence);
 
-    List<PeriodeDto> listOfPerodesByAnnee(Integer annee);
+    List<PeriodeDto> listOfPerodesByAnnee(Integer annee,Long idAgence);
 
-    List<PeriodeDto> findAllPeriode();
+    List<PeriodeDto> findAllPeriode(Long idAgence);
 
-    List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee);
+    List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee,Long idAgence);
 
     List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
 
-    double impayeParPeriode(String periode);
+    double impayeParPeriode(String periode,Long idAgence);
 
-    double payeParPeriode(String periode);
+    double payeParPeriode(String periode,Long idAgence);
 
-    double impayeParAnnee(int annee);
+    double impayeParAnnee(int annee,Long idAgence);
 
-    double payeParAnnee(int annee);
+    double payeParAnnee(int annee,Long idAgence);
 
-    Long nombreBauxImpaye(String periode);
+    Long nombreBauxImpaye(String periode,Long idAgence);
 
-    Long nombreBauxPaye(String periode);
+    Long nombreBauxPaye(String periode,Long idAgence);
 
-    double montantBeauxImpayer(String periode);
+    double montantBeauxImpayer(String periode,Long idAgence);
 }

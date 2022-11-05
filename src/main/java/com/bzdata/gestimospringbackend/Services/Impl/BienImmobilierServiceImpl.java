@@ -26,15 +26,17 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
     final GestimoWebMapperImpl gestimoWebMapperImpl;
 
     @Override
-    public List<BienImmobilierAffiheDto> findAll() {
+    public List<BienImmobilierAffiheDto> findAll(Long idAgence) {
         return bienImmobilierRepository.findAll().stream()
                 .map(gestimoWebMapperImpl::fromBienImmobilier)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<BienImmobilierAffiheDto> findAllBienOccuper() {
+    public List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence) {
         return bienImmobilierRepository.findAll().stream()
+        .filter(agence->agence.getIdAgence()==idAgence)
                 .filter(Bienimmobilier::isOccupied)
                 .map(gestimoWebMapperImpl::fromBienImmobilier)
                 .collect(Collectors.toList());

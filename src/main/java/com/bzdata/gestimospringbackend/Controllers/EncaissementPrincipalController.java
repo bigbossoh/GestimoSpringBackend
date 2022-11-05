@@ -54,10 +54,10 @@ public class EncaissementPrincipalController {
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementMasse(dtos));
     }
     @Operation(summary = "Listés tous les envaissements de lae BD", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllEncaissementPrincipal")
-    public ResponseEntity<List<EncaissementPrincipalDTO>> listTousEncaissementsPrincipal() {
+    @GetMapping("/findAllEncaissementPrincipal/{idAgence}")
+    public ResponseEntity<List<EncaissementPrincipalDTO>> listTousEncaissementsPrincipal(@PathVariable("idAgence") Long idAgence) {
         log.info("Liste de tous les envaissements");
-        return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissement());
+        return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissement(idAgence));
     }
     @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/totalencaissement/{id}")
@@ -85,8 +85,15 @@ public class EncaissementPrincipalController {
 // GET ALL ENCAISSEMENTS BY ID BIEN IMMOBILIER
     @Operation(summary = "Total des encaissements par IdBienImmobilioer d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allencaissementByIdBien/{id}")
-    public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(@PathVariable("id") Long id) {
+    public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(
+            @PathVariable("id") Long id) {
         log.info(" find All Encaissement By IdBienImmobilier  {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdBienImmobilier(id));
+    }
+    @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/totalencaissementjournalier/{jour}/{idAgence}")
+    public ResponseEntity<Double> totalEncaissementParJour(@PathVariable("jour") String jour,@PathVariable("idAgence") Long idAgence) {
+        log.info("Find totalencaissement by ID AppelLoyer {}", jour);
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour,idAgence));
     }
 }

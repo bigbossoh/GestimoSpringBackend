@@ -9,7 +9,7 @@ public interface QuartierService {
 
     boolean delete(Long id);
 
-    List<QuartierRequestDto> findAll();
+    List<QuartierRequestDto> findAll(Long idAgence);
 
     QuartierRequestDto findById(Long id);
 

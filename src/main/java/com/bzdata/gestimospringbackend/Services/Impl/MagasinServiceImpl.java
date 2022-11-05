@@ -57,18 +57,20 @@ public class MagasinServiceImpl implements MagasinService {
     }
 
     @Override
-    public Long maxOfNumBienMagasin() {
+    public Long maxOfNumBienMagasin(Long idAgence) {
         LongSummaryStatistics collectMaxNumBien = magasinRepository.findAll()
                 .stream()
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.summarizingLong(Magasin::getNumMagasin));
         return collectMaxNumBien.getMax();
     }
 
     @Override
-    public List<MagasinResponseDto> findAll() {
+    public List<MagasinResponseDto> findAll(Long idAgence) {
         log.info("All Magasin 21 {}", magasinRepository.findAll().toArray());
         return magasinRepository.findAll().stream()
                 .map(MagasinResponseDto::fromEntity)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 
@@ -123,10 +125,11 @@ public class MagasinServiceImpl implements MagasinService {
     }
 
     @Override
-    public List<MagasinResponseDto> findAllLibre() {
+    public List<MagasinResponseDto> findAllLibre(Long idAgence) {
         return magasinRepository.findAll().stream()
                 .map(MagasinResponseDto::fromEntity)
                 .filter((mag) -> !mag.isOccupied())
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

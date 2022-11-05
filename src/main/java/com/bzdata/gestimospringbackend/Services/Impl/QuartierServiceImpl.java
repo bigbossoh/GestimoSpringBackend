@@ -92,9 +92,10 @@ public class QuartierServiceImpl implements QuartierService {
     }
 
     @Override
-    public List<QuartierRequestDto> findAll() {
+    public List<QuartierRequestDto> findAll(Long idAgence) {
         return quartierRepository.findAll(Sort.by(Direction.ASC, "nomQuartier")).stream()
                 .map(QuartierRequestDto::fromEntity)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

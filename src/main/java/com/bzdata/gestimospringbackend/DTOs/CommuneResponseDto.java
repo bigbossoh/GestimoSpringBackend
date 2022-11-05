@@ -2,13 +2,17 @@ package com.bzdata.gestimospringbackend.DTOs;
 
 import com.bzdata.gestimospringbackend.Models.Commune;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class CommuneResponseDto {

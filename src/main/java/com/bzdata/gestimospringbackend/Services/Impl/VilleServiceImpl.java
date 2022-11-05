@@ -99,6 +99,7 @@ public class VilleServiceImpl implements VilleService {
     public List<VilleDto> findAll() {
         return villeRepository.findAll(Sort.by(Direction.ASC, "nomVille")).stream()
                 .map(VilleDto::fromEntity)
+                
                 .collect(Collectors.toList());
     }
 

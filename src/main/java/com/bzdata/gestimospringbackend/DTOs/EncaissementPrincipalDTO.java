@@ -7,9 +7,13 @@ import com.bzdata.gestimospringbackend.enumeration.EntiteOperation;
 import com.bzdata.gestimospringbackend.enumeration.ModePaiement;
 import com.bzdata.gestimospringbackend.enumeration.OperationType;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class EncaissementPrincipalDTO {
     private Long id;
   private  Long idAgence;

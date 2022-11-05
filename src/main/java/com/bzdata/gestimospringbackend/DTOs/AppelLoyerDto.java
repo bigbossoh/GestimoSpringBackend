@@ -4,11 +4,15 @@ import java.time.LocalDate;
 
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 // @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerDto {
     private Long id;

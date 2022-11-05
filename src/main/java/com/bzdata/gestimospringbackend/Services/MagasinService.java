@@ -12,10 +12,10 @@ public interface MagasinService {
     MagasinDto saveUnMagasin(MagasinDto dto);
     boolean delete(Long id);
 
-    Long maxOfNumBienMagasin();
+    Long maxOfNumBienMagasin(Long idAgence);
 
-    List<MagasinResponseDto> findAll();
-    List<MagasinResponseDto> findAllLibre();
+    List<MagasinResponseDto> findAll(Long idAgence);
+    List<MagasinResponseDto> findAllLibre(Long idAgence);
     MagasinDto findById(Long id);
 
     MagasinDto findByName(String nom);

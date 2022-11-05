@@ -108,7 +108,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             newUtilisateur.setActivated(true);
             newUtilisateur.setUsername(dto.getMobileAgence());
             newUtilisateur.setNonLocked(true);
-            newUtilisateur.setUserCreate(userCreate);
+           // newUtilisateur.setUserCreate(userCreate);
             Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
             String token = generateVerificationToken(saveUser);
             String message = mailContentBuilder
@@ -211,7 +211,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         }
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
         Stream<Long> agenceImmobiliereStream = utilisateurs.stream()
-                .filter(user -> user.getUserCreate().getId().equals(id)).map(Utilisateur::getIdAgence);
+                .filter(user -> user.getIdCreateur().equals(id)).map(Utilisateur::getIdAgence);
         if (agenceImmobiliereStream.findAny().isPresent()) {
             throw new InvalidOperationException("Impossible de supprimer une agence qui a des utilisateurs déjà crées",
                     ErrorCodes.AGENCE_ALREADY_IN_USE);
@@ -287,7 +287,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                 newUtilisateur.setActivated(true);
                 newUtilisateur.setUsername(dto.getMobileAgence());
                 newUtilisateur.setNonLocked(true);
-                newUtilisateur.setUserCreate(userCreate);
+               // newUtilisateur.setUserCreate(userCreate);
                 Utilisateur saveUser = utilisateurRepository.save(newUtilisateur);
                 String token = generateVerificationToken(saveUser);
                 String message = mailContentBuilder

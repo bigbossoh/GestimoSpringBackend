@@ -10,7 +10,8 @@ public interface SiteService {
     SiteResponseDto saveSite(SiteRequestDto dto);
     boolean delete(Long id);
 
-    List<SiteResponseDto> findAll();
+    List<SiteResponseDto> findAll(Long id);
+
 
     SiteResponseDto findById(Long id);
 

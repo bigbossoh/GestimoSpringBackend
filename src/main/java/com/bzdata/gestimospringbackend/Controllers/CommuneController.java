@@ -74,7 +74,7 @@ public class CommuneController {
     /*
      * @Operation(summary = "Trouver une commune par sa Ville", security
      * = @SecurityRequirement(name = "bearerAuth"))
-     * 
+     *
      * @GetMapping("/findByVille")
      * public ResponseEntity<List<CommuneDto>> findByPays(@RequestBody VilleDto
      * villeDto) {

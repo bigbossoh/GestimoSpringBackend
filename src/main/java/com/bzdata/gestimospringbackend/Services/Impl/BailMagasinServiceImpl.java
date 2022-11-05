@@ -142,9 +142,10 @@ public class BailMagasinServiceImpl implements BailMagasinService {
     }
 
     @Override
-    public List<BailMagasinDto> findAll() {
+    public List<BailMagasinDto> findAll(Long idAgence) {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
                 .map(bailMapperImpl::fromBailMagasin)
+                .filter(agence->agence.getIdAgence()==idAgence)
                 .collect(Collectors.toList());
     }
 

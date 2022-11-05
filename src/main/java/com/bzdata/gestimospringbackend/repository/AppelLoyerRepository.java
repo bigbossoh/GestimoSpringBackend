@@ -13,15 +13,15 @@ public interface AppelLoyerRepository extends JpaRepository<AppelLoyer, Long> {
 
     List<AppelLoyer> findAllByBailLocationAppelLoyer(BailLocation bailLocation);
 
-    @Query("select sum(soldeAppelLoyer) from AppelLoyer where periodeAppelLoyer=:periode")
+    @Query("select sum(soldeAppelLoyer) from AppelLoyer where periodeAppelLoyer=:periode ")
     double impayerParMois(@Param("periode") String periode);
 
-    @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where periodeAppelLoyer=:periode")
+    @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where periodeAppelLoyer=:periode ")
     double payeParMois(@Param("periode") String periode);
 
     @Query("select sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee")
     double impayerParAnnee(@Param("annee") int periode);
 
-    @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee")
+    @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee  ")
     double payeParAnnee(@Param("annee") int periode);
 }

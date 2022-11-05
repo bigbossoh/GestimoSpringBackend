@@ -49,9 +49,9 @@ public class BailVillaController {
     }
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<BailVillaDto>> findAllBailVilla() {
-        return ResponseEntity.ok(bailVillaService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<BailVillaDto>> findAllBailVilla(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(bailVillaService.findAll(idAgence));
     }
 
     @Operation(summary = "Trouver un Bail Villa par son ID", security = @SecurityRequirement(name = "bearerAuth"))

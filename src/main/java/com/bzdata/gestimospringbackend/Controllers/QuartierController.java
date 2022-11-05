@@ -49,9 +49,9 @@ public class QuartierController {
     }
 
     @Operation(summary = "Liste de tous les Quartiers", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<QuartierRequestDto>> findAllQuartiers() {
-        return ResponseEntity.ok(quartierService.findAll());
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<QuartierRequestDto>> findAllQuartiers(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(quartierService.findAll(idAgence));
     }
 
     @Operation(summary = "Trouver un Quartier par son ID", security = @SecurityRequirement(name = "bearerAuth"))

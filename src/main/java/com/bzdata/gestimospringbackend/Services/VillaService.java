@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.SiteRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.VillaDto;
@@ -12,10 +11,10 @@ public interface VillaService {
     VillaDto saveUneVilla(VillaDto dto);
     boolean delete(Long id);
 
-    Long maxOfNumBien();
+    Long maxOfNumBien(Long idAgence);
 
-    List<VillaDto> findAll();
-    List<VillaDto> findAllLibre();
+    List<VillaDto> findAll(Long idAgence);
+    List<VillaDto> findAllLibre(Long idAgence);
     VillaDto findById(Long id);
 
     VillaDto findByName(String nom);
