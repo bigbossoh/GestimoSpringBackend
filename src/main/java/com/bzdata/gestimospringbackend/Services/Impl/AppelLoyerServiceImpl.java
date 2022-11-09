@@ -170,7 +170,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         public List<AppelLoyersFactureDto> findAll(Long idAgence) {
                 return appelLoyerRepository.findAll()
                                 .stream()
-                                .filter(appelLoyer -> appelLoyer.getIdAgence()==idAgence)
+                                .filter(appelLoyer -> appelLoyer.getIdAgence() == idAgence)
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
         }
@@ -191,7 +191,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 List<Integer> collectAnneAppelDistinct = appelLoyerRepository
                                 .findAll()
                                 .stream()
-                                .filter(agence->agence.getIdAgence()==idAgence)
+                                .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(AppelLoyer::getAnneeAppelLoyer)
                                 .distinct()
                                 .collect(Collectors.toList());
@@ -200,12 +200,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public List<PeriodeDto> listOfPerodesByAnnee(Integer annee,Long idAgence) {
+        public List<PeriodeDto> listOfPerodesByAnnee(Integer annee, Long idAgence) {
                 List<PeriodeDto> collectPeriodeDistinct = appelLoyerRepository
                                 .findAll()
                                 .stream()
                                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
-                                .filter(agence->agence.getIdAgence()==idAgence)
+                                .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(gestimoWebMapper::fromPeriodeAppel)
                                 .distinct()
                                 .collect(Collectors.toList());
@@ -214,13 +214,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee,Long idAgence) {
+        public List<AnneeAppelLoyersDto> listOfAppelLoyerByAnnee(Integer annee, Long idAgence) {
 
                 return appelLoyerRepository
                                 .findAll()
                                 .stream()
                                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
-                                .filter(agence->agence.getIdAgence()==idAgence)
+                                .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(gestimoWebMapper::fromAppelLoyerForAnnee)
                                 .distinct()
                                 .collect(Collectors.toList());
@@ -306,45 +306,49 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public double impayeParPeriode(String periode,Long idAgence) {
-                double soldeImpaye = appelLoyerRepository.impayerParMois(periode);
-                return soldeImpaye;
+        public double impayeParPeriode(String periode, Long idAgence) {
+                AppelLoyer leLoyerAVerifier = appelLoyerRepository.findByPeriodeAppelLoyerAndIdAgence(periode,idAgence);
+                log.info("Le appel a verifier est : {}", leLoyerAVerifier.getPeriodeAppelLoyer());
+                List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
+                                .filter(prio -> prio.getDateDebutMoisAppelLoyer().compareTo(leLoyerAVerifier.getDateDebutMoisAppelLoyer()) >= 0)
+                .filter(agenc->agenc.getIdAgence()==idAgence).map(AppelLoyer::getSoldeAppelLoyer).collect(Collectors.toList());
+                return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
         }
 
         @Override
-        public double payeParPeriode(String periode,Long idAgence) {
+        public double payeParPeriode(String periode, Long idAgence) {
 
                 return appelLoyerRepository.payeParMois(periode);
         }
 
         @Override
-        public double impayeParAnnee(int annee,Long idAgence) {
+        public double impayeParAnnee(int annee, Long idAgence) {
 
                 return appelLoyerRepository.impayerParAnnee(annee);
         }
 
         @Override
-        public double payeParAnnee(int annee,Long idAgence) {
+        public double payeParAnnee(int annee, Long idAgence) {
 
                 return appelLoyerRepository.payeParAnnee(annee);
         }
 
         @Override
-        public Long nombreBauxImpaye(String periode,Long idAgence) {
+        public Long nombreBauxImpaye(String periode, Long idAgence) {
 
                 return appelLoyerRepository.findAll().stream()
-.filter(agence->agence.getIdAgence()==idAgence)
-                .count();
+                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .count();
         }
 
         @Override
-        public Long nombreBauxPaye(String periode,Long idAgence) {
+        public Long nombreBauxPaye(String periode, Long idAgence) {
 
                 return 0L;
         }
 
         @Override
-        public double montantBeauxImpayer(String periode,Long idAgence) {
+        public double montantBeauxImpayer(String periode, Long idAgence) {
 
                 return 0;
         }
@@ -352,11 +356,11 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public List<PeriodeDto> findAllPeriode(Long idAgence) {
                 List<PeriodeDto> collectPeriodeDistinct = appelLoyerRepository
-                .findAll()
-                .stream()
-.filter(agence->agence.getIdAgence()==idAgence)
-                .map(gestimoWebMapper::fromPeriodeAppel)
-                .distinct()
+                                .findAll()
+                                .stream()
+                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .map(gestimoWebMapper::fromPeriodeAppel)
+                                .distinct()
                                 .collect(Collectors.toList());
                 return collectPeriodeDistinct;
 

@@ -1,5 +1,7 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,28 +34,10 @@ public class AgenceRequestDto {
     private String typeImage;
     private String profileAgenceUrl;
     private boolean active;
+    byte[] logoAgence;
 
 
 
-
-//    public static AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere) {
-//        if (agenceImmobiliere == null) {
-//            return null;
-//        }
-//        return AgenceRequestDto.builder()
-//                .id(agenceImmobiliere.getId())
-//                .nomAgence(agenceImmobiliere.getNomAgence())
-//                .telAgence(agenceImmobiliere.getTelAgence())
-//                .mobileAgence(agenceImmobiliere.getMobileAgence())
-//                .compteContribuable(agenceImmobiliere.getCompteContribuable())
-//                .capital(agenceImmobiliere.getCapital())
-//                .emailAgence(agenceImmobiliere.getEmailAgence())
-//                .regimeFiscaleAgence(agenceImmobiliere.getRegimeFiscaleAgence())
-//                .faxAgence(agenceImmobiliere.getFaxAgence())
-//                .sigleAgence(agenceImmobiliere.getSigleAgence())
-//                .idAgence(agenceImmobiliere.getIdAgence())
-//                .build();
-//    }
 
 
 }

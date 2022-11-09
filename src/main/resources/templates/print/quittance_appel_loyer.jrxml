@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="quittance_appel_loyer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="934dcdce-7007-457f-953b-e9de15bea315">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataSeve.jrdax"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="331"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="660"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="693"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="293"/>
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
 	<parameter name="NOM_PROPRIO" class="java.lang.String"/>
+	<parameter name="PARAMETER_AGENCE" class="java.lang.String"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT
- gestimoweb.appel_loyer.id ,
+		<![CDATA[SELECT 
+ gestimoweb.appel_loyer.id , 
  gestimoweb.bienimmobilier.type_bien_immobilier ,
   gestimoweb.appel_loyer.id_agence ,
    gestimoweb.appel_loyer.id_createur ,
@@ -28,7 +29,7 @@
           gestimoweb.bienimmobilier.code_abrv_bien_immobilier ,
            gestimoweb.bienimmobilier.nom_complet_bien_immobilier ,
             gestimoweb.operation.id as idBailLocation,
-             gestimoweb.operation.abrv_code_bail ,
+             gestimoweb.operation.abrv_code_bail ,     
         gestimoweb.appel_loyer.mois_chiffre_appel_loyer,
     gestimoweb.appel_loyer.desc_appel_loyer ,
      gestimoweb.appel_loyer.montant_loyer_baillperiode ,
@@ -45,18 +46,20 @@
    gestimoweb.agence_immobiliere.compte_contribuable ,
   gestimoweb.agence_immobiliere.email_agence ,
    gestimoweb.agence_immobiliere.mobile_agence ,
-    gestimoweb.agence_immobiliere.regime_fiscale_agence
-FROM gestimoweb.appel_loyer,
+    gestimoweb.agence_immobiliere.regime_fiscale_agence ,
+     gestimoweb.agence_immobiliere.adresse_agence 
+FROM gestimoweb.appel_loyer, 
 gestimoweb.agence_immobiliere ,
 	gestimoweb.operation,
 	gestimoweb.utilisateur,
-	gestimoweb.bienimmobilier
-WHERE
- gestimoweb.bienimmobilier.id = gestimoweb.operation.bien_immobilier_operation_id
- AND  gestimoweb.utilisateur.id_agence = gestimoweb.agence_immobiliere.id
- AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id
-AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id
+	gestimoweb.bienimmobilier 
+WHERE 
+ gestimoweb.bienimmobilier.id = gestimoweb.operation.bien_immobilier_operation_id 
+ AND  gestimoweb.utilisateur.id_agence = gestimoweb.agence_immobiliere.id 
+ AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id 
+AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id 
 AND    gestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
+AND gestimoweb.appel_loyer.id_agence =$P{PARAMETER_AGENCE}
  AND gestimoweb.appel_loyer.is_solder_appel_loyer =0
 ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, gestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
 	</queryString>
@@ -231,6 +234,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 		<property name="com.jaspersoft.studio.field.tree.path" value="agence_immobiliere"/>
 	</field>
 	<field name="periode_lettre" class="java.lang.String"/>
+	<field name="adresse_agence" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -507,19 +511,70 @@ facturée]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10" isUnderline="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{NOM_PROPRIO}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$P{NOM_PROPRIO}.toUpperCase()]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="66" splitType="Stretch">
+		<band height="74" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="0" y="14" width="554" height="39" backcolor="#AB4B49" uuid="901d83ee-525d-4ef5-aa71-89c310222167"/>
+				<reportElement mode="Transparent" x="0" y="7" width="554" height="60" backcolor="#AB4B49" uuid="901d83ee-525d-4ef5-aa71-89c310222167"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16"/>
 				</textElement>
-				<text><![CDATA[bas de page]]></text>
+				<text><![CDATA[]]></text>
 			</staticText>
+			<textField>
+				<reportElement x="380" y="40" width="170" height="13" uuid="3fe094f8-9dd6-4266-bfbf-6f4b71c6f8d5"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{email_agence}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="332" y="40" width="38" height="13" uuid="25bcc4e6-fea7-4a4a-8351-1b4f88029147"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[-Email :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="244" y="40" width="87" height="13" uuid="52961017-81df-43a9-a69b-deecd244d952"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{tel_agence}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="225" y="40" width="35" height="13" uuid="d644f717-4f6c-4061-8207-f0491713b867"/>
+				<textElement textAlignment="Right">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[/ Tel :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="135" y="40" width="87" height="13" uuid="dc35994b-7db0-4e25-bbed-0c5d5d4c7e2f"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{mobile_agence}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="118" y="40" width="27" height="13" uuid="ab98b732-c81d-4b8b-ad0d-250e40c3fe78"/>
+				<textElement textAlignment="Right">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Cel:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="282" y="24" width="185" height="13" uuid="44d017e0-be9a-4bd0-9b84-a97ced827f3b"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{compte_contribuable}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="262" y="22" width="27" height="13" uuid="62b3bfd3-4b7d-46ed-836b-dc94887e8e6b"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="85" y="24" width="185" height="13" uuid="28c5e323-df9d-4a2f-b6b8-2da04a3621ff"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{adresse_agence}.toUpperCase()]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageFooter>
 	<summary>
