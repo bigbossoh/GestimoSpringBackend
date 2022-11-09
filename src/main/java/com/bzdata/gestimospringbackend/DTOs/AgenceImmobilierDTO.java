@@ -1,5 +1,7 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +26,8 @@ public class AgenceImmobilierDTO {
     Long idAgence;
     String profileAgenceUrl;
     String adresseAgence;
-    private Long idImage;
-    private String nameImage;
-    private String typeImage;
-
-    }
+    Long idImage;
+    String nameImage;
+    String typeImage;
+    MultipartFile logoAgence;
+}

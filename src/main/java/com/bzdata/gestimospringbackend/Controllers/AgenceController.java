@@ -2,12 +2,14 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
+import com.bzdata.gestimospringbackend.Services.ImagesService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,39 +30,37 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
+    private final ImagesService imagesService;
+
     @PostMapping("/signup")
     public ResponseEntity<AgenceImmobilierDTO> authenticateAgence(@RequestBody AgenceRequestDto request) {
         log.info("We are going to save a new agence {}", request);
         return ResponseEntity.ok(agenceImmobilierService.saveUneAgence(request));
     }
-    // @PostMapping("/uploadlogo")
-    // public ResponseEntity<String> uploadLog(@RequestBody ImageLogoDto logo) throws IOException {
-    //     log.info("We are going to save a new agence {}", logo);
-    //     return ResponseEntity.ok(agenceImmobilierService.uploadLogoAgence(logo));
-    // }
+
+    @PostMapping("/savelogo")
+    public ResponseEntity<Boolean> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
+        log.info("We are going to save a logo {}", request);
+        return ResponseEntity.ok(imagesService.saveLogo(request));
+    }
 
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {
         log.info("We are going to get back one agence by ID {}", id);
         return ResponseEntity.ok(agenceImmobilierService.findAgenceById(id));
     }
-
+    @GetMapping("/getlogo/{id}")
+    public ResponseEntity<byte[]> getlogo(@PathVariable("id") Long id) {
+        log.info("We are going to get back one agence by ID {}", id);
+        return ResponseEntity.ok(imagesService.getLogo(id));
+    }
     @GetMapping("/getagencebyemail/{email}")
     public ResponseEntity<AgenceImmobilierDTO> getAgenceByEmailAgence(@PathVariable("email") String email) {
         return ResponseEntity.ok(agenceImmobilierService.findAgenceByEmail(email));
     }
-
-//    @GetMapping(path="/imageFilm/{idFilm}",produces = MediaType.IMAGE_JPEG_VALUE)
-//    public byte[] images(@PathVariable(name="idAgence") Long idAgence) throws Exception {
-//        AgenceImmobiliere agence=agenceImmobiliereRepository.findById(idAgence).get();
-//        String photoAgence=agence.getProfileImageUrl();
-//        File file=new File(USER_FOLDER+photoAgence);
-//        Path path= Paths.get(file.toURI());
-//        return Files.readAllBytes(path);
-//    }
 
     @GetMapping("/all")
     public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence() {

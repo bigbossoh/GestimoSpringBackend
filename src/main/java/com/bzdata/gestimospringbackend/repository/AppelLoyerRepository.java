@@ -24,4 +24,9 @@ public interface AppelLoyerRepository extends JpaRepository<AppelLoyer, Long> {
 
     @Query("select sum(montantLoyerBailLPeriode)-sum(soldeAppelLoyer) from AppelLoyer where anneeAppelLoyer=:annee  ")
     double payeParAnnee(@Param("annee") int periode);
+
+    @Query("select a from AppelLoyer as a where periodeAppelLoyer=:periode  ")
+    AppelLoyer findByPeriodeAppelLoyer(@Param("periode") String periode);
+
+    AppelLoyer findByPeriodeAppelLoyerAndIdAgence(String periode, Long idAgence);
 }

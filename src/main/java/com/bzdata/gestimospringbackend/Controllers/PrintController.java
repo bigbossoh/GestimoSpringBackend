@@ -42,11 +42,11 @@ public class PrintController {
         return ResponseEntity.ok(donnees);
     }
 
-    @GetMapping(path = "/quittancegrouper/{periode}",produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(path = "/quittancegrouper/{periode}/{idAgence}/{proprio}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> quittancePeriode(
-            @PathVariable("periode") String periode)
+            @PathVariable("periode") String periode, @PathVariable("periode") Long idAgence, @PathVariable("proprio") String proprio)
             throws FileNotFoundException, JRException, SQLException {
                 log.info("Periode {}", periode);
-        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode));
+        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode,idAgence,proprio));
     }
 }

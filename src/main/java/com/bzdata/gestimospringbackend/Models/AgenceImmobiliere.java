@@ -25,6 +25,7 @@ public class AgenceImmobiliere extends AbstractEntity {
     String faxAgence;
     String sigleAgence;
     String adresseAgence;
+    byte[] logoAgence;
     @OneToOne
     ImageData imageData;
 
