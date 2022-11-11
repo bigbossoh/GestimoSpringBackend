@@ -192,10 +192,11 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     }
 
     @Override
-    public List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc() {
+    public List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc(Long idAgence) {
         log.info("We are going to take back all the agences order by agence name");
 
         return agenceImmobiliereRepository.findAll().stream()
+        .filter(ag->ag.getId()==idAgence)
                 .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
                 .map(gestimoWebMapperImpl::fromAgenceImmobilier)
                 .distinct()

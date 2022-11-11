@@ -18,7 +18,7 @@ public interface AgenceImmobilierService {
 
     List<AgenceImmobilierDTO> listOfAgenceImmobilier();
 
-    List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc();
+    List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc(Long idAgence);
 
     void deleteAgence(Long id);
 
