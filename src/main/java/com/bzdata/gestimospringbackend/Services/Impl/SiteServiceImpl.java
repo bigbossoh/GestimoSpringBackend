@@ -83,7 +83,7 @@ public class SiteServiceImpl implements SiteService {
 
                 site.setIdAgence(dto.getIdAgence());
                 site.setQuartier(quartier);
-                site.setIdAgence(1L);
+                // site.setIdAgence(1L);
                 site.setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
                         .getCommune().getVille().getPays().getAbrvPays())
                         + "-" +
@@ -203,7 +203,7 @@ public class SiteServiceImpl implements SiteService {
 
                 site.setIdAgence(dto.getIdAgence());
                 site.setQuartier(quartier);
-                site.setIdAgence(1L);
+              //  site.setIdAgence(1L);
                 site.setAbrSite(org.apache.commons.lang3.StringUtils.deleteWhitespace(quartier
                         .getCommune().getVille().getPays().getAbrvPays())
                         + "-" +
