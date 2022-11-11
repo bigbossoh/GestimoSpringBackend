@@ -34,7 +34,7 @@ public class AgenceRequestDto {
     private String typeImage;
     private String profileAgenceUrl;
     private boolean active;
-    byte[] logoAgence;
+    String logoAgence;
 
 
 

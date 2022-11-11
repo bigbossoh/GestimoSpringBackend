@@ -9,6 +9,7 @@ public interface BailService {
     boolean closeBail(Long id);
 
     int nombreBauxActifs(Long idAgence);
+
     int nombreBauxNonActifs(Long idAgence);
 
     List<AppelLoyersFactureDto> findAllByIdBienImmobilier(Long id);
