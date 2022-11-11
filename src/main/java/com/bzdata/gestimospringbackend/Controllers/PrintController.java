@@ -28,10 +28,9 @@ import net.sf.jasperreports.engine.JRException;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 @Slf4j
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class PrintController {
     final PrintService printService;
-
 
     @GetMapping("/quittance/{id}")
     public ResponseEntity<byte[]> sampleQuitance(@PathVariable("id") Long id)
@@ -44,9 +43,10 @@ public class PrintController {
 
     @GetMapping(path = "/quittancegrouper/{periode}/{idAgence}/{proprio}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> quittancePeriode(
-            @PathVariable("periode") String periode, @PathVariable("periode") Long idAgence, @PathVariable("proprio") String proprio)
+            @PathVariable("periode") String periode, @PathVariable("idAgence") Long idAgence,
+            @PathVariable("proprio") String proprio)
             throws FileNotFoundException, JRException, SQLException {
-                log.info("Periode {}", periode);
-        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode,idAgence,proprio));
+        log.info("Periode {}", periode);
+        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode, idAgence, proprio));
     }
 }

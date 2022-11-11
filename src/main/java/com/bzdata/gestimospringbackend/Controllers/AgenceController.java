@@ -62,10 +62,10 @@ public class AgenceController {
         return ResponseEntity.ok(agenceImmobilierService.findAgenceByEmail(email));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence() {
+    @GetMapping("/all/{idAgence}")
+    public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence(@PathVariable("idAgence") Long idAgence) {
         log.info("get all agence by Order");
-        return ResponseEntity.ok(agenceImmobilierService.listOfAgenceOrderByNomAgenceAsc());
+        return ResponseEntity.ok(agenceImmobilierService.listOfAgenceOrderByNomAgenceAsc(idAgence));
     }
 
     @DeleteMapping("/deleteagence/{id}")
