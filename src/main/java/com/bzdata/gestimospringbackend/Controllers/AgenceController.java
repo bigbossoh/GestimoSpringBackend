@@ -42,7 +42,7 @@ public class AgenceController {
     }
 
     @PostMapping("/savelogo")
-    public ResponseEntity<Boolean> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
+    public ResponseEntity<byte[]> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
         log.info("We are going to save a logo {}", request);
         return ResponseEntity.ok(imagesService.saveLogo(request));
     }
