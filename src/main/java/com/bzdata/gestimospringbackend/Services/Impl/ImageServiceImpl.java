@@ -28,15 +28,18 @@ public class ImageServiceImpl implements ImagesService {
     private final AgenceImmobiliereRepository agenceImmobiliereRepository;
 
     @Override
-    public Boolean saveLogo(AgenceRequestDto dto) throws IOException {
-        log.info(" Le payload recu est le suivant : {} ", dto.getId());
+    public byte[] saveLogo(AgenceRequestDto dto) throws IOException {
+       System.out.println("************ le logo ****************************");
+       log.info(" Le payload recu est le suivant : {}{}", dto.getId(), dto.getLogoAgence());
+        System.out.println("****************************--------******");
         final byte[] lesFile=dto.getLogoAgence().getBytes() ;
         AgenceImmobiliere findAgence = agenceImmobiliereRepository.findById(dto.getId())
                 .orElseThrow(() -> new InvalidEntityException("Aucun Agence has been found with Code " + dto.getId(),
                         ErrorCodes.AGENCE_NOT_FOUND));
         findAgence.setLogoAgence(ImageUtility.compressImage(lesFile));
         agenceImmobiliereRepository.save(findAgence);
-        return true;
+        return ImageUtility.decompressImage(findAgence.getLogoAgence());
+
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 
 public interface ImagesService {
 
-    Boolean saveLogo(AgenceRequestDto logo) throws IOException;
+    byte[] saveLogo(AgenceRequestDto logo) throws IOException;
 
     public byte[] getLogo(Long idAgence);
 
