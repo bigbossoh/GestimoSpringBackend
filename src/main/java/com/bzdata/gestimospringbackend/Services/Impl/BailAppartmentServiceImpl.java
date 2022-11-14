@@ -50,7 +50,7 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
 final BailMapperImpl bailMapperImpl;
     @Override
     public OperationDto save(BailAppartementDto dto) {
-        BailLocation bailLocation = new BailLocation();
+
         log.info("We are going to create  a new Bail Appartement {}", dto);
         List<String> errors = BailAppartementDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
@@ -58,7 +58,14 @@ final BailMapperImpl bailMapperImpl;
             throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
+        BailLocation findBailLocation=bailLocationRepository.findById(dto.getId()).orElseThrow();
 
+        if (findBailLocation!=null) {
+            return null;
+        } else {
+
+        }
+        BailLocation bailLocation = new BailLocation();
         Utilisateur utilisateur = utilisateurRepository
                 .findById(dto.getIdLocataire())
                 .orElseThrow(() -> new InvalidEntityException(
