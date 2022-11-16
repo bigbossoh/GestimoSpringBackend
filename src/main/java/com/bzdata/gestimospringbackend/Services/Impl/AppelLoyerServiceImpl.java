@@ -148,7 +148,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public boolean deleteAppelDto(Long id) {
+        public boolean cloturerAppelDto(Long id) {
                 log.info("We are going to set isCloture at true a AppelLoyer with the ID {}", id);
                 if (id == null) {
                         log.error("you are provided a null ID for the Bail");
@@ -307,11 +307,14 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public double impayeParPeriode(String periode, Long idAgence) {
-                AppelLoyer leLoyerAVerifier = appelLoyerRepository.findByPeriodeAppelLoyerAndIdAgence(periode,idAgence);
+                AppelLoyer leLoyerAVerifier = appelLoyerRepository.findByPeriodeAppelLoyerAndIdAgence(periode,
+                                idAgence);
                 log.info("Le appel a verifier est : {}", leLoyerAVerifier.getPeriodeAppelLoyer());
                 List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
-                                .filter(prio -> prio.getDateDebutMoisAppelLoyer().compareTo(leLoyerAVerifier.getDateDebutMoisAppelLoyer()) >= 0)
-                .filter(agenc->agenc.getIdAgence()==idAgence).map(AppelLoyer::getSoldeAppelLoyer).collect(Collectors.toList());
+                                .filter(prio -> prio.getDateDebutMoisAppelLoyer()
+                                                .compareTo(leLoyerAVerifier.getDateDebutMoisAppelLoyer()) >= 0)
+                                .filter(agenc -> agenc.getIdAgence() == idAgence).map(AppelLoyer::getSoldeAppelLoyer)
+                                .collect(Collectors.toList());
                 return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
         }
 
@@ -365,4 +368,5 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 return collectPeriodeDistinct;
 
         }
+
 }

@@ -1,7 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;

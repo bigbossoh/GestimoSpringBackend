@@ -1,9 +1,16 @@
 package com.bzdata.gestimospringbackend.repository;
 
-import com.bzdata.gestimospringbackend.Models.ImageData;
+import java.util.Optional;
+
+import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
+import com.bzdata.gestimospringbackend.Models.ImageModel;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ImageRepository extends JpaRepository<ImageData,Long>{
+public interface ImageRepository extends JpaRepository<ImageModel, Long> {
+
+    Optional<ImageModel> findByLogoAgence(AgenceImmobiliere agenceImmobiliere);
+
+    Optional<ImageModel> findByName(String name);
 
 }
