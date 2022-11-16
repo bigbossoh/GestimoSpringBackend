@@ -17,7 +17,7 @@ import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.ImageLogoDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
-import com.bzdata.gestimospringbackend.Models.ImageData;
+import com.bzdata.gestimospringbackend.Models.ImageModel;
 import com.bzdata.gestimospringbackend.Models.NotificationEmail;
 import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
@@ -346,21 +346,21 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                         "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
                         ErrorCodes.AGENCE_NOT_FOUND));
         try {
-            ImageData imageDataFound = imageRepository.findById(dto.getIdImage())
+            ImageModel imageDataFound = imageRepository.findById(dto.getIdImage())
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucune agence has been found with ID " + dto.getAgenceImmobiliere(),
                             ErrorCodes.AGENCE_NOT_FOUND));
             if (imageDataFound != null) {
 
-                imageDataFound.setAgenceImmobiliere(agenceImmobilier);
-                imageDataFound.setNameImage(agenceImmobilier.getSigleAgence());
-                imageDataFound.setImageData(dto.getFile().getBytes());
+                imageDataFound.setLogoAgence(agenceImmobilier);
+                imageDataFound.setName(agenceImmobilier.getSigleAgence());
+                imageDataFound.setPicByte(dto.getFile().getBytes());
                 imageRepository.save(imageDataFound);
             } else {
-                ImageData imageData = new ImageData();
-                imageData.setAgenceImmobiliere(agenceImmobilier);
-                imageData.setNameImage(agenceImmobilier.getSigleAgence());
-                imageData.setImageData(dto.getFile().getBytes());
+                ImageModel imageData = new ImageModel();
+                imageData.setLogoAgence(agenceImmobilier);
+                imageData.setName(agenceImmobilier.getSigleAgence());
+                imageData.setPicByte(dto.getFile().getBytes());
                 imageRepository.save(imageData);
             }
 

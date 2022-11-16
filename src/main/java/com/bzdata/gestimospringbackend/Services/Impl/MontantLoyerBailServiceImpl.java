@@ -10,6 +10,7 @@ import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
 
@@ -27,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
-
+    final BailMapperImpl bailMapperImpl;
     final MontantLoyerBailRepository montantLoyerBailRepository;
     final BailLocationRepository bailLocationRepository;
 
@@ -130,9 +131,8 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
         return ListBauxMontantLoyerBail.stream()
                 .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
                 // .findFirst()
-                .map(MontantLoyerBailDto::fromEntity)
+                .map(bailMapperImpl::fromMontantLoyerBail)
                 .collect(Collectors.toList());
 
-        // return null;
     }
 }

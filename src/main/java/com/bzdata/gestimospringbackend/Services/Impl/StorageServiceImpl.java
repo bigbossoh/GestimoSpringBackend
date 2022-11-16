@@ -1,14 +1,12 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
-
 import java.io.IOException;
 import java.util.Optional;
 
-import com.bzdata.gestimospringbackend.Models.ImageData;
+import com.bzdata.gestimospringbackend.Models.ImageModel;
 import com.bzdata.gestimospringbackend.Services.StorageService;
 import com.bzdata.gestimospringbackend.Utils.ImageUtils;
-import com.bzdata.gestimospringbackend.repository.StorageRepository;
+import com.bzdata.gestimospringbackend.repository.ImageRepository;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,14 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StorageServiceImpl implements StorageService {
-    final StorageRepository repository;
+    final ImageRepository repository;
     @Override
     public String uploadImage(MultipartFile file) throws IOException {
-        ImageData imageData=new ImageData();
-        imageData.setNameImage(file.getOriginalFilename());
-        imageData.setTypeImage(file.getOriginalFilename());
-        imageData.setProfileAgenceImageUrl(APP_ROOT +"/images/"+file.getOriginalFilename());
-        imageData.setImageData(ImageUtils.compressImage(file.getBytes()));
+        ImageModel imageData=new ImageModel();
+        imageData.setName(file.getOriginalFilename());
+        imageData.setType(file.getOriginalFilename());
+        //imageData.set(APP_ROOT +"/images/"+file.getOriginalFilename());
+        imageData.setPicByte(ImageUtils.compressImage(file.getBytes()));
         repository.save(imageData);
         if (imageData != null) {
             return "file uploaded successfully : " + file.getOriginalFilename();
@@ -42,8 +40,8 @@ public class StorageServiceImpl implements StorageService {
 
     @Override
     public byte[] downloadImage(String fileName) {
-        Optional<ImageData> dbImageData = repository.findByNameImage(fileName);
-        byte[] images=ImageUtils.decompressImage(dbImageData.get().getImageData());
+        Optional<ImageModel> dbImageData = repository.findByName(fileName);
+        byte[] images=ImageUtils.decompressImage(dbImageData.get().getPicByte());
         return images;
     }
 

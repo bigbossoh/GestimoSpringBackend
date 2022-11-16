@@ -8,6 +8,7 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
+import com.bzdata.gestimospringbackend.Models.ImageModel;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.Services.ImagesService;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -42,9 +44,16 @@ public class AgenceController {
     }
 
     @PostMapping("/savelogo")
-    public ResponseEntity<Boolean> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
+    public ResponseEntity<byte[]> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
         log.info("We are going to save a logo {}", request);
         return ResponseEntity.ok(imagesService.saveLogo(request));
+    }
+
+    @PostMapping("/saveagencelogo")
+    public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
+            @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
+        log.info("We are going to save a logo {}", imageFile.getBytes().length);
+        return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
     }
 
     @GetMapping("/getagencebyid/{id}")
@@ -52,18 +61,21 @@ public class AgenceController {
         log.info("We are going to get back one agence by ID {}", id);
         return ResponseEntity.ok(agenceImmobilierService.findAgenceById(id));
     }
+
     @GetMapping("/getlogo/{id}")
     public ResponseEntity<byte[]> getlogo(@PathVariable("id") Long id) {
         log.info("We are going to get back one agence by ID {}", id);
         return ResponseEntity.ok(imagesService.getLogo(id));
     }
+
     @GetMapping("/getagencebyemail/{email}")
     public ResponseEntity<AgenceImmobilierDTO> getAgenceByEmailAgence(@PathVariable("email") String email) {
         return ResponseEntity.ok(agenceImmobilierService.findAgenceByEmail(email));
     }
 
     @GetMapping("/all/{idAgence}")
-    public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence(@PathVariable("idAgence") Long idAgence) {
+    public ResponseEntity<List<AgenceImmobilierDTO>> getAllAgenceByOrderAgence(
+            @PathVariable("idAgence") Long idAgence) {
         log.info("get all agence by Order");
         return ResponseEntity.ok(agenceImmobilierService.listOfAgenceOrderByNomAgenceAsc(idAgence));
     }
