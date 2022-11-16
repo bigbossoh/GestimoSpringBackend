@@ -1,11 +1,13 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
@@ -16,6 +18,7 @@ import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailService;
+import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -42,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailServiceImpl implements BailService {
-
+    final MontantLoyerBailService montantLoyerBailService;
     final BailLocationRepository bailLocationRepository;
     final AppelLoyerService appelLoyerService;
     final MontantLoyerBailRepository montantLoyerBailRepository;
@@ -84,27 +87,26 @@ public class BailServiceImpl implements BailService {
             // la dateClotureEffecture
             List<AppelLoyer> listeAppelLoyerAyantDateDebutSupDateCloture = appelLoyerRepository.findAll()
                     .stream()
-                    .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getBailLocationAppelLoyer().getId() == newBailLocation
-                            .getId())
+                    .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getBailLocationAppelLoyer()
+                            .getId() == newBailLocation
+                                    .getId())
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getDateDebutMoisAppelLoyer()
                             .isAfter(dateClotureEffectif))
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getSoldeAppelLoyer() == montantBail)
                     .collect(Collectors.toList());
             for (AppelLoyer dto : listeAppelLoyerAyantDateDebutSupDateCloture) {
                 System.out.println(dto);
-                appelLoyerService.deleteAppelDto(dto.getId());
+                appelLoyerService.cloturerAppelDto(dto.getId());
             }
         }
-
         return true;
     }
 
     @Override
     public int nombreBauxActifs(Long idAgence) {
-
         return (int) bailLocationRepository.findAll()
                 .stream()
-                .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .filter(encourrs -> encourrs.isEnCoursBail())
                 .count();
     }
@@ -143,9 +145,6 @@ public class BailServiceImpl implements BailService {
 
     @Override
     public List<OperationDto> findAllBauxLocation(Long idAgence) {
-        // BailLocation
-        // bailLocationRepository.findAll()
-
         return null;
     }
 
@@ -185,8 +184,31 @@ public class BailServiceImpl implements BailService {
     public int nombreBauxNonActifs(Long idAgence) {
         return (int) bailLocationRepository.findAll()
                 .stream()
-                .filter(agence->agence.getIdAgence()==idAgence)
-                .filter(encourrs -> encourrs.isEnCoursBail()==false)
+                .filter(agence -> agence.getIdAgence() == idAgence)
+                .filter(encourrs -> encourrs.isEnCoursBail() == false)
                 .count();
+    }
+
+    @Override
+    public OperationDto modifierUnBail(BailModifDto dto) {
+        BailLocation operation = bailLocationRepository.findById(dto.getIdBail())
+                .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + dto.getIdBail(),
+                        ErrorCodes.APPARTEMENT_NOT_FOUND));
+        // MODIFIER LE BAIL
+        operation.setDateDebut(dto.getDateDePriseEncompte());
+        operation.setDateFin(dto.getDateFin());
+        operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
+        operation.setMontantCautionBail(dto.getNouveauMontantLoyer() * dto.getNombreMoisCaution());
+        BailLocation bailSave = bailLocationRepository.save(operation);
+        // METTRE A JOUR LE MONTANT DU BAIL
+        boolean modifMontantLoyerbail = montantLoyerBailService.saveNewMontantLoyerBail(0L,
+                dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence());
+        System.out.println("le montant est les suivant");
+        System.out.println(modifMontantLoyerbail);
+        if (modifMontantLoyerbail == true) {
+            // MODIFIER LES LOYERS
+
+        }
+        return bailMapperImpl.fromOperation(bailSave);
     }
 }

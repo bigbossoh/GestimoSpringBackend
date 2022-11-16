@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GestimoWebMapperImpl {
 
     final AgenceImmobiliereRepository agenceImmobiliereRepository;
-    final StorageRepository storageRepository;
+    final ImageRepository imageRepository;
     final BienImmobilierRepository bienImmobilierRepository;
     final BailLocationRepository bailLocationRepository;
     final UtilisateurRepository utilisateurRepository;
@@ -131,15 +131,15 @@ public class GestimoWebMapperImpl {
     public AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere){
         AgenceRequestDto agenceImmobilierDTO = new AgenceRequestDto();
         BeanUtils.copyProperties(agenceImmobiliere, agenceImmobilierDTO);
-        ImageData imageData = getImageData(agenceImmobiliere);
-        agenceImmobilierDTO.setIdImage(imageData.getId());
-        agenceImmobilierDTO.setTypeImage(imageData.getTypeImage());
-        agenceImmobilierDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
+        ImageModel imageModel = getImageData(agenceImmobiliere);
+        agenceImmobilierDTO.setIdImage(imageModel.getId());
+        agenceImmobilierDTO.setTypeImage(imageModel.getType());
+        //agenceImmobilierDTO.setProfileAgenceUrl(imageModel.getProfileAgenceImageUrl());
         return agenceImmobilierDTO;
     }
 
-    private ImageData getImageData(AgenceImmobiliere agenceImmobiliere) {
-        ImageData imageData = storageRepository.findById(agenceImmobiliere.getImageData().getId()).orElse(null);
+    private ImageModel getImageData(AgenceImmobiliere agenceImmobiliere) {
+        ImageModel imageData = imageRepository.findByLogoAgence(agenceImmobiliere).orElse(null);
         if (imageData == null)
             throw new EntityNotFoundException("Image from GestimoMapper not found",
                     ErrorCodes.IMAGE_NOT_FOUND);

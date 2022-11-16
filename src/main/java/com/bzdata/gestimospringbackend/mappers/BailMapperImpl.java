@@ -4,8 +4,10 @@ import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
 import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
+import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
+import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -74,5 +76,10 @@ public class BailMapperImpl {
                 return locataireEncaisDTO;
         }
 
+        public MontantLoyerBailDto fromMontantLoyerBail(MontantLoyerBail montantLoyerBail) {
+                MontantLoyerBailDto montantLoyerBailDto = new MontantLoyerBailDto();
+                BeanUtils.copyProperties(montantLoyerBail, montantLoyerBailDto);
+                return montantLoyerBailDto;
+}
 
 }

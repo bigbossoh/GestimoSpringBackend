@@ -1,13 +1,11 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
@@ -29,7 +27,6 @@ import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepositor
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.EncaissementPayloadDtoValidator;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
