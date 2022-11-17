@@ -19,6 +19,8 @@ public interface BailService {
 
     List<OperationDto> findAllByIdLocataire(Long id);
 
+    OperationDto findOperationById(Long id);
+
     List<OperationDto> findAllBauxLocation(Long idAgence);
 
     boolean deleteOperationById(Long id);

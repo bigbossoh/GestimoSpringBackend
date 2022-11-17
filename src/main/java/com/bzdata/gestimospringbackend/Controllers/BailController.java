@@ -67,6 +67,12 @@ public class BailController {
         return ResponseEntity.ok(bailService.findAllByIdLocataire(id));
     }
 
+    @Operation(summary = "All Bail By BienImmobilier", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findoperationbyid/{id}")
+    public ResponseEntity<OperationDto> findOperationById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(bailService.findOperationById(id));
+    }
+
     @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/supprimerBail/{id}")
     public ResponseEntity<Boolean> supprimerBail(@PathVariable("id") Long id) {

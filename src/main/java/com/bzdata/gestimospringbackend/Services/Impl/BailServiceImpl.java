@@ -207,8 +207,13 @@ public class BailServiceImpl implements BailService {
         System.out.println(modifMontantLoyerbail);
         if (modifMontantLoyerbail == true) {
             // MODIFIER LES LOYERS
-
         }
         return bailMapperImpl.fromOperation(bailSave);
+    }
+    @Override
+    public OperationDto findOperationById(Long id) {
+        BailLocation findBailLocation = bailLocationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + id,
+        ErrorCodes.BAILLOCATION_NOT_FOUND));
+        return bailMapperImpl.fromOperation(findBailLocation);
     }
 }
