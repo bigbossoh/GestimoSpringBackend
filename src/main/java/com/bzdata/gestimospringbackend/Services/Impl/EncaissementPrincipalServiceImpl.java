@@ -78,7 +78,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                 - totalEncaissementByIdAppelLoyer;
                                 montantVerser = montantVerser - montantAPayerLeMois;
-                                appelLoyerDto.setStatusAppelLoyer("Payé");
+                                appelLoyerDto.setStatusAppelLoyer("Soldé");
                                 appelLoyerDto.setSolderAppelLoyer(true);
                                 appelLoyerDto.setSoldeAppelLoyer(0);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
@@ -162,7 +162,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                         double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                         - totalEncaissementByIdAppelLoyer;
                                         montantVerser = montantVerser - montantAPayerLeMois;
-                                        appelLoyerDto.setStatusAppelLoyer("Payé");
+                                        appelLoyerDto.setStatusAppelLoyer("Soldé");
                                         appelLoyerDto.setSolderAppelLoyer(true);
                                         appelLoyerDto.setSoldeAppelLoyer(0);
                                         appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
@@ -315,7 +315,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                 - totalEncaissementByIdAppelLoyer;
                                 montantVerser = montantVerser - montantAPayerLeMois;
-                                appelLoyerDto.setStatusAppelLoyer("Payé");
+                                appelLoyerDto.setStatusAppelLoyer("Soldé");
                                 appelLoyerDto.setSolderAppelLoyer(true);
                                 appelLoyerDto.setSoldeAppelLoyer(0);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
