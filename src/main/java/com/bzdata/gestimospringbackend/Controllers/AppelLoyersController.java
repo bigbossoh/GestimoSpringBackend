@@ -126,7 +126,7 @@ public class AppelLoyersController {
     @GetMapping("/impayeParMois/{periode}/{idAgence}")
     public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence) {
-        log.info("Find Appel by loy {}", periode);
+        log.info("Find Appel by loyer en fonction de la periode {}, et de l id AGENCE {}", periode,idAgence);
         return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode, idAgence));
     }
 
