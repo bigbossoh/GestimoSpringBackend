@@ -58,7 +58,7 @@ final BailMapperImpl bailMapperImpl;
             throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
-        BailLocation findBailLocation=bailLocationRepository.findById(dto.getId()).orElseThrow();
+        BailLocation findBailLocation=bailLocationRepository.findById(dto.getId()).orElse(null);
 
         if (findBailLocation!=null) {
             return null;
