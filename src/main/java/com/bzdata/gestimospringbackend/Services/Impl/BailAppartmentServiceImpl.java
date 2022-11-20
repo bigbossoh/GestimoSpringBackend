@@ -47,7 +47,8 @@ public class BailAppartmentServiceImpl implements BailAppartementService {
     final MontantLoyerBailService montantLoyerBailService;
     final AppelLoyerService appelLoyerService;
     final BienImmobilierRepository bienImmobilierRepository;
-final BailMapperImpl bailMapperImpl;
+    final BailMapperImpl bailMapperImpl;
+
     @Override
     public OperationDto save(BailAppartementDto dto) {
 
@@ -58,9 +59,10 @@ final BailMapperImpl bailMapperImpl;
             throw new InvalidEntityException("Certain attributs de l'object Bail sont null.",
                     ErrorCodes.BAILLOCATION_NOT_VALID, errors);
         }
-        BailLocation findBailLocation=bailLocationRepository.findById(dto.getId()).orElseThrow(null);
 
-        if (findBailLocation!=null) {
+        BailLocation findBailLocation = bailLocationRepository.findById(dto.getId()).orElse(null);
+
+        if (findBailLocation != null) {
             return null;
         } else {
 
@@ -82,7 +84,7 @@ final BailMapperImpl bailMapperImpl;
                             "Aucun Bien has been found with code " + dto.getIdAppartement(),
                             ErrorCodes.MAGASIN_NOT_FOUND));
             bailLocation.setIdAgence(dto.getIdAgence());
-          //  bailLocation.setAppartementBail(appartementBail);
+            // bailLocation.setAppartementBail(appartementBail);
             bailLocation.setBienImmobilierOperation(bienImmobilierOperation);
             bailLocation.setUtilisateurOperation(utilisateur);
             bailLocation.setArchiveBail(false);
@@ -97,7 +99,7 @@ final BailMapperImpl bailMapperImpl;
 
             BailLocation appartementBailSave = bailLocationRepository.save(bailLocation);
             appartementBail.setOccupied(true);
-           // appartementBail.setStatutAppart("Occupied");
+            // appartementBail.setStatutAppart("Occupied");
             appartementRepository.save(appartementBail);
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
@@ -146,7 +148,7 @@ final BailMapperImpl bailMapperImpl;
     @Override
     public List<BailAppartementDto> findAll(Long idAgence) {
         return bailLocationRepository.findAll(Sort.by(Direction.ASC, "designationBail")).stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .map(bailMapperImpl::fromBailAppartement)
                 .collect(Collectors.toList());
     }
