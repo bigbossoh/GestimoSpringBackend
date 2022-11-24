@@ -80,9 +80,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public boolean sendMailGrouperWithAttachment(String periode)
+    public boolean sendMailGrouperWithAttachment(String periode,Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
-        List<AppelLoyersFactureDto> listDesLocataireAppel = this.appelLoyerService.findAllAppelLoyerByPeriode(periode);
+        List<AppelLoyersFactureDto> listDesLocataireAppel = this.appelLoyerService.findAllAppelLoyerByPeriode(periode,idAgence);
 
         try {
             for (int i = 0; i < listDesLocataireAppel.size(); i++) {

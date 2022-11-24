@@ -54,10 +54,6 @@ import lombok.extern.slf4j.Slf4j;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerServiceImpl implements AppelLoyerService {
 
-        /**
-         * Auto injection
-         */
-
         final MontantLoyerBailRepository montantLoyerBailRepository;
         final BailLocationRepository bailLocationRepository;
         final AppelLoyerRepository appelLoyerRepository;
@@ -176,11 +172,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer) {
+        public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer,Long idAgence) {
                 return appelLoyerRepository.findAll()
                                 .stream()
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                                 .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
+                                .filter(appelLoyer -> appelLoyer.getIdAgence()==idAgence)
                                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
@@ -307,59 +304,60 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public double impayeParPeriode(String periode, Long idAgence) {
-        
-        List<Double> soldeImpaye =appelLoyerRepository.findAll().stream()
-        .filter(period->period.getPeriodeAppelLoyer().equals(periode))
-        .filter(agence->agence.getIdAgence()==idAgence)
-        .filter(solde-> solde.getSoldeAppelLoyer()>0)
-        .map(AppelLoyer::getSoldeAppelLoyer)
-        .collect(Collectors.toList());
-return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
-         }
+
+                List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
+                                .filter(period -> period.getPeriodeAppelLoyer().equals(periode))
+                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(solde -> solde.getSoldeAppelLoyer() > 0)
+                                .map(AppelLoyer::getSoldeAppelLoyer)
+                                .collect(Collectors.toList());
+                return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
+        }
 
         @Override
         public double payeParPeriode(String periode, Long idAgence) {
-log.info("total des paiements sur periode et par agence {},{}",periode,idAgence);
-                List<Double> soldeImpaye =appelLoyerRepository.findAll().stream()
-        .filter(period->period.getPeriodeAppelLoyer().equals(periode))
-        .filter(agence->agence.getIdAgence()==idAgence)
-        
-        .map(AppelLoyer::getMontantLoyerBailLPeriode)
-        .collect(Collectors.toList());
-        double TotalMontantLoyerParPeriodeParAgence=soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
-                log.info("Total montant loyer par periode par agence {}, {}",TotalMontantLoyerParPeriodeParAgence,impayeParPeriode( periode,  idAgence));
- return TotalMontantLoyerParPeriodeParAgence-impayeParPeriode( periode,  idAgence);
+                log.info("total des paiements sur periode et par agence {},{}", periode, idAgence);
+                List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
+                                .filter(period -> period.getPeriodeAppelLoyer().equals(periode))
+                                .filter(agence -> agence.getIdAgence() == idAgence)
 
+                                .map(AppelLoyer::getMontantLoyerBailLPeriode)
+                                .collect(Collectors.toList());
+                double TotalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
+                                .sum();
+                log.info("Total montant loyer par periode par agence {}, {}", TotalMontantLoyerParPeriodeParAgence,
+                                impayeParPeriode(periode, idAgence));
+                return TotalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence);
 
-               // return appelLoyerRepository.payeParMois(periode);
+                // return appelLoyerRepository.payeParMois(periode);
         }
 
         @Override
         public double impayeParAnnee(int annee, Long idAgence) {
 
-                List<Double> soldeImpaye =appelLoyerRepository.findAll().stream()
-        .filter(period->period.getAnneeAppelLoyer()==(annee))
-        .filter(agence->agence.getIdAgence()==idAgence)
-        .filter(solde-> solde.getSoldeAppelLoyer()>0)
-        .map(AppelLoyer::getSoldeAppelLoyer)
-        .collect(Collectors.toList());
-return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
+                List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
+                                .filter(period -> period.getAnneeAppelLoyer() == (annee))
+                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(solde -> solde.getSoldeAppelLoyer() > 0)
+                                .map(AppelLoyer::getSoldeAppelLoyer)
+                                .collect(Collectors.toList());
+                return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
 
-                
         }
 
         @Override
         public double payeParAnnee(int annee, Long idAgence) {
 
-                List<Double> soldeImpaye =appelLoyerRepository.findAll().stream()
-                .filter(period->period.getAnneeAppelLoyer()==(annee))
-                .filter(agence->agence.getIdAgence()==idAgence)
-                
-                .map(AppelLoyer::getMontantLoyerBailLPeriode)
-                .collect(Collectors.toList());
-                double TotalMontantLoyerParPeriodeParAgence=soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
-                        
-         return TotalMontantLoyerParPeriodeParAgence-impayeParAnnee( annee,  idAgence);
+                List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
+                                .filter(period -> period.getAnneeAppelLoyer() == (annee))
+                                .filter(agence -> agence.getIdAgence() == idAgence)
+
+                                .map(AppelLoyer::getMontantLoyerBailLPeriode)
+                                .collect(Collectors.toList());
+                double TotalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
+                                .sum();
+
+                return TotalMontantLoyerParPeriodeParAgence - impayeParAnnee(annee, idAgence);
         }
 
         @Override
@@ -395,4 +393,19 @@ return soldeImpaye.stream().mapToDouble(Double::doubleValue).sum();
 
         }
 
+        @Override
+        public boolean deleteAppelsByIdBail(Long idBail) {
+                List<AppelLoyer> appelsloyer = appelLoyerRepository.findAll().stream()
+                                .filter(bail -> bail.getBailLocationAppelLoyer().getId() == idBail)
+                                .collect(Collectors.toList());
+                if (appelsloyer.size() > 0) {
+                        for (int index = 0; index < appelsloyer.size() - 1; index++) {
+                                System.out.println(appelsloyer.get(index));
+                                appelLoyerRepository.delete(appelsloyer.get(index));
+                        }
+                } else {
+                        return false;
+                }
+                return true;
+        }
 }

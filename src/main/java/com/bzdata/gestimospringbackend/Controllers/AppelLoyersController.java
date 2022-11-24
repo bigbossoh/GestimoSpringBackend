@@ -72,10 +72,10 @@ public class AppelLoyersController {
     }
 
     @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllAppelloyerByPeriode/{periode}")
-    public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode) {
+    @GetMapping("/findAllAppelloyerByPeriode/{periode}/{idAgence}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode,@PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by periode {}", periode);
-        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode));
+        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode,idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))

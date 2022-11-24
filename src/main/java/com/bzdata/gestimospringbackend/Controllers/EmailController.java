@@ -32,8 +32,8 @@ public class EmailController {
         return ResponseEntity.ok(emailService.sendMailQuittanceWithAttachment(id));
     }
 
-    @PostMapping("/sendmailgrouper/{periode}")
-    public ResponseEntity<Boolean> sendMailGrouperWithAttachment(@PathVariable("periode") String periode) throws FileNotFoundException, JRException, SQLException {
-        return ResponseEntity.ok(emailService.sendMailGrouperWithAttachment(periode));
+    @PostMapping("/sendmailgrouper/{periode}/{idAgence}")
+    public ResponseEntity<Boolean> sendMailGrouperWithAttachment(@PathVariable("periode") String periode,@PathVariable("idAgence") Long idAgence) throws FileNotFoundException, JRException, SQLException {
+        return ResponseEntity.ok(emailService.sendMailGrouperWithAttachment(periode,idAgence));
     }
 }

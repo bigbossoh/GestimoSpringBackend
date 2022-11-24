@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailService;
+import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -55,18 +56,26 @@ public class BailServiceImpl implements BailService {
     final UtilisateurRepository utilisateurRepository;
     final AppelLoyerRepository appelLoyerRepository;
     final EncaissementPrincipalRepository encaissementRepository;
+    final BienImmobilierService bienImmobilierService;
+
 
     @Override
     public boolean closeBail(Long id) {
         log.info("We are going to close a bail ID {}", id);
-        // List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
+
         if (id != null) {
             BailLocation newBailLocation = bailLocationRepository.findById(id).orElse(null);
             if (newBailLocation == null)
                 throw new EntityNotFoundException("BailLocation from id not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
             // Mise a jour de la table Operation
+            Bienimmobilier bienLiberer = bienImmobilierService.findBienByBailEnCours(id);
+            if (bienLiberer!=null) {
+                bienLiberer.setOccupied(false);
+                bienImmobilierRepository.save(bienLiberer);
+            }
             newBailLocation.setEnCoursBail(false);
             newBailLocation.setDateCloture(LocalDate.now());
+
             bailLocationRepository.save(newBailLocation);
 
             // Determinons le montant du loyer du bail en question
@@ -152,13 +161,13 @@ public class BailServiceImpl implements BailService {
     public boolean deleteOperationById(Long id) {
         // log.info("We are going to delete a Appartement with the ID {}", id);
         if (id == null) {
-            // log.error("you are provided a null ID for the Appartement");
-            return false;
+            throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
+            + "n' ete trouve dans la BDD", ErrorCodes.BAILLOCATION_NOT_FOUND);
         }
         boolean exist = bailLocationRepository.existsById(id);
         if (!exist) {
             throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
-                    + "n' ete trouve dans la BDD", ErrorCodes.APPARTEMENT_NOT_FOUND);
+                    + "n' ete trouve dans la BDD", ErrorCodes.BAILLOCATION_NOT_FOUND);
         }
         List<EncaissementPrincipalDTO> encaissement = encaissementRepository.findAll().stream()
                 .filter(operation -> operation.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getId()
@@ -166,7 +175,7 @@ public class BailServiceImpl implements BailService {
                 .map(gestimoWebMapperImpl::fromEncaissementPrincipal)
                 .collect(Collectors.toList());
         if (!encaissement.isEmpty()) {
-            throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
+            throw new EntityNotFoundException("L = " + id + " "
                     + "Il existe des encaissement our ce bail", ErrorCodes.APPARTEMENT_NOT_FOUND);
         }
         Operation operation = bailLocationRepository.findById(id)
@@ -176,6 +185,8 @@ public class BailServiceImpl implements BailService {
                 .findById(operation.getBienImmobilierOperation().getId()).get();
         bienAModifier.setOccupied(false);
         bienImmobilierRepository.save(bienAModifier);
+        montantLoyerBailService.supprimerUnMontantParIdBail(id);
+        appelLoyerService.deleteAppelsByIdBail(id);
         bailLocationRepository.deleteById(id);
         return true;
     }

@@ -37,7 +37,6 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
             double ancienMontantLoyer, Long idBailLocation, Long idAgence) {
         log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation, idAgence);
 
-
         try {
 
             MontantLoyerBail newMontantLoyerBail = new MontantLoyerBail();
@@ -134,5 +133,20 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 .map(bailMapperImpl::fromMontantLoyerBail)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public boolean supprimerUnMontantParIdBail(Long idBail) {
+        List<MontantLoyerBail> montantLoyerBails = montantLoyerBailRepository.findAll().stream()
+                .filter(bail -> bail.getBailLocation().getId() == idBail).collect(Collectors.toList());
+        if (montantLoyerBails.size() > 0) {
+            for (int index = 0; index < montantLoyerBails.size() - 1; index++) {
+                System.out.println(montantLoyerBails.get(index));
+                montantLoyerBailRepository.delete(montantLoyerBails.get(index));
+            }
+        } else {
+            return false;
+        }
+        return true;
     }
 }

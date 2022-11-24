@@ -4,9 +4,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
+import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
+import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
+import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import lombok.experimental.FieldDefaults;
 public class BienImmobilierServiceImpl implements BienImmobilierService {
     final BienImmobilierRepository bienImmobilierRepository;
     final GestimoWebMapperImpl gestimoWebMapperImpl;
+    final BailLocationRepository bailLocationRepository;
 
     @Override
     public List<BienImmobilierAffiheDto> findAll(Long idAgence) {
@@ -41,6 +45,20 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
                 .map(gestimoWebMapperImpl::fromBienImmobilier)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Bienimmobilier findBienByBailEnCours(Long idBail) {
+        BailLocation bailLocation = bailLocationRepository.findById(idBail)
+        .filter(bail->bail.isEnCoursBail()==true)
+        .orElse(null);
+        if (bailLocation!=null) {
+            Bienimmobilier bienimmobilier = bienImmobilierRepository
+                    .findById(bailLocation.getBienImmobilierOperation().getId())
+            .orElse(null);
+            return bienimmobilier;
+        }
+        return null;
     }
 
 }

@@ -18,4 +18,6 @@ public interface MontantLoyerBailService {
     MontantLoyerBailDto findById(Long id);
 
     List<MontantLoyerBailDto> findAllMontantLoyerBailByBailId(Long idBailLocation);
+
+    boolean supprimerUnMontantParIdBail(Long idBail);
 }

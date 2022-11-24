@@ -6,6 +6,7 @@
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
 	<parameter name="NOM_PROPRIO" class="java.lang.String"/>
 	<parameter name="ID_UTILISATEUR" class="java.lang.String"/>
+	<parameter name="LOGO" class="java.io.InputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT DISTINCT
 gestimoweb.appel_loyer.id ,
@@ -347,7 +348,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 			</textField>
 			<image>
 				<reportElement x="2" y="3" width="87" height="48" uuid="e8ea1663-7fce-46f7-9474-926fb288195b"/>
-				<imageExpression><![CDATA["/home/astairenazaire/spring-project/GestimoSpringBackend/src/main/resources/templates/print/magiser2.jpeg"]]></imageExpression>
+				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
 			</image>
 		</band>
 	</pageHeader>
