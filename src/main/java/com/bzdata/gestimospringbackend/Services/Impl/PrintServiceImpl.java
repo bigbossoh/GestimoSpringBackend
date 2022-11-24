@@ -2,6 +2,8 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +12,7 @@ import javax.sql.DataSource;
 
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -31,7 +34,7 @@ import net.sf.jasperreports.engine.JasperReport;
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PrintServiceImpl implements PrintService {
-
+    ResourceLoader resourceLoader;
     final DataSource dataSourceSQL;
 
     @Override
@@ -52,6 +55,14 @@ public class PrintServiceImpl implements PrintService {
     @Override
     public byte[] quittancePeriode(String periode, String proprio, Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
+
+        try {
+            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
+                    .getInputStream();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
@@ -69,12 +80,16 @@ public class PrintServiceImpl implements PrintService {
             throws FileNotFoundException, JRException, SQLException {
 
         try {
+
+            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
+                    .getInputStream();
             String path = "src/main/resources/templates";
             File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
             parameters.put("NOM_PROPRIO", proprio);
+            parameters.put("LOGO", logoMagiser);
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
@@ -98,12 +113,18 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittancePeriodeById(String periode, Long id, String proprio)
             throws FileNotFoundException, JRException, SQLException {
         try {
+
+            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
+                    .getInputStream();
             String path = "src/main/resources/templates";
             File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
+
             Map<String, Object> parameters = new HashMap<>();
+
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("ID_UTILISATEUR", id.toString());
-            parameters.put("NOM_PROPRIO", "N'GOUAN GEREMI");
+            parameters.put("NOM_PROPRIO", proprio);
+            parameters.put("LOGO", logoMagiser);
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
