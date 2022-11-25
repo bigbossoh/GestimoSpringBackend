@@ -98,7 +98,7 @@ public class BailVillaServiceImpl implements BailVillaService {
             montantLoyerBail.setBailLocation(villaBailSave);
             montantLoyerBail.setIdAgence(dto.getIdAgence());
             montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                    dto.getNouveauMontantLoyer(), 0.0, villaBailSave.getId(), dto.getIdAgence());
+                    dto.getNouveauMontantLoyer(), 0.0, villaBailSave.getId(), dto.getIdAgence(),dto.getDateDebut());
             /**
              * Creation de l'appel loyer
              */

@@ -1,5 +1,8 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,7 +37,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
 
     @Override
     public boolean saveNewMontantLoyerBail(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
-            double ancienMontantLoyer, Long idBailLocation, Long idAgence) {
+            double ancienMontantLoyer, Long idBailLocation, Long idAgence, LocalDate datePriseEnCompDate) {
         log.info("We are going to create  a new  {} {} {}", nouveauMontantLoyer, idBailLocation, idAgence);
 
         try {
@@ -73,24 +76,36 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
 
                 newMontantLoyerBail.setId(firstMontantLoyerBail.get().getId());
                 if (firstMontantLoyerBail.get().getNouveauMontantLoyer() != nouveauMontantLoyer) {
-                    firstMontantLoyerBail.get()
-                            .setAncienMontantLoyer(firstMontantLoyerBail.get().getNouveauMontantLoyer());
-                    firstMontantLoyerBail.get().setFinLoyer(bailLocation.getDateFin());
+                    YearMonth ym1 = YearMonth.of(datePriseEnCompDate.getYear(), datePriseEnCompDate.getMonth());
+                    YearMonth ym2 = ym1.minus(Period.ofMonths(1));
+                    LocalDate initial = LocalDate.of(ym2.getYear(), ym2.getMonth(), 1);
+                    // firstMontantLoyerBail.get()
+                    // .setAncienMontantLoyer(firstMontantLoyerBail.get().getNouveauMontantLoyer());
+                    // firstMontantLoyerBail.get().setFinLoyer(bailLocation.getDateFin());
+                    firstMontantLoyerBail.get().setFinLoyer(initial);
                     firstMontantLoyerBail.get().setStatusLoyer(false);
                     montantLoyerBailRepository.save(firstMontantLoyerBail.get());
                 }
-                newMontantLoyerBail.setAncienMontantLoyer(0);
-                newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
-                newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
-                newMontantLoyerBail.setFinLoyer(bailLocation.getDateFin());
-                newMontantLoyerBail.setIdAgence(bailLocation.getIdAgence());
-                newMontantLoyerBail.setBailLocation(bailLocation);
-                newMontantLoyerBail.setNouveauMontantLoyer(nouveauMontantLoyer);
-                newMontantLoyerBail.setStatusLoyer(true);
-                newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
-                newMontantLoyerBail.setDebutLoyer(bailLocation.getDateDebut());
+                MontantLoyerBail nouvelleLigne = new MontantLoyerBail();
+                nouvelleLigne.setAncienMontantLoyer(ancienMontantLoyer);
+                nouvelleLigne.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
+                nouvelleLigne.setDebutLoyer(datePriseEnCompDate);
+                nouvelleLigne.setFinLoyer(bailLocation.getDateFin());
+                nouvelleLigne.setIdAgence(bailLocation.getIdAgence());
+                nouvelleLigne.setBailLocation(bailLocation);
+                nouvelleLigne.setNouveauMontantLoyer(nouveauMontantLoyer);
+                nouvelleLigne.setStatusLoyer(true);
+                nouvelleLigne.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
+                // nouvelleLigne.setDebutLoyer(bailLocation.getDateDebut());
+                if (ancienMontantLoyer != 0) {
+                    nouvelleLigne.setTauxLoyer(
+                            (nouveauMontantLoyer - ancienMontantLoyer) * 100
+                                    / ancienMontantLoyer);
+                }
+
+                montantLoyerBailRepository.save(nouvelleLigne);
             }
-            montantLoyerBailRepository.save(newMontantLoyerBail);
+
             return true;
         } catch (Exception e) {
             throw new InvalidEntityException(
