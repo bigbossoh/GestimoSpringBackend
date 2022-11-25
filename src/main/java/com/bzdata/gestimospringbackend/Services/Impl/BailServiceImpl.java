@@ -206,14 +206,16 @@ public class BailServiceImpl implements BailService {
                 .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + dto.getIdBail(),
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
         // MODIFIER LE BAIL
-        operation.setDateDebut(dto.getDateDePriseEncompte());
+      // operation.setDateDebut(dto.getDateDePriseEncompte());
         operation.setDateFin(dto.getDateFin());
-        operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
-        operation.setMontantCautionBail(dto.getNouveauMontantLoyer() * dto.getNombreMoisCaution());
+        //operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
+        //operation.setMontantCautionBail(dto.getNouveauMontantLoyer());
         BailLocation bailSave = bailLocationRepository.save(operation);
+        System.out.println("Le modifiable");
+        System.out.println(dto.getAncienMontantLoyer()+" "+dto.getNouveauMontantLoyer());
         // METTRE A JOUR LE MONTANT DU BAIL
         boolean modifMontantLoyerbail = montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence());
+                dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence(),dto.getDateDePriseEncompte());
         System.out.println("le montant est les suivant");
         System.out.println(modifMontantLoyerbail);
         if (modifMontantLoyerbail == true) {
