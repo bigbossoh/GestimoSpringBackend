@@ -18,7 +18,7 @@ public interface AppelLoyerService {
 
     AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bienImmobilier);
 
-    List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer,Long idAgence);
+    List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer, Long idAgence);
 
     public double soldeArrierer(Long idBailLocation);
 
@@ -51,4 +51,7 @@ public interface AppelLoyerService {
     double montantBeauxImpayer(String periode, Long idAgence);
 
     boolean deleteAppelsByIdBail(Long idBail);
+
+    boolean sendSmsAppelLoyerGroupe(String periodeAppelLoyer, Long idAgence);
+
 }

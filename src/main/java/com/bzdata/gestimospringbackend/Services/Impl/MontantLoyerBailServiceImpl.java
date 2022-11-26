@@ -54,7 +54,6 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 newMontantLoyerBail.setId(oldMontantBail.get().getId());
             }
             if (ListBauxMontantLoyerBail.size() == 0) {
-                newMontantLoyerBail.setId(currentIdMontantLoyerBail);
                 newMontantLoyerBail.setAncienMontantLoyer(0);
                 newMontantLoyerBail.setTauxLoyer(0);
                 newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
@@ -64,6 +63,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 newMontantLoyerBail.setBailLocation(bailLocation);
                 newMontantLoyerBail.setNouveauMontantLoyer(nouveauMontantLoyer);
                 newMontantLoyerBail.setStatusLoyer(true);
+                montantLoyerBailRepository.save(newMontantLoyerBail);
             } else {
                 Optional<MontantLoyerBail> firstMontantLoyerBail = ListBauxMontantLoyerBail.stream()
                         .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)

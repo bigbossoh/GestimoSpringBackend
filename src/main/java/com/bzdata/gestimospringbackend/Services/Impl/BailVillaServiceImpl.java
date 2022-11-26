@@ -49,7 +49,7 @@ public class BailVillaServiceImpl implements BailVillaService {
     @Override
     public OperationDto saveNewBailVilla(BailVillaDto dto) {
         BailLocation bailLocationVilla = new BailLocation();
-        log.info("We are going to create  a new Bail Villa {}", dto);
+        log.info("We are going to create  a new Bail Villa SERVICE {}", dto);
         List<String> errors = BailVillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("le Villa n'est pas valide {}", errors);
@@ -93,6 +93,9 @@ public class BailVillaServiceImpl implements BailVillaService {
             /**
              * Creation d'un montant de loyer juste apres que le contrat de bail a été crée
              */
+            log.info(
+                    " les donnees {}, {}, {}, {}, {},{}", 0L,
+                    dto.getNouveauMontantLoyer(), 0.0, villaBailSave.getId(), dto.getIdAgence(), dto.getDateDebut());
             MontantLoyerBail montantLoyerBail = new MontantLoyerBail();
             montantLoyerBail.setNouveauMontantLoyer(dto.getNouveauMontantLoyer());
             montantLoyerBail.setBailLocation(villaBailSave);

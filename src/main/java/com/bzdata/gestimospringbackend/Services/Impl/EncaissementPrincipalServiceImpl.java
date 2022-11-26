@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
@@ -45,7 +46,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         final AppelLoyerService appelLoyerService;
         final AgenceImmobiliereRepository agenceImmobiliereRepository;
         final EncaissementPrincipalRepository encaissementPrincipalRepository;
-        final SmsOrangeConfig smsOrangeConfig;
+        // final SmsOrangeConfig smsOrangeConfig;
+        final SmsOrangeConfig envoiSmsOrange;
 
         @Override
         public boolean saveEncaissement(EncaissementPayloadDto dto) {
@@ -333,6 +335,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
                                 EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
                                                 .save(encaissementPrincipal);
+
                                 if (montantVerser <= 0) {
                                         break;
                                 }
@@ -367,6 +370,16 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                                 .comparing(EncaissementPrincipal::getId);
+                try {
+                        String leTok = envoiSmsOrange.getTokenSmsOrange();
+                        AgenceImmobiliere agenceFound=agenceImmobiliereRepository.findById(bailLocation.getIdAgence()).orElse(null);
+                        String message = agenceFound.getNomAgence().toUpperCase()+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer.";
+                        envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                                        bailLocation.getUtilisateurOperation().getUsername(), "Sms Societe");
+                        System.out.println("********************* Le toke toke est : " + leTok);
+                } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                }
                 return encaissementPrincipalRepository.findAll()
                                 .stream().sorted(compareBydatecreation.reversed())
                                 .filter(agence -> agence.getIdAgence() == dto.getIdAgence())
@@ -378,6 +391,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .map(gestimoWebMapper::fromEncaissementPrincipal)
                                 .distinct()
                                 .collect(Collectors.toList());
+
         }
 
         @Override

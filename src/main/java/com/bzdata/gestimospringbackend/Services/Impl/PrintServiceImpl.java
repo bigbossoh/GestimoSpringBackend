@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
 import org.springframework.core.io.ResourceLoader;
@@ -36,6 +37,7 @@ import net.sf.jasperreports.engine.JasperReport;
 public class PrintServiceImpl implements PrintService {
     ResourceLoader resourceLoader;
     final DataSource dataSourceSQL;
+    final AppelLoyerService appelLoyerService;
 
     @Override
     public byte[] quittanceLoyer(Long id) throws FileNotFoundException, JRException, SQLException {
@@ -101,6 +103,11 @@ public class PrintServiceImpl implements PrintService {
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+            // ENVOI DE MESSAGCE DE QUITTANCE
+            boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode, idAgence);
+            if (sms_envoyer) {
+                log.info("Sms Envoye {}", sms_envoyer);
+            }
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());

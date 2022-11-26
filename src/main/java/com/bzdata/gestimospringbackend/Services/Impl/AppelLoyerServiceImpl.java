@@ -16,20 +16,25 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
+import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.SmsRequest;
+import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
+import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
+import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
 
 import org.springframework.stereotype.Service;
@@ -57,9 +62,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         final MontantLoyerBailRepository montantLoyerBailRepository;
         final BailLocationRepository bailLocationRepository;
         final AppelLoyerRepository appelLoyerRepository;
-
+        final UtilisateurRepository utilisateurRepository;
         final GestimoWebMapperImpl gestimoWebMapper;
         final BienImmobilierRepository bienImmobilierRepository;
+        final SmsOrangeConfig envoiSmsOrange;
+
+        final AgenceImmobiliereRepository agenceImmobiliereRepository;
 
         /**
          * Cette methode est utilisé pour enregister tous les appels loyers
@@ -93,7 +101,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 YearMonth ym1 = YearMonth.of(dateDebut.getYear(), dateDebut.getMonth());
                 List<AppelLoyer> appelLoyerList = new ArrayList<>();
                 AppelLoyer appelLoyer;
-                for (int k = 1; k <= (ChronoUnit.MONTHS.between(dateDebut, dateFin) + 1); k++) {
+                for (int k = 1; k < (ChronoUnit.MONTHS.between(dateDebut, dateFin) + 1); k++) {
                         appelLoyer = new AppelLoyer();
                         YearMonth period = ym1.plus(Period.ofMonths(k));
                         LocalDate initial = LocalDate.of(period.getYear(), period.getMonth(), 1);
@@ -133,10 +141,11 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 appelLoyerRepository.saveAll(appelLoyerList);
                 log.info("we are going lo launch sms to the user ");
-                SmsRequest sms = new SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),
-                                "Vôtre baillocation a été créé avec succès.");
+                // SmsRequest sms = new
+                // SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),
+                // "Vôtre baillocation a été créé avec succès.");
 
-                log.info("Sms sent");
+                // log.info("Sms sent");
                 return appelLoyerList
                                 .stream()
                                 .map(AppelLoyer::getPeriodeAppelLoyer)
@@ -172,12 +181,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         }
 
         @Override
-        public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer,Long idAgence) {
+        public List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer, Long idAgence) {
                 return appelLoyerRepository.findAll()
                                 .stream()
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                                 .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
-                                .filter(appelLoyer -> appelLoyer.getIdAgence()==idAgence)
+                                .filter(appelLoyer -> appelLoyer.getIdAgence() == idAgence)
                                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
@@ -191,6 +200,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(AppelLoyer::getAnneeAppelLoyer)
                                 .distinct()
+                                .sorted()
                                 .collect(Collectors.toList());
                 return collectAnneAppelDistinct;
 
@@ -219,6 +229,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
                                 .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(gestimoWebMapper::fromAppelLoyerForAnnee)
+
                                 .distinct()
                                 .collect(Collectors.toList());
         }
@@ -273,6 +284,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                                 .filter(bail -> !bail.isSolderAppelLoyer())
                                 .sorted(appelLoyerByDateDebutAppelLoyer)
+
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
         }
@@ -387,6 +399,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .stream()
                                 .filter(agence -> agence.getIdAgence() == idAgence)
                                 .map(gestimoWebMapper::fromPeriodeAppel)
+                                .sorted(Comparator.comparing(PeriodeDto::getPeriodeAppelLoyer))
                                 .distinct()
                                 .collect(Collectors.toList());
                 return collectPeriodeDistinct;
@@ -407,5 +420,44 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         return false;
                 }
                 return true;
+        }
+
+        @Override
+        public boolean sendSmsAppelLoyerGroupe(String periodeAppelLoyer, Long idAgence) {
+
+                List<AppelLoyer> appelLoyersFactureDtos = appelLoyerRepository.findAll().stream()
+                                .filter(sold -> sold.isSolderAppelLoyer() == false)
+                                .filter(agen -> agen.getIdAgence() == idAgence)
+                                .filter(perio -> perio.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
+                                .collect(Collectors.toList());
+
+                if (appelLoyersFactureDtos.size() > 0) {
+                        appelLoyersFactureDtos.forEach(ap -> {
+                                Utilisateur locataire = utilisateurRepository.findById(
+                                                ap.getBailLocationAppelLoyer().getUtilisateurOperation().getId())
+                                                .orElse(null);
+                                try {
+                                        String leTok = envoiSmsOrange.getTokenSmsOrange();
+                                        AgenceImmobiliere agenceFound = agenceImmobiliereRepository
+                                                        .findById(ap.getIdAgence()).orElse(null);
+                                        String message = "Bonjour, " + locataire.getGenre() + " " + locataire.getNom()
+                                                        + " votre agence " +
+                                                        agenceFound.getNomAgence().toUpperCase()
+                                                        + ", vous informe que le montant de " + ap.getSoldeAppelLoyer()
+                                                        + " F CFA correspondant au solde de votre loyer pour la periode de "
+                                                        + ap.getPeriodeLettre()
+                                                        + ", doit etre regler avant le " +
+                                                        ap.getDatePaiementPrevuAppelLoyer()
+                                                        + ". Merci de regulariser votre situation.";
+                                        envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                                                        locataire.getUsername(), "Sms Societe");
+                                        System.out.println("********************* Le toke toke est : " + leTok);
+                                } catch (Exception e) {
+                                        System.err.println(e.getMessage());
+                                }
+                        });
+                        return true;
+                }
+                return false;
         }
 }
