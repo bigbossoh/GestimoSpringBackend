@@ -404,8 +404,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
                                 // .map(EncaissementPrincipal::getMontantEncaissement)
-                                .filter(leJour -> leJour.getDateEncaissement().equals(localDate))
                                 .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(leJour -> leJour.getDateEncaissement().equals(localDate))
                                 .collect(Collectors.toList());
                 List<Double> listEncaissDouble = listEncaissent.stream()
                                 .map(EncaissementPrincipal::getMontantEncaissement).collect(Collectors.toList());
