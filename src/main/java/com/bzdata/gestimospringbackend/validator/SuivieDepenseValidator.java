@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
-import com.bzdata.gestimospringbackend.Models.SuivieDepense;
 
 public class SuivieDepenseValidator {
    public static List<String> validate(SuivieDepenseDto dto) {
