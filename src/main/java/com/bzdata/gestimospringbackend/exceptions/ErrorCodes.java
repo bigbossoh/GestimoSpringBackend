@@ -60,6 +60,8 @@ public enum ErrorCodes {
     BIEN_IMMOBILIER_NOT_FOUND(18001),
     IMAGE_NOT_VALID(19000),
     IMAGE_NOT_FOUND(19001),
+    SUIVIEDEPENSE_NOT_VALID(20000),
+    SUIVIEDEPENSE_NOT_FOUND(20001),
     ;
 
     private int code;

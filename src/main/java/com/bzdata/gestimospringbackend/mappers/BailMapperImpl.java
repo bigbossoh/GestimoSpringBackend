@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.mappers;
 
-import java.util.stream.DoubleStream;
 
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.BailMagasinDto;
@@ -8,9 +7,13 @@ import com.bzdata.gestimospringbackend.DTOs.BailVillaDto;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.MontantLoyerBailDto;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
+import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
+import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaissementDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.SuivieDepense;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
+import com.bzdata.gestimospringbackend.repository.SuivieDepenseRepository;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class BailMapperImpl {
         final MontantLoyerBailRepository montantLoyerBailRepository;
+        final SuivieDepenseRepository suivieDepenseRepository;
         // BAIL VILLA MAPPER
         public BailVillaDto fromBailVilla(BailLocation bailLocation) {
                 BailVillaDto bailLocaDto = new BailVillaDto();
@@ -92,5 +96,28 @@ public class BailMapperImpl {
                 BeanUtils.copyProperties(montantLoyerBail, montantLoyerBailDto);
                 return montantLoyerBailDto;
         }
+
+        // SUIVIE DEPENSE DTO MAPPER
+        public SuivieDepenseDto fromSuivieDepense(SuivieDepense suivieDepense) {
+                SuivieDepenseDto suivieDepenseDto = new SuivieDepenseDto();
+                BeanUtils.copyProperties(suivieDepense, suivieDepenseDto);
+                return suivieDepenseDto;
+        }
+
+        // SUIVIE DEPENSE MAPPER
+        public SuivieDepense  fromSuivieDepenseDto(SuivieDepenseDto suivieDepenseDto) {
+                SuivieDepense suivieDepense = new SuivieDepense();
+                BeanUtils.copyProperties(suivieDepenseDto, suivieDepense);
+                return suivieDepense;
+        }
+
+        // public SuivieDepense  fromSuivieDepenseDto(SuivieDepenseEncaissementDto suivieDepenseEncaissementDto) {
+        //         suivieDepenseRepository.findById(suivieDepenseEncaissementDto.getId)
+        //         SuivieDepense suivieDepense = new SuivieDepense();
+        //         BeanUtils.copyProperties(suivieDepenseDto, suivieDepense);
+        //         return suivieDepense;
+        // }
+
+
 
 }
