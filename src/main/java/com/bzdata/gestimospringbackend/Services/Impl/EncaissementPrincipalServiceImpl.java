@@ -48,6 +48,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         final EncaissementPrincipalRepository encaissementPrincipalRepository;
         // final SmsOrangeConfig smsOrangeConfig;
         final SmsOrangeConfig envoiSmsOrange;
+        
 
         @Override
         public boolean saveEncaissement(EncaissementPayloadDto dto) {
@@ -370,12 +371,19 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                                 .comparing(EncaissementPrincipal::getId);
+                                AgenceImmobiliere agenceFound=agenceImmobiliereRepository.findById(bailLocation.getIdAgence()).orElse(null);
+                                String nomString;
+                                if(agenceFound.getNomAgence()=="magiser"){
+                                 nomString="MAGISER";
+                        }else{
+                                nomString="MOLIBETY";
+                        }
                 try {
                         String leTok = envoiSmsOrange.getTokenSmsOrange();
-                        AgenceImmobiliere agenceFound=agenceImmobiliereRepository.findById(bailLocation.getIdAgence()).orElse(null);
-                        String message = agenceFound.getNomAgence().toUpperCase()+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer.";
+                        
+                        String message = "L'Agence "+nomString+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
                         envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                                        bailLocation.getUtilisateurOperation().getUsername(), "Sms Societe");
+                                        bailLocation.getUtilisateurOperation().getUsername(), nomString);
                         System.out.println("********************* Le toke toke est : " + leTok);
                 } catch (Exception e) {
                         System.err.println(e.getMessage());
