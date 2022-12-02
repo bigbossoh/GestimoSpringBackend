@@ -11,7 +11,7 @@ public class UtilisateurDtoValiditor {
         List<String> errors = new ArrayList<>();
 
         if (dto == null) {
-            errors.add("Veuillez renseigner l'email de l'utilisateur");
+            // errors.add("Veuillez renseigner l'email de l'utilisateur");
             errors.add("Veuillez renseigner le mot de passe de l'utilisateur");
             errors.add("Veuillez renseigner le nom de l'utilisateur");
             errors.add("Veuillez renseigner le mobile de l'utilisateur");
@@ -20,9 +20,9 @@ public class UtilisateurDtoValiditor {
             // errors.addAll(RoleDtoValidator.validate(null));
             return errors;
         }
-        if (!StringUtils.hasLength(dto.getEmail())) {
-            errors.add("Veuillez renseigner l'email de l'utilisateur");
-        }
+        // if (!StringUtils.hasLength(dto.getEmail())) {
+        //     errors.add("Veuillez renseigner l'email de l'utilisateur");
+        // }
         if (!StringUtils.hasLength(dto.getPassword())) {
             errors.add("Veuillez renseigner le mot de passe de l'utilisateur");
         }
