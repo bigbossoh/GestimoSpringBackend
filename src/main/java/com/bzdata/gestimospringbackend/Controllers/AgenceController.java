@@ -49,12 +49,12 @@ public class AgenceController {
         return ResponseEntity.ok(imagesService.saveLogo(request));
     }
 
-    @PostMapping("/saveagencelogo")
-    public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
-            @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
-        log.info("We are going to save a logo {}", imageFile.getBytes().length);
-        return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
-    }
+    // @PostMapping("/saveagencelogo")
+    // public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
+    //         @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
+    //     log.info("We are going to save a logo {}", imageFile.getBytes().length);
+    //     return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
+    // }
 
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {

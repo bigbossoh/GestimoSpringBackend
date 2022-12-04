@@ -24,7 +24,7 @@ public class ImageData extends AbstractEntity{
     private String profileAgenceImageUrl;
     @Lob
     @Column(name = "imagedata",length = 1500)
-    private byte[] imageData;
+    private String imageData;
     // @OneToOne(mappedBy = "imageData")
     // private AgenceImmobiliere agenceImmobiliere;
 
