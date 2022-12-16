@@ -128,14 +128,21 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(agenceImmobilierDTO, agenceImmo);
         return agenceImmo;
     }
-    public AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere){
+
+    public AgenceRequestDto fromEntity(AgenceImmobiliere agenceImmobiliere) {
         AgenceRequestDto agenceImmobilierDTO = new AgenceRequestDto();
         BeanUtils.copyProperties(agenceImmobiliere, agenceImmobilierDTO);
         ImageModel imageModel = getImageData(agenceImmobiliere);
         agenceImmobilierDTO.setIdImage(imageModel.getId());
         agenceImmobilierDTO.setTypeImage(imageModel.getType());
-        //agenceImmobilierDTO.setProfileAgenceUrl(imageModel.getProfileAgenceImageUrl());
+        // agenceImmobilierDTO.setProfileAgenceUrl(imageModel.getProfileAgenceImageUrl());
         return agenceImmobilierDTO;
+    }
+
+    public CronMailDto fromCronMail(CronMail cronMail) {
+        CronMailDto cronMailDto = new CronMailDto();
+        BeanUtils.copyProperties(cronMail, cronMailDto);
+        return cronMailDto;
     }
 
     private ImageModel getImageData(AgenceImmobiliere agenceImmobiliere) {
@@ -149,10 +156,10 @@ public class GestimoWebMapperImpl {
     public AgenceImmobilierDTO fromAgenceImmobilier(AgenceImmobiliere agenceImmobilier) {
         AgenceImmobilierDTO agenceImmoDTO = new AgenceImmobilierDTO();
         BeanUtils.copyProperties(agenceImmobilier, agenceImmoDTO);
-//        ImageData imageData = getImageData(agenceImmobilier);
-//        agenceImmoDTO.setIdImage(imageData.getId());
-//        agenceImmoDTO.setTypeImage(imageData.getTypeImage());
-//        agenceImmoDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
+        // ImageData imageData = getImageData(agenceImmobilier);
+        // agenceImmoDTO.setIdImage(imageData.getId());
+        // agenceImmoDTO.setTypeImage(imageData.getTypeImage());
+        // agenceImmoDTO.setProfileAgenceUrl(imageData.getProfileAgenceImageUrl());
         return agenceImmoDTO;
     }
 
