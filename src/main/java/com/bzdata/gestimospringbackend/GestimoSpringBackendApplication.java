@@ -63,9 +63,6 @@ import lombok.RequiredArgsConstructor;
 @SecurityScheme(name = "gestimoapi", scheme = "bearer", type = SecuritySchemeType.HTTP, in = SecuritySchemeIn.HEADER, bearerFormat = "JWT")
 public class GestimoSpringBackendApplication {
 
-    // private final GestimoWebInitDataAgenceImmoServiceImpl
-    // gestimoWebInitDataAgenceImmoService;
-
     public static void main(String[] args) {
         SpringApplication.run(GestimoSpringBackendApplication.class, args);
         new File(FOLDER_PATH).mkdirs();
