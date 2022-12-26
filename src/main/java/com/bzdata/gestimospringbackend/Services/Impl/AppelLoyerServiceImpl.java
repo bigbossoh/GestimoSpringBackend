@@ -16,6 +16,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
+import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -114,7 +115,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         appelLoyer.setPeriodeLettre(ym.format(f));
                         DateTimeFormatter mois = DateTimeFormatter.ofPattern("MMMM", Locale.FRANCE);
                         appelLoyer.setMoisUniquementLettre(ym.format(mois));
-
+                        appelLoyer.setMessageReduction("");
                         appelLoyer.setIdAgence(dto.getIdAgence());
                         appelLoyer.setPeriodeAppelLoyer(period.toString());
                         appelLoyer.setStatusAppelLoyer("Impayé");
@@ -459,5 +460,35 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         return true;
                 }
                 return false;
+        }
+
+        @Override
+        public List<AppelLoyersFactureDto> reductionLoyerByPeriode(PourcentageAppelDto pourcentageAppelDto) {
+                List<AppelLoyersFactureDto> listAppels = findAllAppelLoyerByPeriode(
+                                pourcentageAppelDto.getPeriodeAppelLoyer(), pourcentageAppelDto.getIdAgence());
+                if (listAppels.size() > 0) {
+                        for (int i = 0; i < listAppels.size(); i++) {
+                                Double montantApresReduction = 0.0;
+                                AppelLoyer appelLoyerTrouve = appelLoyerRepository.findById(listAppels.get(i).getId())
+                                                .orElseThrow(null);
+
+                                montantApresReduction = listAppels.get(i).getMontantLoyerBailLPeriode()
+                                                * (1 - pourcentageAppelDto.getTauxApplique() / 100);
+                                appelLoyerTrouve.setAncienMontant(listAppels.get(i).getMontantLoyerBailLPeriode());
+                                appelLoyerTrouve.setPourcentageReduction(pourcentageAppelDto.getTauxApplique());
+                                appelLoyerTrouve.setMontantLoyerBailLPeriode(montantApresReduction);
+                                appelLoyerTrouve.setMessageReduction(pourcentageAppelDto.getMessageReduction());
+                                log.info("Le montant loyer est le suivant : {},{} ,{}", listAppels.get(i).getId(),
+                                                montantApresReduction,
+                                                appelLoyerTrouve.getMontantLoyerBailLPeriode());
+                                appelLoyerRepository.save(appelLoyerTrouve);
+                        }
+                        List<AppelLoyersFactureDto> listAppelsModifier = findAllAppelLoyerByPeriode(
+                                        pourcentageAppelDto.getPeriodeAppelLoyer(), pourcentageAppelDto.getIdAgence());
+                        return listAppelsModifier;
+                } else {
+                        return null;
+                }
+
         }
 }

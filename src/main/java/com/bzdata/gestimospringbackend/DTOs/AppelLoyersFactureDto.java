@@ -58,4 +58,8 @@ public class AppelLoyersFactureDto {
     String abrvCodeBail;
     double nouveauMontantLoyer;
 
+    double ancienMontant;
+    double pourcentageReduction;
+    String messageReduction;
+
 }
