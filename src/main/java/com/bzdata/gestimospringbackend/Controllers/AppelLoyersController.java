@@ -17,6 +17,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
+import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,9 +74,10 @@ public class AppelLoyersController {
 
     @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllAppelloyerByPeriode/{periode}/{idAgence}")
-    public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode,@PathVariable("idAgence") Long idAgence) {
+    public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode,
+            @PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by periode {}", periode);
-        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode,idAgence));
+        return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode, idAgence));
     }
 
     @Operation(summary = "Trouver tous les appels loyers par annee", security = @SecurityRequirement(name = "bearerAuth"))
@@ -126,7 +128,7 @@ public class AppelLoyersController {
     @GetMapping("/impayeParMois/{periode}/{idAgence}")
     public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence) {
-        log.info("Find Appel by loyer en fonction de la periode {}, et de l id AGENCE {}", periode,idAgence);
+        log.info("Find Appel by loyer en fonction de la periode {}, et de l id AGENCE {}", periode, idAgence);
         return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode, idAgence));
     }
 
@@ -152,5 +154,13 @@ public class AppelLoyersController {
             @PathVariable("idAgence") Long idAgence) {
         log.info("Find Appel by loy {}", annee);
         return ResponseEntity.ok(appelLoyerService.impayeParAnnee(annee, idAgence));
+    }
+
+    @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/reductionLoyerByPeriode")
+    public ResponseEntity<List<AppelLoyersFactureDto>> ReductionLoyerByPeriode(
+            @RequestBody PourcentageAppelDto pourcentageAppelDto) {
+        log.info("Modif Appel by periode {}", pourcentageAppelDto.getPeriodeAppelLoyer());
+        return ResponseEntity.ok(appelLoyerService.reductionLoyerByPeriode(pourcentageAppelDto));
     }
 }

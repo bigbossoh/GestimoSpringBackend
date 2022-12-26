@@ -26,29 +26,20 @@ public class CronJobService {
     @Scheduled(cron = "* * * * * *")
     public void sendMail() throws InterruptedException, FileNotFoundException, JRException, SQLException {
 
-        List<CronMail> sendCron = cronMailService.getAllCronMailNotSend();
-        if (sendCron.size() > 0) {
-            for (int i = 0; i < sendCron.size(); i++) {
-                System.out.println("*************** Nazaire " + new Date());
-                System.out.println("Non Non Nazaire " + sendCron.get(i).getIdAgence());
-                emailService.sendMailGrouperWithAttachment(sendCron.get(i).getNextDateMail().getYear() + "-"
-                        + sendCron.get(i).getNextDateMail().getMonthValue(), sendCron.get(i).getIdAgence());
+        // List<CronMail> sendCron = cronMailService.getAllCronMailNotSend();
+        // if (sendCron.size() > 0) {
+        //     for (int i = 0; i < sendCron.size(); i++) {
+        //         System.out.println("*************** Nazaire " + new Date());
+        //         System.out.println("Non Non Nazaire " + sendCron.get(i).getIdAgence());
+        //         emailService.sendMailGrouperWithAttachment(sendCron.get(i).getNextDateMail().getYear() + "-"
+        //                 + sendCron.get(i).getNextDateMail().getMonthValue(), sendCron.get(i).getIdAgence());
 
-                System.out.println(" Loca ");
+        //         System.out.println(" Loca ");
 
-            }
+        //     }
 
-        }
-        // CronMailDto cronMail = cronMailService.getLasCronMailDto();
-        // if (cronMail.isDonne() == false) {
-        // cronMailService.modifierUneDateDenvoi(cronMail.getId());
-
-        // cronMailService.creerUneDateDenvoi(LocalDate.now());
-        // } else {
-        // System.out.println("Non Non Nazaire " + new Date());
         // }
-        // LocalDate lDate = LocalDate.now();
-        // cronMailService.creerUneDateDenvoi(lDate);
+
 
     }
 
