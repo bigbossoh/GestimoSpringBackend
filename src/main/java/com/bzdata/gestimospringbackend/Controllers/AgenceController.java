@@ -8,7 +8,6 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
-import com.bzdata.gestimospringbackend.Models.ImageModel;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
 import com.bzdata.gestimospringbackend.Services.ImagesService;
 
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,12 +46,12 @@ public class AgenceController {
         return ResponseEntity.ok(imagesService.saveLogo(request));
     }
 
-    @PostMapping("/saveagencelogo")
-    public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
-            @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
-        log.info("We are going to save a logo {}", imageFile.getBytes().length);
-        return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
-    }
+    // @PostMapping("/saveagencelogo")
+    // public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
+    //         @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
+    //     log.info("We are going to save a logo {}", imageFile.getBytes().length);
+    //     return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
+    // }
 
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {

@@ -35,10 +35,11 @@ public class AppelLoyer extends AbstractEntity {
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
     boolean isCloturer;
-
+    double ancienMontant;
+    double pourcentageReduction;
+    String messageReduction;
     @ManyToOne
     BailLocation bailLocationAppelLoyer;
     @OneToMany(mappedBy = "appelLoyerEncaissement")
     List<Encaissement> encaissementsAppelLoyer;
-
 }
