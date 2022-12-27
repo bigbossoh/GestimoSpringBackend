@@ -484,11 +484,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 log.info("Le montant loyer est le suivant : {},{} ,{}", listAppels.get(i).getId(),
                                                 montantApresReduction,
                                                 appelLoyerTrouve.getMontantLoyerBailLPeriode());
-                               AppelLoyer leSave= appelLoyerRepository.save(appelLoyerTrouve);
-                                log.info("info {}" ,leSave.getMontantLoyerBailLPeriode());
+                                AppelLoyer leSave = appelLoyerRepository.saveAndFlush(appelLoyerTrouve);
+                                log.info("info nouveau {}", leSave.getMontantLoyerBailLPeriode());
                         }
                         // List<AppelLoyersFactureDto> listAppelsModifier = findAllAppelLoyerByPeriode(
-                        //                 pourcentageAppelDto.getPeriodeAppelLoyer(), pourcentageAppelDto.getIdAgence());
+                        // pourcentageAppelDto.getPeriodeAppelLoyer(),
+                        // pourcentageAppelDto.getIdAgence());
                         return listAppels;
                 } else {
                         return null;

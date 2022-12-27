@@ -3,8 +3,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="quittance_appel_loyer" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="934dcdce-7007-457f-953b-e9de15bea315">
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="331"/>
-	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="660"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="248"/>
+	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="744"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="693"/>
 	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="293"/>
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
@@ -48,7 +48,8 @@
   gestimoweb.agence_immobiliere.email_agence ,
    gestimoweb.agence_immobiliere.mobile_agence ,
     gestimoweb.agence_immobiliere.regime_fiscale_agence ,
-     gestimoweb.agence_immobiliere.adresse_agence
+     gestimoweb.agence_immobiliere.adresse_agence,
+      gestimoweb.appel_loyer.message_reduction
 FROM gestimoweb.appel_loyer,
 gestimoweb.agence_immobiliere ,
 	gestimoweb.operation,
@@ -236,6 +237,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 	</field>
 	<field name="periode_lettre" class="java.lang.String"/>
 	<field name="adresse_agence" class="java.lang.String"/>
+	<field name="message_reduction" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -350,6 +352,13 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 				</textElement>
 				<text><![CDATA[Période :]]></text>
 			</staticText>
+			<textField>
+				<reportElement mode="Transparent" x="2" y="257" width="548" height="43" forecolor="#010300" backcolor="#FFFFFF" uuid="b5ca87f5-a666-41e7-952d-d0815e88f5f8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Century Schoolbook L" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{message_reduction}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<detail>
@@ -368,7 +377,7 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 					<font fontName="Arial" size="12" isBold="true" isItalic="true"/>
 					<paragraph lineSpacing="Double" leftIndent="5"/>
 				</textElement>
-				<text><![CDATA[	Désignation]]></text>
+				<text><![CDATA[Désignation]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="360" y="-21" width="185" height="20" forecolor="#080707" backcolor="#EDEDED" uuid="a88c23cb-309d-495a-9cf0-5bd476f604b6">
