@@ -13,57 +13,57 @@
 	<parameter name="LOGO" class="java.io.InputStream"/>
 	<queryString language="SQL">
 		<![CDATA[SELECT
- gestimoweb.appel_loyer.id ,
- gestimoweb.bienimmobilier.type_bien_immobilier ,
-  gestimoweb.appel_loyer.id_agence ,
-   gestimoweb.appel_loyer.id_createur ,
-    gestimoweb.appel_loyer.periode_appel_loyer ,
-     gestimoweb.appel_loyer.status_appel_loyer ,
-   gestimoweb.appel_loyer.date_paiement_prevu_appel_loyer ,
-    gestimoweb.appel_loyer.date_debut_mois_appel_loyer ,
-     gestimoweb.appel_loyer.date_fin_mois_appel_loyer ,
-      gestimoweb.appel_loyer.mois_uniquement_lettre ,
-       gestimoweb.appel_loyer.annee_appel_loyer ,
-        gestimoweb.appel_loyer.periode_lettre ,
-        gestimoweb.agence_immobiliere.fax_agence ,
-         gestimoweb.agence_immobiliere.sigle_agence ,
-          gestimoweb.bienimmobilier.code_abrv_bien_immobilier ,
-           gestimoweb.bienimmobilier.nom_complet_bien_immobilier ,
-            gestimoweb.operation.id as idBailLocation,
-             gestimoweb.operation.abrv_code_bail ,
-        gestimoweb.appel_loyer.mois_chiffre_appel_loyer,
-    gestimoweb.appel_loyer.desc_appel_loyer ,
-     gestimoweb.appel_loyer.montant_loyer_baillperiode ,
-      gestimoweb.appel_loyer.solde_appel_loyer ,
-       gestimoweb.appel_loyer.is_solder_appel_loyer ,
-        gestimoweb.appel_loyer.is_cloturer ,
-         gestimoweb.utilisateur.nom ,
-          gestimoweb.utilisateur.prenom ,
-           gestimoweb.utilisateur.genre ,
-            gestimoweb.utilisateur.email ,
-             gestimoweb.utilisateur.id as idLocataire,
-              gestimoweb.agence_immobiliere.nom_agence ,
-  gestimoweb.agence_immobiliere.tel_agence ,
-   gestimoweb.agence_immobiliere.compte_contribuable ,
-  gestimoweb.agence_immobiliere.email_agence ,
-   gestimoweb.agence_immobiliere.mobile_agence ,
-    gestimoweb.agence_immobiliere.regime_fiscale_agence ,
-     gestimoweb.agence_immobiliere.adresse_agence,
-      gestimoweb.appel_loyer.message_reduction
-FROM gestimoweb.appel_loyer,
-gestimoweb.agence_immobiliere ,
-	gestimoweb.operation,
-	gestimoweb.utilisateur,
-	gestimoweb.bienimmobilier
+ dbgestimoweb.appel_loyer.id ,
+  dbgestimoweb.bienimmobilier.type_bien_immobilier ,
+   dbgestimoweb.appel_loyer.id_agence ,
+    dbgestimoweb.appel_loyer.id_createur ,
+     dbgestimoweb.appel_loyer.periode_appel_loyer ,
+      dbgestimoweb.appel_loyer.status_appel_loyer ,
+    dbgestimoweb.appel_loyer.date_paiement_prevu_appel_loyer ,
+     dbgestimoweb.appel_loyer.date_debut_mois_appel_loyer ,
+      dbgestimoweb.appel_loyer.date_fin_mois_appel_loyer ,
+      dbgestimoweb.appel_loyer.mois_uniquement_lettre ,
+       dbgestimoweb.appel_loyer.annee_appel_loyer ,
+        dbgestimoweb.appel_loyer.periode_lettre ,
+        dbgestimoweb.agence_immobiliere.fax_agence ,
+         dbgestimoweb.agence_immobiliere.sigle_agence ,
+          dbgestimoweb.bienimmobilier.code_abrv_bien_immobilier ,
+           dbgestimoweb.bienimmobilier.nom_complet_bien_immobilier ,
+            dbgestimoweb.operation.id as idBailLocation,
+             dbgestimoweb.operation.abrv_code_bail ,
+        dbgestimoweb.appel_loyer.mois_chiffre_appel_loyer,
+    dbgestimoweb.appel_loyer.desc_appel_loyer ,
+     dbgestimoweb.appel_loyer.solde_appel_loyer  as montant_loyer_baillperiode,
+      dbgestimoweb.appel_loyer.solde_appel_loyer ,
+       dbgestimoweb.appel_loyer.is_solder_appel_loyer ,
+        dbgestimoweb.appel_loyer.is_cloturer ,
+         dbgestimoweb.utilisateur.nom ,
+          dbgestimoweb.utilisateur.prenom ,
+           dbgestimoweb.utilisateur.genre ,
+            dbgestimoweb.utilisateur.email ,
+             dbgestimoweb.utilisateur.id as idLocataire,
+              dbgestimoweb.agence_immobiliere.nom_agence ,
+  dbgestimoweb.agence_immobiliere.tel_agence ,
+   dbgestimoweb.agence_immobiliere.compte_contribuable ,
+  dbgestimoweb.agence_immobiliere.email_agence ,
+   dbgestimoweb.agence_immobiliere.mobile_agence ,
+    dbgestimoweb.agence_immobiliere.regime_fiscale_agence ,
+     dbgestimoweb.agence_immobiliere.adresse_agence,
+      dbgestimoweb.appel_loyer.message_reduction
+FROM dbgestimoweb.appel_loyer,
+dbgestimoweb.agence_immobiliere ,
+	dbgestimoweb.operation,
+	dbgestimoweb.utilisateur,
+	dbgestimoweb.bienimmobilier
 WHERE
- gestimoweb.bienimmobilier.id = gestimoweb.operation.bien_immobilier_operation_id
- AND  gestimoweb.utilisateur.id_agence = gestimoweb.agence_immobiliere.id
- AND  gestimoweb.operation.utilisateur_operation_id= gestimoweb.utilisateur.id
-AND	 gestimoweb.appel_loyer.bail_location_appel_loyer_id = gestimoweb.operation.id
-AND    gestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
-AND gestimoweb.appel_loyer.id_agence =$P{PARAMETER_AGENCE}
- AND gestimoweb.appel_loyer.is_solder_appel_loyer =0
-ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, gestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
+ dbgestimoweb.bienimmobilier.id = dbgestimoweb.operation.bien_immobilier_operation_id
+ AND  dbgestimoweb.utilisateur.id_agence = dbgestimoweb.agence_immobiliere.id
+ AND  dbgestimoweb.operation.utilisateur_operation_id= dbgestimoweb.utilisateur.id
+AND	 dbgestimoweb.appel_loyer.bail_location_appel_loyer_id = dbgestimoweb.operation.id
+AND    dbgestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
+AND dbgestimoweb.appel_loyer.id_agence =$P{PARAMETER_AGENCE}
+ AND dbgestimoweb.appel_loyer.is_solder_appel_loyer =0
+ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC, dbgestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="id"/>
@@ -118,6 +118,11 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 	<field name="annee_appel_loyer" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.name" value="annee_appel_loyer"/>
 		<property name="com.jaspersoft.studio.field.label" value="annee_appel_loyer"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="appel_loyer"/>
+	</field>
+	<field name="periode_lettre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="periode_lettre"/>
+		<property name="com.jaspersoft.studio.field.label" value="periode_lettre"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="appel_loyer"/>
 	</field>
 	<field name="fax_agence" class="java.lang.String">
@@ -235,9 +240,16 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 		<property name="com.jaspersoft.studio.field.label" value="regime_fiscale_agence"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="agence_immobiliere"/>
 	</field>
-	<field name="periode_lettre" class="java.lang.String"/>
-	<field name="adresse_agence" class="java.lang.String"/>
-	<field name="message_reduction" class="java.lang.String"/>
+	<field name="adresse_agence" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="adresse_agence"/>
+		<property name="com.jaspersoft.studio.field.label" value="adresse_agence"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="agence_immobiliere"/>
+	</field>
+	<field name="message_reduction" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="message_reduction"/>
+		<property name="com.jaspersoft.studio.field.label" value="message_reduction"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="appel_loyer"/>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -251,14 +263,14 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 				<text><![CDATA[Bien loué :	]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="240" y="222" width="130" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement x="40" y="222" width="274" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="370" y="222" width="184" height="30" uuid="21c66301-09ac-43b1-99cf-33c53e17b877"/>
+				<reportElement x="322" y="222" width="234" height="30" uuid="21c66301-09ac-43b1-99cf-33c53e17b877"/>
 				<textElement verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
@@ -353,11 +365,16 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 				<text><![CDATA[Période :]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="2" y="257" width="548" height="43" forecolor="#010300" backcolor="#FFFFFF" uuid="b5ca87f5-a666-41e7-952d-d0815e88f5f8"/>
+				<reportElement mode="Transparent" x="2" y="257" width="548" height="43" forecolor="#FA071C" backcolor="#FFFFFF" uuid="b5ca87f5-a666-41e7-952d-d0815e88f5f8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
 					<font fontName="Century Schoolbook L" size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{message_reduction}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="472" y="7" width="100" height="30" uuid="6113af32-4777-458c-bab0-221dbaf5c162"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<patternExpression><![CDATA["dd / MM / yyyy"]]></patternExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -446,11 +463,9 @@ ORDER BY gestimoweb.utilisateur.nom ASC , gestimoweb.utilisateur.prenom ASC, ges
 				<patternExpression><![CDATA["dd / MM / yyyy"]]></patternExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="76" width="540" height="30" forecolor="#FC201C" uuid="6cba93c5-c790-4c6f-a7ed-9482b884f639"/>
+				<reportElement x="0" y="57" width="540" height="36" forecolor="#FC201C" uuid="6cba93c5-c790-4c6f-a7ed-9482b884f639"/>
 				<textElement textAlignment="Left" verticalAlignment="Top"/>
-				<text><![CDATA[NB: Le loyer est dû avant le 10 de chaque mois entamé, dans les cas contraire une pénalité de 10% (Dix pour cent) vous sera
-facturée
-				]]></text>
+				<text><![CDATA[NB: Le loyer est dû avant le 10 de chaque mois entamé, dans les cas contraire une pénalité de 10% (Dix pour cent) vous sera facturée.				]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="27" y="184" width="58" height="19" uuid="07b27337-732a-427e-9213-f9daf250d61b"/>
@@ -516,7 +531,7 @@ facturée
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="58" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
 				<reportElement x="350" y="-42" width="100" height="20" uuid="45ca6eaf-ac4e-462a-af54-f013a12b3220"/>
 				<text><![CDATA[
@@ -535,41 +550,41 @@ facturée
 	<pageFooter>
 		<band height="28" splitType="Stretch">
 			<textField>
-				<reportElement x="380" y="-7" width="170" height="13" uuid="3fe094f8-9dd6-4266-bfbf-6f4b71c6f8d5"/>
+				<reportElement x="380" y="15" width="170" height="13" uuid="3fe094f8-9dd6-4266-bfbf-6f4b71c6f8d5"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{email_agence}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="332" y="-7" width="38" height="13" uuid="25bcc4e6-fea7-4a4a-8351-1b4f88029147"/>
+				<reportElement x="332" y="15" width="38" height="13" uuid="25bcc4e6-fea7-4a4a-8351-1b4f88029147"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[-Email :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="244" y="-7" width="87" height="13" uuid="52961017-81df-43a9-a69b-deecd244d952"/>
+				<reportElement x="244" y="15" width="87" height="13" uuid="52961017-81df-43a9-a69b-deecd244d952"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{tel_agence}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="225" y="-7" width="35" height="13" uuid="d644f717-4f6c-4061-8207-f0491713b867"/>
+				<reportElement x="217" y="15" width="35" height="13" uuid="d644f717-4f6c-4061-8207-f0491713b867"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[/ Tel :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="135" y="-7" width="87" height="13" uuid="dc35994b-7db0-4e25-bbed-0c5d5d4c7e2f"/>
+				<reportElement x="125" y="15" width="87" height="13" uuid="dc35994b-7db0-4e25-bbed-0c5d5d4c7e2f"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{mobile_agence}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="118" y="-7" width="27" height="13" uuid="ab98b732-c81d-4b8b-ad0d-250e40c3fe78"/>
+				<reportElement x="118" y="15" width="27" height="13" uuid="ab98b732-c81d-4b8b-ad0d-250e40c3fe78"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Cel:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="282" y="-23" width="185" height="13" uuid="44d017e0-be9a-4bd0-9b84-a97ced827f3b"/>
+				<reportElement x="319" y="-2" width="185" height="13" uuid="44d017e0-be9a-4bd0-9b84-a97ced827f3b"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{compte_contribuable}.toUpperCase()]]></textFieldExpression>
 			</textField>
@@ -583,7 +598,7 @@ facturée
 				]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="85" y="-23" width="185" height="13" uuid="28c5e323-df9d-4a2f-b6b8-2da04a3621ff"/>
+				<reportElement x="122" y="-2" width="185" height="13" uuid="28c5e323-df9d-4a2f-b6b8-2da04a3621ff"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{adresse_agence}.toUpperCase()]]></textFieldExpression>
 			</textField>

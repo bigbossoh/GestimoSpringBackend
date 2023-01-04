@@ -3,10 +3,16 @@ package com.bzdata.gestimospringbackend.Controllers;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
+import java.io.File;
+import java.io.FileInputStream;
+
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,11 +48,22 @@ public class PrintController {
     }
 
     @GetMapping(path = "/quittancegrouper/{periode}/{idAgence}/{proprio}", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> quittancePeriode(
+    public ResponseEntity<InputStreamResource> quittancePeriode(
             @PathVariable("periode") String periode, @PathVariable("idAgence") Long idAgence,
             @PathVariable("proprio") String proprio)
-            throws FileNotFoundException, JRException, SQLException {
-        log.info("Periode {}", periode);
-        return ResponseEntity.ok(this.printService.quittancePeriodeString(periode, idAgence, proprio));
+            throws FileNotFoundException, JRException, SQLException, IOException {
+        byte[] bytes = this.printService.quittancePeriodeString(periode, idAgence, proprio);
+        String path = "src/main/resources/templates/depot_etat/appel_loyer_du_" + periode + ".pdf";
+        File leFichierTelecharger = new File(path);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(leFichierTelecharger));
+        log.info("Periode Pour le Test de AMAZON Periode , chemin,Nom du fichier,{},{},{}", periode, path,
+                leFichierTelecharger.getName());
+        return ResponseEntity.ok()
+                // CONTENT-DISPOSITION
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment;filename=" + leFichierTelecharger.getName())
+                .contentType(MediaType.APPLICATION_PDF)
+                .contentLength(leFichierTelecharger.length())
+                .body(resource);
     }
 }

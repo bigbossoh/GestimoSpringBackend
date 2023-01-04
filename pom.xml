@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -115,7 +117,7 @@
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
         <!-- <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
+        <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
         </dependency> -->
         <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
@@ -157,7 +159,16 @@
             <artifactId>javax.json</artifactId>
             <version>1.1.4</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>7.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>html2pdf</artifactId>
+            <version>4.0.4</version>
+        </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
@@ -236,7 +247,8 @@
                             </info>
                             <outputPath>${project.build.directory}</outputPath>
                             <outputFormats>json</outputFormats>
-                            <swaggerApiReader>com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
+                            <swaggerApiReader>
+                                com.github.kongchen.swagger.docgen.reader.SpringMvcApiReader</swaggerApiReader>
                             <swaggerDirectory>${project.build.directory}</swaggerDirectory>
                         </apiSource>
                     </apiSources>

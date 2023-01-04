@@ -480,6 +480,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 appelLoyerTrouve.setAncienMontant(listAppels.get(i).getMontantLoyerBailLPeriode());
                                 appelLoyerTrouve.setPourcentageReduction(pourcentageAppelDto.getTauxApplique());
                                 appelLoyerTrouve.setMontantLoyerBailLPeriode(montantApresReduction);
+                                appelLoyerTrouve.setSoldeAppelLoyer(listAppels.get(i).getSoldeAppelLoyer()- listAppels.get(i).getMontantLoyerBailLPeriode()*pourcentageAppelDto.getTauxApplique() / 100);
                                 appelLoyerTrouve.setMessageReduction(pourcentageAppelDto.getMessageReduction());
                                 log.info("Le montant loyer est le suivant : {},{} ,{}", listAppels.get(i).getId(),
                                                 montantApresReduction,

@@ -29,7 +29,8 @@ import java.util.List;
 public class SuivieDepenseController {
    private final SuivieDepenseService suivieDepenseService;
    @PostMapping("/saveSuivieDepense")
-    public ResponseEntity<SuivieDepenseDto> saveSuivieDepense(@RequestBody SuivieDepenseDto dto) {
+   public ResponseEntity<SuivieDepenseDto> saveSuivieDepense(@RequestBody SuivieDepenseDto dto) {
+System.out.println("On n'est ici : ");
         log.info("We are going to save a new suive depense from controller {}", dto);
         return ResponseEntity.ok(suivieDepenseService.saveNewDepense(dto));
     }
