@@ -18,7 +18,7 @@ public class SecurityConstant {
     public static final String[] PUBLIC_URLS = {
             "/**/envoimail/**","**/bail/**","/actuator/**",
             "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login",
-            "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**", "/**/bienImmobilier/**"
+            "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**", "/**/bienImmobilier/**","/**/suiviedepense/**"
     };
     // public static final String[] PUBLIC_URLS = { "**" };
     // "/**/utilisateurs/singup",
