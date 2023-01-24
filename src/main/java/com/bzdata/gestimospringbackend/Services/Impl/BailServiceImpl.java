@@ -1,9 +1,9 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
@@ -96,9 +96,9 @@ public class BailServiceImpl implements BailService {
             // la dateClotureEffecture
             List<AppelLoyer> listeAppelLoyerAyantDateDebutSupDateCloture = appelLoyerRepository.findAll()
                     .stream()
-                    .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getBailLocationAppelLoyer()
-                            .getId() == newBailLocation
-                                    .getId())
+                    .filter(appelLoyersFactureDto -> Objects.equals(appelLoyersFactureDto.getBailLocationAppelLoyer()
+                            .getId(), newBailLocation
+                                    .getId()))
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getDateDebutMoisAppelLoyer()
                             .isAfter(dateClotureEffectif))
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getSoldeAppelLoyer() == montantBail)
@@ -115,8 +115,8 @@ public class BailServiceImpl implements BailService {
     public int nombreBauxActifs(Long idAgence) {
         return (int) bailLocationRepository.findAll()
                 .stream()
-                .filter(agence -> agence.getIdAgence() == idAgence)
-                .filter(encourrs -> encourrs.isEnCoursBail())
+                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
+                .filter(BailLocation::isEnCoursBail)
                 .count();
     }
 
@@ -195,8 +195,8 @@ public class BailServiceImpl implements BailService {
     public int nombreBauxNonActifs(Long idAgence) {
         return (int) bailLocationRepository.findAll()
                 .stream()
-                .filter(agence -> agence.getIdAgence() == idAgence)
-                .filter(encourrs -> encourrs.isEnCoursBail() == false)
+                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
+                .filter(encourrs -> !encourrs.isEnCoursBail())
                 .count();
     }
 
@@ -218,7 +218,7 @@ public class BailServiceImpl implements BailService {
                 dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence(),dto.getDateDePriseEncompte());
         System.out.println("le montant est les suivant");
         System.out.println(modifMontantLoyerbail);
-        if (modifMontantLoyerbail == true) {
+        if (modifMontantLoyerbail) {
             // MODIFIER LES LOYERS
         }
         return bailMapperImpl.fromOperation(bailSave);
