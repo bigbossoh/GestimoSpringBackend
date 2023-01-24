@@ -101,19 +101,11 @@ public class GestimoSpringBackendApplication {
             AgenceImmobiliereRepository agenceImmobiliereRepository,
             MagasinRepository magasinRepository) {
         String mdp = passwordEncoder.encode("superviseur");
-        // try {
-        // String leTok = envoiSmsOrange.getTokenSmsOrange();
-        // envoiSmsOrange.sendSms(leTok, "bonjour ...", "+2250000", "0556918763", "Sms
-        // Societe");
-        // System.out.println("Le toke toke est : " + leTok);
-        // } catch (Exception e) {
-        // System.err.println(e.getMessage());
-        // }
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
         return (args) -> {
             // Creation des Constants
-            // CHARGEMENT DU PAYS COTE D4IVOIRE
+            // CHARGEMENT DU PAYS COTE D'IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");
             if (!oPays.isPresent()) {
                 pays.setAbrvPays("CI");
@@ -122,7 +114,6 @@ public class GestimoSpringBackendApplication {
                 paysRepository.save(pays);
             }
             // CREATION VILLES
-
             Optional<Pays> p = paysRepository.findById(1L);
             if (p.isPresent()) {
                 Optional<Ville> v = villeRepository.findById(1L);

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
@@ -187,7 +188,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .stream()
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                                 .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
-                                .filter(appelLoyer -> appelLoyer.getIdAgence() == idAgence)
+                                .filter(appelLoyer -> Objects.equals(appelLoyer.getIdAgence(), idAgence))
                                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
@@ -198,7 +199,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 List<Integer> collectAnneAppelDistinct = appelLoyerRepository
                                 .findAll()
                                 .stream()
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .map(AppelLoyer::getAnneeAppelLoyer)
                                 .distinct()
                                 .sorted()
@@ -213,7 +214,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .findAll()
                                 .stream()
                                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .map(gestimoWebMapper::fromPeriodeAppel)
                                 .distinct()
                                 .collect(Collectors.toList());
@@ -228,7 +229,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .findAll()
                                 .stream()
                                 .filter(appelLoyer -> appelLoyer.getAnneeAppelLoyer() == annee)
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .map(gestimoWebMapper::fromAppelLoyerForAnnee)
 
                                 .distinct()
@@ -320,7 +321,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
                                 .filter(period -> period.getPeriodeAppelLoyer().equals(periode))
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .filter(solde -> solde.getSoldeAppelLoyer() > 0)
                                 .map(AppelLoyer::getSoldeAppelLoyer)
                                 .collect(Collectors.toList());
@@ -332,15 +333,15 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 log.info("total des paiements sur periode et par agence {},{}", periode, idAgence);
                 List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
                                 .filter(period -> period.getPeriodeAppelLoyer().equals(periode))
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
 
                                 .map(AppelLoyer::getMontantLoyerBailLPeriode)
                                 .collect(Collectors.toList());
-                double TotalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
+                double totalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
                                 .sum();
-                log.info("Total montant loyer par periode par agence {}, {}", TotalMontantLoyerParPeriodeParAgence,
+                log.info("Total montant loyer par periode par agence {}, {}", totalMontantLoyerParPeriodeParAgence,
                                 impayeParPeriode(periode, idAgence));
-                return TotalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence);
+                return totalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence);
 
                 // return appelLoyerRepository.payeParMois(periode);
         }
@@ -350,7 +351,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
                                 .filter(period -> period.getAnneeAppelLoyer() == (annee))
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .filter(solde -> solde.getSoldeAppelLoyer() > 0)
                                 .map(AppelLoyer::getSoldeAppelLoyer)
                                 .collect(Collectors.toList());
@@ -363,21 +364,21 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
                                 .filter(period -> period.getAnneeAppelLoyer() == (annee))
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
 
                                 .map(AppelLoyer::getMontantLoyerBailLPeriode)
                                 .collect(Collectors.toList());
-                double TotalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
+                double totalMontantLoyerParPeriodeParAgence = soldeImpaye.stream().mapToDouble(Double::doubleValue)
                                 .sum();
 
-                return TotalMontantLoyerParPeriodeParAgence - impayeParAnnee(annee, idAgence);
+                return totalMontantLoyerParPeriodeParAgence - impayeParAnnee(annee, idAgence);
         }
 
         @Override
         public Long nombreBauxImpaye(String periode, Long idAgence) {
 
                 return appelLoyerRepository.findAll().stream()
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .count();
         }
 
@@ -398,7 +399,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 List<PeriodeDto> collectPeriodeDistinct = appelLoyerRepository
                                 .findAll()
                                 .stream()
-                                .filter(agence -> agence.getIdAgence() == idAgence)
+                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
                                 .map(gestimoWebMapper::fromPeriodeAppel)
                                 .sorted(Comparator.comparing(PeriodeDto::getPeriodeAppelLoyer))
                                 .distinct()
@@ -410,9 +411,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public boolean deleteAppelsByIdBail(Long idBail) {
                 List<AppelLoyer> appelsloyer = appelLoyerRepository.findAll().stream()
-                                .filter(bail -> bail.getBailLocationAppelLoyer().getId() == idBail)
+                                .filter(bail -> Objects.equals(bail.getBailLocationAppelLoyer().getId(), idBail))
                                 .collect(Collectors.toList());
-                if (appelsloyer.size() > 0) {
+                if (!appelsloyer.isEmpty()) {
                         for (int index = 0; index < appelsloyer.size() - 1; index++) {
                                 System.out.println(appelsloyer.get(index));
                                 appelLoyerRepository.delete(appelsloyer.get(index));
@@ -428,11 +429,11 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 List<AppelLoyer> appelLoyersFactureDtos = appelLoyerRepository.findAll().stream()
                                 .filter(sold -> sold.isSolderAppelLoyer() == false)
-                                .filter(agen -> agen.getIdAgence() == idAgence)
+                                .filter(agen -> Objects.equals(agen.getIdAgence(), idAgence))
                                 .filter(perio -> perio.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
                                 .collect(Collectors.toList());
 
-                if (appelLoyersFactureDtos.size() > 0) {
+                if (!appelLoyersFactureDtos.isEmpty()) {
                         appelLoyersFactureDtos.forEach(ap -> {
                                 Utilisateur locataire = utilisateurRepository.findById(
                                                 ap.getBailLocationAppelLoyer().getUtilisateurOperation().getId())
@@ -470,7 +471,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 List<AppelLoyersFactureDto> listAppels = findAllAppelLoyerByPeriode(
                                 pourcentageAppelDto.getPeriodeAppelLoyer(), pourcentageAppelDto.getIdAgence());
 
-                if (listAppels.size() > 0) {
+                if (!listAppels.isEmpty()) {
                         for (int i = 0; i < listAppels.size(); i++) {
                                 double montantApresReduction = 0.0;
                                 AppelLoyer appelLoyerTrouve = appelLoyerRepository.findById(listAppels.get(i).getId())
@@ -495,6 +496,38 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 } else {
                         return null;
                 }
+        }
+        @Override
+        public List<AppelLoyersFactureDto> modifierMontantLoyerAppel(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
+                        double ancienMontantLoyer, Long idBailLocation, Long idAgence,LocalDate datePriseEnCompDate) {
 
+                return null;
+        }
+
+        @Override
+        public List<AppelLoyersFactureDto> listeDesloyerSuperieurAUnePeriode(String periode,Long idBail) {
+                AppelLoyersFactureDto appelLoyerTrouver = findByIdAndBail(periode, idBail);
+                return appelLoyerRepository.findAll()
+                .stream()
+                // .filter(appelLoyer -> !appelLoyer.isCloturer())
+                .filter(appelLoyer -> appelLoyer.getId()>=appelLoyerTrouver.getId())
+                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(), idBail))
+                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                .map(gestimoWebMapper::fromAppelLoyer)
+                .collect(Collectors.toList());
+        }
+
+        @Override
+        public AppelLoyersFactureDto findByIdAndBail(String periode, Long idBail) {
+                List<AppelLoyersFactureDto>factureLoyer= appelLoyerRepository.findAll()
+                .stream()
+                // .filter(appelLoyer -> !appelLoyer.isCloturer())
+                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periode))
+                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(), idBail))
+                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                .map(gestimoWebMapper::fromAppelLoyer)
+                                .collect(Collectors.toList());
+                log.info("Voici la periode de zrangus {}, {}", periode, factureLoyer.get(0).getId());
+                return factureLoyer.get(0);
         }
 }

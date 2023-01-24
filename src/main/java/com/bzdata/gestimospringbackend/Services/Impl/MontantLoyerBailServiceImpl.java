@@ -47,13 +47,13 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                     .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                             idBailLocation,
                             ErrorCodes.BAILLOCATION_NOT_FOUND));
-            List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository
+            List<MontantLoyerBail> listBauxMontantLoyerBail = montantLoyerBailRepository
                     .findByBailLocation(bailLocation);
             Optional<MontantLoyerBail> oldMontantBail = montantLoyerBailRepository.findById(currentIdMontantLoyerBail);
             if (oldMontantBail.isPresent()) {
                 newMontantLoyerBail.setId(oldMontantBail.get().getId());
             }
-            if (ListBauxMontantLoyerBail.size() == 0) {
+            if (listBauxMontantLoyerBail.isEmpty()) {
                 newMontantLoyerBail.setAncienMontantLoyer(0);
                 newMontantLoyerBail.setTauxLoyer(0);
                 newMontantLoyerBail.setMontantAugmentation((nouveauMontantLoyer - ancienMontantLoyer));
@@ -65,8 +65,8 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 newMontantLoyerBail.setStatusLoyer(true);
                 montantLoyerBailRepository.save(newMontantLoyerBail);
             } else {
-                Optional<MontantLoyerBail> firstMontantLoyerBail = ListBauxMontantLoyerBail.stream()
-                        .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
+                Optional<MontantLoyerBail> firstMontantLoyerBail = listBauxMontantLoyerBail.stream()
+                        .filter(MontantLoyerBail::isStatusLoyer)
                         .findFirst();
                 if (firstMontantLoyerBail.get().getAncienMontantLoyer() != 0) {
                     newMontantLoyerBail.setTauxLoyer(
@@ -102,7 +102,6 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                             (nouveauMontantLoyer - ancienMontantLoyer) * 100
                                     / ancienMontantLoyer);
                 }
-
                 montantLoyerBailRepository.save(nouvelleLigne);
             }
 
@@ -140,9 +139,9 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
                 .orElseThrow(() -> new InvalidEntityException("Aucun BailMagasin has been found with Code " +
                         idBailLocation,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
-        List<MontantLoyerBail> ListBauxMontantLoyerBail = montantLoyerBailRepository.findByBailLocation(bailLocation);
+        List<MontantLoyerBail> listBauxMontantLoyerBail = montantLoyerBailRepository.findByBailLocation(bailLocation);
 
-        return ListBauxMontantLoyerBail.stream()
+        return listBauxMontantLoyerBail.stream()
                 .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
                 // .findFirst()
                 .map(bailMapperImpl::fromMontantLoyerBail)
@@ -154,7 +153,7 @@ public class MontantLoyerBailServiceImpl implements MontantLoyerBailService {
     public boolean supprimerUnMontantParIdBail(Long idBail) {
         List<MontantLoyerBail> montantLoyerBails = montantLoyerBailRepository.findAll().stream()
                 .filter(bail -> bail.getBailLocation().getId() == idBail).collect(Collectors.toList());
-        if (montantLoyerBails.size() > 0) {
+        if (!montantLoyerBails.isEmpty()) {
             for (int index = 0; index < montantLoyerBails.size() - 1; index++) {
                 System.out.println(montantLoyerBails.get(index));
                 montantLoyerBailRepository.delete(montantLoyerBails.get(index));

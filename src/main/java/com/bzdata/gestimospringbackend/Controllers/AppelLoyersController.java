@@ -124,6 +124,20 @@ public class AppelLoyersController {
         return ResponseEntity.ok(appelLoyerService.getFirstLoyerImpayerByBien(id));
     }
 
+
+    @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findByIdAndBail/{idBien}/{periode}")
+    public ResponseEntity<AppelLoyersFactureDto> findByIdAndBail(@PathVariable("idBien") Long idBien,
+            @PathVariable("periode") String periode) {
+        log.info("Find Appel by loy {},{}", idBien, periode);
+        return ResponseEntity.ok(appelLoyerService.findByIdAndBail(periode, idBien));
+    }
+    @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/listeDesloyerSuperieurAUnePeriode/{idBien}/{periode}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> listeDesloyerSuperieurAUnePeriode(@PathVariable("idBien") Long idBien,@PathVariable("periode") String periode) {
+        log.info("Find Appel by loy {},{}", idBien, periode);
+        return ResponseEntity.ok(appelLoyerService.listeDesloyerSuperieurAUnePeriode( periode,idBien));
+    }
     @Operation(summary = "Trouver tous les appels loyers impayé par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/impayeParMois/{periode}/{idAgence}")
     public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,
