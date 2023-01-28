@@ -58,7 +58,6 @@ public class BailServiceImpl implements BailService {
     final EncaissementPrincipalRepository encaissementRepository;
     final BienImmobilierService bienImmobilierService;
 
-
     @Override
     public boolean closeBail(Long id) {
         log.info("We are going to close a bail ID {}", id);
@@ -69,7 +68,7 @@ public class BailServiceImpl implements BailService {
                 throw new EntityNotFoundException("BailLocation from id not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
             // Mise a jour de la table Operation
             Bienimmobilier bienLiberer = bienImmobilierService.findBienByBailEnCours(id);
-            if (bienLiberer!=null) {
+            if (bienLiberer != null) {
                 bienLiberer.setOccupied(false);
                 bienImmobilierRepository.save(bienLiberer);
             }
@@ -97,7 +96,8 @@ public class BailServiceImpl implements BailService {
             List<AppelLoyer> listeAppelLoyerAyantDateDebutSupDateCloture = appelLoyerRepository.findAll()
                     .stream()
                     .filter(appelLoyersFactureDto -> Objects.equals(appelLoyersFactureDto.getBailLocationAppelLoyer()
-                            .getId(), newBailLocation
+                            .getId(),
+                            newBailLocation
                                     .getId()))
                     .filter(appelLoyersFactureDto -> appelLoyersFactureDto.getDateDebutMoisAppelLoyer()
                             .isAfter(dateClotureEffectif))
@@ -162,7 +162,7 @@ public class BailServiceImpl implements BailService {
         // log.info("We are going to delete a Appartement with the ID {}", id);
         if (id == null) {
             throw new EntityNotFoundException("Aucune Operation avec l'ID = " + id + " "
-            + "n' ete trouve dans la BDD", ErrorCodes.BAILLOCATION_NOT_FOUND);
+                    + "n' ete trouve dans la BDD", ErrorCodes.BAILLOCATION_NOT_FOUND);
         }
         boolean exist = bailLocationRepository.existsById(id);
         if (!exist) {
@@ -206,27 +206,47 @@ public class BailServiceImpl implements BailService {
                 .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + dto.getIdBail(),
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
         // MODIFIER LE BAIL
-      // operation.setDateDebut(dto.getDateDePriseEncompte());
+        // operation.setDateDebut(dto.getDateDePriseEncompte());
         operation.setDateFin(dto.getDateFin());
-        //operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
-        //operation.setMontantCautionBail(dto.getNouveauMontantLoyer());
+        // operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
+        // operation.setMontantCautionBail(dto.getNouveauMontantLoyer());
         BailLocation bailSave = bailLocationRepository.save(operation);
         System.out.println("Le modifiable");
-        System.out.println(dto.getAncienMontantLoyer()+" "+dto.getNouveauMontantLoyer());
+        System.out.println(dto.getAncienMontantLoyer() + " " + dto.getNouveauMontantLoyer());
         // METTRE A JOUR LE MONTANT DU BAIL
         boolean modifMontantLoyerbail = montantLoyerBailService.saveNewMontantLoyerBail(0L,
-                dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence(),dto.getDateDePriseEncompte());
+                dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence(),
+                dto.getDateDePriseEncompte());
         System.out.println("le montant est les suivant");
         System.out.println(modifMontantLoyerbail);
         if (modifMontantLoyerbail) {
             // MODIFIER LES LOYERS
+            log.info("La période est {}",
+                    dto.getDateDePriseEncompte().getYear() + "-" + dto.getDateDePriseEncompte().getMonthValue());
+            List<AppelLoyersFactureDto> loyers = appelLoyerService.listeDesloyerSuperieurAUnePeriode(
+                    dto.getDateDePriseEncompte().getYear() + "-" + dto.getDateDePriseEncompte().getMonthValue(),
+                    dto.getIdBail());
+            if (!loyers.isEmpty()) {
+                for (int index = 0; index < loyers.size(); index++) {
+                    AppelLoyer lappelTrouver = appelLoyerRepository.findById(loyers.get(index).getId()).orElse(null);
+                    lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer());
+                    if (lappelTrouver.getSoldeAppelLoyer()>0) {
+                        lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer()-(lappelTrouver.getMontantLoyerBailLPeriode()-lappelTrouver.getSoldeAppelLoyer()));
+                    }
+                    lappelTrouver.setMontantLoyerBailLPeriode(dto.getNouveauMontantLoyer());
+                    appelLoyerRepository.save(lappelTrouver);
+                }
+
+            }
         }
         return bailMapperImpl.fromOperation(bailSave);
     }
+
     @Override
     public OperationDto findOperationById(Long id) {
-        BailLocation findBailLocation = bailLocationRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + id,
-        ErrorCodes.BAILLOCATION_NOT_FOUND));
+        BailLocation findBailLocation = bailLocationRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + id,
+                        ErrorCodes.BAILLOCATION_NOT_FOUND));
         return bailMapperImpl.fromOperation(findBailLocation);
     }
 }
