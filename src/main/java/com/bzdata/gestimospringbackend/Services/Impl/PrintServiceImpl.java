@@ -104,10 +104,10 @@ public class PrintServiceImpl implements PrintService {
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
            // ENVOI DE MESSAGCE DE QUITTANCE
-            boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode, idAgence);
-            if (sms_envoyer) {
-                log.info("Sms Envoye {}", sms_envoyer);
-            }
+           // boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode, idAgence);
+            // if (sms_envoyer) {
+            //     log.info("Sms Envoye {}", sms_envoyer);
+            // }
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -5,8 +5,8 @@
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="248"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="744"/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="693"/>
-	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="293"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w1" value="933"/>
+	<property name="com.jaspersoft.studio.property.dataset.dialog.DatasetDialog.sash.w2" value="53"/>
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
 	<parameter name="NOM_PROPRIO" class="java.lang.String"/>
 	<parameter name="PARAMETER_AGENCE" class="java.lang.String"/>
@@ -37,7 +37,7 @@
       dbgestimoweb.appel_loyer.solde_appel_loyer ,
        dbgestimoweb.appel_loyer.is_solder_appel_loyer ,
         dbgestimoweb.appel_loyer.is_cloturer ,
-         dbgestimoweb.utilisateur.nom ,
+        CONCAT(dbgestimoweb.utilisateur.nom, ' ', dbgestimoweb.utilisateur.prenom)   as nom ,
           dbgestimoweb.utilisateur.prenom ,
            dbgestimoweb.utilisateur.genre ,
             dbgestimoweb.utilisateur.email ,
@@ -166,7 +166,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 		<property name="com.jaspersoft.studio.field.tree.path" value="appel_loyer"/>
 	</field>
 	<field name="montant_loyer_baillperiode" class="java.lang.Double">
-		<property name="com.jaspersoft.studio.field.name" value="montant_loyer_baillperiode"/>
+		<property name="com.jaspersoft.studio.field.name" value="solde_appel_loyer"/>
 		<property name="com.jaspersoft.studio.field.label" value="montant_loyer_baillperiode"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="appel_loyer"/>
 	</field>
@@ -263,21 +263,14 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<text><![CDATA[Bien loué :	]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="40" y="222" width="274" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<reportElement x="291" y="222" width="254" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="322" y="222" width="234" height="30" uuid="21c66301-09ac-43b1-99cf-33c53e17b877"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{prenom}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="240" y="203" width="100" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
+				<reportElement x="291" y="203" width="100" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -528,24 +521,23 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				</textElement>
 				<text><![CDATA[Résumé facture]]></text>
 			</staticText>
-		</band>
-	</detail>
-	<columnFooter>
-		<band height="23" splitType="Stretch">
-			<staticText>
-				<reportElement x="350" y="-42" width="100" height="20" uuid="45ca6eaf-ac4e-462a-af54-f013a12b3220"/>
-				<text><![CDATA[
-					Fait à Abidjan,
-				]]></text>
-			</staticText>
 			<textField>
-				<reportElement x="350" y="-25" width="150" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
+				<reportElement x="309" y="194" width="190" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
 					<font size="10" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{NOM_PROPRIO}.toUpperCase()]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="430" y="260" width="100" height="20" uuid="08253ea9-6a0c-46c3-a680-94dd83376a03"/>
+				<text><![CDATA[
+					Fait à Abidjan,
+				]]></text>
+			</staticText>
 		</band>
+	</detail>
+	<columnFooter>
+		<band height="23" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="28" splitType="Stretch">

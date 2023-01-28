@@ -34,7 +34,7 @@ dbgestimoweb.appel_loyer.id ,
       dbgestimoweb.appel_loyer.solde_appel_loyer ,
        dbgestimoweb.appel_loyer.is_solder_appel_loyer ,
         dbgestimoweb.appel_loyer.is_cloturer ,
-         dbgestimoweb.utilisateur.nom ,
+         CONCAT(dbgestimoweb.utilisateur.nom, ' ', dbgestimoweb.utilisateur.prenom)  as nom,
           dbgestimoweb.utilisateur.prenom ,
            dbgestimoweb.utilisateur.genre ,
             dbgestimoweb.utilisateur.email ,
@@ -267,21 +267,14 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<text><![CDATA[Bien loué :		]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="240" y="248" width="130" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
+				<reportElement x="309" y="248" width="244" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="370" y="248" width="184" height="30" uuid="21c66301-09ac-43b1-99cf-33c53e17b877"/>
-				<textElement verticalAlignment="Middle">
-					<font size="14" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{prenom}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="240" y="229" width="100" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
+				<reportElement x="309" y="229" width="34" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
@@ -520,6 +513,13 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{periode_lettre}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="388" y="148" width="150" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="10" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOM_PROPRIO}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
@@ -528,13 +528,6 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<reportElement x="400" y="0" width="100" height="20" uuid="45ca6eaf-ac4e-462a-af54-f013a12b3220"/>
 				<text><![CDATA[Fait à Abidjan,]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="400" y="17" width="150" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font size="10" isUnderline="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{NOM_PROPRIO}]]></textFieldExpression>
-			</textField>
 		</band>
 	</columnFooter>
 	<pageFooter>
