@@ -260,7 +260,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<text><![CDATA[Période :			]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="340" width="80" height="19" uuid="bf1fbf24-c434-4240-ad20-e5f8bdce1980"/>
+				<reportElement x="157" y="340" width="80" height="19" uuid="bf1fbf24-c434-4240-ad20-e5f8bdce1980"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Serif" size="12" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
@@ -344,7 +344,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<textFieldExpression><![CDATA[$F{nom_agence}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="302" y="340" width="248" height="19" uuid="cfaa7427-b9c9-4e1b-a9e8-3b0a8e165af8"/>
+				<reportElement x="237" y="340" width="313" height="19" uuid="cfaa7427-b9c9-4e1b-a9e8-3b0a8e165af8"/>
 				<textElement verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
@@ -514,7 +514,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<textFieldExpression><![CDATA[$F{periode_lettre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="388" y="148" width="150" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
+				<reportElement x="360" y="148" width="178" height="24" uuid="2ffbc6fc-7612-4944-a22f-6ae8c75ef152"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="10" isUnderline="true"/>
 				</textElement>
