@@ -43,7 +43,7 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittanceLoyer(Long id) throws FileNotFoundException, JRException, SQLException {
         String path = "src/main/resources/templates";
 
-        File file = ResourceUtils.getFile("classpath:templates/print/Recu_paiement.jrxml");
+        File file = ResourceUtils.getFile(path+"/print/Recu_paiement.jrxml");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("idQuit", id);
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -58,15 +58,15 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittancePeriode(String periode, String proprio, Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
 
-        try {
-            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
-                    .getInputStream();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        // try {
+        //     String path = "src/main/resources/templates";
+        //   //  InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg").getInputStream();
+        // } catch (IOException e) {
+        //     // TODO Auto-generated catch block
+        //     e.printStackTrace();
+        // }
         String path = "src/main/resources/templates";
-        File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
+        File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("PARAMETER_PERIODE", periode);
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -82,11 +82,11 @@ public class PrintServiceImpl implements PrintService {
             throws FileNotFoundException, JRException, SQLException {
 
         try {
-
-            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
-                    .getInputStream();
             String path = "src/main/resources/templates";
-            File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer.jrxml");
+            InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg")
+                    .getInputStream();
+
+            File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
@@ -120,11 +120,11 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittancePeriodeById(String periode, Long id, String proprio)
             throws FileNotFoundException, JRException, SQLException {
         try {
-
-            InputStream logoMagiser = resourceLoader.getResource("classpath:templates/print/magiser.jpeg")
-                    .getInputStream();
             String path = "src/main/resources/templates";
-            File file = ResourceUtils.getFile("classpath:templates/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
+            InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg")
+                    .getInputStream();
+
+            File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
 
             Map<String, Object> parameters = new HashMap<>();
 
