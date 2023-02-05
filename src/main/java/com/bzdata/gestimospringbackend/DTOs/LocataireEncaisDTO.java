@@ -1,4 +1,5 @@
 package com.bzdata.gestimospringbackend.DTOs;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,7 +12,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LocataireEncaisDTO {
     Long id;
-     String nom;
-     String prenom;
+    Long idBien;
+    Long idAppel;
+    double montantloyer;
+    String mois;
+    String moisEnLettre;
+    String nom;
+    String prenom;
+    String codeDescBail;
 
 }

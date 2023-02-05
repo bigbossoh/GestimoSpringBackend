@@ -298,6 +298,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<LocataireEncaisDTO> listOfLocataireAyantunbail(Long idAgence) {
+
         return bailrepository.findAll().stream()
         .filter(agence->agence.getIdAgence()==idAgence)
                 .map(bailMapper::fromOperationBailLocation)
