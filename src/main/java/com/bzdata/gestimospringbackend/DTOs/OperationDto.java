@@ -18,6 +18,8 @@ public class OperationDto {
     Long id;
     Long idAgence;
     Long idCreateur;
+    Long idFirstAppel;
+    
     Instant creationDate;
     Instant lastModifiedDate;
     LocalDate dateDebut;

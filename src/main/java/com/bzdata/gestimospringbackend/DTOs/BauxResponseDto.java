@@ -19,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 public class BauxResponseDto {
     Long id;
     Long idAgence;
+    Long idFirstAppel;
     String designationBail;
     String abrvCodeBail;
     boolean enCoursBail;

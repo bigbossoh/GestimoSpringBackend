@@ -55,6 +55,7 @@ public class GestimoWebMapperImpl {
         appelLoyersFactureDto
                 .setEmailLocatire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getEmail());
         appelLoyersFactureDto.setIdLocataire(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getId());
+        appelLoyersFactureDto.setNouveauMontantLoyer(appelLoyer.getMontantLoyerBailLPeriode());
         // AGENCE
         AgenceImmobiliere agenceImmobiliere = agenceImmobiliereRepository.findById(appelLoyer.getIdAgence())
                 .orElse(null);
@@ -88,20 +89,21 @@ public class GestimoWebMapperImpl {
             throw new EntityNotFoundException("bail from GestimoMapper not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
         appelLoyersFactureDto.setIdBailLocation(bailLocation.getId());
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
-        appelLoyersFactureDto.setNouveauMontantLoyer(bailLocation
-                .getMontantLoyerBail()
-                .stream()
-                .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
-                .findFirst()
-                .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
-                .orElse(null));
-        appelLoyer.setMontantLoyerBailLPeriode(bailLocation
-                .getMontantLoyerBail()
-                .stream()
-                .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
-                .findFirst()
-                .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
-                .orElse(null));
+        // appelLoyersFactureDto.setNouveauMontantLoyer(bailLocation
+        //         .getMontantLoyerBail()
+        //         .stream()
+        //         .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
+        //         .findFirst()
+        //         .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
+        //         .orElse(null));
+        // appelLoyer.setMontantLoyerBailLPeriode(bailLocation
+        // .getMontantLoyerBail()
+        // .stream()
+        // .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
+        // .findFirst()
+        // .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
+        // .orElse(null))
+        // ;
         // Information sur le proprietaire
         Utilisateur utilisateur = utilisateurRepository
                 .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation()

@@ -189,7 +189,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
                                 .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer))
                                 .filter(appelLoyer -> Objects.equals(appelLoyer.getIdAgence(), idAgence))
-                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                               // .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
         }
@@ -309,7 +309,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 return lesLoyers.stream()
                                 .filter(bienTrouver -> bienTrouver.getBailLocationAppelLoyer()
                                                 .getBienImmobilierOperation().equals(bienImmobilier))
-                                .filter(loyers -> loyers.getMontantLoyerBailLPeriode() > 0)
+                                .filter(loyers -> loyers.getSoldeAppelLoyer() > 0)
                                 // .filter(perio->perio.getPeriodeAppelLoyer().compareTo(bienPeriodeDto.getPeriode())<0)
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .findFirst().orElseThrow(null);
@@ -477,55 +477,62 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 AppelLoyer appelLoyerTrouve = appelLoyerRepository.findById(listAppels.get(i).getId())
                                                 .orElseThrow(null);
                                 montantApresReduction = listAppels.get(i).getMontantLoyerBailLPeriode()
-                                                * (1 - pourcentageAppelDto.getTauxApplique() / 100);
+                                                - listAppels.get(i).getMontantLoyerBailLPeriode()
+                                                                * pourcentageAppelDto.getTauxApplique() / 100;
+
                                 appelLoyerTrouve.setAncienMontant(listAppels.get(i).getMontantLoyerBailLPeriode());
                                 appelLoyerTrouve.setPourcentageReduction(pourcentageAppelDto.getTauxApplique());
                                 appelLoyerTrouve.setMontantLoyerBailLPeriode(montantApresReduction);
-                                appelLoyerTrouve.setSoldeAppelLoyer(listAppels.get(i).getSoldeAppelLoyer()- listAppels.get(i).getMontantLoyerBailLPeriode()*pourcentageAppelDto.getTauxApplique() / 100);
+                                log.info("Le nouveau montan est le suivant du loyer {};{}",listAppels.get(i).getId(), montantApresReduction);
+                                appelLoyerTrouve.setSoldeAppelLoyer(listAppels.get(i).getSoldeAppelLoyer()
+                                                - listAppels.get(i).getMontantLoyerBailLPeriode()
+                                                                * pourcentageAppelDto.getTauxApplique() / 100);
                                 appelLoyerTrouve.setMessageReduction(pourcentageAppelDto.getMessageReduction());
                                 log.info("Le montant loyer est le suivant : {},{} ,{}", listAppels.get(i).getId(),
                                                 montantApresReduction,
                                                 appelLoyerTrouve.getMontantLoyerBailLPeriode());
-                                AppelLoyer leSave = appelLoyerRepository.saveAndFlush(appelLoyerTrouve);
+                                AppelLoyer leSave = appelLoyerRepository.save(appelLoyerTrouve);
                                 log.info("info nouveau {}", leSave.getMontantLoyerBailLPeriode());
                         }
-                        // List<AppelLoyersFactureDto> listAppelsModifier = findAllAppelLoyerByPeriode(
-                        // pourcentageAppelDto.getPeriodeAppelLoyer(),
-                        // pourcentageAppelDto.getIdAgence());
+
                         return listAppels;
                 } else {
                         return null;
                 }
         }
+
         @Override
-        public List<AppelLoyersFactureDto> modifierMontantLoyerAppel(Long currentIdMontantLoyerBail, double nouveauMontantLoyer,
-                        double ancienMontantLoyer, Long idBailLocation, Long idAgence,LocalDate datePriseEnCompDate) {
+        public List<AppelLoyersFactureDto> modifierMontantLoyerAppel(Long currentIdMontantLoyerBail,
+                        double nouveauMontantLoyer,
+                        double ancienMontantLoyer, Long idBailLocation, Long idAgence, LocalDate datePriseEnCompDate) {
 
                 return null;
         }
 
         @Override
-        public List<AppelLoyersFactureDto> listeDesloyerSuperieurAUnePeriode(String periode,Long idBail) {
+        public List<AppelLoyersFactureDto> listeDesloyerSuperieurAUnePeriode(String periode, Long idBail) {
                 AppelLoyersFactureDto appelLoyerTrouver = findByIdAndBail(periode, idBail);
                 return appelLoyerRepository.findAll()
-                .stream()
-                // .filter(appelLoyer -> !appelLoyer.isCloturer())
-                .filter(appelLoyer -> appelLoyer.getId()>=appelLoyerTrouver.getId())
-                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(), idBail))
-                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
-                .map(gestimoWebMapper::fromAppelLoyer)
-                .collect(Collectors.toList());
+                                .stream()
+                                // .filter(appelLoyer -> !appelLoyer.isCloturer())
+                                .filter(appelLoyer -> appelLoyer.getId() >= appelLoyerTrouver.getId())
+                                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(),
+                                                idBail))
+                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                                .map(gestimoWebMapper::fromAppelLoyer)
+                                .collect(Collectors.toList());
         }
 
         @Override
         public AppelLoyersFactureDto findByIdAndBail(String periode, Long idBail) {
-                List<AppelLoyersFactureDto>factureLoyer= appelLoyerRepository.findAll()
-                .stream()
-                // .filter(appelLoyer -> !appelLoyer.isCloturer())
-                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periode))
-                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(), idBail))
-                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
-                .map(gestimoWebMapper::fromAppelLoyer)
+                List<AppelLoyersFactureDto> factureLoyer = appelLoyerRepository.findAll()
+                                .stream()
+                                // .filter(appelLoyer -> !appelLoyer.isCloturer())
+                                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periode))
+                                .filter(appelLoyer -> Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(),
+                                                idBail))
+                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                                .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
                 log.info("Voici la periode de zrangus {}, {}", periode, factureLoyer.get(0).getId());
                 return factureLoyer.get(0);
