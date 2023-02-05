@@ -80,7 +80,8 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
         quittance.setAnneeLoyer(appelLoyerQuittance.getAnneeAppelLoyer());
         // quittance.setChargeLoyer(especeEncaissementSave.get);
         quittance.setCodeBien(
-                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation()
+                        .getCodeAbrvBienImmobilier());
         quittance.setEnvoiParMail(true);
         quittance.setEnvoiParMail(true);
         quittance.setEnvoiParSms(true);
@@ -91,9 +92,11 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
                         .getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom();
         quittance.setNomLocataire(nomPrenoms);
         quittance.setNomProprietaire(
-                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getNom()
+                appelLoyerQuittance.getBailLocationAppelLoyer().getBienImmobilierOperation()
+                        .getUtilisateurProprietaire().getNom()
                         + " " + appelLoyerQuittance
-                                .getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire().getPrenom());
+                                .getBailLocationAppelLoyer().getBienImmobilierOperation().getUtilisateurProprietaire()
+                                .getPrenom());
         quittance.setSoldeLoyer(appelLoyerQuittance.getSoldeAppelLoyer());
         quittanceRepository.save(quittance);
         return EspeceEncaissementDto.fromEntity(especeEncaissementSave);

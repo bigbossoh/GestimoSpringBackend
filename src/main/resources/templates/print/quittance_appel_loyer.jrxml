@@ -10,7 +10,7 @@
 	<parameter name="PARAMETER_PERIODE" class="java.lang.String"/>
 	<parameter name="NOM_PROPRIO" class="java.lang.String"/>
 	<parameter name="PARAMETER_AGENCE" class="java.lang.String"/>
-	<parameter name="LOGO" class="java.io.InputStream"/>
+	<!-- <parameter name="LOGO" class="java.io.InputStream"/> -->
 	<queryString language="SQL">
 		<![CDATA[SELECT
  dbgestimoweb.appel_loyer.id ,
@@ -263,49 +263,49 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<text><![CDATA[Bien loué :	]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="291" y="222" width="254" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
+				<reportElement x="298" y="158" width="254" height="30" uuid="bce6e129-05d0-4149-9feb-d295886ab042"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nom}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="291" y="203" width="100" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
+				<reportElement x="298" y="139" width="100" height="19" uuid="8be9c880-2c43-4883-aa40-59c011d96220"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{genre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="104" y="121" width="28" height="25" uuid="d2507802-7aa9-4f93-9786-059f9ee3b425"/>
+				<reportElement x="104" y="95" width="28" height="25" uuid="d2507802-7aa9-4f93-9786-059f9ee3b425"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[N°			]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="130" y="121" width="44" height="25" uuid="6d8010e4-9536-41b3-8cfa-95e863a59957"/>
+				<reportElement x="130" y="95" width="44" height="25" uuid="6d8010e4-9536-41b3-8cfa-95e863a59957"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{sigle_agence}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="171" y="121" width="13" height="25" uuid="1562f1e3-6a2e-4d47-9a8c-044f57d74b1c"/>
+				<reportElement x="171" y="114" width="13" height="25" uuid="1562f1e3-6a2e-4d47-9a8c-044f57d74b1c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
 			<textField evaluationTime="Page">
-				<reportElement x="186" y="120" width="41" height="25" uuid="31a2a48e-cc7a-4741-ae6d-07358206ec3c"/>
+				<reportElement x="186" y="94" width="41" height="25" uuid="31a2a48e-cc7a-4741-ae6d-07358206ec3c"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{type_bien_immobilier}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="223" y="120" width="13" height="25" uuid="1f25f8c8-c263-436b-a505-416957d44fc1"/>
+				<reportElement x="223" y="113" width="13" height="25" uuid="1f25f8c8-c263-436b-a505-416957d44fc1"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
@@ -333,18 +333,14 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				<textFieldExpression><![CDATA[$F{periode_lettre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="236" y="119" width="100" height="26" uuid="4661c068-03b9-4c77-b0ad-24999c0d8c6e"/>
+				<reportElement x="236" y="93" width="100" height="26" uuid="4661c068-03b9-4c77-b0ad-24999c0d8c6e"/>
 				<textElement verticalAlignment="Middle">
 					<font size="16" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="-5" y="13" width="109" height="67" uuid="b7ed7c20-6649-48d5-8543-d3f12a82d7c6"/>
-				<imageExpression><![CDATA[$P{LOGO}]]></imageExpression>
-			</image>
 			<staticText>
-				<reportElement x="31" y="120" width="89" height="30" uuid="e63869e1-b4fb-4917-ae9a-73b132850633"/>
+				<reportElement x="31" y="94" width="89" height="30" uuid="e63869e1-b4fb-4917-ae9a-73b132850633"/>
 				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>

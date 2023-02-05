@@ -202,17 +202,13 @@ public class BailServiceImpl implements BailService {
 
     @Override
     public OperationDto modifierUnBail(BailModifDto dto) {
+
         BailLocation operation = bailLocationRepository.findById(dto.getIdBail())
                 .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + dto.getIdBail(),
                         ErrorCodes.APPARTEMENT_NOT_FOUND));
         // MODIFIER LE BAIL
-        // operation.setDateDebut(dto.getDateDePriseEncompte());
         operation.setDateFin(dto.getDateFin());
-        // operation.setNbreMoisCautionBail(dto.getNombreMoisCaution());
-        // operation.setMontantCautionBail(dto.getNouveauMontantLoyer());
         BailLocation bailSave = bailLocationRepository.save(operation);
-        System.out.println("Le modifiable");
-        System.out.println(dto.getAncienMontantLoyer() + " " + dto.getNouveauMontantLoyer());
         // METTRE A JOUR LE MONTANT DU BAIL
         boolean modifMontantLoyerbail = montantLoyerBailService.saveNewMontantLoyerBail(0L,
                 dto.getNouveauMontantLoyer(), dto.getAncienMontantLoyer(), dto.getIdBail(), bailSave.getIdAgence(),
@@ -220,18 +216,24 @@ public class BailServiceImpl implements BailService {
         System.out.println("le montant est les suivant");
         System.out.println(modifMontantLoyerbail);
         if (modifMontantLoyerbail) {
+            String mois = dto.getDateDePriseEncompte().getMonthValue() + "";
+            if (dto.getDateDePriseEncompte().getMonthValue() < 10) {
+                mois = "0" + dto.getDateDePriseEncompte().getMonthValue();
+
+            }
             // MODIFIER LES LOYERS
             log.info("La période est {}",
-                    dto.getDateDePriseEncompte().getYear() + "-" + dto.getDateDePriseEncompte().getMonthValue());
+                    dto.getDateDePriseEncompte().getYear() + "-" + mois);
             List<AppelLoyersFactureDto> loyers = appelLoyerService.listeDesloyerSuperieurAUnePeriode(
-                    dto.getDateDePriseEncompte().getYear() + "-" + dto.getDateDePriseEncompte().getMonthValue(),
+                    dto.getDateDePriseEncompte().getYear() + "-" + mois,
                     dto.getIdBail());
             if (!loyers.isEmpty()) {
                 for (int index = 0; index < loyers.size(); index++) {
                     AppelLoyer lappelTrouver = appelLoyerRepository.findById(loyers.get(index).getId()).orElse(null);
                     lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer());
-                    if (lappelTrouver.getSoldeAppelLoyer()>0) {
-                        lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer()-(lappelTrouver.getMontantLoyerBailLPeriode()-lappelTrouver.getSoldeAppelLoyer()));
+                    if (lappelTrouver.getSoldeAppelLoyer() > 0) {
+                        lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer()
+                                - (lappelTrouver.getMontantLoyerBailLPeriode() - lappelTrouver.getSoldeAppelLoyer()));
                     }
                     lappelTrouver.setMontantLoyerBailLPeriode(dto.getNouveauMontantLoyer());
                     appelLoyerRepository.save(lappelTrouver);

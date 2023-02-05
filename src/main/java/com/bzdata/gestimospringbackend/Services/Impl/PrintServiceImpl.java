@@ -43,7 +43,7 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittanceLoyer(Long id) throws FileNotFoundException, JRException, SQLException {
         String path = "src/main/resources/templates";
 
-        File file = ResourceUtils.getFile(path+"/print/Recu_paiement.jrxml");
+        File file = ResourceUtils.getFile(path + "/print/Recu_paiement.jrxml");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("idQuit", id);
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -59,14 +59,15 @@ public class PrintServiceImpl implements PrintService {
             throws FileNotFoundException, JRException, SQLException {
 
         // try {
-        //     String path = "src/main/resources/templates";
-        //   //  InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg").getInputStream();
+        // String path = "src/main/resources/templates";
+        // // InputStream logoMagiser =
+        // resourceLoader.getResource(path+"/print/magiser.jpeg").getInputStream();
         // } catch (IOException e) {
-        //     // TODO Auto-generated catch block
-        //     e.printStackTrace();
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
         // }
         String path = "src/main/resources/templates";
-        File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer.jrxml");
+        File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("PARAMETER_PERIODE", periode);
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
@@ -83,15 +84,17 @@ public class PrintServiceImpl implements PrintService {
 
         try {
             String path = "src/main/resources/templates";
-            InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg")
-                    .getInputStream();
+            // File filemagiser = ResourceUtils.getFile(path + "/print/magiser.jpeg");
 
-            File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer.jrxml");
+            // InputStream logoMagiser = resourceLoader.getResource(filemagiser.getPath())
+            //         .getInputStream();
+
+            File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
             parameters.put("NOM_PROPRIO", proprio);
-            parameters.put("LOGO", logoMagiser);
+            parameters.put("LOGO", "magiser.jpeg");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
@@ -103,10 +106,11 @@ public class PrintServiceImpl implements PrintService {
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-           // ENVOI DE MESSAGCE DE QUITTANCE
-           // boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode, idAgence);
+            // ENVOI DE MESSAGCE DE QUITTANCE
+            // boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode,
+            // idAgence);
             // if (sms_envoyer) {
-            //     log.info("Sms Envoye {}", sms_envoyer);
+            // log.info("Sms Envoye {}", sms_envoyer);
             // }
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
@@ -121,17 +125,19 @@ public class PrintServiceImpl implements PrintService {
             throws FileNotFoundException, JRException, SQLException {
         try {
             String path = "src/main/resources/templates";
-            InputStream logoMagiser = resourceLoader.getResource(path+"/print/magiser.jpeg")
-                    .getInputStream();
 
-            File file = ResourceUtils.getFile(path+"/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
+            File filemagiser = ResourceUtils.getFile(path + "/print/magiser.jpeg");
+
+            InputStream logoMagiser = resourceLoader.getResource(filemagiser.getPath())
+                    .getInputStream();
+            File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer_indiv_pour_mail.jrxml");
 
             Map<String, Object> parameters = new HashMap<>();
 
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("ID_UTILISATEUR", id.toString());
             parameters.put("NOM_PROPRIO", proprio);
-            parameters.put("LOGO", logoMagiser);
+            parameters.put("LOGO", "magiser.jpeg");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
