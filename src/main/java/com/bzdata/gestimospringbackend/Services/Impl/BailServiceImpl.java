@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -57,6 +58,8 @@ public class BailServiceImpl implements BailService {
     final AppelLoyerRepository appelLoyerRepository;
     final EncaissementPrincipalRepository encaissementRepository;
     final BienImmobilierService bienImmobilierService;
+    private final BailMapperImpl bailMapper;
+
 
     @Override
     public boolean closeBail(Long id) {
@@ -250,5 +253,20 @@ public class BailServiceImpl implements BailService {
                 .orElseThrow(() -> new EntityNotFoundException("Aucune Operation avec l'ID = " + id,
                         ErrorCodes.BAILLOCATION_NOT_FOUND));
         return bailMapperImpl.fromOperation(findBailLocation);
+    }
+
+    @Override
+    public LocataireEncaisDTO bailBayLocataireEtBien(Long locataire, Long bienImmobilier) {
+        List<LocataireEncaisDTO> lesbeaux = bailLocationRepository.findAll().stream()
+                .filter(bien -> bien.getBienImmobilierOperation().getId() == bienImmobilier && bien.getUtilisateurOperation().getId() == locataire)
+                .map(bailMapper::fromOperationBailLocation)
+                .collect(Collectors.toList());
+        log.info("Le size du mapper est le suivant {}", lesbeaux.size());
+        if (lesbeaux.size()>0) {
+            return lesbeaux.get(0);
+        } else {
+
+        }
+        return null;
     }
 }
