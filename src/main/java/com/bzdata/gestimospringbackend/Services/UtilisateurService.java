@@ -43,5 +43,6 @@ public interface UtilisateurService {
     List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence);
 
     List<LocataireEncaisDTO> listOfLocataireAyantunbail(Long idAgence);
+    
 
 }

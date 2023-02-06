@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 
 public interface BailService {
@@ -24,5 +25,7 @@ public interface BailService {
     List<OperationDto> findAllBauxLocation(Long idAgence);
 
     boolean deleteOperationById(Long id);
+
+    LocataireEncaisDTO bailBayLocataireEtBien(Long locataire,Long bienImmobilier);
 
 }

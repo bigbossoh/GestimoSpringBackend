@@ -282,9 +282,8 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 Comparator<AppelLoyer> appelLoyerByDateDebutAppelLoyer = Comparator
                                 .comparing(AppelLoyer::getDateDebutMoisAppelLoyer);
                 return lesLoyers.stream()
-                                .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation)
-                                // .filter(appelLoyer -> !appelLoyer.isCloturer())
-                                .filter(bail -> !bail.isSolderAppelLoyer())
+                                .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation && !bail.isSolderAppelLoyer())
+
                                 .sorted(appelLoyerByDateDebutAppelLoyer)
 
                                 .map(gestimoWebMapper::fromAppelLoyer)

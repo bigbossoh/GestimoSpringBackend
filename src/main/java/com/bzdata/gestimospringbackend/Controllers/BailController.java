@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.BailService;
 
@@ -71,6 +72,13 @@ public class BailController {
     @GetMapping("/findoperationbyid/{id}")
     public ResponseEntity<OperationDto> findOperationById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(bailService.findOperationById(id));
+    }
+
+    @GetMapping("/bailLocataireetbien/{locataire}/{bien}")
+    public ResponseEntity<LocataireEncaisDTO> bailByLocataireEtBien(@PathVariable("locataire") Long locataire,
+            @PathVariable("bien") Long bien) {
+        log.info("Input des locataire est le suivant ::: {}, {}", locataire, bien);
+        return ResponseEntity.ok(bailService.bailBayLocataireEtBien(locataire, bien));
     }
 
     @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))

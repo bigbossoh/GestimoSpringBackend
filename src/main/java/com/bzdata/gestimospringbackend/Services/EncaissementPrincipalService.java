@@ -2,6 +2,7 @@ package com.bzdata.gestimospringbackend.Services;
 
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 
 import java.util.List;
 
@@ -25,4 +26,5 @@ public interface EncaissementPrincipalService {
     double sommeEncaisserParJour(String jour,Long idAgence);
 
     boolean delete(Long id);
+
 }

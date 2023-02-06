@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
+import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -48,7 +49,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         final EncaissementPrincipalRepository encaissementPrincipalRepository;
         // final SmsOrangeConfig smsOrangeConfig;
         final SmsOrangeConfig envoiSmsOrange;
-        
+
 
         @Override
         public boolean saveEncaissement(EncaissementPayloadDto dto) {
@@ -293,7 +294,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
                 if (!errors.isEmpty()) {
                         log.error("L'encaissement n'est pas valide {}", errors);
-                        throw new InvalidEntityException("Certain attributs de l'object site sont null.",
+                        throw new InvalidEntityException("Certains attributs de l'object site sont null.",
                                         ErrorCodes.ENCAISSEMENT_NOT_VALID, errors);
                 }
                 AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer()).orElse(null);
@@ -306,10 +307,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .findAllAppelLoyerImpayerByBailId(bailLocation.getId());
                 double montantVerser = dto.getMontantEncaissement();
 
-                log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(),
+                log.info("BAIL A ENREGISTRER {} et la liste des appels impayés est {}", bailLocation.getId(),
                                 listAppelImpayerParBail.size());
                 EncaissementPrincipal encaissementPrincipal;
                 for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
+                        log.info("On est dans la boucle {},{}, {} ; {}", appelLoyerDto.getAbrvBienimmobilier(),appelLoyerDto.getMontantLoyerBailLPeriode(),montantVerser,appelLoyerDto.getSoldeAppelLoyer());
                         encaissementPrincipal = new EncaissementPrincipal();
                         if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
                                 // Total des encaissement percu pour le mois en cours;
@@ -379,12 +381,12 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 nomString="MOLIBETY";
                         }
                 try {
-                        String leTok = envoiSmsOrange.getTokenSmsOrange();
-                        
-                        String message = "L'Agence "+nomString+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
-                        envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                                        bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                        System.out.println("********************* Le toke toke est : " + leTok);
+                        // String leTok = envoiSmsOrange.getTokenSmsOrange();
+
+                        // String message = "L'Agence "+nomString+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
+                        // envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                        //                 bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                        // System.out.println("********************* Le toke toke est : " + leTok);
                 } catch (Exception e) {
                         System.err.println(e.getMessage());
                 }
@@ -421,4 +423,5 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
                 return totalEncaissement;
         }
+
 }
