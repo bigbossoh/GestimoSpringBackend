@@ -52,7 +52,6 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         // final SmsOrangeConfig smsOrangeConfig;
         final SmsOrangeConfig envoiSmsOrange;
 
-
         @Override
         public boolean saveEncaissement(EncaissementPayloadDto dto) {
                 log.info("We are going to create  a new encaissement EncaissementPrincipalServiceImpl {}", dto);
@@ -313,9 +312,12 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 listAppelImpayerParBail.size());
                 EncaissementPrincipal encaissementPrincipal;
                 for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
-                        log.info("On est dans la boucle {},{}, {} ; {}", appelLoyerDto.getAbrvBienimmobilier(),appelLoyerDto.getMontantLoyerBailLPeriode(),montantVerser,appelLoyerDto.getSoldeAppelLoyer());
+                        log.info("On est dans la boucle pour le montant verse {},{}, {} ; {}",
+                                        appelLoyerDto.getAbrvBienimmobilier(),
+                                        appelLoyerDto.getMontantLoyerBailLPeriode(), montantVerser,
+                                        appelLoyerDto.getSoldeAppelLoyer());
                         encaissementPrincipal = new EncaissementPrincipal();
-                        if (montantVerser >= appelLoyerDto.getSoldeAppelLoyer()) {
+                        if (montantVerser > appelLoyerDto.getSoldeAppelLoyer()) {
                                 // Total des encaissement percu pour le mois en cours;
                                 double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(
                                                 appelLoyerDto.getId());
@@ -351,8 +353,15 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                 - totalEncaissementByIdAppelLoyer;
                                 double montantPayer = montantAPayerLeMois - montantVerser;
-                                appelLoyerDto.setStatusAppelLoyer("partiellement payé");
-                                appelLoyerDto.setSolderAppelLoyer(false);
+                                log.info("LE MONTANT QUI DOIT ETRE VERIFIE EST COMME SUIT ::::: {}", montantPayer);
+                                if (montantPayer > 0) {
+                                        appelLoyerDto.setStatusAppelLoyer("partiellement payé");
+                                        appelLoyerDto.setSolderAppelLoyer(false);
+                                } else {
+                                        appelLoyerDto.setStatusAppelLoyer("Soldé");
+                                        appelLoyerDto.setSolderAppelLoyer(true);
+                                }
+
                                 appelLoyerDto.setSoldeAppelLoyer(montantPayer);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                                 // EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
@@ -375,19 +384,22 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 Comparator<EncaissementPrincipal> compareBydatecreation = Comparator
                                 .comparing(EncaissementPrincipal::getId);
-                                AgenceImmobiliere agenceFound=agenceImmobiliereRepository.findById(bailLocation.getIdAgence()).orElse(null);
-                                String nomString;
-                                if(agenceFound.getNomAgence()=="magiser"){
-                                 nomString="MAGISER";
-                        }else{
-                                nomString="MOLIBETY";
-                        }
+                AgenceImmobiliere agenceFound = agenceImmobiliereRepository.findById(bailLocation.getIdAgence())
+                                .orElse(null);
+                String nomString;
+                if (agenceFound.getNomAgence() == "magiser") {
+                        nomString = "MAGISER";
+                } else {
+                        nomString = "MOLIBETY";
+                }
                 try {
                         // String leTok = envoiSmsOrange.getTokenSmsOrange();
 
-                        // String message = "L'Agence "+nomString+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
+                        // String message = "L'Agence "+nomString+" accuse bonne reception de la somme
+                        // de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer
+                        // du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
                         // envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                        //                 bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                        // bailLocation.getUtilisateurOperation().getUsername(), nomString);
                         // System.out.println("********************* Le toke toke est : " + leTok);
                 } catch (Exception e) {
                         System.err.println(e.getMessage());
@@ -429,9 +441,10 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         @Override
         public List<LocataireEncaisDTO> listeLocataireImpayerParAgenceEtPeriode(Long agence, String periode) {
                 List<LocataireEncaisDTO> appelLocataire = appelLoyerRepository.findAll().stream()
-                .filter(app->app.getSoldeAppelLoyer()>0&&app.getIdAgence()==agence&&app.getPeriodeAppelLoyer().equals(periode))
-                .map(bailMapperImpl::fromOperationAppelLoyer)
-                .collect(Collectors.toList());
+                                .filter(app -> app.getSoldeAppelLoyer() > 0 && app.getIdAgence() == agence
+                                                && app.getPeriodeAppelLoyer().equals(periode))
+                                .map(bailMapperImpl::fromOperationAppelLoyer)
+                                .collect(Collectors.toList());
                 return appelLocataire;
         }
 
