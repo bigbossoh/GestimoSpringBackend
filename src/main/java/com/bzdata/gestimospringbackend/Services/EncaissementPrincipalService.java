@@ -27,4 +27,6 @@ public interface EncaissementPrincipalService {
 
     boolean delete(Long id);
 
+   List<LocataireEncaisDTO> listeLocataireImpayerParAgenceEtPeriode(Long agence,String periode);
+
 }
