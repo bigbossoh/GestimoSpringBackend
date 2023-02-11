@@ -22,6 +22,7 @@ import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
+import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
@@ -47,6 +48,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         final AppelLoyerService appelLoyerService;
         final AgenceImmobiliereRepository agenceImmobiliereRepository;
         final EncaissementPrincipalRepository encaissementPrincipalRepository;
+        BailMapperImpl bailMapperImpl;
         // final SmsOrangeConfig smsOrangeConfig;
         final SmsOrangeConfig envoiSmsOrange;
 
@@ -422,6 +424,15 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                 Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
                 return totalEncaissement;
+        }
+
+        @Override
+        public List<LocataireEncaisDTO> listeLocataireImpayerParAgenceEtPeriode(Long agence, String periode) {
+                List<LocataireEncaisDTO> appelLocataire = appelLoyerRepository.findAll().stream()
+                .filter(app->app.getSoldeAppelLoyer()>0&&app.getIdAgence()==agence&&app.getPeriodeAppelLoyer().equals(periode))
+                .map(bailMapperImpl::fromOperationAppelLoyer)
+                .collect(Collectors.toList());
+                return appelLocataire;
         }
 
 }
