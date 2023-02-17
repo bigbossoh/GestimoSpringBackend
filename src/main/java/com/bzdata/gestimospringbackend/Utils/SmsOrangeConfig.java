@@ -9,17 +9,23 @@ import java.net.URL;
 import javax.json.Json;
 import javax.json.JsonObject;
 
+import com.bzdata.gestimospringbackend.Models.MessageEnvoyer;
+import com.bzdata.gestimospringbackend.Services.MessageEnvoyerService;
+
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Service
+@RequiredArgsConstructor
 public class SmsOrangeConfig {
+    final MessageEnvoyerService messageEnvoyerService;
     String telephoneDuDetinataire;
     String telephoneQuiEnvoiLesSms;
     String messageEnvyer;
@@ -70,12 +76,29 @@ public class SmsOrangeConfig {
             System.out.println("POST request worked");
 
             System.out.println(this.accessToken);
+
+            MessageEnvoyer messageEnvoyer = new MessageEnvoyer();
+            messageEnvoyer.setId(0L);
+            messageEnvoyer.setTextMessage(sms);
+            messageEnvoyer.setLogin(telRecepteur);
+            messageEnvoyer.setEnvoer(true);
+            messageEnvoyer.setTypeMessage("SMS");
+            messageEnvoyer.setNomDestinaire(telRecepteur);
+            messageEnvoyerService.saveMesageEnvoyer(messageEnvoyer);
             return true;
         } else {
             System.out.println("POST request not worked");
+            MessageEnvoyer messageEnvoyer = new MessageEnvoyer();
+            messageEnvoyer.setId(0L);
+            messageEnvoyer.setTextMessage(sms);
+            messageEnvoyer.setLogin(telRecepteur);
+            messageEnvoyer.setTypeMessage("SMS");
+            messageEnvoyer.setEnvoer(false);
+            messageEnvoyer.setNomDestinaire(telRecepteur);
+            messageEnvoyerService.saveMesageEnvoyer(messageEnvoyer);
             return false;
         }
-        
+
     }
 
     public String getTokenSmsOrange() throws Exception {

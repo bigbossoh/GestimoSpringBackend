@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,16 +11,13 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LocataireEncaisDTO {
-    Long id;
-    Long idBien;
-    Long idAppel;
-    double montantloyer;
-    String mois;
-    String moisEnLettre;
-    String nom;
-    String prenom;
-    String codeDescBail;
-    String username;
+public class MessageEnvoyerDto {
+    Long idDestinaire;
+    Instant dateEnvoi;
+    String destinaireNomPrenom;
+    String login;
+    String textMessage;
+    boolean envoer;
+    String typeMessage;
 
 }

@@ -61,5 +61,7 @@ public interface AppelLoyerService {
             double ancienMontantLoyer, Long idBailLocation, Long idAgence, LocalDate datePriseEnCompDate);
 
     List<AppelLoyersFactureDto> listeDesloyerSuperieurAUnePeriode(String periode, Long idBail);
-    AppelLoyersFactureDto findByIdAndBail(String periode,Long idBail);
+
+    AppelLoyersFactureDto findByIdAndBail(String periode, Long idBail);
+  
 }

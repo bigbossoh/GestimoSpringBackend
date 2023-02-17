@@ -297,4 +297,15 @@ public class GestimoWebMapperImpl {
         periodeDto.setPeriodeLettre(appelLoyer.getPeriodeLettre());
         return periodeDto;
     }
+
+       // PERIODE BAIL APPEL
+       public MessageEnvoyerDto fromMessageEnvoyer(MessageEnvoyer messageEnvoyer) {
+
+        MessageEnvoyerDto messageEnvoyerDto = new MessageEnvoyerDto();
+        BeanUtils.copyProperties(messageEnvoyer, messageEnvoyerDto);
+        messageEnvoyerDto.setDestinaireNomPrenom(messageEnvoyer.getNomDestinaire());
+        messageEnvoyerDto.setIdDestinaire(messageEnvoyer.getIdDestinaire());
+        messageEnvoyerDto.setDateEnvoi(messageEnvoyer.getCreationDate());
+        return messageEnvoyerDto;
+    }
 }

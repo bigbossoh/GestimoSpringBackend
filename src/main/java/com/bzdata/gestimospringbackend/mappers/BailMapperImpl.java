@@ -116,6 +116,8 @@ public class BailMapperImpl {
                 locataireEncaisDTO.setNom(bailLocation.getUtilisateurOperation().getNom());
                 locataireEncaisDTO.setPrenom(bailLocation.getUtilisateurOperation().getPrenom());
                 locataireEncaisDTO.setIdBien(bailLocation.getBienImmobilierOperation().getId());
+                locataireEncaisDTO.setUsername(bailLocation.getUtilisateurOperation().getUsername());
+
                 return locataireEncaisDTO;
         }
 
@@ -158,7 +160,10 @@ public class BailMapperImpl {
                 locataireEncaisDTO.setCodeDescBail(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom()+" "+appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom()+" / "+appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 locataireEncaisDTO.setNom(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
                 locataireEncaisDTO.setPrenom(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
-                locataireEncaisDTO.setIdBien(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId());
+                locataireEncaisDTO
+                                .setIdBien(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId());
+                locataireEncaisDTO.setUsername(
+                                appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getUsername());
                 return locataireEncaisDTO;
         }
 }

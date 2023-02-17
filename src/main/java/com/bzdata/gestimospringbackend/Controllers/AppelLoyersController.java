@@ -16,9 +16,11 @@ import com.bzdata.gestimospringbackend.DTOs.AnneeAppelLoyersDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
+import com.bzdata.gestimospringbackend.DTOs.MessageEnvoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
+import com.bzdata.gestimospringbackend.Services.MessageEnvoyerService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AppelLoyersController {
 
     final AppelLoyerService appelLoyerService;
+    final MessageEnvoyerService messageEnvoyerService;
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un appel", security = @SecurityRequirement(name = "bearerAuth"))
@@ -63,6 +66,12 @@ public class AppelLoyersController {
     public ResponseEntity<List<AppelLoyersFactureDto>> listDesLoyersImpayerParBail(@PathVariable("id") Long id) {
         log.info("Find Appel by ID Bail {}", id);
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerImpayerByBailId(id));
+    }
+    @Operation(summary = "List des SMS Envoyer à un locataire", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/listMessageEnvoyerAUnLocataire/{login}")
+    public ResponseEntity<List<MessageEnvoyerDto>> listMessageEnvoyerAUnLocataire(@PathVariable("login") String login) {
+        log.info("The Login is good {}", login);
+        return ResponseEntity.ok(messageEnvoyerService.listMessageEnvoyerAUnLocataire(login));
     }
 
     @Operation(summary = "Trouver un appel loyer par son ID", security = @SecurityRequirement(name = "bearerAuth"))
