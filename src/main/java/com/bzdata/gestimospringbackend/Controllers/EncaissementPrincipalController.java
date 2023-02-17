@@ -98,11 +98,11 @@ public class EncaissementPrincipalController {
     }
 
     @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/totalencaissementjournalier/{jour}/{idAgence}")
+    @GetMapping("/totalencaissementjournalier/{jour}/{idAgence}/{chapitre}")
     public ResponseEntity<Double> totalEncaissementParJour(@PathVariable("jour") String jour,
-            @PathVariable("idAgence") Long idAgence) {
+            @PathVariable("idAgence") Long idAgence,@PathVariable("chapitre") Long chapitre) {
         log.info("Find totalencaissement by ID AppelLoyer {}", jour);
-        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour, idAgence));
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour, idAgence,chapitre));
     }
 
     @GetMapping("/listeLocataireImpayerParAgenceEtPeriode/{agence}/{periode}")

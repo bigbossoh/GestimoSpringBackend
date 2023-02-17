@@ -147,8 +147,8 @@ public class BailMapperImpl {
         // return suivieDepense;
         // }
         public LocataireEncaisDTO fromOperationAppelLoyer(AppelLoyer appelLoyer) {
-                log.info("fromOperationBailLocation {}, {} ", appelLoyer.getId(),
-                appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                // log.info("fromOperationBailLocation {}, {} ", appelLoyer.getId(),
+                // appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 LocataireEncaisDTO locataireEncaisDTO = new LocataireEncaisDTO();
                 locataireEncaisDTO.setMois(appelLoyer.getPeriodeAppelLoyer());
                 locataireEncaisDTO.setMoisEnLettre(appelLoyer.getPeriodeLettre());

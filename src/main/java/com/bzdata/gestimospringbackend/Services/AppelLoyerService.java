@@ -40,19 +40,19 @@ public interface AppelLoyerService {
 
     List<AppelLoyersFactureDto> findAllAppelLoyerImpayerByBailId(Long idBailLocation);
 
-    double impayeParPeriode(String periode, Long idAgence);
+    double impayeParPeriode(String periode, Long idAgence,Long chapitre);
 
-    double payeParPeriode(String periode, Long idAgence);
+    double payeParPeriode(String periode, Long idAgence,Long chapitre);
 
-    double impayeParAnnee(int annee, Long idAgence);
+    double impayeParAnnee(int annee, Long idAgence,Long chapitre);
 
-    double payeParAnnee(int annee, Long idAgence);
+    double payeParAnnee(int annee, Long idAgence,Long chapitre);
 
-    Long nombreBauxImpaye(String periode, Long idAgence);
+    Long nombreBauxImpaye(String periode, Long idAgence,Long chapitre);
 
-    Long nombreBauxPaye(String periode, Long idAgence);
+    Long nombreBauxPaye(String periode, Long idAgence,Long chapitre);
 
-    double montantBeauxImpayer(String periode, Long idAgence);
+    double montantBeauxImpayer(String periode, Long idAgence,Long chapitre);
 
     boolean deleteAppelsByIdBail(Long idBail);
 

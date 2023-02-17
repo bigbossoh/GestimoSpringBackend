@@ -30,32 +30,48 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
     final BailLocationRepository bailLocationRepository;
 
     @Override
-    public List<BienImmobilierAffiheDto> findAll(Long idAgence) {
-        return bienImmobilierRepository.findAll().stream()
-                .map(gestimoWebMapperImpl::fromBienImmobilier)
-                .filter(agence->agence.getIdAgence()==idAgence)
-                .collect(Collectors.toList());
+    public List<BienImmobilierAffiheDto> findAll(Long idAgence, Long chapitre) {
+        if (chapitre == 0 || chapitre == null) {
+            return bienImmobilierRepository.findAll().stream()
+            .map(gestimoWebMapperImpl::fromBienImmobilier)
+            .filter(agence -> agence.getIdAgence() == idAgence)
+            .collect(Collectors.toList());
+        } else {
+            return bienImmobilierRepository.findAll().stream()
+            .filter(agence -> agence.getIdAgence() == idAgence && agence.getChapitre().getId() == chapitre)
+            .map(gestimoWebMapperImpl::fromBienImmobilier)
+            .collect(Collectors.toList());
+        }
+
     }
 
     @Override
-    public List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence) {
-        return bienImmobilierRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
-                .filter(Bienimmobilier::isOccupied)
-                .map(gestimoWebMapperImpl::fromBienImmobilier)
-                .collect(Collectors.toList());
+    public List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence, Long chapitre) {
+        if (chapitre == 0 || chapitre == null) {
+            return bienImmobilierRepository.findAll().stream()
+                    .filter(agence -> agence.getIdAgence() == idAgence)
+                    .filter(Bienimmobilier::isOccupied)
+                    .map(gestimoWebMapperImpl::fromBienImmobilier)
+                    .collect(Collectors.toList());
+        } else {
+            return bienImmobilierRepository.findAll().stream()
+                    .filter(agence -> agence.getIdAgence() == idAgence && agence.getChapitre().getId() == chapitre
+                            && agence.isOccupied())
+                    .map(gestimoWebMapperImpl::fromBienImmobilier)
+                    .collect(Collectors.toList());
+        }
 
     }
 
     @Override
     public Bienimmobilier findBienByBailEnCours(Long idBail) {
         BailLocation bailLocation = bailLocationRepository.findById(idBail)
-        .filter(bail->bail.isEnCoursBail()==true)
-        .orElse(null);
-        if (bailLocation!=null) {
+                .filter(bail -> bail.isEnCoursBail() == true)
+                .orElse(null);
+        if (bailLocation != null) {
             Bienimmobilier bienimmobilier = bienImmobilierRepository
                     .findById(bailLocation.getBienImmobilierOperation().getId())
-            .orElse(null);
+                    .orElse(null);
             return bienimmobilier;
         }
         return null;
