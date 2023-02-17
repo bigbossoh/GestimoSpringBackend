@@ -419,23 +419,43 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         }
 
         @Override
-        public double sommeEncaisserParJour(String jour, Long idAgence) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-                                .withLocale(Locale.FRENCH);
-                LocalDate localDate = LocalDate.parse(jour, formatter);
-                System.out.println(" -----------------------------------");
-                System.out.println("La date est la suivante : " + localDate);
+        public double sommeEncaisserParJour(String jour, Long idAgence, Long chapitre) {
+                if (chapitre == 0 || chapitre == null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                                        .withLocale(Locale.FRENCH);
+                        LocalDate localDate = LocalDate.parse(jour, formatter);
+                        System.out.println(" -----------------------------------");
+                        System.out.println("La date est la suivante : " + localDate);
 
-                List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
-                                // .map(EncaissementPrincipal::getMontantEncaissement)
-                                .filter(agence -> agence.getIdAgence() == idAgence)
-                                .filter(leJour -> leJour.getDateEncaissement().equals(localDate))
-                                .collect(Collectors.toList());
-                List<Double> listEncaissDouble = listEncaissent.stream()
-                                .map(EncaissementPrincipal::getMontantEncaissement).collect(Collectors.toList());
+                        List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && agence.getDateEncaissement().equals(localDate))
+                                        .collect(Collectors.toList());
+                        List<Double> listEncaissDouble = listEncaissent.stream()
+                                        .map(EncaissementPrincipal::getMontantEncaissement)
+                                        .collect(Collectors.toList());
 
-                Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
-                return totalEncaissement;
+                        Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
+                        return totalEncaissement;
+                } else {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+                                        .withLocale(Locale.FRENCH);
+                        LocalDate localDate = LocalDate.parse(jour, formatter);
+                        System.out.println(" -----------------------------------");
+                        System.out.println("La date est la suivante : " + localDate);
+
+                        List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && agence.getDateEncaissement().equals(localDate)&& agence.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getChapitre().getId()==chapitre)
+                                        .collect(Collectors.toList());
+                        List<Double> listEncaissDouble = listEncaissent.stream()
+                                        .map(EncaissementPrincipal::getMontantEncaissement)
+                                        .collect(Collectors.toList());
+
+                        Double totalEncaissement = listEncaissDouble.stream().mapToDouble(Double::doubleValue).sum();
+                        return totalEncaissement;
+                }
+
         }
 
         @Override

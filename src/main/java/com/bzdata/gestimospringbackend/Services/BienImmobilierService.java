@@ -6,9 +6,9 @@ import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 
 public interface BienImmobilierService {
-    List<BienImmobilierAffiheDto> findAll(Long idAgence);
+    List<BienImmobilierAffiheDto> findAll(Long idAgence,Long chapitre);
 
-    List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence);
+    List<BienImmobilierAffiheDto> findAllBienOccuper(Long idAgence,Long chapitre);
 
     Bienimmobilier findBienByBailEnCours(Long idBail);
 }

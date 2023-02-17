@@ -39,5 +39,7 @@ public abstract class Bienimmobilier extends AbstractEntity {
     @ManyToOne
     Utilisateur utilisateurProprietaire;
     int nombrePieceBien;
+    @ManyToOne
+    Chapitre chapitre;
 
 }

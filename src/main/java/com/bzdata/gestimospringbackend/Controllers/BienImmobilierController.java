@@ -28,14 +28,14 @@ public class BienImmobilierController {
     final BienImmobilierService bienImmobilierService;
 
     @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all/{idAgence}")
-    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien(@PathVariable("idAgence") Long idAgence) {
-        return ResponseEntity.ok(bienImmobilierService.findAll(idAgence));
+    @GetMapping("/all/{idAgence}/{chapitre}")
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBien(@PathVariable("idAgence") Long idAgence,@PathVariable("chapitre") Long chapitre) {
+        return ResponseEntity.ok(bienImmobilierService.findAll(idAgence,chapitre));
     }
 
     @Operation(summary = "Liste de toutes les bien immobiliers oqpq", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/allBienOccuper/{idAgence}")
-    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp(@PathVariable("idAgence") Long idAgence) {
-        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper(idAgence));
+    @GetMapping("/allBienOccuper/{idAgence}/{chapitre}")
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp(@PathVariable("idAgence") Long idAgence,@PathVariable("chapitre") Long chapitre) {
+        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper(idAgence,chapitre));
     }
 }
