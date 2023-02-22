@@ -286,6 +286,7 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(bienimmobilier, bienImmobilierAffiheDto);
         bienImmobilierAffiheDto.setNomPrenomProprio(bienimmobilier.getUtilisateurProprietaire().getNom() + " "
                 + bienimmobilier.getUtilisateurProprietaire().getPrenom());
+                bienImmobilierAffiheDto.setChapitre(bienimmobilier.getChapitre().getLibelleChapitre());
         return bienImmobilierAffiheDto;
     }
 

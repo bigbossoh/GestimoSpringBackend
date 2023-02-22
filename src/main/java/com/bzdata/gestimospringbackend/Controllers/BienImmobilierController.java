@@ -35,7 +35,13 @@ public class BienImmobilierController {
 
     @Operation(summary = "Liste de toutes les bien immobiliers oqpq", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allBienOccuper/{idAgence}/{chapitre}")
-    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp(@PathVariable("idAgence") Long idAgence,@PathVariable("chapitre") Long chapitre) {
-        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper(idAgence,chapitre));
+    public ResponseEntity<List<BienImmobilierAffiheDto>> findAllBienOqp(@PathVariable("idAgence") Long idAgence,
+            @PathVariable("chapitre") Long chapitre) {
+        return ResponseEntity.ok(bienImmobilierService.findAllBienOccuper(idAgence, chapitre));
+    }
+    @Operation(summary = "Liste de toutes les Baux Villa", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/rattacherUnBienAUnChapitre/{idBien}/{chapitre}")
+    public ResponseEntity<BienImmobilierAffiheDto> rattacherUnBienAUnChapitre(@PathVariable("idBien") Long idBien,@PathVariable("chapitre") Long chapitre) {
+        return ResponseEntity.ok(bienImmobilierService.rattacherUnBienAUnChapitre(idBien,chapitre));
     }
 }

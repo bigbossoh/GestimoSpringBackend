@@ -353,7 +353,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                 - totalEncaissementByIdAppelLoyer;
                                 double montantPayer = montantAPayerLeMois - montantVerser;
-                                log.info("LE MONTANT QUI DOIT ETRE VERIFIE EST COMME SUIT ::::: {}", montantPayer);
+                                log.info("LE MONTANT QUI DOIT ETRE VERIFIE EST COMME SUIT ::::: {}, {},{}}",totalEncaissementByIdAppelLoyer,montantAPayerLeMois, montantPayer);
                                 if (montantPayer > 0) {
                                         appelLoyerDto.setStatusAppelLoyer("partiellement payé");
                                         appelLoyerDto.setSolderAppelLoyer(false);
