@@ -117,7 +117,7 @@ public class BailMapperImpl {
                 locataireEncaisDTO.setPrenom(bailLocation.getUtilisateurOperation().getPrenom());
                 locataireEncaisDTO.setIdBien(bailLocation.getBienImmobilierOperation().getId());
                 locataireEncaisDTO.setUsername(bailLocation.getUtilisateurOperation().getUsername());
-
+locataireEncaisDTO.setIdBail(bailLocation.getId());
                 return locataireEncaisDTO;
         }
 
@@ -164,6 +164,8 @@ public class BailMapperImpl {
                                 .setIdBien(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId());
                 locataireEncaisDTO.setUsername(
                                 appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getUsername());
+                locataireEncaisDTO.setIdBail(appelLoyer.getBailLocationAppelLoyer().getId());
+
                 return locataireEncaisDTO;
         }
 }

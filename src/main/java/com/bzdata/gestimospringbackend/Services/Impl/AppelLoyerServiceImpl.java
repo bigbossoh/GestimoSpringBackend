@@ -407,7 +407,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public double payeParAnnee(int annee, Long idAgence, Long chapitre) {
-                if (chapitre == 0 || chapitre == null) {
+                if (chapitre == 0) {
                         List<Double> soldeImpaye = appelLoyerRepository.findAll().stream()
                                         .filter(period -> period.getAnneeAppelLoyer() == (annee)
                                                         && Objects.equals(period.getIdAgence(), idAgence))
@@ -440,22 +440,43 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public Long nombreBauxImpaye(String periode, Long idAgence, Long chapitre) {
-                if (chapitre == 0 || chapitre == null) {
+                if (chapitre == 0) {
                         return appelLoyerRepository.findAll().stream()
-                                .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence))
-                                .count();
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && Objects.equals(agence.getPeriodeAppelLoyer(), periode)
+                                                        && !Objects.equals(agence.getStatusAppelLoyer(), "Soldé"))
+                                        .count();
                 } else {
                         return appelLoyerRepository.findAll().stream()
-                        .filter(agence -> Objects.equals(agence.getIdAgence(), idAgence)&& agence.getBailLocationAppelLoyer().getBienImmobilierOperation().getChapitre().getId()==chapitre)
-                        .count();
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && Objects.equals(agence.getPeriodeAppelLoyer(), periode)
+                                                        && !Objects.equals(agence.getStatusAppelLoyer(), "Soldé")
+                                                        && agence.getBailLocationAppelLoyer()
+                                                                        .getBienImmobilierOperation().getChapitre()
+                                                                        .getId() == chapitre)
+                                        .count();
                 }
 
         }
 
         @Override
         public Long nombreBauxPaye(String periode, Long idAgence, Long chapitre) {
-
-                return 0L;
+                if (chapitre == 0) {
+                        return appelLoyerRepository.findAll().stream()
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && Objects.equals(agence.getPeriodeAppelLoyer(), periode)
+                                                        && Objects.equals(agence.getStatusAppelLoyer(), "Soldé"))
+                                        .count();
+                } else {
+                        return appelLoyerRepository.findAll().stream()
+                                        .filter(agence -> agence.getIdAgence() == idAgence
+                                                        && Objects.equals(agence.getPeriodeAppelLoyer(), periode)
+                                                        && Objects.equals(agence.getStatusAppelLoyer(), "Soldé")
+                                                        && agence.getBailLocationAppelLoyer()
+                                                                        .getBienImmobilierOperation().getChapitre()
+                                                                        .getId() == chapitre)
+                                        .count();
+                }
         }
 
         @Override
@@ -522,7 +543,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                                         ap.getDatePaiementPrevuAppelLoyer()
                                                         + ". Merci de regulariser votre situation.";
                                         envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                                                        locataire.getUsername(), "Sms Societe");
+                                                        locataire.getUsername(), "MAGISER");
                                         System.out.println("********************* Le toke toke est : " + leTok);
                                 } catch (Exception e) {
                                         System.err.println(e.getMessage());

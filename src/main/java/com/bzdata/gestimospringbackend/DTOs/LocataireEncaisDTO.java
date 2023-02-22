@@ -13,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class LocataireEncaisDTO {
     Long id;
     Long idBien;
+    Long idBail;
     Long idAppel;
     double montantloyer;
     String mois;

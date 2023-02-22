@@ -23,4 +23,5 @@ public class BienImmobilierAffiheDto {
     boolean isOccupied= false;
 
     String nomPrenomProprio;
+    String chapitre;
 }
