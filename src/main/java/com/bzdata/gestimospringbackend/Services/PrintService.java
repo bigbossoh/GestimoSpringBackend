@@ -1,7 +1,10 @@
 package com.bzdata.gestimospringbackend.Services;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
+
+import org.springframework.core.io.InputStreamSource;
 
 import net.sf.jasperreports.engine.JRException;
 
@@ -15,5 +18,9 @@ public interface PrintService {
     byte[] quittancePeriode(String periode, String proprio,Long idAgence) throws FileNotFoundException, JRException, SQLException;
 
     byte[] quittancePeriodeString(String periode,Long idAgence,String proprio) throws FileNotFoundException, JRException, SQLException;
-    byte[] quittancePeriodeById(String periode,Long id,String proprio) throws FileNotFoundException, JRException, SQLException;
+
+    byte[] quittancePeriodeById(String periode, Long id, String proprio)
+            throws FileNotFoundException, JRException, SQLException;
+
+    // InputStreamSource downloadReportByPeriode(String periode,Long idAgence,String proprio) throws IOException,FileNotFoundException, JRException, SQLException;
 }
