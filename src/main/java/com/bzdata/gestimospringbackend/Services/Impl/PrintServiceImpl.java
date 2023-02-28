@@ -89,12 +89,13 @@ public class PrintServiceImpl implements PrintService {
             // InputStream logoMagiser = resourceLoader.getResource(filemagiser.getPath())
             //         .getInputStream();
 
-            File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
+            File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
             parameters.put("NOM_PROPRIO", proprio);
-            parameters.put("LOGO", "magiser.jpeg");
+           // parameters.put("LOGO", path + "/print/magiser.jpeg");
+            log.info(" le logo est situé {}", path + "/print/magiser.jpeg");
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
@@ -107,11 +108,11 @@ public class PrintServiceImpl implements PrintService {
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
            // ENVOI DE MESSAGCE DE QUITTANCE
-            boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode,
-            idAgence);
-            if (sms_envoyer) {
-            log.info("Sms Envoye {}", sms_envoyer);
-            }
+            // boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode,
+            // idAgence);
+            // if (sms_envoyer) {
+            // log.info("Sms Envoye {}", sms_envoyer);
+            // }
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());

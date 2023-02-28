@@ -1,10 +1,7 @@
-package com.bzdata.gestimospringbackend.SecurityConfig;
+package com.bzdata.gestimospringbackend.SecurityConfig.filter;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.PUBLIC_URLS;
 
-import com.bzdata.gestimospringbackend.SecurityConfig.filter.JwtAccessDeniedHandler;
-import com.bzdata.gestimospringbackend.SecurityConfig.filter.JwtAuthenticationEntryPoint;
-import com.bzdata.gestimospringbackend.SecurityConfig.filter.JwtAuthorizationFilter;
 import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;
 import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
 

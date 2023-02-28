@@ -53,7 +53,6 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 
-
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableScheduling
@@ -68,10 +67,12 @@ public class GestimoSpringBackendApplication {
         new File(FOLDER_PATH).mkdirs();
 
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public CorsFilter corsFilter() {
 
@@ -81,12 +82,13 @@ public class GestimoSpringBackendApplication {
         corsConfiguration.setAllowedOriginPatterns(
                 Arrays.asList("*", "http://angular-front-end-gestimoweb.s3-website-us-east-1.amazonaws.com:4200",
                         "http://localhost:4200"));
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type",
-                "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
-                "Access-Control-Request-Method", "Access-Control-Request-Headers"));
+        corsConfiguration.setAllowedHeaders(
+                Arrays.asList("Origin", "Access-Control-Allow-Origin", "Content-Type", "Content-Disposition",
+                        "Accept", "Jwt-Token", "Authorization", "Origin, Accept", "X-Requested-With",
+                        "Access-Control-Request-Method", "Access-Control-Request-Headers"));
         corsConfiguration.setExposedHeaders(Arrays.asList("Origin", "Content-Type", "Accept", "Jwt-Token",
-                "Authorization",
-                "Access-Control-Allow-Origin", "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
+                "Content-Disposition", "Authorization", "Access-Control-Allow-Origin", "Access-Control-Allow-Origin",
+                "Access-Control-Allow-Credentials"));
         corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(urlBasedCorsConfigurationSource);
