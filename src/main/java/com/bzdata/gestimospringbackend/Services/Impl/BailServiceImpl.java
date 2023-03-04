@@ -233,11 +233,11 @@ public class BailServiceImpl implements BailService {
             if (!loyers.isEmpty()) {
                 for (int index = 0; index < loyers.size(); index++) {
                     AppelLoyer lappelTrouver = appelLoyerRepository.findById(loyers.get(index).getId()).orElse(null);
-                    lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer());
-                    if (lappelTrouver.getSoldeAppelLoyer() > 0) {
+                   // lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer());
+                   // if (lappelTrouver.getSoldeAppelLoyer() > 0) {
                         lappelTrouver.setSoldeAppelLoyer(dto.getNouveauMontantLoyer()
                                 - (lappelTrouver.getMontantLoyerBailLPeriode() - lappelTrouver.getSoldeAppelLoyer()));
-                    }
+                   // }
                     lappelTrouver.setMontantLoyerBailLPeriode(dto.getNouveauMontantLoyer());
                     appelLoyerRepository.save(lappelTrouver);
                 }

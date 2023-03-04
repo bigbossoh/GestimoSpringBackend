@@ -61,7 +61,6 @@ WHERE
 AND	 dbgestimoweb.appel_loyer.bail_location_appel_loyer_id = dbgestimoweb.operation.id
 AND    dbgestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
 AND dbgestimoweb.appel_loyer.id_agence =$P{PARAMETER_AGENCE}
- AND dbgestimoweb.appel_loyer.is_solder_appel_loyer =0
 ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC, dbgestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
@@ -534,12 +533,27 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 				]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="386" y="170" width="126" height="30" uuid="a2aeb56c-cddb-4e91-8dc0-a58954ddc186"/>
+				<reportElement x="337" y="244" width="126" height="16" uuid="a2aeb56c-cddb-4e91-8dc0-a58954ddc186"/>
 				<textElement>
 					<font size="12" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[SABLIN SEVERIN]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="337" y="222" width="110" height="25" uuid="de276ffe-b9a1-4ef9-985b-b542dcda7df3"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Fait à Abidjan, le ]]></text>
+			</staticText>
+			<textField evaluationTime="Column" pattern="MMMMM dd, yyyy">
+				<reportElement x="447" y="223" width="108" height="21" uuid="6b67014b-ed65-4f11-9e9b-2023b5c3deed"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<patternExpression><![CDATA["dd / MM / yyyy"]]></patternExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
