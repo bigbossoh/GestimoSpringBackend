@@ -344,7 +344,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                                 .save(encaissementPrincipal);
 
                                 if (montantVerser <= 0) {
-                                        break;
+
                                 }
                         } else {
                                 // Total des encaissement percu pour le mois en cours;
@@ -353,7 +353,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 double montantAPayerLeMois = appelLoyerDto.getNouveauMontantLoyer()
                                                 - totalEncaissementByIdAppelLoyer;
                                 double montantPayer = montantAPayerLeMois - montantVerser;
-                                log.info("LE MONTANT QUI DOIT ETRE VERIFIE EST COMME SUIT ::::: {}, {},{}}",totalEncaissementByIdAppelLoyer,montantAPayerLeMois, montantPayer);
+                                log.info("LE MONTANT QUI DOIT ETRE VERIFIE EST COMME SUIT ::::: {}, {},{}}",
+                                                totalEncaissementByIdAppelLoyer, montantAPayerLeMois, montantPayer);
                                 if (montantPayer > 0) {
                                         appelLoyerDto.setStatusAppelLoyer("partiellement payé");
                                         appelLoyerDto.setSolderAppelLoyer(false);
@@ -390,18 +391,24 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 if (agenceFound.getNomAgence() == "magiser") {
                         nomString = "MAGISER";
                 } else {
-                        nomString = "MOLIBETY";
+                        nomString = "MAGISER";
                 }
-                // try {
-                //         String leTok = envoiSmsOrange.getTokenSmsOrange();
-
-                //         String message = "L'Agence "+nomString+" accuse bonne reception de la somme de "+dto.getMontantEncaissement()+ " F CFA pour le reglement de votre loyer  du bail : "+bailLocation.getDesignationBail().toUpperCase()+".";
-                //         envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                //         bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                //         System.out.println("********************* Le toke toke est : " + leTok);
-                // } catch (Exception e) {
-                //         System.err.println(e.getMessage());
-                // }
+                /*
+                 * try {
+                 * String leTok = envoiSmsOrange.getTokenSmsOrange();
+                 *
+                 * String message = "L'Agence " + nomString +
+                 * " accuse bonne reception de la somme de "
+                 * + dto.getMontantEncaissement()
+                 * + " F CFA pour le reglement de votre loyer  du bail : "
+                 * + bailLocation.getDesignationBail().toUpperCase() + ".";
+                 * envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                 * bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                 * System.out.println("********************* Le toke toke est : " + leTok);
+                 * } catch (Exception e) {
+                 * System.err.println(e.getMessage());
+                 * }
+                 */
                 return encaissementPrincipalRepository.findAll()
                                 .stream().sorted(compareBydatecreation.reversed())
                                 .filter(agence -> agence.getIdAgence() == dto.getIdAgence())
@@ -444,7 +451,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                         List<EncaissementPrincipal> listEncaissent = encaissementPrincipalRepository.findAll().stream()
                                         .filter(agence -> agence.getIdAgence() == idAgence
-                                                        && agence.getDateEncaissement().equals(localDate)&& agence.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getChapitre().getId()==chapitre)
+                                                        && agence.getDateEncaissement().equals(localDate)
+                                                        && agence.getAppelLoyerEncaissement()
+                                                                        .getBailLocationAppelLoyer()
+                                                                        .getBienImmobilierOperation().getChapitre()
+                                                                        .getId() == chapitre)
                                         .collect(Collectors.toList());
                         List<Double> listEncaissDouble = listEncaissent.stream()
                                         .map(EncaissementPrincipal::getMontantEncaissement)

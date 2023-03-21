@@ -169,6 +169,11 @@
             <artifactId>html2pdf</artifactId>
             <version>4.0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jool</artifactId>
+            <version>0.9.14</version>
+        </dependency>
 
         <dependency>
             <groupId>org.assertj</groupId>
@@ -229,7 +234,8 @@
                 <configuration>
                     <apiSources>
                         <apiSource>
-                            <!--Required parameters BEGIN-->
+                            <!--Required
+                            parameters BEGIN-->
                             <springmvc>true</springmvc>
                             <locations>
 

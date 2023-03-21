@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.bzdata.gestimospringbackend.Models.hotel.Chambre;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +32,7 @@ public class Etage extends AbstractEntity {
     private List<Magasin> magasins;
     @ManyToOne
     private Immeuble immeuble;
+    @OneToMany(mappedBy = "etage")
+    List<Chambre> chambresEtage;
 
 }
