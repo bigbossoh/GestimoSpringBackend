@@ -27,7 +27,7 @@ public class CronJobService {
     final AppelLoyerService appelLoyerService;
     final SmsOrangeConfig envoiSmsOrange;
 
-     @Scheduled(cron = "0 0 18 * * FRI")
+     @Scheduled(cron = "0 0 15 * * FRI")
     //@Scheduled(cron = "0 18 * * FRI *")
      public void sendMail() throws InterruptedException, FileNotFoundException, JRException, SQLException {
 
