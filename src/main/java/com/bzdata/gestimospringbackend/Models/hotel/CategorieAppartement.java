@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import com.bzdata.gestimospringbackend.Models.AbstractEntity;
+import com.bzdata.gestimospringbackend.Models.Appartement;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class CategorieAppartement extends AbstractEntity{
     String nomCategorieAppart;
     String descCatAppart;
     @OneToMany(mappedBy = "categorieAppartement")
-    List<Chambre> chambresCategorie;
+    List<Appartement> appartementCategorie;
     @OneToMany(mappedBy = "categorieAppartement")
     List<DetailContratReservation> detailContratReservationsCat;
     @OneToMany(mappedBy = "categorieAppartement")
