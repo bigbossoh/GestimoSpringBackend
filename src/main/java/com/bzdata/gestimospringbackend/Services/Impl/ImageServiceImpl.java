@@ -2,8 +2,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Optional;
-
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.ImageModel;

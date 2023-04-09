@@ -29,5 +29,4 @@ public class DetailContratReservation extends AbstractEntity {
     ContratReservation contratReservation;
     @ManyToOne
     CategorieAppartement categorieAppartement;
-
 }
