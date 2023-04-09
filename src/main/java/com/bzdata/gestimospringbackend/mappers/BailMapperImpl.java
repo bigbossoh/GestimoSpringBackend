@@ -1,7 +1,6 @@
 package com.bzdata.gestimospringbackend.mappers;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.BailAppartementDto;
