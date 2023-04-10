@@ -32,7 +32,7 @@
              dbgestimoweb.operation.abrv_code_bail ,
         dbgestimoweb.appel_loyer.mois_chiffre_appel_loyer,
     dbgestimoweb.appel_loyer.desc_appel_loyer ,
-     dbgestimoweb.appel_loyer.solde_appel_loyer  as montant_loyer_baillperiode,
+     dbgestimoweb.appel_loyer.montant_loyer_baillperiode  as montant_loyer_baillperiode,
       dbgestimoweb.appel_loyer.solde_appel_loyer ,
        dbgestimoweb.appel_loyer.is_solder_appel_loyer ,
         dbgestimoweb.appel_loyer.is_cloturer ,
@@ -339,7 +339,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 			</textField>
 			<image>
 				<reportElement x="-5" y="13" width="109" height="67" uuid="b7ed7c20-6649-48d5-8543-d3f12a82d7c6"/>
-				<imageExpression><![CDATA["src/main/resources/templates/print/magiser.jpeg"]]></imageExpression>
+				<imageExpression><![CDATA["/home/astairenazaire/spring-project/GestimoSpringBackend/src/main/resources/templates/print/magiser.jpeg"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="31" y="120" width="89" height="30" uuid="e63869e1-b4fb-4917-ae9a-73b132850633"/>
