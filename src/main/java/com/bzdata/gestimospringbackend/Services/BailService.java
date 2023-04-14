@@ -8,7 +8,7 @@ import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 
 public interface BailService {
-    boolean closeBail(Long id);
+    List<OperationDto>  closeBail(Long id);
 
     OperationDto modifierUnBail(BailModifDto dto);
 

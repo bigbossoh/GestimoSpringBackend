@@ -37,7 +37,7 @@ public class BailController {
 
     @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/clotureBail/{id}")
-    public ResponseEntity<Boolean> clotureBail(@PathVariable("id") Long id) {
+    public ResponseEntity<List<OperationDto>> clotureBail(@PathVariable("id") Long id) {
         log.info("cloture du bail by ID Bail {}", id);
         return ResponseEntity.ok(bailService.closeBail(id));
     }
