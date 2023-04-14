@@ -167,6 +167,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         throw new EntityNotFoundException("Aucune Studio avec l'ID = " + id + " "
                                         + "n' ete trouve dans la BDD", ErrorCodes.BAILLOCATION_NOT_FOUND);
                 }
+               
                 AppelLoyersFactureDto byId = findById(id);
                 byId.setCloturer(true);
                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(byId));

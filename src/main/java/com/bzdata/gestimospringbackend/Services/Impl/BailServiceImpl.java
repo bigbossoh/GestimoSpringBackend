@@ -21,6 +21,7 @@ import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.BailService;
 import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 import com.bzdata.gestimospringbackend.Services.MontantLoyerBailService;
+import com.bzdata.gestimospringbackend.Services.OperationService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -59,12 +60,13 @@ public class BailServiceImpl implements BailService {
     final EncaissementPrincipalRepository encaissementRepository;
     final BienImmobilierService bienImmobilierService;
     private final BailMapperImpl bailMapper;
+    final OperationService operationService;
 
 
     @Override
-    public boolean closeBail(Long id) {
+    public List<OperationDto>  closeBail(Long id) {
         log.info("We are going to close a bail ID {}", id);
-
+        Long lagence=0L;
         if (id != null) {
             BailLocation newBailLocation = bailLocationRepository.findById(id).orElse(null);
             if (newBailLocation == null)
@@ -72,6 +74,7 @@ public class BailServiceImpl implements BailService {
             // Mise a jour de la table Operation
             Bienimmobilier bienLiberer = bienImmobilierService.findBienByBailEnCours(id);
             if (bienLiberer != null) {
+                lagence = bienLiberer.getIdAgence();
                 bienLiberer.setOccupied(false);
                 bienImmobilierRepository.save(bienLiberer);
             }
@@ -111,7 +114,7 @@ public class BailServiceImpl implements BailService {
                 appelLoyerService.cloturerAppelDto(dto.getId());
             }
         }
-        return true;
+        return operationService.getAllOperation(lagence);
     }
 
     @Override
