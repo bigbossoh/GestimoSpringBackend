@@ -3,10 +3,6 @@ package com.bzdata.gestimospringbackend.Services;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-
-import com.bzdata.gestimospringbackend.Models.CronMail;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +17,6 @@ import net.sf.jasperreports.engine.JRException;
 @Component
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Slf4j
 public class CronJobService {
     final CronMailService cronMailService;
     final AppelLoyerService appelLoyerService;

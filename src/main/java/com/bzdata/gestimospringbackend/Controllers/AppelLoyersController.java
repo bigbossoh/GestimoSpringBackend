@@ -78,7 +78,7 @@ public class AppelLoyersController {
     @Operation(summary = "Trouver un appel loyer par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAppelloyer/{id}")
     public ResponseEntity<AppelLoyersFactureDto> AppelLoyersParId(@PathVariable("id") Long id) {
-        log.info("Find Appel by ID Bail {}", id);
+        
         return ResponseEntity.ok(appelLoyerService.findById(id));
     }
 
@@ -86,7 +86,7 @@ public class AppelLoyersController {
     @GetMapping("/findAllAppelloyerByPeriode/{periode}/{idAgence}")
     public ResponseEntity<List<AppelLoyersFactureDto>> AppelLoyersParPeriode(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence) {
-        log.info("Find Appel by periode {}", periode);
+
         return ResponseEntity.ok(appelLoyerService.findAllAppelLoyerByPeriode(periode, idAgence));
     }
 
@@ -154,7 +154,6 @@ public class AppelLoyersController {
     @GetMapping("/impayeParMois/{periode}/{idAgence}/{chapitre}")
     public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
-        log.info("Find Appel by loyer en fonction de la periode {}, et de l id AGENCE {}", periode, idAgence);
         return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode, idAgence, chapitre));
     }
 

@@ -1,8 +1,6 @@
 package com.bzdata.gestimospringbackend.Models;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
