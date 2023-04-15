@@ -23,5 +23,6 @@ public class EncaissementPayloadDto {
     private double montantEncaissement;
     private String intituleDepense;
     private EntiteOperation entiteOperation;
+    private String typePaiement;
 
 }

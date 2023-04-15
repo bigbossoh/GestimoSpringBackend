@@ -9,9 +9,6 @@ import java.sql.SQLException;
 import com.bzdata.gestimospringbackend.Services.PrintService;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,7 +31,7 @@ import net.sf.jasperreports.engine.JRException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
-@Slf4j
+
 @CrossOrigin(origins = "*")
 public class PrintController {
         final PrintService printService;

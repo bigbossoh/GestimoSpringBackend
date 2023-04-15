@@ -27,4 +27,5 @@ public class EncaissementPrincipalDTO {
     private String intituleDepense;
     private EntiteOperation entiteOperation;
     private AppelLoyersFactureDto appelLoyersFactureDto;
+    private String typePaiement;
 }
