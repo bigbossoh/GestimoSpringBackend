@@ -23,7 +23,6 @@ import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
-import com.bzdata.gestimospringbackend.Models.SmsRequest;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
@@ -245,7 +244,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         return null;
                 }
                 return appelLoyerRepository.findById(id)
-                              
+
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .orElseThrow(
                                                 () -> new InvalidEntityException(
