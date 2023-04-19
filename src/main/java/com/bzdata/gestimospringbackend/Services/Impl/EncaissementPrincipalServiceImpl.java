@@ -384,24 +384,24 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .orElse(null);
                 // String nomString;
                 // if (agenceFound.getNomAgence() == "magiser") {
-                //         nomString = "MAGISER";
+                // nomString = "MAGISER";
                 // } else {
-                //         nomString = "MAGISER";
+                // nomString = "MAGISER";
                 // }
 
                 // try {
-                //         String leTok = envoiSmsOrange.getTokenSmsOrange();
+                // String leTok = envoiSmsOrange.getTokenSmsOrange();
 
-                //         String message = "L'Agence " + nomString +
-                //                         " accuse bonne reception de la somme de "
-                //                         + dto.getMontantEncaissement()
-                //                         + " F CFA pour le reglement de votre loyer  du bail : "
-                //                         + bailLocation.getDesignationBail().toUpperCase() + ".";
-                //         envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                //                         bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                //         System.out.println("********************* Le toke toke est : " + leTok);
+                // String message = "L'Agence " + nomString +
+                // " accuse bonne reception de la somme de "
+                // + dto.getMontantEncaissement()
+                // + " F CFA pour le reglement de votre loyer du bail : "
+                // + bailLocation.getDesignationBail().toUpperCase() + ".";
+                // envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                // bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                // System.out.println("********************* Le toke toke est : " + leTok);
                 // } catch (Exception e) {
-                //         System.err.println(e.getMessage());
+                // System.err.println(e.getMessage());
                 // }
 
                 return encaissementPrincipalRepository.findAll()
@@ -466,7 +466,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         public List<LocataireEncaisDTO> listeLocataireImpayerParAgenceEtPeriode(Long agence, String periode) {
                 List<LocataireEncaisDTO> appelLocataire = appelLoyerRepository.findAll().stream()
                                 .filter(app -> app.getSoldeAppelLoyer() > 0 && app.getIdAgence() == agence
-                                                && app.getPeriodeAppelLoyer().equals(periode)&&app.isCloturer()==false)
+                                                && app.getPeriodeAppelLoyer().equals(periode)
+                                                && app.isCloturer() == false)
                                 .map(bailMapperImpl::fromOperationAppelLoyer)
                                 .collect(Collectors.toList());
                 return appelLocataire;

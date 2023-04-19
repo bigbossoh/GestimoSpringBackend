@@ -61,6 +61,7 @@ WHERE
 AND	 dbgestimoweb.appel_loyer.bail_location_appel_loyer_id = dbgestimoweb.operation.id
 AND    dbgestimoweb.appel_loyer.periode_appel_loyer = $P{PARAMETER_PERIODE}
 AND dbgestimoweb.appel_loyer.id_agence =$P{PARAMETER_AGENCE}
+ AND dbgestimoweb.appel_loyer.is_cloturer=0
 ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC, dbgestimoweb.bienimmobilier.code_abrv_bien_immobilier  asc]]>
 	</queryString>
 	<field name="id" class="java.lang.Long">
