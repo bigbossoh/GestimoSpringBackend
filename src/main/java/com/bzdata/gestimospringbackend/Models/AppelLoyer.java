@@ -38,6 +38,7 @@ public class AppelLoyer extends AbstractEntity {
     double ancienMontant;
     double pourcentageReduction;
     String messageReduction;
+    String typePaiement;
     @ManyToOne
     BailLocation bailLocationAppelLoyer;
     @OneToMany(mappedBy = "appelLoyerEncaissement")

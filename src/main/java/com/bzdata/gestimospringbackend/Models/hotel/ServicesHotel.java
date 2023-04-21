@@ -1,7 +1,5 @@
 package com.bzdata.gestimospringbackend.Models.hotel;
 
-import java.time.LocalDate;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -22,6 +20,6 @@ public class ServicesHotel extends AbstractEntity {
    ClientHotel clientHotel;
     @ManyToOne
     PrestationHotel prestationHotel;
-  
+
 
 }

@@ -32,11 +32,6 @@ public class EncaissementPrincipal extends AbstractEntity{
     private EntiteOperation entiteOperation;
     @ManyToOne
     private AppelLoyer appelLoyerEncaissement;
-
-    //    @ManyToOne
-//    private Utilisateur ClientEncaissement;
-    //n'est pas bidirectionnel avec la table utilisateur
-    //Tracker qui a effectuer le paiement
-    //Tracker si c'est debit
+    String typePaiement;
 
 }

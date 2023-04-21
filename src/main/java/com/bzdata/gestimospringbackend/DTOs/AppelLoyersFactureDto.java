@@ -62,4 +62,6 @@ public class AppelLoyersFactureDto {
     double pourcentageReduction;
     String messageReduction;
 
+    String typePaiement;
+
 }

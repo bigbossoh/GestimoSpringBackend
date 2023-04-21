@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(APP_ROOT + "/file")
 @RequiredArgsConstructor
-@Slf4j
+
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
 public class FileUploadController {
