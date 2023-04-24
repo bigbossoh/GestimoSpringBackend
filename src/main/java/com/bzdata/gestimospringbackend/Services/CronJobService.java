@@ -11,14 +11,12 @@ import org.springframework.stereotype.Component;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JRException;
 
 @Component
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CronJobService {
-    final CronMailService cronMailService;
     final AppelLoyerService appelLoyerService;
     final SmsOrangeConfig envoiSmsOrange;
 
@@ -26,7 +24,7 @@ public class CronJobService {
     //@Scheduled(cron = "0 18 * * FRI *")
      public void sendMail() throws InterruptedException, FileNotFoundException, JRException, SQLException {
 
-        System.out.println("**************** Ici on est bien la ***********");
+     //   System.out.println("**************** Ici on est bien la ***********");
         try {
 
             LocalDate dateEnvoiSms = LocalDate.now();
@@ -48,7 +46,7 @@ public class CronJobService {
 
             String message = "ENCAISSEMENT du 01-"+leMois+'-'+dateEnvoiSms.getYear()+" au "+dateEnvoiSms.getDayOfMonth()+"-"+leMois+'-'+dateEnvoiSms.getYear()+" est de "+montant+ " FCFA CONCERNANT "+personneAyantpayer+" LOCATAIRE(S) SUR "+totatLocataire;
             envoiSmsOrange.sendSms(leTok, message, "+2250000",    "0758448344", "MAGISER");
-            System.out.println("********************* Le toke toke est : " + leTok);
+          //  System.out.println("********************* Le toke toke est : " + leTok);
     } catch (Exception e) {
             System.err.println(e.getMessage());
     }
