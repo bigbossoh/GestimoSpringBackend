@@ -24,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 public class Reservation extends AbstractEntity{
     LocalDate checkinDate;
     LocalDate checkoutDate;
+    String reservationtest;
     double advancePayment;
     double remainingPayment;
     @OneToMany( mappedBy = "reservation")
