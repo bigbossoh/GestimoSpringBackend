@@ -2,7 +2,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -84,25 +83,18 @@ public class PrintServiceImpl implements PrintService {
 
         try {
             String path = "src/main/resources/templates";
-            // File filemagiser = ResourceUtils.getFile(path + "/print/magiser.jpeg");
-
-            // InputStream logoMagiser = resourceLoader.getResource(filemagiser.getPath())
-            //         .getInputStream();
-
-            File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
+                   File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
             parameters.put("NOM_PROPRIO", proprio);
-           // parameters.put("LOGO", path + "/print/magiser.jpeg");
-            log.info(" le logo est situé {}", path + "/print/magiser.jpeg");
+
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
             if (di1) {
                 System.out.println("Folder is created successfully");
-            } else {
-                System.out.println("Error Found!");
+
             }
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
@@ -138,14 +130,12 @@ public class PrintServiceImpl implements PrintService {
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("ID_UTILISATEUR", id.toString());
             parameters.put("NOM_PROPRIO", proprio);
-            parameters.put("LOGO", "magiser.jpeg");
+            parameters.put("LOGO", logoMagiser);
             JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
             File di = new File(path + "/depot_etat");
             boolean di1 = di.mkdirs();
             if (di1) {
                 System.out.println("Folder is created successfully");
-            } else {
-                System.out.println("Error Found!");
             }
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print,
