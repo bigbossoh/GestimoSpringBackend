@@ -39,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class UtilisateurServiceImpl implements UtilisateurService {
-    private final AgenceImmobiliereRepository agenceImmobiliereRepository;
+    // private final AgenceImmobiliereRepository agenceImmobiliereRepository;
     private final UtilisateurRepository utilisateurRepository;
     public final PasswordEncoder passwordEncoderUser;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -52,7 +52,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto) {
         if (dto.getId() == 0 || dto.getId() == null) {
-            log.info("We are going to create a new user with the role Locataire {}", dto);
+            // log.info("We are going to create a new user with the role Locataire {}", dto);
             Utilisateur newUser = new Utilisateur();
             List<String> errors = UtilisateurDtoValiditor.validate(dto);
             if (!errors.isEmpty()) {
@@ -123,7 +123,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             return gestimoWebMapperImpl.fromUtilisateur(userSave);
 
         } else {
-            log.info("WE ARE GOING TO MAKE A UDPDATE OF utilisateur");
+            // log.info("WE ARE GOING TO MAKE A UDPDATE OF utilisateur");
             Utilisateur utilisateurUpdate = utilisateurRepository.findById(dto.getId())
                     .orElseThrow(() -> new InvalidEntityException(
                             "Aucun Utlisateur has been found with id " + dto.getId(),
@@ -184,7 +184,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence) {
-        log.info("We are going to take back all the locataires order by locataires name");
+        // log.info("We are going to take back all the locataires order by locataires name");
 
         return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
@@ -196,9 +196,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public UtilisateurRequestDto findById(Long id) {
-        log.info("We are going to get back the utilisateur en fonction de l'ID {} de l'utilisateur ", id);
+        // log.info("We are going to get back the utilisateur en fonction de l'ID {} de l'utilisateur ", id);
         if (id == null) {
-            log.error("you are provided a null ID for the user");
+            // log.error("you are provided a null ID for the user");
             return null;
         }
         return utilisateurRepository.findById(id)
@@ -220,7 +220,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurRequestDto findUtilisateurByUsername(String username) {
         Utilisateur utilisateurByUsername = utilisateurRepository.findUtilisateurByUsername(username);
-        log.info("Le User est {}", utilisateurByUsername.getUsername());
+        // log.info("Le User est {}", utilisateurByUsername.getUsername());
         if (utilisateurByUsername != null) {
             return UtilisateurRequestDto.fromEntity(utilisateurByUsername);
         } else {
@@ -230,7 +230,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurOrderbyName(Long idAgence) {
-        log.info("We are going to take back all the utilisateurs");
+     //   log.info("We are going to take back all the utilisateurs");
 
         return utilisateurRepository.findAll().stream()
                 .sorted(Comparator.comparing(Utilisateur::getNom))
@@ -241,20 +241,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyName(Long idAgence) {
-        log.info("We are going to take back all the locataires order by locataires name");
-
         return utilisateurRepository.findAll().stream()
         .filter(agence->agence.getIdAgence()==idAgence)
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
-
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
                 .collect(Collectors.toList());
+
     }
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurProprietaireOrderbyName(Long idAgence) {
-        log.info("We are going to take back all the PROPRIETAIRE order by PROPRIETAIRE name");
+      //  log.info("We are going to take back all the PROPRIETAIRE order by PROPRIETAIRE name");
 
         return utilisateurRepository.findAll().stream()
         .filter(agence->agence.getIdAgence()==idAgence)
@@ -266,7 +264,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurGerantOrderbyName(Long idAgence) {
-        log.info("We are going to take back all the GERANT order by GERANT name");
+      //  log.info("We are going to take back all the GERANT order by GERANT name");
 
         return utilisateurRepository.findAll().stream()
         .filter(agence->agence.getIdAgence()==idAgence)
@@ -278,7 +276,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurSuperviseurOrderbyName() {
-        log.info("We are going to take back all the SUPERVISEUR order by SUPERVISEUR name");
+        // log.info("We are going to take back all the SUPERVISEUR order by SUPERVISEUR name");
 
         return utilisateurRepository.findAllByOrderByNomAsc().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("SUPERVISEUR"))
@@ -301,8 +299,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         return bailrepository.findAll().stream()
         .filter(agence->agence.getIdAgence()==idAgence)
+        .filter(bailActif->bailActif.isEnCoursBail()==true)
                 .map(bailMapper::fromOperationBailLocation)
-                .distinct()
                 .collect(Collectors.toList());
     }
 
