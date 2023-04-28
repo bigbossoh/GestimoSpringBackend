@@ -27,7 +27,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.OPTIONS_
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
+
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JWTTokenProvider jwtTokenProvider;
 
@@ -50,19 +50,19 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             }
             String token=authorizationHeader.substring(TOKEN_PREFIX.length());
             String username=jwtTokenProvider.getSubject(token);
-            log.info("we are take the token {}",token);
+            // log.info("we are take the token {}",token);
             idAgence = jwtTokenProvider.extractIdAgnece(token);
           //  idCreateur= jwtTokenProvider.extractIdCreateur(token);
-           log.info("idAgence {}",idAgence);
+        //    log.info("idAgence {}",idAgence);
             if(jwtTokenProvider.isTokenValid(username,token) &&
                     SecurityContextHolder.getContext().getAuthentication()==null){
-                log.info("token is valid");
+                // log.info("token is valid");
                 List<GrantedAuthority> authorities=jwtTokenProvider.getAuthorities(token);
                 Authentication authentication =jwtTokenProvider.getAuthentication(username,authorities,request);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
             }else {
-                log.error("Token is not valid");
+                // log.error("Token is not valid");
                 SecurityContextHolder.clearContext();
             }
         }

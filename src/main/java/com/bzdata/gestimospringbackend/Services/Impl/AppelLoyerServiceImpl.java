@@ -54,7 +54,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Author Michel Bossoh
  */
 @Service
-@Slf4j
+// @Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -84,10 +84,10 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public List<String> save(AppelLoyerRequestDto dto) {
 
-                log.info("We are going to create  a new Appel loyer bail {}", dto);
+                // log.info("We are going to create  a new Appel loyer bail {}", dto);
                 List<String> errors = AppelLoyerRequestValidator.validate(dto);
                 if (!errors.isEmpty()) {
-                        log.error("L'appel du loyer n'est pas valide {}", errors);
+                        // log.error("L'appel du loyer n'est pas valide {}", errors);
                         throw new InvalidEntityException("Certain attributs de l'object appelloyer sont null.",
                                         ErrorCodes.APPELLOYER_NOT_VALID, errors);
                 }
@@ -134,14 +134,14 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                         .filter(MontantLoyerBail::isStatusLoyer)
                                         .map(MontantLoyerBail::getNouveauMontantLoyer)
                                         .findFirst().orElse(0.0);
-                        log.info("montantBail {}", montantBail);
+                        // log.info("montantBail {}", montantBail);
                         appelLoyer.setMontantLoyerBailLPeriode(montantBail);
                         appelLoyer.setBailLocationAppelLoyer(bailLocation);
                         appelLoyerList.add(appelLoyer);
                 }
 
                 appelLoyerRepository.saveAll(appelLoyerList);
-                log.info("we are going lo launch sms to the user ");
+                // log.info("we are going lo launch sms to the user ");
                 // SmsRequest sms = new
                 // SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),
                 // "Vôtre baillocation a été créé avec succès.");
@@ -155,9 +155,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public boolean cloturerAppelDto(Long id) {
-                log.info("We are going to set isCloture at true a AppelLoyer with the ID {}", id);
+                // log.info("We are going to set isCloture at true a AppelLoyer with the ID {}", id);
                 if (id == null) {
-                        log.error("you are provided a null ID for the Bail");
+                        // log.error("you are provided a null ID for the Bail");
                         return false;
                 }
                 boolean exist = appelLoyerRepository.existsById(id);
@@ -240,7 +240,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         public AppelLoyersFactureDto findById(Long id) {
 
                 if (id == null) {
-                        log.error("you are not provided a good Id of AppelLoyersFacture.");
+                        // log.error("you are not provided a good Id of AppelLoyersFacture.");
                         return null;
                 }
                 return appelLoyerRepository.findById(id)
@@ -370,9 +370,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         double totalMontantLoyerParPeriodeParAgence = soldeImpaye.stream()
                                         .mapToDouble(Double::doubleValue)
                                         .sum();
-                        log.info("Total montant loyer par periode par agence {}, {}",
-                                        totalMontantLoyerParPeriodeParAgence,
-                                        impayeParPeriode(periode, idAgence, chapitre));
+                        // log.info("Total montant loyer par periode par agence {}, {}",
+                                        // totalMontantLoyerParPeriodeParAgence,
+                                        // impayeParPeriode(periode, idAgence, chapitre));
                         return totalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence, chapitre);
                 }
 

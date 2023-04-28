@@ -71,7 +71,7 @@ public class BailMapperImpl {
 
         // BAIL MAGASIN MAPPER
         public OperationDto fromOperation(BailLocation bailLocation) {
-                log.info("fromOperation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+               // log.info("fromOperation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 OperationDto bailLocaDto = new OperationDto();
                 bailLocaDto.setIdFirstAppel(0L);
                 List<AppelLoyer> appelLoyers = appelLoyerRepository.findAll()
@@ -98,7 +98,7 @@ public class BailMapperImpl {
         }
 
         public LocataireEncaisDTO fromOperationBailLocation(BailLocation bailLocation) {
-                log.info("fromOperationBailLocation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+           //     log.info("fromOperationBailLocation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 LocataireEncaisDTO locataireEncaisDTO = new LocataireEncaisDTO();
                 List<AppelLoyer> lesAppelduBail = appelLoyerRepository.findAll().stream()
                                 .filter(bien -> bien.getBailLocationAppelLoyer() == bailLocation && bien.getSoldeAppelLoyer() > 0)

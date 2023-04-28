@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(APP_ROOT + "/bail")
 @RequiredArgsConstructor
-@Slf4j
+// @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 public class BailController {
@@ -38,21 +38,21 @@ public class BailController {
     @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/clotureBail/{id}")
     public ResponseEntity<List<OperationDto>> clotureBail(@PathVariable("id") Long id) {
-        log.info("cloture du bail by ID Bail {}", id);
+        // log.info("cloture du bail by ID Bail {}", id);
         return ResponseEntity.ok(bailService.closeBail(id));
     }
 
     @Operation(summary = "nombre de bail actif", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/nombrebailactif/{idAgence}")
     public ResponseEntity<Integer> nombrebailactif(@PathVariable("idAgence") Long idAgence) {
-        log.info("nombre de baux actifs");
+        // log.info("nombre de baux actifs");
         return ResponseEntity.ok(bailService.nombreBauxActifs(idAgence));
     }
 
     @Operation(summary = "nombre de bail non actif", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/nombrebailnonactif/{idAgence}")
     public ResponseEntity<Integer> nombrebailnonactif(@PathVariable("idAgence") Long idAgence) {
-        log.info("nombre de baux non actifs");
+        // log.info("nombre de baux non actifs");
         return ResponseEntity.ok(bailService.nombreBauxNonActifs(idAgence));
     }
 
@@ -77,21 +77,21 @@ public class BailController {
     @GetMapping("/bailLocataireetbien/{locataire}/{bien}")
     public ResponseEntity<LocataireEncaisDTO> bailByLocataireEtBien(@PathVariable("locataire") Long locataire,
             @PathVariable("bien") Long bien) {
-        log.info("Input des locataire est le suivant ::: {}, {}", locataire, bien);
+        // log.info("Input des locataire est le suivant ::: {}, {}", locataire, bien);
         return ResponseEntity.ok(bailService.bailBayLocataireEtBien(locataire, bien));
     }
 
     @Operation(summary = "Cloture du bail par rapport a son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/supprimerBail/{id}")
     public ResponseEntity<Boolean> supprimerBail(@PathVariable("id") Long id) {
-        log.info("cloture du bail by ID Bail {}", id);
+        // log.info("cloture du bail by ID Bail {}", id);
         return ResponseEntity.ok(bailService.deleteOperationById(id));
     }
 
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Bail Appartement", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<OperationDto> modifierUnBail(@RequestBody BailModifDto dto) {
-        log.info("We are going to save a new Bail Appartement {}", dto);
+        // log.info("We are going to save a new Bail Appartement {}", dto);
         return ResponseEntity.ok(bailService.modifierUnBail(dto));
     }
 }
