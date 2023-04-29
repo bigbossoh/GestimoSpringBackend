@@ -382,25 +382,25 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .comparing(EncaissementPrincipal::getId);
                 AgenceImmobiliere agenceFound = agenceImmobiliereRepository.findById(bailLocation.getIdAgence())
                                 .orElse(null);
-                String nomString;
-                if (agenceFound.getNomAgence() == "magiser") {
-                nomString = "MAGISER";
-                } else {
-                nomString = "MAGISER";
-                }
+                // String nomString;
+                // if (agenceFound.getNomAgence() == "magiser") {
+                // nomString = "MAGISER";
+                // } else {
+                // nomString = "MAGISER";
+                // }
 
-                try {
-                String leTok = envoiSmsOrange.getTokenSmsOrange();
+                // try {
+                // String leTok = envoiSmsOrange.getTokenSmsOrange();
 
-                String message = "L'Agence " + nomString +" accuse bonne reception de la somme de "+ dto.getMontantEncaissement()
-                + " F CFA pour le reglement de votre loyer du bail : "
-                + bailLocation.getDesignationBail().toUpperCase() + ".";
-                envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                System.out.println("********************* Le toke toke est : " + leTok);
-                } catch (Exception e) {
-                System.err.println(e.getMessage());
-                }
+                // String message = "L'Agence " + nomString +" accuse bonne reception de la somme de "+ dto.getMontantEncaissement()
+                // + " F CFA pour le reglement de votre loyer du bail : "
+                // + bailLocation.getDesignationBail().toUpperCase() + ".";
+                // envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                // bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                // System.out.println("********************* Le toke toke est : " + leTok);
+                // } catch (Exception e) {
+                // System.err.println(e.getMessage());
+                // }
 
                 return encaissementPrincipalRepository.findAll()
                                 .stream().sorted(compareBydatecreation.reversed())
