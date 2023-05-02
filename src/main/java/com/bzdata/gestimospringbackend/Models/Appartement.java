@@ -24,9 +24,8 @@ public class Appartement extends Bienimmobilier {
     int nbreChambreApp;
     int nbreSalonApp;
     int nbreSalleEauApp;
+    double prixReservation;
     Long numApp;
-//    @OneToMany(mappedBy = "appartementBail")
-//    List<Operation> operationsApp;
     @ManyToOne(fetch = FetchType.LAZY)
     Etage etageAppartement;
 

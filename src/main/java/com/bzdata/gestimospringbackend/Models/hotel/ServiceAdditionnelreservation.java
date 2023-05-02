@@ -17,8 +17,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class ReductionTarifaire extends AbstractEntity{
-    float rate;
-    boolean isPercent;
+public class ServiceAdditionnelreservation extends AbstractEntity {
+    Reservation reservation;
+    ServiceAdditionnelle serviceAdditionnelle;
 }

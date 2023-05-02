@@ -70,5 +70,11 @@ public class DroitAccesServiceImpl implements DroitAccesService {
         .map(mapper::fromDroitAcces)
         .orElseThrow(() -> new EntityNotFoundException("No Droit access found with the ID : " + id));
     }
-    
+
+    @Override
+    public DroitAccesPayloadDTO saveOrUpdate(DroitAccesPayloadDTO dto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdate'");
+    }
+
 }

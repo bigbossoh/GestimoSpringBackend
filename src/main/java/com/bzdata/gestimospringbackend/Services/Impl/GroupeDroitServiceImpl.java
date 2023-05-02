@@ -29,7 +29,7 @@ public class GroupeDroitServiceImpl implements GroupeDroitService {
         validator.validate(dto);
         GroupeDroit groupeDroit = mapper.fromGroupeDroitDto(dto);
     return repository.save(groupeDroit).getId();
-  
+
     }
     @Override
     public List<GroupeDroitDto> findAll() {
@@ -48,5 +48,10 @@ public class GroupeDroitServiceImpl implements GroupeDroitService {
     public void delete(Long id) {
          // todo check delete
         repository.deleteById(id);
+    }
+    @Override
+    public GroupeDroitDto saveOrUpdate(GroupeDroitDto dto) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdate'");
     }
 }

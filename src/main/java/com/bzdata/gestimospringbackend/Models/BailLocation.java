@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BailLocation extends Operation {
     public static Object getUtilisateurOperation;
-    String designationBail;
+    String designationBail; 
     String abrvCodeBail;
     boolean enCoursBail;
     boolean archiveBail;

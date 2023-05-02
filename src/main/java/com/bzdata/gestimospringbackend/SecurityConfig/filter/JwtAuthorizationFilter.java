@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.SecurityConfig.filter;
 import com.auth0.jwt.interfaces.Claim;
 import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

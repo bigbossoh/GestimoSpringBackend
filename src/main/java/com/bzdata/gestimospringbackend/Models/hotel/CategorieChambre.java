@@ -1,9 +1,13 @@
 package com.bzdata.gestimospringbackend.Models.hotel;
 
+import java.util.List;
+
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 import com.bzdata.gestimospringbackend.Models.AbstractEntity;
+import com.bzdata.gestimospringbackend.Models.Appartement;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -19,10 +23,11 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
-public class Facture extends AbstractEntity {
-    double totalAmount;
-    boolean paymentStatus;
-    @ManyToOne
-    Reservation reservation;
-
+public class CategorieChambre extends AbstractEntity {
+    String description;
+    String name;
+    double price;
+    @OneToMany
+    @JoinColumn(name = "categorieApartement")
+    List<Appartement>appartements;
 }
