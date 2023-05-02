@@ -1,10 +1,14 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -469,4 +473,89 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .collect(Collectors.toList());
                 return appelLocataire;
         }
+
+        @Override
+        public double sommeEncaissementParAgenceEtParChapitreEtParPeriode(Long agence, Long chapitre, String dateDebut,
+                        String dateFin) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'sommeEncaissementParAgenceEtParChapitreEtParPeriode'");
+        }
+
+        @Override
+        public double sommeEncaissementParAgenceEtParPeriode(Long agence, LocalDate dateDebut, LocalDate dateFin) {
+             List<Double> listeEncaissementParPeriode=   encaissementPrincipalRepository.findAll()
+                .stream()
+                .filter(encaissement->encaissement.getIdAgence()==agence && 
+                encaissement.getDateEncaissement().isAfter(dateDebut) && 
+                encaissement.getDateEncaissement().isBefore(dateFin))
+                .map(EncaissementPrincipal::getMontantEncaissement)
+                .collect(Collectors.toList());
+                Double totalEncaissement = listeEncaissementParPeriode.stream().mapToDouble(Double::doubleValue).sum();
+                return totalEncaissement;
+        }
+
+        @Override
+        public double sommeImpayerParAgenceEtParChapitreEtParPeriode(Long agence, Long chapitre, String dateDebut,
+                        String dateFin) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'sommeImpayerParAgenceEtParChapitreEtParPeriode'");
+        }
+
+        @Override
+        public double sommeImpayerParAgenceEtParPeriode(Long agence, String dateDebut, String dateFin) {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'sommeImpayerParAgenceEtParPeriode'");
+        }
+
+        @Override
+        public Map<YearMonth, Double> getTotalEncaissementsParMois(Long idAgence,LocalDate debut, LocalDate fin) {
+                
+                  return encaissementPrincipalRepository.findAll().stream()
+                .filter(e ->e.getIdAgence()==idAgence && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isBefore(debut) && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isAfter(fin))
+                .collect(Collectors.groupingBy(
+                        e -> YearMonth.from(e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()),
+                        Collectors.summingDouble(EncaissementPrincipal::getMontantEncaissement)
+                ));
+              
+        }
+
+        @Override
+        public Map<YearMonth, Double[]> getTotalEncaissementsEtMontantsDeLoyerParMois(Long idAgence,LocalDate debut, LocalDate fin) {
+                // Initialisation de la map de résultats
+        Map<YearMonth, Double[]> result = new HashMap<>();
+       // YearMonth currentMonth 
+        YearMonth startMonth= YearMonth.from(debut); 
+        YearMonth endMonth= YearMonth.from(fin); 
+
+        YearMonth currentMonth = startMonth;
+        // Boucle pour itérer sur chaque mois dans la période donnée
+        while (!currentMonth.isAfter(endMonth)) {
+                YearMonth finalCurrentMonth = currentMonth;
+                // Utilisation d'un stream pour filtrer les loyers payés dans le mois actuel
+            List<EncaissementPrincipal> loyersDuMois = encaissementPrincipalRepository.findAll().stream()
+            .filter(loyer -> loyer.getIdAgence()==idAgence && YearMonth.from(loyer.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()).equals(finalCurrentMonth))
+            .collect(Collectors.toList());
+            List<AppelLoyersFactureDto> loyers= appelLoyerService.findAll(idAgence).stream()
+                .filter(loyer -> YearMonth.from(loyer.getDateDebutMoisAppelLoyer()).equals(finalCurrentMonth))
+                .collect(Collectors.toList());
+            // Calcul du total des encaissements de loyer pour le mois actuel
+            Double totalEncaissements = loyersDuMois.stream()
+                    .mapToDouble(encaissement -> encaissement.getMontantEncaissement())
+                    .sum();
+                // Calcul du total des montants de loyers pour le mois actuel
+            Double totalMontantLoyers = loyers.stream()
+            .mapToDouble(encaissement -> encaissement.getMontantLoyerBailLPeriode())
+            .sum();
+
+            // Ajout des résultats dans la map de résultats
+            result.put(currentMonth, new Double[]{totalEncaissements, totalMontantLoyers});
+            
+            // Passage au mois suivant
+            currentMonth = currentMonth.plusMonths(1);
+
+        }
+                return result;
+        }
+
+       
 }

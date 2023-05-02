@@ -2,7 +2,12 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+
 import java.util.List;
+import java.util.Map;
 
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
@@ -27,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(APP_ROOT + "/encaissement")
 @RequiredArgsConstructor
-// @Slf4j
+ @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 public class EncaissementPrincipalController {
@@ -104,6 +109,37 @@ public class EncaissementPrincipalController {
         // log.info("Find totalencaissement by ID AppelLoyer {}", jour);
         return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour, idAgence,chapitre));
     }
+    @Operation(summary = "Total des encaissements par agence et par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/sommeEncaissementParAgenceEtParPeriode/{idAgence}/{datedebut}/{datefin}")
+     public ResponseEntity<Double> sommeEncaissementParAgenceEtParPeriode(     
+                                                            @PathVariable Long idAgence,
+                                                            @PathVariable("datedebut") String datedebut,
+                                                            @PathVariable("datefin") String datefin) {
+    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
+        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaissementParAgenceEtParPeriode(idAgence, dateDebutLocalDate,dateFinLocalDate));
+}
+@GetMapping("/getTotalEncaissementsParMois/{idAgence}/{datedebut}/{datefin}")
+     public ResponseEntity<Map<YearMonth, Double>> getTotalEncaissementsParMois(     
+                                                            @PathVariable Long idAgence,
+                                                            @PathVariable("datedebut") String datedebut,
+                                                            @PathVariable("datefin") String datefin) {
+    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
+        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsParMois(idAgence, dateDebutLocalDate,dateFinLocalDate));
+}
+@GetMapping("/getTotalEncaissementsEtMontantsDeLoyerParMois/{idAgence}/{datedebut}/{datefin}")
+     public ResponseEntity<Map<YearMonth, Double[]>> getTotalEncaissementsEtMontantsDeLoyerParMois(     
+                                                            @PathVariable Long idAgence,
+                                                            @PathVariable("datedebut") String datedebut,
+                                                            @PathVariable("datefin") String datefin) {
+    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
+        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsEtMontantsDeLoyerParMois(idAgence, dateDebutLocalDate,dateFinLocalDate));
+}
 
     @GetMapping("/listeLocataireImpayerParAgenceEtPeriode/{agence}/{periode}")
     public ResponseEntity<List<LocataireEncaisDTO>> listeLocataireImpayerParAgenceEtPeriode(

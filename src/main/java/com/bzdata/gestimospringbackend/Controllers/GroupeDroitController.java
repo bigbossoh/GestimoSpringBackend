@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping(APP_ROOT + "/groupeDroit")
 @Slf4j
 @RequiredArgsConstructor
+@SecurityRequirement(name = "gestimoapi")
 public class GroupeDroitController {
 
 
@@ -40,16 +41,19 @@ public class GroupeDroitController {
   }
 
   @GetMapping("/")
+  @Operation(summary = "Liste des groupes droits", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<List<GroupeDroitDto>> findAll() {
     return ResponseEntity.ok(service.findAll());
   }
 
   @GetMapping("/{groupedroitid}")
+  @Operation(summary = "Groupes droitspar id", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<GroupeDroitDto> findById( @PathVariable("groupedroitid") Long groupedroitid ) {
     return ResponseEntity.ok(service.findById(groupedroitid));
   }
 
   @DeleteMapping("/{groupedroitid}")
+  @Operation(summary = "delete groupe droit par id", security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> delete(
       @PathVariable("groupedroitid") Long groupedroitid
   ) {
