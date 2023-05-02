@@ -267,6 +267,12 @@ public class GestimoSpringBackendApplication {
             if (!roles.isPresent()) {
                 roleRepository.save(new Role("LOCATAIRE", "Role de LOCATAIRE", null));
             }
+
+            roles = null;
+            roles = roleRepository.findRoleByRoleName("CLIENT HOTEL");
+            if (!roles.isPresent()) {
+                roleRepository.save(new Role("CLIENT HOTEL", "Role de CLIENT HOTEL", null));
+            }
             roles = null;
             roles = roleRepository.findRoleByRoleName("SUPERVISEUR");
             if (roles.isPresent()) {

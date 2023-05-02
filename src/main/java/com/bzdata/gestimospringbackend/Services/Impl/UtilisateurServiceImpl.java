@@ -1,9 +1,7 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
-import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_LOCATAIRE;
-import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_PROPRIETAIRE;
-import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPERVISEUR;
+import static com.bzdata.gestimospringbackend.enumeration.Role.*;
+
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -19,7 +17,6 @@ import com.bzdata.gestimospringbackend.exceptions.GestimoWebExceptionGlobal;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
-import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.RoleRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
@@ -90,6 +87,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 case "LOCATAIRE":
                     newUser.setRoleUsed(ROLE_LOCATAIRE.name());
                     newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
+                    break;
+                    case "CLIENT HOTEL":
+                    newUser.setRoleUsed(ROLE_CLIENT_HOTEL.name());
+                    newUser.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
                     break;
                 default:
                     log.error(

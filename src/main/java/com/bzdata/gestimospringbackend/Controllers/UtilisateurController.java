@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(APP_ROOT + "/utilisateur")
 @RequiredArgsConstructor
-// @Slf4j
+ @Slf4j
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins="*")
 public class UtilisateurController {
@@ -27,7 +27,7 @@ public class UtilisateurController {
 
     @PostMapping("/save")
     public ResponseEntity<UtilisateurAfficheDto> saveUtilisateur(@RequestBody UtilisateurRequestDto request) {
-        // log.info("We are going to save a new locatire {}", request);
+         log.info("We are going to save a new locatire {}", request);
         return ResponseEntity.ok(utilisateurService.saveUtilisateur(request));
     }
 

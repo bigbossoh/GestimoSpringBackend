@@ -2,7 +2,8 @@ package com.bzdata.gestimospringbackend.mappers;
 
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
-
+import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
+import com.bzdata.gestimospringbackend.Models.hotel.ServiceAdditionnelle;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
@@ -89,22 +90,7 @@ public class GestimoWebMapperImpl {
             throw new EntityNotFoundException("bail from GestimoMapper not found", ErrorCodes.BAILLOCATION_NOT_FOUND);
         appelLoyersFactureDto.setIdBailLocation(bailLocation.getId());
         appelLoyersFactureDto.setAbrvCodeBail(appelLoyer.getBailLocationAppelLoyer().getAbrvCodeBail());
-        // appelLoyersFactureDto.setNouveauMontantLoyer(bailLocation
-        //         .getMontantLoyerBail()
-        //         .stream()
-        //         .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
-        //         .findFirst()
-        //         .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
-        //         .orElse(null));
-        // appelLoyer.setMontantLoyerBailLPeriode(bailLocation
-        // .getMontantLoyerBail()
-        // .stream()
-        // .filter(montantLoyerBail -> montantLoyerBail.isStatusLoyer() == true)
-        // .findFirst()
-        // .map(nouveauMontant -> nouveauMontant.getNouveauMontantLoyer())
-        // .orElse(null))
-        // ;
-        // Information sur le proprietaire
+
         Utilisateur utilisateur = utilisateurRepository
                 .findById(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation()
                         .getUtilisateurProprietaire().getId())
@@ -286,7 +272,7 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(bienimmobilier, bienImmobilierAffiheDto);
         bienImmobilierAffiheDto.setNomPrenomProprio(bienimmobilier.getUtilisateurProprietaire().getNom() + " "
                 + bienimmobilier.getUtilisateurProprietaire().getPrenom());
-                bienImmobilierAffiheDto.setChapitre(bienimmobilier.getChapitre().getLibelleChapitre());
+        bienImmobilierAffiheDto.setChapitre(bienimmobilier.getChapitre().getLibelleChapitre());
         return bienImmobilierAffiheDto;
     }
 
@@ -299,8 +285,8 @@ public class GestimoWebMapperImpl {
         return periodeDto;
     }
 
-       // PERIODE BAIL APPEL
-       public MessageEnvoyerDto fromMessageEnvoyer(MessageEnvoyer messageEnvoyer) {
+    // PERIODE BAIL APPEL
+    public MessageEnvoyerDto fromMessageEnvoyer(MessageEnvoyer messageEnvoyer) {
 
         MessageEnvoyerDto messageEnvoyerDto = new MessageEnvoyerDto();
         BeanUtils.copyProperties(messageEnvoyer, messageEnvoyerDto);
@@ -309,4 +295,28 @@ public class GestimoWebMapperImpl {
         messageEnvoyerDto.setDateEnvoi(messageEnvoyer.getCreationDate());
         return messageEnvoyerDto;
     }
+
+    public CategorieChambre toCategorieChambre(CategoryChambreSaveOrUpdateDto dto) {
+        CategorieChambre categorieChambre = new CategorieChambre();
+        BeanUtils.copyProperties(dto, categorieChambre);
+        return categorieChambre;
+    }
+
+    public static CategoryChambreSaveOrUpdateDto fromCategoryChambre(CategorieChambre categorieChambre) {
+        CategoryChambreSaveOrUpdateDto dto = new CategoryChambreSaveOrUpdateDto();
+        BeanUtils.copyProperties(categorieChambre, dto);
+        return dto;
+    }
+
+    public static ServiceAdditionnelle toServiceAdditionnelle(ServiceAditionnelSaveOrUpdateDto dto) {
+        ServiceAdditionnelle serviceAdditionnelle = new ServiceAdditionnelle();
+        BeanUtils.copyProperties(dto, serviceAdditionnelle);
+        return serviceAdditionnelle;
+    }
+
+    public static ServiceAditionnelSaveOrUpdateDto fromServiceAditionnel(ServiceAdditionnelle serviceAdditionnelle) {
+        ServiceAditionnelSaveOrUpdateDto serviceAditionnelSaveOrUpdateDto = new ServiceAditionnelSaveOrUpdateDto();
+        BeanUtils.copyProperties(serviceAdditionnelle, serviceAditionnelSaveOrUpdateDto);
+        return serviceAditionnelSaveOrUpdateDto;
+}
 }

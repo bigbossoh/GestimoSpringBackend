@@ -7,7 +7,6 @@ import com.bzdata.gestimospringbackend.DTOs.BienImmobilierAffiheDto;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.Chapitre;
-import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Services.BienImmobilierService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;

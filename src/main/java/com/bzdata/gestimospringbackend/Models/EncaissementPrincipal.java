@@ -25,13 +25,16 @@ public class EncaissementPrincipal extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
     LocalDate dateEncaissement;
+
     double montantEncaissement;
     double soldeEncaissement;
+    double encienSoldReservation;
+    double nvoSoldeReservation;
+
     private String intituleDepense;
     @Enumerated(EnumType.STRING)
     private EntiteOperation entiteOperation;
     @ManyToOne
     private AppelLoyer appelLoyerEncaissement;
     String typePaiement;
-
 }

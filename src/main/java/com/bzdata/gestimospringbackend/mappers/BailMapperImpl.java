@@ -71,12 +71,14 @@ public class BailMapperImpl {
 
         // BAIL MAGASIN MAPPER
         public OperationDto fromOperation(BailLocation bailLocation) {
-               // log.info("fromOperation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                // log.info("fromOperation {}, {} ",
+                // bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 OperationDto bailLocaDto = new OperationDto();
                 bailLocaDto.setIdFirstAppel(0L);
                 List<AppelLoyer> appelLoyers = appelLoyerRepository.findAll()
                                 .stream()
-                                .filter(b -> b.getBailLocationAppelLoyer() == bailLocation && b.getSoldeAppelLoyer() > 0)
+                                .filter(b -> b.getBailLocationAppelLoyer() == bailLocation
+                                                && b.getSoldeAppelLoyer() > 0)
                                 .collect(Collectors.toList());
                 if (appelLoyers.size() > 0) {
                         bailLocaDto.setIdFirstAppel(appelLoyers.get(0).getId());
@@ -98,10 +100,12 @@ public class BailMapperImpl {
         }
 
         public LocataireEncaisDTO fromOperationBailLocation(BailLocation bailLocation) {
-           //     log.info("fromOperationBailLocation {}, {} ", bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                // log.info("fromOperationBailLocation {}, {} ",
+                // bailLocation.getId(),bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 LocataireEncaisDTO locataireEncaisDTO = new LocataireEncaisDTO();
                 List<AppelLoyer> lesAppelduBail = appelLoyerRepository.findAll().stream()
-                                .filter(bien -> bien.getBailLocationAppelLoyer() == bailLocation && bien.getSoldeAppelLoyer() > 0)
+                                .filter(bien -> bien.getBailLocationAppelLoyer() == bailLocation
+                                                && bien.getSoldeAppelLoyer() > 0)
 
                                 .collect(Collectors.toList());
                 if (lesAppelduBail.size() > 0) {
@@ -111,12 +115,14 @@ public class BailMapperImpl {
                         locataireEncaisDTO.setIdAppel(lesAppelduBail.get(0).getId());
                 }
                 locataireEncaisDTO.setId(bailLocation.getUtilisateurOperation().getId());
-                locataireEncaisDTO.setCodeDescBail(bailLocation.getUtilisateurOperation().getNom()+" "+bailLocation.getUtilisateurOperation().getPrenom()+" / "+bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                locataireEncaisDTO.setCodeDescBail(bailLocation.getUtilisateurOperation().getNom() + " "
+                                + bailLocation.getUtilisateurOperation().getPrenom() + " / "
+                                + bailLocation.getBienImmobilierOperation().getCodeAbrvBienImmobilier());
                 locataireEncaisDTO.setNom(bailLocation.getUtilisateurOperation().getNom());
                 locataireEncaisDTO.setPrenom(bailLocation.getUtilisateurOperation().getPrenom());
                 locataireEncaisDTO.setIdBien(bailLocation.getBienImmobilierOperation().getId());
                 locataireEncaisDTO.setUsername(bailLocation.getUtilisateurOperation().getUsername());
-locataireEncaisDTO.setIdBail(bailLocation.getId());
+                locataireEncaisDTO.setIdBail(bailLocation.getId());
                 return locataireEncaisDTO;
         }
 
@@ -156,9 +162,16 @@ locataireEncaisDTO.setIdBail(bailLocation.getId());
                 locataireEncaisDTO.setMontantloyer(appelLoyer.getMontantLoyerBailLPeriode());
                 locataireEncaisDTO.setIdAppel(appelLoyer.getId());
                 locataireEncaisDTO.setId(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getId());
-                locataireEncaisDTO.setCodeDescBail(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom()+" "+appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom()+" / "+appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getCodeAbrvBienImmobilier());
+                locataireEncaisDTO.setCodeDescBail(
+                                appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom() + " "
+                                                + appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation()
+                                                                .getPrenom()
+                                                + " / "
+                                                + appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation()
+                                                                .getCodeAbrvBienImmobilier());
                 locataireEncaisDTO.setNom(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getNom());
-                locataireEncaisDTO.setPrenom(appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
+                locataireEncaisDTO.setPrenom(
+                                appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getPrenom());
                 locataireEncaisDTO
                                 .setIdBien(appelLoyer.getBailLocationAppelLoyer().getBienImmobilierOperation().getId());
                 locataireEncaisDTO.setUsername(
