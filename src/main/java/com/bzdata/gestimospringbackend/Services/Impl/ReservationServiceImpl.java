@@ -139,14 +139,11 @@ public class ReservationServiceImpl implements ReservationService {
         UtilisateurRequestDto utilisateurRequestDto = dto.getUtilisateurRequestDto();
         Objects.requireNonNull(utilisateurRequestDto, "Le paramètre utilisateurRequestDto ne doit pas être nul");
 
-        UtilisateurAfficheDto utilisateurAfficheDto;
         Utilisateur utilisateur;
 
         if (utilisateurRequestDto.getId() == 0) {
-            utilisateurAfficheDto = utilisateurService.saveUtilisateur(utilisateurRequestDto);
             utilisateur = gestimoWebMapperImpl.fromUtilisateurRequestDto(utilisateurService.findUtilisateurByUsername(utilisateurRequestDto.getUsername()));
         } else {
-            utilisateurAfficheDto = null;
             utilisateur = gestimoWebMapperImpl.toUtilisateur(utilisateurService.saveUtilisateur(utilisateurRequestDto));
         }
 

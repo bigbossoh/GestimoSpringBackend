@@ -17,7 +17,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ServiceAdditionnelreservation extends AbstractEntity {
+public class PrestationAdditionnelReservation extends AbstractEntity {
     Reservation reservation;
-    ServiceAdditionnelle serviceAdditionnelle;
+    Prestation serviceAdditionnelle;
 }

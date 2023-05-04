@@ -4,8 +4,8 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.ServiceAditionnelSaveOrUpdateDto;
-import com.bzdata.gestimospringbackend.Services.ServiceAdditionnelService;
+import com.bzdata.gestimospringbackend.DTOs.PrestationSaveOrUpdateDto;
+import com.bzdata.gestimospringbackend.Services.PrestaionService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,17 +24,17 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@RequestMapping(APP_ROOT + "/serviceadditionnel")
+@RequestMapping(APP_ROOT + "/prestation")
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
-public class ServiceAdditionnelController {
-    final ServiceAdditionnelService serviceAdditionnelService;
+public class PrestationController {
+    final PrestaionService serviceAdditionnelService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ServiceAditionnelSaveOrUpdateDto> saveorupdate(
-            @RequestBody ServiceAditionnelSaveOrUpdateDto dto) {
+    public ResponseEntity<PrestationSaveOrUpdateDto> saveorupdate(
+            @RequestBody PrestationSaveOrUpdateDto dto) {
         log.info("We are going to save a new ServiceAdditionnel {}", dto);
         return ResponseEntity.ok(serviceAdditionnelService.saveOrUpdate(dto));
     }
@@ -49,14 +49,14 @@ public class ServiceAdditionnelController {
       }
       @Operation(summary = "Trouver une CateroryChambre par son ID", security = @SecurityRequirement(name = "bearerAuth"))
       @GetMapping("/findById/{id}")
-      public ResponseEntity<ServiceAditionnelSaveOrUpdateDto> findServiceAdditionnelByID(@PathVariable("id") Long id) {
+      public ResponseEntity<PrestationSaveOrUpdateDto> findServiceAdditionnelByID(@PathVariable("id") Long id) {
           log.info("Find Commune by ID{}", id);
           return ResponseEntity.ok(serviceAdditionnelService.findById(id));
       }
       // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<ServiceAditionnelSaveOrUpdateDto>> findAllServiceAdditionnel() {
+    public ResponseEntity<List<PrestationSaveOrUpdateDto>> findAllServiceAdditionnel() {
         return ResponseEntity.ok(serviceAdditionnelService.findAll());
     }
 

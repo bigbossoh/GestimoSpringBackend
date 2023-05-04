@@ -20,11 +20,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ServiceAdditionnelle  extends AbstractEntity{
+public class Prestation  extends AbstractEntity{
     String name;
     double amount;
     String type;
     @OneToMany
     @JoinColumn(name = "idServiceAdditionnel")
-    List<ServiceAdditionnelreservation>serviceAddits;
+    List<PrestationAdditionnelReservation>serviceAddits;
 }
