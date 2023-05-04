@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.bzdata.gestimospringbackend.DTOs.ServiceAditionnelSaveOrUpdateDto;
-import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Models.hotel.ServiceAdditionnelle;
 import com.bzdata.gestimospringbackend.Services.ServiceAdditionnelService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
@@ -14,21 +13,17 @@ import com.bzdata.gestimospringbackend.validator.ObjectsValidator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
     final ServiceAdditionnelRepository serviceAdditionnelRepository;
-    final GestimoWebMapperImpl gestimoWebMapperImpl;
+
     private final ObjectsValidator<ServiceAditionnelSaveOrUpdateDto> validator;
 
     @Override
@@ -50,7 +45,7 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
     public ServiceAditionnelSaveOrUpdateDto findById(Long id) {
         ServiceAdditionnelle serviceAdditionnelle = serviceAdditionnelRepository.findById(id).orElse(null);
         if (serviceAdditionnelle != null) {
-            return gestimoWebMapperImpl.fromServiceAditionnel(serviceAdditionnelle);
+            return GestimoWebMapperImpl.fromServiceAditionnel(serviceAdditionnelle);
         } else {
             return null;
         }
@@ -78,7 +73,7 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
             serviceAdditionnelle.setIdAgence(dto.getIdAgence());
             serviceAdditionnelle.setIdCreateur(dto.getIdCreateur());
             ServiceAdditionnelle saveServiceAdditionnelle = serviceAdditionnelRepository.save(serviceAdditionnelle);
-            return gestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
+            return GestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
         } else {
             ServiceAdditionnelle newsServiceAdditionnelle = new ServiceAdditionnelle();
            // newCategorieChambre.setDescription(dto.getDescription());
@@ -87,7 +82,7 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
            newsServiceAdditionnelle.setIdCreateur(dto.getIdCreateur());
            newsServiceAdditionnelle.setIdAgence(dto.getIdAgence());
            ServiceAdditionnelle saveServiceAdditionnelle = serviceAdditionnelRepository.save(newsServiceAdditionnelle);
-            return gestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
+            return GestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -485,8 +484,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         public double sommeEncaissementParAgenceEtParPeriode(Long agence, LocalDate dateDebut, LocalDate dateFin) {
              List<Double> listeEncaissementParPeriode=   encaissementPrincipalRepository.findAll()
                 .stream()
-                .filter(encaissement->encaissement.getIdAgence()==agence && 
-                encaissement.getDateEncaissement().isAfter(dateDebut) && 
+                .filter(encaissement->encaissement.getIdAgence()==agence &&
+                encaissement.getDateEncaissement().isAfter(dateDebut) &&
                 encaissement.getDateEncaissement().isBefore(dateFin))
                 .map(EncaissementPrincipal::getMontantEncaissement)
                 .collect(Collectors.toList());
@@ -509,23 +508,23 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
         @Override
         public Map<YearMonth, Double> getTotalEncaissementsParMois(Long idAgence,LocalDate debut, LocalDate fin) {
-                
+
                   return encaissementPrincipalRepository.findAll().stream()
                 .filter(e ->e.getIdAgence()==idAgence && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isBefore(debut) && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isAfter(fin))
                 .collect(Collectors.groupingBy(
                         e -> YearMonth.from(e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()),
                         Collectors.summingDouble(EncaissementPrincipal::getMontantEncaissement)
                 ));
-              
+
         }
 
         @Override
         public Map<YearMonth, Double[]> getTotalEncaissementsEtMontantsDeLoyerParMois(Long idAgence,LocalDate debut, LocalDate fin) {
                 // Initialisation de la map de résultats
         Map<YearMonth, Double[]> result = new HashMap<>();
-       // YearMonth currentMonth 
-        YearMonth startMonth= YearMonth.from(debut); 
-        YearMonth endMonth= YearMonth.from(fin); 
+       // YearMonth currentMonth
+        YearMonth startMonth= YearMonth.from(debut);
+        YearMonth endMonth= YearMonth.from(fin);
 
         YearMonth currentMonth = startMonth;
         // Boucle pour itérer sur chaque mois dans la période donnée
@@ -549,7 +548,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
             // Ajout des résultats dans la map de résultats
             result.put(currentMonth, new Double[]{totalEncaissements, totalMontantLoyers});
-            
+
             // Passage au mois suivant
             currentMonth = currentMonth.plusMonths(1);
 
@@ -557,5 +556,5 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 return result;
         }
 
-       
+
 }

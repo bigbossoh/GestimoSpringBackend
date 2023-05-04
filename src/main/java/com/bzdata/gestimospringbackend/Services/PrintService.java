@@ -1,10 +1,7 @@
 package com.bzdata.gestimospringbackend.Services;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
-
-import org.springframework.core.io.InputStreamSource;
 
 import net.sf.jasperreports.engine.JRException;
 

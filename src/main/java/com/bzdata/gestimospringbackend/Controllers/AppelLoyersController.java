@@ -27,7 +27,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(APP_ROOT + "/appelloyer")
@@ -78,7 +77,7 @@ public class AppelLoyersController {
     @Operation(summary = "Trouver un appel loyer par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAppelloyer/{id}")
     public ResponseEntity<AppelLoyersFactureDto> AppelLoyersParId(@PathVariable("id") Long id) {
-        
+
         return ResponseEntity.ok(appelLoyerService.findById(id));
     }
 

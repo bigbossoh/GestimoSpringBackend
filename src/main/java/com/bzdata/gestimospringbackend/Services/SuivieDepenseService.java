@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.Services;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;

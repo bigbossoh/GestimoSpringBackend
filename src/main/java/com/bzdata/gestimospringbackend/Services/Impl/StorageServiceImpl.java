@@ -15,10 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -32,10 +30,9 @@ public class StorageServiceImpl implements StorageService {
         //imageData.set(APP_ROOT +"/images/"+file.getOriginalFilename());
         imageData.setPicByte(ImageUtils.compressImage(file.getBytes()));
         repository.save(imageData);
-        if (imageData != null) {
+        {
             return "file uploaded successfully : " + file.getOriginalFilename();
         }
-        return null;
     }
 
     @Override

@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
-import com.bzdata.gestimospringbackend.Models.AbstractEntity;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
+import com.bzdata.gestimospringbackend.Models.Operation;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @DiscriminatorValue("Reservation")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Reservation extends AbstractEntity {
+public class Reservation extends Operation {
     // LocalDate checkinDate;
     // LocalDate checkoutDate;
     // String reservationtest;

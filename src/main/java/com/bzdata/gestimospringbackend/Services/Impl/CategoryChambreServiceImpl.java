@@ -17,16 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CategoryChambreServiceImpl implements CategoryChambreService {
     final CategoryChambreRepository categoryChambreRepository;
-    final GestimoWebMapperImpl gestimoWebMapperImpl;
     private final ObjectsValidator<CategoryChambreSaveOrUpdateDto> validator;
 
     @Override
@@ -48,7 +45,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
     public CategoryChambreSaveOrUpdateDto findById(Long id) {
         CategorieChambre categorieChambre = categoryChambreRepository.findById(id).orElse(null);
         if (categorieChambre != null) {
-            return gestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
+            return GestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
         } else {
             return null;
         }
@@ -77,7 +74,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
             categorieChambre.setIdAgence(dto.getIdAgence());
             categorieChambre.setIdCreateur(dto.getIdCreateur());
             CategorieChambre savCategorieChambre = categoryChambreRepository.save(categorieChambre);
-            return gestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
+            return GestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
         } else {
             CategorieChambre newCategorieChambre = new CategorieChambre();
             newCategorieChambre.setDescription(dto.getDescription());
@@ -86,7 +83,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
             newCategorieChambre.setIdCreateur(dto.getIdCreateur());
             newCategorieChambre.setIdAgence(dto.getIdAgence());
             CategorieChambre savCategorieChambre = categoryChambreRepository.save(newCategorieChambre);
-            return gestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
+            return GestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
         }
 
     }

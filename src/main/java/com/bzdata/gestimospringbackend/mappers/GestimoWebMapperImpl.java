@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.mappers;
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
+import com.bzdata.gestimospringbackend.Models.hotel.Reservation;
 import com.bzdata.gestimospringbackend.Models.hotel.ServiceAdditionnelle;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -260,12 +261,21 @@ public class GestimoWebMapperImpl {
     }
 
     // UTILISATEUR MAPPER
-    public UtilisateurAfficheDto fromUtilisateur(Utilisateur utilisateur) {
+    public static UtilisateurAfficheDto fromUtilisateurStatic(Utilisateur utilisateur) {
+        UtilisateurAfficheDto utilisateurAfficheDto = new UtilisateurAfficheDto();
+        BeanUtils.copyProperties(utilisateur, utilisateurAfficheDto);
+        return utilisateurAfficheDto;
+    }
+      // UTILISATEUR MAPPER
+      public  UtilisateurAfficheDto fromUtilisateur(Utilisateur utilisateur) {
         UtilisateurAfficheDto utilisateurAfficheDto = new UtilisateurAfficheDto();
         BeanUtils.copyProperties(utilisateur, utilisateurAfficheDto);
         return utilisateurAfficheDto;
     }
 
+    public Utilisateur toUtilisateur(UtilisateurAfficheDto dto) {
+        return null;
+    }
     // BIEN IMMOBILIER MAPPER
     public BienImmobilierAffiheDto fromBienImmobilier(Bienimmobilier bienimmobilier) {
         BienImmobilierAffiheDto bienImmobilierAffiheDto = new BienImmobilierAffiheDto();
@@ -318,5 +328,27 @@ public class GestimoWebMapperImpl {
         ServiceAditionnelSaveOrUpdateDto serviceAditionnelSaveOrUpdateDto = new ServiceAditionnelSaveOrUpdateDto();
         BeanUtils.copyProperties(serviceAdditionnelle, serviceAditionnelSaveOrUpdateDto);
         return serviceAditionnelSaveOrUpdateDto;
-}
+    }
+
+    public static ReservationAfficheDto fromReservation(Reservation reservation) {
+        ReservationAfficheDto reservationSaveOrUpdateDto = new ReservationAfficheDto();
+        BeanUtils.copyProperties(reservation, reservationSaveOrUpdateDto);
+        reservationSaveOrUpdateDto
+                .setBienImmobilierOperation(reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier());
+                reservationSaveOrUpdateDto.setUtilisateurOperation(reservation.getUtilisateurOperation().getNom()+" "+reservation.getUtilisateurOperation().getPrenom());
+
+        return reservationSaveOrUpdateDto;
+    }
+
+    public Reservation toReservation(ReservationSaveOrUpdateDto dto) {
+        Reservation reservation = new Reservation();
+        BeanUtils.copyProperties(dto, reservation);
+        return reservation;
+    }
+
+    public Utilisateur fromUtilisateurRequestDto(UtilisateurRequestDto use) {
+        Utilisateur usr = new Utilisateur();
+        BeanUtils.copyProperties(use, usr);
+        return usr;
+    }
 }

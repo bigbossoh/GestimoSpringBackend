@@ -2,7 +2,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import static com.bzdata.gestimospringbackend.enumeration.Role.*;
 
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,7 +48,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto) {
         if (dto.getId() == 0 || dto.getId() == null) {
-            // log.info("We are going to create a new user with the role Locataire {}", dto);
+            // log.info("We are going to create a new user with the role Locataire {}",
+            // dto);
             Utilisateur newUser = new Utilisateur();
             List<String> errors = UtilisateurDtoValiditor.validate(dto);
             if (!errors.isEmpty()) {
@@ -58,12 +58,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                         "Certain attributs de l'object utiliateur avec pour role locataire sont null.",
                         ErrorCodes.UTILISATEUR_NOT_VALID, errors);
             }
-            // L'utilisateur createur
-            Utilisateur userCreate = utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
+            utilisateurRepository.findById(dto.getUserCreate()).orElseThrow(
                     () -> new InvalidEntityException(
-                            "Aucun Utilisateur has been found with Code " + dto.getUserCreate(),
+                            "Aucun Createur has been found with Code " + dto.getUserCreate(),
                             ErrorCodes.UTILISATEUR_NOT_FOUND));
-           // newUser.setUserCreate(userCreate);
+            // newUser.setUserCreate(userCreate);
             // GERER LES ROLES
             Role leRole = roleRepository.findRoleByRoleName(dto.getRoleUsed())
                     .orElseThrow(() -> new InvalidEntityException(
@@ -88,7 +87,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                     newUser.setRoleUsed(ROLE_LOCATAIRE.name());
                     newUser.setAuthorities(ROLE_LOCATAIRE.getAuthorities());
                     break;
-                    case "CLIENT HOTEL":
+                case "CLIENT HOTEL":
                     newUser.setRoleUsed(ROLE_CLIENT_HOTEL.name());
                     newUser.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
                     break;
@@ -180,13 +179,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 () -> new GestimoWebExceptionGlobal("Utilisateur avec l'username " + email + " n'exise pas."));
         utilisateur.setActivated(true);
         utilisateurRepository.save(utilisateur);
-
     }
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence) {
-        // log.info("We are going to take back all the locataires order by locataires name");
-
         return utilisateurRepository.findAll().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
                 .filter(agence -> agence.getIdAgence().equals(idAgence))
@@ -197,9 +193,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public UtilisateurRequestDto findById(Long id) {
-        // log.info("We are going to get back the utilisateur en fonction de l'ID {} de l'utilisateur ", id);
         if (id == null) {
-            // log.error("you are provided a null ID for the user");
             return null;
         }
         return utilisateurRepository.findById(id)
@@ -211,7 +205,6 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public UtilisateurRequestDto findUtilisateurByEmail(String email) {
         return utilisateurRepository.findUtilisateurByEmail(email)
-
                 .map(UtilisateurRequestDto::fromEntity)
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Aucun utilisateur avec l'email = " + email + " n' ete trouve dans la BDD",
@@ -231,11 +224,11 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurOrderbyName(Long idAgence) {
-     //   log.info("We are going to take back all the utilisateurs");
+        // log.info("We are going to take back all the utilisateurs");
 
         return utilisateurRepository.findAll().stream()
                 .sorted(Comparator.comparing(Utilisateur::getNom))
-                .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .map(gestimoWebMapperImpl::fromUtilisateur)
                 .collect(Collectors.toList());
     }
@@ -243,7 +236,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyName(Long idAgence) {
         return utilisateurRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .filter(user -> user.getUrole().getRoleName().equals("LOCATAIRE"))
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
@@ -253,10 +246,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurProprietaireOrderbyName(Long idAgence) {
-      //  log.info("We are going to take back all the PROPRIETAIRE order by PROPRIETAIRE name");
-
-        return utilisateurRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+              return utilisateurRepository.findAll().stream()
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .filter(user -> user.getUrole().getRoleName().equals("PROPRIETAIRE"))
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
@@ -265,10 +256,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurGerantOrderbyName(Long idAgence) {
-      //  log.info("We are going to take back all the GERANT order by GERANT name");
+        // log.info("We are going to take back all the GERANT order by GERANT name");
 
         return utilisateurRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence -> agence.getIdAgence() == idAgence)
                 .filter(user -> user.getUrole().getRoleName().equals("GERANT"))
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)
@@ -277,7 +268,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurSuperviseurOrderbyName() {
-        // log.info("We are going to take back all the SUPERVISEUR order by SUPERVISEUR name");
+        // log.info("We are going to take back all the SUPERVISEUR order by SUPERVISEUR
+        // name");
 
         return utilisateurRepository.findAllByOrderByNomAsc().stream()
                 .filter(user -> user.getUrole().getRoleName().equals("SUPERVISEUR"))
@@ -299,8 +291,8 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public List<LocataireEncaisDTO> listOfLocataireAyantunbail(Long idAgence) {
 
         return bailrepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
-        .filter(bailActif->bailActif.isEnCoursBail()==true)
+                .filter(agence -> agence.getIdAgence() == idAgence)
+                .filter(bailActif -> bailActif.isEnCoursBail() == true)
                 .map(bailMapper::fromOperationBailLocation)
                 .collect(Collectors.toList());
     }

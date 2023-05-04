@@ -11,7 +11,7 @@ public interface AppartementService {
 
     List<AppartementDto> findAll(Long idAgence);
     List<AppartementDto> findAllLibre(Long idAgence);
-
+    List<AppartementDto> findAllMeuble(Long idAgence);
     AppartementDto findById(Long id);
 
     AppartementDto findByName(String nom);

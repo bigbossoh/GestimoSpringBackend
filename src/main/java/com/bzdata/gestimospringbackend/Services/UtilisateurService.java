@@ -9,11 +9,6 @@ import java.util.List;
 
 public interface UtilisateurService {
 
-    // UtilisateurRequestDto saveLocataire(UtilisateurRequestDto dto);
-
-    // boolean saveProprietaire(UtilisateurRequestDto dto);
-
-    // UtilisateurRequestDto saveGerant(UtilisateurRequestDto dto);
     UtilisateurAfficheDto saveUtilisateur(UtilisateurRequestDto dto);
 
     UtilisateurRequestDto findById(Long id);
@@ -43,6 +38,4 @@ public interface UtilisateurService {
     List<UtilisateurAfficheDto> listOfAllUtilisateurLocataireOrderbyNameByAgence(Long idAgence);
 
     List<LocataireEncaisDTO> listOfLocataireAyantunbail(Long idAgence);
-    
-
 }

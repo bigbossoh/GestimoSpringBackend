@@ -106,7 +106,7 @@ public class AppartementServiceImpl implements AppartementService {
     }
 
     @Override
-    public AppartementDto save(AppartementDto dto) {
+    public AppartementDto  save(AppartementDto dto) {
 
         log.info("We are going to create  a new Appartement {}", dto);
         List<String> errors = AppartementDtoValidator.validate(dto);
@@ -117,22 +117,16 @@ public class AppartementServiceImpl implements AppartementService {
         }
         Optional<Appartement> unAppartementTrouve = appartementRepository.findById(dto.getId());
         if (unAppartementTrouve.isPresent()) {
-            // Etage etage = getEtage(dto);
-            // Long numApp = nombreVillaByIdSite(etage.getImmeuble().getSite());
-
-            // unAppartementTrouve.setEtageAppartement(etage);
+        
             unAppartementTrouve.get().setNbrPieceApp(dto.getNbrPieceApp());
             unAppartementTrouve.get().setNbreChambreApp(dto.getNbreChambreApp());
             unAppartementTrouve.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
             unAppartementTrouve.get().setNbreSalonApp(dto.getNbreSalonApp());
             unAppartementTrouve.get().setIdAgence(dto.getIdAgence());
             unAppartementTrouve.get().setIdCreateur(dto.getIdCreateur());
-            // unAppartementTrouve.setNumApp(numApp);
-            // unAppartementTrouve.setCodeAbrvBienImmobilier((etage.getCodeAbrvEtage() +
-            // "-APPT-" + numApp).toUpperCase());
+
             unAppartementTrouve.get().setNomBaptiserBienImmobilier(dto.getNomBaptiserBienImmobilier());
-            // unAppartementTrouve.setNomCompletBienImmobilier(etage.getNomCompletEtage() +
-            // "-APPARTEMENT-" + numApp);
+
             unAppartementTrouve.get().setBienMeublerResidence(dto.isBienMeublerResidence());
             unAppartementTrouve.get().setDescription(dto.getDescription());
             unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
@@ -193,6 +187,14 @@ public class AppartementServiceImpl implements AppartementService {
             }
         }
         return 1L;
+    }
+
+    @Override
+    public List<AppartementDto> findAllMeuble(Long idAgence) {
+        return appartementRepository.findAll().stream()
+        .filter(appa->appa.getIdAgence()==idAgence&& appa.isBienMeublerResidence()==true)
+                .map(gestimoWebMapperImpl::fromAppartement)
+                .collect(Collectors.toList());
     }
 
 }

@@ -27,6 +27,6 @@ public class AppartementDto {
     String description;
     double superficieBien;
     boolean bienMeublerResidence;
-    boolean isOccupied= false;
+    boolean isOccupied;
 
 }
