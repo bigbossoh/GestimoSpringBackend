@@ -4,7 +4,8 @@ import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Models.hotel.Reservation;
-import com.bzdata.gestimospringbackend.Models.hotel.ServiceAdditionnelle;
+import com.bzdata.gestimospringbackend.Models.hotel.Prestation;
+import com.bzdata.gestimospringbackend.Models.hotel.PrestationAdditionnelReservation;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
@@ -318,14 +319,14 @@ public class GestimoWebMapperImpl {
         return dto;
     }
 
-    public static ServiceAdditionnelle toServiceAdditionnelle(ServiceAditionnelSaveOrUpdateDto dto) {
-        ServiceAdditionnelle serviceAdditionnelle = new ServiceAdditionnelle();
+    public static Prestation toServiceAdditionnelle(PrestationSaveOrUpdateDto dto) {
+        Prestation serviceAdditionnelle = new Prestation();
         BeanUtils.copyProperties(dto, serviceAdditionnelle);
         return serviceAdditionnelle;
     }
 
-    public static ServiceAditionnelSaveOrUpdateDto fromServiceAditionnel(ServiceAdditionnelle serviceAdditionnelle) {
-        ServiceAditionnelSaveOrUpdateDto serviceAditionnelSaveOrUpdateDto = new ServiceAditionnelSaveOrUpdateDto();
+    public static PrestationSaveOrUpdateDto fromServiceAditionnel(Prestation serviceAdditionnelle) {
+        PrestationSaveOrUpdateDto serviceAditionnelSaveOrUpdateDto = new PrestationSaveOrUpdateDto();
         BeanUtils.copyProperties(serviceAdditionnelle, serviceAditionnelSaveOrUpdateDto);
         return serviceAditionnelSaveOrUpdateDto;
     }
@@ -351,4 +352,15 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(use, usr);
         return usr;
     }
+
+    public static PrestationAdditionnelReservationSaveOrrUpdate fromPrestationAdditionnelReservation(
+            PrestationAdditionnelReservation prestationAdditionnelReservation) {
+        PrestationAdditionnelReservationSaveOrrUpdate prestationAdditionnelReservationSaveOrrUpdate = new PrestationAdditionnelReservationSaveOrrUpdate();
+        BeanUtils.copyProperties(prestationAdditionnelReservation, prestationAdditionnelReservationSaveOrrUpdate);
+        prestationAdditionnelReservationSaveOrrUpdate
+                .setNamePrestaion(prestationAdditionnelReservation.getServiceAdditionnelle().getName());
+        prestationAdditionnelReservationSaveOrrUpdate.setAmountPrestation(prestationAdditionnelReservation.getServiceAdditionnelle().getAmount());
+        return prestationAdditionnelReservationSaveOrrUpdate;
+}
+
 }

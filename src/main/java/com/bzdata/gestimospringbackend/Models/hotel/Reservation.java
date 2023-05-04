@@ -37,7 +37,7 @@ public class Reservation extends Operation {
 
     @OneToMany
     @JoinColumn(name = "idResvationServiceAdditionnel")
-    List<ServiceAdditionnelreservation> serviceAdditionnelreservations;
+    List<PrestationAdditionnelReservation> serviceAdditionnelreservations;
 
     @OneToMany
     @JoinColumn(name = "idResvationEncaissement")

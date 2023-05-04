@@ -4,11 +4,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.bzdata.gestimospringbackend.DTOs.ServiceAditionnelSaveOrUpdateDto;
-import com.bzdata.gestimospringbackend.Models.hotel.ServiceAdditionnelle;
-import com.bzdata.gestimospringbackend.Services.ServiceAdditionnelService;
+import com.bzdata.gestimospringbackend.DTOs.PrestationSaveOrUpdateDto;
+import com.bzdata.gestimospringbackend.Models.hotel.Prestation;
+import com.bzdata.gestimospringbackend.Services.PrestaionService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
-import com.bzdata.gestimospringbackend.repository.ServiceAdditionnelRepository;
+import com.bzdata.gestimospringbackend.repository.PrestationRepository;
 import com.bzdata.gestimospringbackend.validator.ObjectsValidator;
 
 import org.springframework.stereotype.Service;
@@ -21,29 +21,29 @@ import lombok.experimental.FieldDefaults;
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
-    final ServiceAdditionnelRepository serviceAdditionnelRepository;
+public class PrestaionServiceImpl implements PrestaionService{
+    final PrestationRepository serviceAdditionnelRepository;
 
-    private final ObjectsValidator<ServiceAditionnelSaveOrUpdateDto> validator;
+    private final ObjectsValidator<PrestationSaveOrUpdateDto> validator;
 
     @Override
-    public Long save(ServiceAditionnelSaveOrUpdateDto dto) {
+    public Long save(PrestationSaveOrUpdateDto dto) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
-    public List<ServiceAditionnelSaveOrUpdateDto> findAll() {
+    public List<PrestationSaveOrUpdateDto> findAll() {
         return serviceAdditionnelRepository.findAll()
                 .stream()
-                .sorted(Comparator.comparing(ServiceAdditionnelle::getName))
+                .sorted(Comparator.comparing(Prestation::getName))
                 .map(GestimoWebMapperImpl::fromServiceAditionnel)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ServiceAditionnelSaveOrUpdateDto findById(Long id) {
-        ServiceAdditionnelle serviceAdditionnelle = serviceAdditionnelRepository.findById(id).orElse(null);
+    public PrestationSaveOrUpdateDto findById(Long id) {
+        Prestation serviceAdditionnelle = serviceAdditionnelRepository.findById(id).orElse(null);
         if (serviceAdditionnelle != null) {
             return GestimoWebMapperImpl.fromServiceAditionnel(serviceAdditionnelle);
         } else {
@@ -53,7 +53,7 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
 
     @Override
     public void delete(Long id) {
-        ServiceAdditionnelle serviceAdditionnelle = serviceAdditionnelRepository.findById(id).orElse(null);
+        Prestation serviceAdditionnelle = serviceAdditionnelRepository.findById(id).orElse(null);
         if (serviceAdditionnelle != null) {
             serviceAdditionnelRepository.delete(serviceAdditionnelle);
         } else {
@@ -62,8 +62,8 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
     }
 
     @Override
-    public ServiceAditionnelSaveOrUpdateDto saveOrUpdate(ServiceAditionnelSaveOrUpdateDto dto) {
-        ServiceAdditionnelle serviceAdditionnelle = serviceAdditionnelRepository.findById(dto.getId()).orElse(null);
+    public PrestationSaveOrUpdateDto saveOrUpdate(PrestationSaveOrUpdateDto dto) {
+        Prestation serviceAdditionnelle = serviceAdditionnelRepository.findById(dto.getId()).orElse(null);
 
         validator.validate(dto);
         if (serviceAdditionnelle != null) {
@@ -72,16 +72,16 @@ public class ServiceAdditionnelServiceImpl implements ServiceAdditionnelService{
             serviceAdditionnelle.setAmount(dto.getAmount());
             serviceAdditionnelle.setIdAgence(dto.getIdAgence());
             serviceAdditionnelle.setIdCreateur(dto.getIdCreateur());
-            ServiceAdditionnelle saveServiceAdditionnelle = serviceAdditionnelRepository.save(serviceAdditionnelle);
+            Prestation saveServiceAdditionnelle = serviceAdditionnelRepository.save(serviceAdditionnelle);
             return GestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
         } else {
-            ServiceAdditionnelle newsServiceAdditionnelle = new ServiceAdditionnelle();
+            Prestation newsServiceAdditionnelle = new Prestation();
            // newCategorieChambre.setDescription(dto.getDescription());
            newsServiceAdditionnelle.setName(dto.getName());
            newsServiceAdditionnelle.setAmount(dto.getAmount());
            newsServiceAdditionnelle.setIdCreateur(dto.getIdCreateur());
            newsServiceAdditionnelle.setIdAgence(dto.getIdAgence());
-           ServiceAdditionnelle saveServiceAdditionnelle = serviceAdditionnelRepository.save(newsServiceAdditionnelle);
+           Prestation saveServiceAdditionnelle = serviceAdditionnelRepository.save(newsServiceAdditionnelle);
             return GestimoWebMapperImpl.fromServiceAditionnel(saveServiceAdditionnelle);
         }
     }
