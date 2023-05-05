@@ -27,11 +27,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(APP_ROOT + "/appelloyer")
 @RequiredArgsConstructor
-// @Slf4j
+ @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 public class AppelLoyersController {
@@ -125,7 +126,12 @@ public class AppelLoyersController {
         // log.info("Liste de tous les appels ");
         return ResponseEntity.ok(appelLoyerService.findAll(idAgence));
     }
-
+    @Operation(summary = "Lister tous les supprimerPaiementAppel de BD", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/supprimerPaiementAppel/{idPeriode}/{idBail}")
+    public ResponseEntity<List<AppelLoyersFactureDto>> supprimerPaiementAppel(@PathVariable("idPeriode") Long idPeriode,@PathVariable("idBail") Long idBail) {
+       // log.info("SUPPRIMER de tous les appels periode {}, bail {}",idPeriode,idBail);
+        return ResponseEntity.ok(appelLoyerService.supprimerLoyerPayer(idPeriode,idBail));
+    }
     @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllAppelloyerBybien/{id}")
     public ResponseEntity<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(@PathVariable("id") Long id) {

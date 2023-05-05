@@ -29,6 +29,7 @@ public interface AppelLoyerService {
     AppelLoyersFactureDto findById(Long id);
 
     List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
+    List<AppelLoyersFactureDto> supprimerLoyerPayer(Long periode,Long idBailLocation);
 
     List<Integer> listOfDistinctAnnee(Long idAgence);
 
@@ -63,5 +64,5 @@ public interface AppelLoyerService {
     List<AppelLoyersFactureDto> listeDesloyerSuperieurAUnePeriode(String periode, Long idBail);
 
     AppelLoyersFactureDto findByIdAndBail(String periode, Long idBail);
-  
+
 }
