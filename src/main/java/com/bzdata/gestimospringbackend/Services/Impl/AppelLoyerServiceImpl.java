@@ -22,6 +22,7 @@ import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
+import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
@@ -34,6 +35,7 @@ import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.AppelLoyerRepository;
 import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
+import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
@@ -53,12 +55,12 @@ import lombok.experimental.FieldDefaults;
  * @Author Michel Bossoh
  */
 @Service
-// @Slf4j
+//@Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerServiceImpl implements AppelLoyerService {
-
+        final EncaissementPrincipalRepository encaissementPrincipalRepository;
         final MontantLoyerBailRepository montantLoyerBailRepository;
         final BailLocationRepository bailLocationRepository;
         final AppelLoyerRepository appelLoyerRepository;
@@ -83,7 +85,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public List<String> save(AppelLoyerRequestDto dto) {
 
-                // log.info("We are going to create  a new Appel loyer bail {}", dto);
+                // log.info("We are going to create a new Appel loyer bail {}", dto);
                 List<String> errors = AppelLoyerRequestValidator.validate(dto);
                 if (!errors.isEmpty()) {
                         // log.error("L'appel du loyer n'est pas valide {}", errors);
@@ -140,12 +142,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 }
 
                 appelLoyerRepository.saveAll(appelLoyerList);
-                // log.info("we are going lo launch sms to the user ");
-                // SmsRequest sms = new
-                // SmsRequest(bailLocation.getUtilisateurOperation().getUsername(),
-                // "Vôtre baillocation a été créé avec succès.");
 
-                // log.info("Sms sent");
                 return appelLoyerList
                                 .stream()
                                 .map(AppelLoyer::getPeriodeAppelLoyer)
@@ -154,7 +151,8 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public boolean cloturerAppelDto(Long id) {
-                // log.info("We are going to set isCloture at true a AppelLoyer with the ID {}", id);
+                // log.info("We are going to set isCloture at true a AppelLoyer with the ID {}",
+                // id);
                 if (id == null) {
                         // log.error("you are provided a null ID for the Bail");
                         return false;
@@ -186,7 +184,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 return appelLoyerRepository.findAll()
                                 .stream()
                                 // .filter(appelLoyer -> !appelLoyer.isCloturer())
-                                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer)&&Objects.equals(appelLoyer.getIdAgence(), idAgence)&&appelLoyer.isCloturer()==false)
+                                .filter(appelLoyer -> appelLoyer.getPeriodeAppelLoyer().equals(periodeAppelLoyer)
+                                                && Objects.equals(appelLoyer.getIdAgence(), idAgence)
+                                                && appelLoyer.isCloturer() == false)
 
                                 // .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
@@ -370,8 +370,8 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                         .mapToDouble(Double::doubleValue)
                                         .sum();
                         // log.info("Total montant loyer par periode par agence {}, {}",
-                                        // totalMontantLoyerParPeriodeParAgence,
-                                        // impayeParPeriode(periode, idAgence, chapitre));
+                        // totalMontantLoyerParPeriodeParAgence,
+                        // impayeParPeriode(periode, idAgence, chapitre));
                         return totalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence, chapitre);
                 }
 
@@ -625,7 +625,44 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
-
                 return factureLoyer.get(0);
+        }
+
+        @Override
+        public List<AppelLoyersFactureDto> supprimerLoyerPayer(Long idAppel, Long idBailLocation) {
+                List<AppelLoyersFactureDto> appelLoyerTrouver = appelLoyerRepository.findAll()
+                                .stream()
+                                .filter(appelLoyer -> appelLoyer.getId() >= idAppel
+                                                && Objects.equals(appelLoyer.getBailLocationAppelLoyer().getId(),
+                                                                idBailLocation))
+                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                                .map(gestimoWebMapper::fromAppelLoyer)
+                                .collect(Collectors.toList());
+                for (int i = 0; i < appelLoyerTrouver.size(); i++) {
+                        AppelLoyer appelLoyer = appelLoyerRepository.findById(appelLoyerTrouver.get(i).getId())
+                                        .orElse(null);
+                        if (appelLoyer != null) {
+                                appelLoyer.setStatusAppelLoyer("Impayé");
+                                appelLoyer.setSolderAppelLoyer(false);
+                                appelLoyer.setSoldeAppelLoyer(appelLoyer.getMontantLoyerBailLPeriode());
+                                appelLoyerRepository.save(appelLoyer);
+
+                                if (appelLoyer != null && appelLoyer.isSolderAppelLoyer() == false) {
+                                        List<EncaissementPrincipal> encaissementPrincipal = encaissementPrincipalRepository
+                                                        .findAll()
+                                                        .stream()
+                                                        .filter(encais -> encais.getAppelLoyerEncaissement()
+                                                                        .getId() == appelLoyer.getId())
+                                                        .collect(Collectors.toList());
+                                        if (encaissementPrincipal.size() > 0) {
+                                                for (int j = 0; j < encaissementPrincipal.size(); j++) {
+                                                        encaissementPrincipalRepository.deleteById(
+                                                                        encaissementPrincipal.get(j).getId());
+                                                }
+                                        }
+                                }
+                        }
+                }
+                return findAllAppelLoyerImpayerByBailId(idBailLocation) ;
         }
 }
