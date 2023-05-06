@@ -609,4 +609,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 return result;
         }
 
+        @Override
+        public List<EncaissementPrincipalDTO> listeEncaissementParPeriode(Long agence, String dateDebut,
+                        String dateFin) {
+            
+              return null;
+        }
+
 }
