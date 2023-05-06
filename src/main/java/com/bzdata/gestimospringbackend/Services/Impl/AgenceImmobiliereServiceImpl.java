@@ -75,7 +75,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
         Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
         if (utilisateurByMobile == null) {
             // get back the connected user
-            Utilisateur userCreate = getUserCreate(dto);
+            getUserCreate(dto);
             // agenceImmobiliere.setCreateur(userCreate);
             agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
             agenceImmobiliere.setCapital(dto.getCapital());
@@ -254,8 +254,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             // Check if the user already exist in the database
             Utilisateur utilisateurByMobile = utilisateurRepository.findUtilisateurByUsername(dto.getMobileAgence());
             if (utilisateurByMobile == null) {
-                // get back the connected user
-                Utilisateur userCreate = getUserCreate(dto);
                 // agenceImmobiliere.setCreateur(userCreate);
                 agenceImmobiliere.setSigleAgence(dto.getSigleAgence());
                 agenceImmobiliere.setCapital(dto.getCapital());

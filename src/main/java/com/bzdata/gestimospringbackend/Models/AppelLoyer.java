@@ -35,6 +35,7 @@ public class AppelLoyer extends AbstractEntity {
     double soldeAppelLoyer;
     boolean isSolderAppelLoyer;
     boolean isCloturer;
+    boolean isUnLock=false;
     double ancienMontant;
     double pourcentageReduction;
     String messageReduction;

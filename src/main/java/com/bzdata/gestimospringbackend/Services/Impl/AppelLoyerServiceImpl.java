@@ -55,7 +55,7 @@ import lombok.experimental.FieldDefaults;
  * @Author Michel Bossoh
  */
 @Service
-//@Slf4j
+// @Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -306,12 +306,12 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 return lesLoyers.stream()
                                 .filter(bienTrouver -> bienTrouver.getBailLocationAppelLoyer()
-                                                .getBienImmobilierOperation().equals(bienImmobilier))
-                                .filter(loyers -> loyers.getSoldeAppelLoyer() > 0)
-                                // .filter(perio->perio.getPeriodeAppelLoyer().compareTo(bienPeriodeDto.getPeriode())<0)
+                                                .getBienImmobilierOperation().equals(bienImmobilier)&&bienTrouver.getSoldeAppelLoyer() > 0)
+                                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .findFirst().orElseThrow(null);
-                // .collect(Collectors.toList());
+             
         }
 
         @Override
@@ -582,7 +582,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                                 - listAppels.get(i).getMontantLoyerBailLPeriode()
                                                                 * pourcentageAppelDto.getTauxApplique() / 100);
                                 appelLoyerTrouve.setMessageReduction(pourcentageAppelDto.getMessageReduction());
-                                AppelLoyer leSave = appelLoyerRepository.save(appelLoyerTrouve);
+                                appelLoyerRepository.save(appelLoyerTrouve);
 
                         }
 
@@ -663,6 +663,22 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 }
                         }
                 }
-                return findAllAppelLoyerImpayerByBailId(idBailLocation) ;
+                return findAllAppelLoyerImpayerByBailId(idBailLocation);
+        }
+
+        @Override
+        public AppelLoyersFactureDto findFirstAppelImpayerByBail(Long idBail) {
+                List<AppelLoyersFactureDto> appelLoyerTrouver = appelLoyerRepository.findAll()
+                .stream()
+                .filter(appelLoyer -> appelLoyer.getBailLocationAppelLoyer().getId() == idBail
+                                && appelLoyer.getSoldeAppelLoyer()>=appelLoyer.getMontantLoyerBailLPeriode())
+                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                .map(gestimoWebMapper::fromAppelLoyer)
+                                .collect(Collectors.toList());
+                if (appelLoyerTrouver.size()>0) {
+                        return appelLoyerTrouver.get(0);
+                } else {
+                        return null;
+                }
         }
 }

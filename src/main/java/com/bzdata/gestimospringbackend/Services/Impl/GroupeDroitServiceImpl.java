@@ -51,7 +51,7 @@ public class GroupeDroitServiceImpl implements GroupeDroitService {
     }
     @Override
     public GroupeDroitDto saveOrUpdate(GroupeDroitDto dto) {
-        // TODO Auto-generated method stub
+       
         throw new UnsupportedOperationException("Unimplemented method 'saveOrUpdate'");
     }
 }

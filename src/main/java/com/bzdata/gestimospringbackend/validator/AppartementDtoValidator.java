@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 
-import org.springframework.util.StringUtils;
-
 public class AppartementDtoValidator {
     public static List<String> validate(AppartementDto dto) {
         List<String> errors = new ArrayList<>();

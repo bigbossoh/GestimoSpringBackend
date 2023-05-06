@@ -132,8 +132,8 @@ public class AppelLoyersController {
        // log.info("SUPPRIMER de tous les appels periode {}, bail {}",idPeriode,idBail);
         return ResponseEntity.ok(appelLoyerService.supprimerLoyerPayer(idPeriode,idBail));
     }
-    @Operation(summary = "Trouver tous les appels loyers par periode", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/findAllAppelloyerBybien/{id}")
+    @Operation(summary = "Trouver le premier appel impayé.", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/getFirstLoyerImpayerByBien/{id}")
     public ResponseEntity<AppelLoyersFactureDto> getFirstLoyerImpayerByBien(@PathVariable("id") Long id) {
         // log.info("Find Appel by loy {}", id);
         return ResponseEntity.ok(appelLoyerService.getFirstLoyerImpayerByBien(id));

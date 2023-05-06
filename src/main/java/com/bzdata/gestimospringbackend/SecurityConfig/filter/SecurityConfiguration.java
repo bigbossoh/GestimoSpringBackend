@@ -3,8 +3,6 @@ package com.bzdata.gestimospringbackend.SecurityConfig.filter;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.PUBLIC_URLS;
 
 import com.bzdata.gestimospringbackend.Services.Auth.ApplicationUserDetailsService;
-import com.bzdata.gestimospringbackend.utility.JWTTokenProvider;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -27,7 +25,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final ApplicationUserDetailsService applicationUserDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final JWTTokenProvider jwtTokenProvider;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 

@@ -117,7 +117,7 @@ public class AppartementServiceImpl implements AppartementService {
         }
         Optional<Appartement> unAppartementTrouve = appartementRepository.findById(dto.getId());
         if (unAppartementTrouve.isPresent()) {
-        
+
             unAppartementTrouve.get().setNbrPieceApp(dto.getNbrPieceApp());
             unAppartementTrouve.get().setNbreChambreApp(dto.getNbreChambreApp());
             unAppartementTrouve.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());

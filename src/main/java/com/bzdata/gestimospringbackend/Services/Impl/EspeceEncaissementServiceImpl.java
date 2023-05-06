@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.EspeceEncaissementDto;
-import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.EspeceEncaissement;
 import com.bzdata.gestimospringbackend.Models.Quittance;
@@ -55,7 +54,7 @@ public class EspeceEncaissementServiceImpl implements EspeceEncaissementService 
                 .orElseThrow(() -> new InvalidEntityException(
                         "Aucun Appel n'a été trouvé avec l'Id " + dto.getIdAppelLoyerEncaissement(),
                         ErrorCodes.APPELLOYER_NOT_FOUND));
-        UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdAppelLoyerEncaissement());
+        utilisateurService.findById(dto.getIdAppelLoyerEncaissement());
 
         especeEncaissement.setAppelLoyerEncaissement(appelLoyer);
         especeEncaissement.setDateEncaissement(dto.getDateEncaissement());

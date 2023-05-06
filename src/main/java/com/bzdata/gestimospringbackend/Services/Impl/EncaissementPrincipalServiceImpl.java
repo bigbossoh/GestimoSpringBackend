@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
@@ -57,7 +58,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
         @Override
         public boolean saveEncaissement(EncaissementPayloadDto dto) {
-                log.info("We are going to create  a new encaissement EncaissementPrincipalServiceImpl {}", dto);
+                // log.info("We are going to create a new encaissement
+                // EncaissementPrincipalServiceImpl {}", dto);
                 List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
                 if (!errors.isEmpty()) {
                         log.error("L'encaissement n'est pas valide {}", errors);
@@ -74,8 +76,9 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 .findAllAppelLoyerImpayerByBailId(bailLocation.getId());
                 double montantVerser = dto.getMontantEncaissement();
 
-                log.info("le bail concerner est {} et la liste des appels impayés est {}", bailLocation.getId(),
-                                listAppelImpayerParBail.size());
+                // log.info("le bail concerner est {} et la liste des appels impayés est {}",
+                // bailLocation.getId(),
+                // listAppelImpayerParBail.size());
                 EncaissementPrincipal encaissementPrincipal;
                 for (AppelLoyersFactureDto appelLoyerDto : listAppelImpayerParBail) {
                         encaissementPrincipal = new EncaissementPrincipal();
@@ -90,6 +93,15 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 appelLoyerDto.setSolderAppelLoyer(true);
                                 appelLoyerDto.setSoldeAppelLoyer(0);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+                                AppelLoyersFactureDto appelLoyersFactureDto = appelLoyerService
+                                                .getFirstLoyerImpayerByBien(appelLoyerDto.getIdBailLocation());
+                                appelLoyersFactureDto.setUnLock(true);
+                                AppelLoyer unlockAppelLoyer = appelLoyerRepository
+                                                .findById(appelLoyersFactureDto.getId()).orElse(null);
+                                if (unlockAppelLoyer != null) {
+                                        unlockAppelLoyer.setUnLock(true);
+                                        appelLoyerRepository.save(unlockAppelLoyer);
+                                }
 
                                 encaissementPrincipal.setAppelLoyerEncaissement(
                                                 gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
@@ -102,8 +114,9 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                encaissementPrincipalRepository
                                                 .save(encaissementPrincipal);
+
                                 if (montantVerser <= 0) {
                                         break;
                                 }
@@ -117,7 +130,17 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 appelLoyerDto.setStatusAppelLoyer("partiellement payé");
                                 appelLoyerDto.setSolderAppelLoyer(false);
                                 appelLoyerDto.setSoldeAppelLoyer(montantPayer);
+
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
+                                AppelLoyersFactureDto appelLoyersFactureDto = appelLoyerService
+                                                .getFirstLoyerImpayerByBien(appelLoyerDto.getIdBailLocation());
+                                appelLoyersFactureDto.setUnLock(true);
+                                AppelLoyer unlockAppelLoyer = appelLoyerRepository
+                                                .findById(appelLoyersFactureDto.getId()).orElse(null);
+                                if (unlockAppelLoyer != null) {
+                                        unlockAppelLoyer.setUnLock(true);
+                                        appelLoyerRepository.save(unlockAppelLoyer);
+                                }
                                 // EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
                                 encaissementPrincipal.setAppelLoyerEncaissement(
                                                 gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
@@ -130,7 +153,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setMontantEncaissement(montantVerser);
                                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                encaissementPrincipalRepository
                                                 .save(encaissementPrincipal);
                                 break;
                         }
@@ -183,7 +206,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                         encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                                         encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                         encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                        EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                        encaissementPrincipalRepository
                                                         .save(encaissementPrincipal);
                                         if (montantVerser <= 0) {
                                                 break;
@@ -210,7 +233,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                         encaissementPrincipal.setMontantEncaissement(montantVerser);
                                         encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                         encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                        EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                        encaissementPrincipalRepository
                                                         .save(encaissementPrincipal);
                                         break;
                                 }
@@ -286,13 +309,12 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         }
 
         @Override
-        public boolean delete(Long id) {
+        public boolean delete(Long id) {                      
                 return false;
         }
 
         @Override
         public List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(EncaissementPayloadDto dto) {
-
                 List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
                 if (!errors.isEmpty()) {
 
@@ -324,8 +346,17 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 appelLoyerDto.setStatusAppelLoyer("Soldé");
                                 appelLoyerDto.setSolderAppelLoyer(true);
                                 appelLoyerDto.setSoldeAppelLoyer(0);
+                                appelLoyer.setUnLock(false);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
-
+                                AppelLoyersFactureDto appelLoyersFactureDto = appelLoyerService
+                                                .getFirstLoyerImpayerByBien(appelLoyerDto.getIdBailLocation());
+                                appelLoyersFactureDto.setUnLock(true);
+                                AppelLoyer unlockAppelLoyer = appelLoyerRepository
+                                                .findById(appelLoyersFactureDto.getId()).orElse(null);
+                                if (unlockAppelLoyer != null) {
+                                        unlockAppelLoyer.setUnLock(true);
+                                        appelLoyerRepository.save(unlockAppelLoyer);
+                                }
                                 encaissementPrincipal.setAppelLoyerEncaissement(
                                                 gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
@@ -338,7 +369,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                encaissementPrincipalRepository
                                                 .save(encaissementPrincipal);
 
                                 if (montantVerser <= 0) {
@@ -362,7 +393,15 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
 
                                 appelLoyerDto.setSoldeAppelLoyer(montantPayer);
                                 appelLoyerRepository.save(gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
-
+                                AppelLoyersFactureDto appelLoyersFactureDto = appelLoyerService
+                                                .getFirstLoyerImpayerByBien(appelLoyerDto.getIdBailLocation());
+                                appelLoyersFactureDto.setUnLock(true);
+                                AppelLoyer unlockAppelLoyer = appelLoyerRepository
+                                                .findById(appelLoyersFactureDto.getId()).orElse(null);
+                                if (unlockAppelLoyer != null) {
+                                        unlockAppelLoyer.setUnLock(true);
+                                        appelLoyerRepository.save(unlockAppelLoyer);
+                                }
                                 encaissementPrincipal.setAppelLoyerEncaissement(
                                                 gestimoWebMapper.fromAppelLoyerDto(appelLoyerDto));
                                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
@@ -375,7 +414,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setMontantEncaissement(montantVerser);
                                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository
+                                encaissementPrincipalRepository
                                                 .save(encaissementPrincipal);
                                 break;
                         }
@@ -395,7 +434,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 // try {
                 // String leTok = envoiSmsOrange.getTokenSmsOrange();
 
-                // String message = "L'Agence " + nomString +" accuse bonne reception de la somme de "+ dto.getMontantEncaissement()
+                // String message = "L'Agence " + nomString +" accuse bonne reception de la
+                // somme de "+ dto.getMontantEncaissement()
                 // + " F CFA pour le reglement de votre loyer du bail : "
                 // + bailLocation.getDesignationBail().toUpperCase() + ".";
                 // envoiSmsOrange.sendSms(leTok, message, "+2250000",
@@ -462,6 +502,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 }
 
         }
+
         @Override
         public List<LocataireEncaisDTO> listeLocataireImpayerParAgenceEtPeriode(Long agence, String periode) {
                 List<LocataireEncaisDTO> appelLocataire = appelLoyerRepository.findAll().stream()
@@ -477,18 +518,19 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         public double sommeEncaissementParAgenceEtParChapitreEtParPeriode(Long agence, Long chapitre, String dateDebut,
                         String dateFin) {
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'sommeEncaissementParAgenceEtParChapitreEtParPeriode'");
+                throw new UnsupportedOperationException(
+                                "Unimplemented method 'sommeEncaissementParAgenceEtParChapitreEtParPeriode'");
         }
 
         @Override
         public double sommeEncaissementParAgenceEtParPeriode(Long agence, LocalDate dateDebut, LocalDate dateFin) {
-             List<Double> listeEncaissementParPeriode=   encaissementPrincipalRepository.findAll()
-                .stream()
-                .filter(encaissement->encaissement.getIdAgence()==agence &&
-                encaissement.getDateEncaissement().isAfter(dateDebut) &&
-                encaissement.getDateEncaissement().isBefore(dateFin))
-                .map(EncaissementPrincipal::getMontantEncaissement)
-                .collect(Collectors.toList());
+                List<Double> listeEncaissementParPeriode = encaissementPrincipalRepository.findAll()
+                                .stream()
+                                .filter(encaissement -> encaissement.getIdAgence() == agence &&
+                                                encaissement.getDateEncaissement().isAfter(dateDebut) &&
+                                                encaissement.getDateEncaissement().isBefore(dateFin))
+                                .map(EncaissementPrincipal::getMontantEncaissement)
+                                .collect(Collectors.toList());
                 Double totalEncaissement = listeEncaissementParPeriode.stream().mapToDouble(Double::doubleValue).sum();
                 return totalEncaissement;
         }
@@ -497,7 +539,8 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         public double sommeImpayerParAgenceEtParChapitreEtParPeriode(Long agence, Long chapitre, String dateDebut,
                         String dateFin) {
                 // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'sommeImpayerParAgenceEtParChapitreEtParPeriode'");
+                throw new UnsupportedOperationException(
+                                "Unimplemented method 'sommeImpayerParAgenceEtParChapitreEtParPeriode'");
         }
 
         @Override
@@ -507,54 +550,63 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         }
 
         @Override
-        public Map<YearMonth, Double> getTotalEncaissementsParMois(Long idAgence,LocalDate debut, LocalDate fin) {
+        public Map<YearMonth, Double> getTotalEncaissementsParMois(Long idAgence, LocalDate debut, LocalDate fin) {
 
-                  return encaissementPrincipalRepository.findAll().stream()
-                .filter(e ->e.getIdAgence()==idAgence && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isBefore(debut) && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer().isAfter(fin))
-                .collect(Collectors.groupingBy(
-                        e -> YearMonth.from(e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()),
-                        Collectors.summingDouble(EncaissementPrincipal::getMontantEncaissement)
-                ));
+                return encaissementPrincipalRepository.findAll().stream()
+                                .filter(e -> e.getIdAgence() == idAgence
+                                                && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()
+                                                                .isBefore(debut)
+                                                && !e.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()
+                                                                .isAfter(fin))
+                                .collect(Collectors.groupingBy(
+                                                e -> YearMonth.from(e.getAppelLoyerEncaissement()
+                                                                .getDateDebutMoisAppelLoyer()),
+                                                Collectors.summingDouble(
+                                                                EncaissementPrincipal::getMontantEncaissement)));
 
         }
 
         @Override
-        public Map<YearMonth, Double[]> getTotalEncaissementsEtMontantsDeLoyerParMois(Long idAgence,LocalDate debut, LocalDate fin) {
+        public Map<YearMonth, Double[]> getTotalEncaissementsEtMontantsDeLoyerParMois(Long idAgence, LocalDate debut,
+                        LocalDate fin) {
                 // Initialisation de la map de résultats
-        Map<YearMonth, Double[]> result = new HashMap<>();
-       // YearMonth currentMonth
-        YearMonth startMonth= YearMonth.from(debut);
-        YearMonth endMonth= YearMonth.from(fin);
+                Map<YearMonth, Double[]> result = new HashMap<>();
+                // YearMonth currentMonth
+                YearMonth startMonth = YearMonth.from(debut);
+                YearMonth endMonth = YearMonth.from(fin);
 
-        YearMonth currentMonth = startMonth;
-        // Boucle pour itérer sur chaque mois dans la période donnée
-        while (!currentMonth.isAfter(endMonth)) {
-                YearMonth finalCurrentMonth = currentMonth;
-                // Utilisation d'un stream pour filtrer les loyers payés dans le mois actuel
-            List<EncaissementPrincipal> loyersDuMois = encaissementPrincipalRepository.findAll().stream()
-            .filter(loyer -> loyer.getIdAgence()==idAgence && YearMonth.from(loyer.getAppelLoyerEncaissement().getDateDebutMoisAppelLoyer()).equals(finalCurrentMonth))
-            .collect(Collectors.toList());
-            List<AppelLoyersFactureDto> loyers= appelLoyerService.findAll(idAgence).stream()
-                .filter(loyer -> YearMonth.from(loyer.getDateDebutMoisAppelLoyer()).equals(finalCurrentMonth))
-                .collect(Collectors.toList());
-            // Calcul du total des encaissements de loyer pour le mois actuel
-            Double totalEncaissements = loyersDuMois.stream()
-                    .mapToDouble(encaissement -> encaissement.getMontantEncaissement())
-                    .sum();
-                // Calcul du total des montants de loyers pour le mois actuel
-            Double totalMontantLoyers = loyers.stream()
-            .mapToDouble(encaissement -> encaissement.getMontantLoyerBailLPeriode())
-            .sum();
+                YearMonth currentMonth = startMonth;
+                // Boucle pour itérer sur chaque mois dans la période donnée
+                while (!currentMonth.isAfter(endMonth)) {
+                        YearMonth finalCurrentMonth = currentMonth;
+                        // Utilisation d'un stream pour filtrer les loyers payés dans le mois actuel
+                        List<EncaissementPrincipal> loyersDuMois = encaissementPrincipalRepository.findAll().stream()
+                                        .filter(loyer -> loyer.getIdAgence() == idAgence && YearMonth
+                                                        .from(loyer.getAppelLoyerEncaissement()
+                                                                        .getDateDebutMoisAppelLoyer())
+                                                        .equals(finalCurrentMonth))
+                                        .collect(Collectors.toList());
+                        List<AppelLoyersFactureDto> loyers = appelLoyerService.findAll(idAgence).stream()
+                                        .filter(loyer -> YearMonth.from(loyer.getDateDebutMoisAppelLoyer())
+                                                        .equals(finalCurrentMonth))
+                                        .collect(Collectors.toList());
+                        // Calcul du total des encaissements de loyer pour le mois actuel
+                        Double totalEncaissements = loyersDuMois.stream()
+                                        .mapToDouble(encaissement -> encaissement.getMontantEncaissement())
+                                        .sum();
+                        // Calcul du total des montants de loyers pour le mois actuel
+                        Double totalMontantLoyers = loyers.stream()
+                                        .mapToDouble(encaissement -> encaissement.getMontantLoyerBailLPeriode())
+                                        .sum();
 
-            // Ajout des résultats dans la map de résultats
-            result.put(currentMonth, new Double[]{totalEncaissements, totalMontantLoyers});
+                        // Ajout des résultats dans la map de résultats
+                        result.put(currentMonth, new Double[] { totalEncaissements, totalMontantLoyers });
 
-            // Passage au mois suivant
-            currentMonth = currentMonth.plusMonths(1);
+                        // Passage au mois suivant
+                        currentMonth = currentMonth.plusMonths(1);
 
-        }
+                }
                 return result;
         }
-
 
 }

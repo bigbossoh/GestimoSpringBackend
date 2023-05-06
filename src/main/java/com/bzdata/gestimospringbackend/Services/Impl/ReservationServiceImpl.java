@@ -34,6 +34,7 @@ public class ReservationServiceImpl implements ReservationService {
     final AppartementService appartementService;
     final ReservationRepository reservationRepository;
     final GestimoWebMapperImpl gestimoWebMapperImpl;
+
     @Override
     public Long save(ReservationSaveOrUpdateDto dto) {
         // TODO Auto-generated method stub
@@ -76,15 +77,17 @@ public class ReservationServiceImpl implements ReservationService {
 
         UtilisateurAfficheDto newUtilisateurDto = new UtilisateurAfficheDto();
 
-        if (dto.getId()==0 ) {
+        if (dto.getId() == 0) {
             Reservation nReservation = new Reservation();
             if (dto.getUtilisateurRequestDto().getId() == 0) {
                 log.info("********* Utilisateur id est ******* : {}", dto.getUtilisateurRequestDto().getId());
                 newUtilisateurDto = utilisateurService.saveUtilisateur(dto.getUtilisateurRequestDto());
-                log.info("Le nouveau user est le meme {},{}", newUtilisateurDto.getId(),newUtilisateurDto.getNom());
+                log.info("Le nouveau user est le meme {},{}", newUtilisateurDto.getId(), newUtilisateurDto.getNom());
                 nReservation.setUtilisateurOperation(gestimoWebMapperImpl.toUtilisateur(newUtilisateurDto));
-               //UtilisateurRequestDto uDto= utilisateurService.findUtilisateurByUsername(dto.getUtilisateurOperation());
-                log.info("Le nouveau reservaion est  est le meme {},{}", nReservation.getUtilisateurOperation().getNom(),newUtilisateurDto.getNom());
+                // UtilisateurRequestDto uDto=
+                // utilisateurService.findUtilisateurByUsername(dto.getUtilisateurOperation());
+                log.info("Le nouveau reservaion est  est le meme {},{}",
+                        nReservation.getUtilisateurOperation().getNom(), newUtilisateurDto.getNom());
             } else {
                 nReservation.setUtilisateurOperation(gestimoWebMapperImpl
                         .toUtilisateur(utilisateurService.saveUtilisateur(dto.getUtilisateurRequestDto())));
@@ -102,10 +105,10 @@ public class ReservationServiceImpl implements ReservationService {
             nReservation.setAdvancePayment(dto.getAdvancePayment());
             nReservation.setBienImmobilierOperation(gestimoWebMapperImpl.fromAppartementDto(appartementDto));
             Reservation saveReservation = reservationRepository.save(nReservation);
-            return null;//GestimoWebMapperImpl.fromReservation(saveReservation);
+            return null;// GestimoWebMapperImpl.fromReservation(saveReservation);
         } else {
             Reservation reservationTrouver = reservationRepository.getById(dto.getId());
-            if (dto.getUtilisateurRequestDto().getId() == 0 ) {
+            if (dto.getUtilisateurRequestDto().getId() == 0) {
                 newUtilisateurDto = utilisateurService.saveUtilisateur(dto.getUtilisateurRequestDto());
                 reservationTrouver.setUtilisateurOperation(gestimoWebMapperImpl.toUtilisateur(newUtilisateurDto));
             } else {
@@ -125,7 +128,7 @@ public class ReservationServiceImpl implements ReservationService {
             reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
             reservationTrouver.setBienImmobilierOperation(gestimoWebMapperImpl.fromAppartementDto(appartementDto));
             Reservation saveReservation = reservationRepository.save(reservationTrouver);
-            return null;//GestimoWebMapperImpl.fromReservation(saveReservation);
+            return null;// GestimoWebMapperImpl.fromReservation(saveReservation);
         }
 
     }
@@ -142,7 +145,8 @@ public class ReservationServiceImpl implements ReservationService {
         Utilisateur utilisateur;
 
         if (utilisateurRequestDto.getId() == 0) {
-            utilisateur = gestimoWebMapperImpl.fromUtilisateurRequestDto(utilisateurService.findUtilisateurByUsername(utilisateurRequestDto.getUsername()));
+            utilisateur = gestimoWebMapperImpl.fromUtilisateurRequestDto(
+                    utilisateurService.findUtilisateurByUsername(utilisateurRequestDto.getUsername()));
         } else {
             utilisateur = gestimoWebMapperImpl.toUtilisateur(utilisateurService.saveUtilisateur(utilisateurRequestDto));
         }

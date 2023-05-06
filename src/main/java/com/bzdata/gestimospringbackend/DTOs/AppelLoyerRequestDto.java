@@ -11,7 +11,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppelLoyerRequestDto {
-
     Long idAgence;
     Long idCreateur;
     Long idBailLocation;
