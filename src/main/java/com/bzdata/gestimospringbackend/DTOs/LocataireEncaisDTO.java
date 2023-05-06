@@ -22,5 +22,6 @@ public class LocataireEncaisDTO {
     String prenom;
     String codeDescBail;
     String username;
+    boolean isUnlock;
 
 }
