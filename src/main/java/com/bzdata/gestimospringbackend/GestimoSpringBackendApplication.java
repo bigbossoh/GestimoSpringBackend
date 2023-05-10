@@ -107,10 +107,8 @@ public class GestimoSpringBackendApplication {
         String mdp = passwordEncoder.encode("superviseur");
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
-        return (args) -> {
-            boolean sauve = appelLoyerService
+        return (args) -> {       appelLoyerService
                     .miseAjourDesUnlockDesBaux(1L);
-            System.out.println(sauve);
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D'IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");

@@ -63,7 +63,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     @Override
     public boolean save(AgenceRequestDto dto) {
         AgenceImmobiliere agenceImmobiliere = new AgenceImmobiliere();
-        log.info("We are going to create  a new agence {}", dto);
+
         List<String> errors = AgenceDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("l'agence immobilière n'est pas valide {}", errors);
@@ -91,8 +91,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
             saveAgence.setIdAgence(saveAgence.getId());
             // AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
             AgenceImmobiliere saveAgenceUpdate = agenceImmobiliereRepository.save(saveAgence);
-            log.info("We are going to create  a new utilisateur gerant by the logged user {}",
-                    dto.getIdUtilisateurCreateur());
             Utilisateur newUtilisateur = new Utilisateur();
             newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
             newUtilisateur.setNom(dto.getNomPrenomGerant());
@@ -121,7 +119,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                             "ci-dessous pour activer votre account: " + ACTIVATION_EMAIL + "/" + token + "\n");
             mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",
                     saveUser.getEmail(), message));
-            log.info("We are same a gerant user and Agence also !!!");
+
             return true;
         }
 
@@ -169,7 +167,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     @Override
     public AgenceResponseDto findAgenceById(Long id) {
-        log.info("We are going to get back the Agence Immobilière en fonction de l'ID {} du bien", id);
+
         if (id == null) {
             log.error("you are provided a null ID for the Agence");
             return null;
@@ -183,8 +181,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     @Override
     public List<AgenceImmobilierDTO> listOfAgenceImmobilier() {
 
-        log.info("We are going to take back all agences");
-
         return agenceImmobiliereRepository.findAll().stream()
                 .map(gestimoWebMapperImpl::fromAgenceImmobilier)
                 .distinct()
@@ -193,8 +189,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     @Override
     public List<AgenceImmobilierDTO> listOfAgenceOrderByNomAgenceAsc(Long idAgence) {
-        log.info("We are going to take back all the agences order by agence name");
-
         return agenceImmobiliereRepository.findAll().stream()
         .filter(ag->ag.getId()==idAgence)
                 .sorted(Comparator.comparing(AgenceImmobiliere::getNomAgence))
@@ -205,7 +199,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     @Override
     public void deleteAgence(Long id) {
-        log.info("We are going to delete a Agence with the ID {}", id);
+
         if (id == null) {
             log.error("you are provided a null ID for the agence");
         }
@@ -228,7 +222,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
 
     @Override
     public AgenceImmobilierDTO findAgenceByEmail(String email) {
-        log.info("We are going to get back the Agence by email {}", email);
+
         if (!StringUtils.hasLength(email)) {
             log.error("you are not provided a email  get back the Agence.");
             return null;
@@ -243,7 +237,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
     public AgenceImmobilierDTO saveUneAgence(AgenceRequestDto dto) {
         if (dto.getId() == 0 || dto.getId() == null) {
             AgenceImmobiliere agenceImmobiliere = new AgenceImmobiliere();
-            log.info("We are going to create  a new agence from the service layer {}", dto);
+
             List<String> errors = AgenceDtoValidator.validate(dto);
             if (!errors.isEmpty()) {
                 log.error("l'agence immobilière n'est pas valide {}", errors);
@@ -269,8 +263,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                 saveAgence.setIdAgence(saveAgence.getId());
                 // AgenceRequestDto agenceRequestDto = AgenceRequestDto.fromEntity(saveAgence);
                 AgenceImmobiliere saveAgenceUpdate = agenceImmobiliereRepository.save(saveAgence);
-                log.info("We are going to create  a new utilisateur gerant by the logged user {}",
-                        dto.getIdUtilisateurCreateur());
+
                 Utilisateur newUtilisateur = new Utilisateur();
                 newUtilisateur.setIdAgence(saveAgenceUpdate.getId());
                 newUtilisateur.setNom(dto.getNomPrenomGerant());
@@ -299,7 +292,7 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                                 "ci-dessous pour activer votre account: " + ACTIVATION_EMAIL + "/" + token + "\n");
                 mailService.sendMail(new NotificationEmail("Veuillez activer votre compte en cliquant sur ce lien: ",
                         saveUser.getEmail(), message));
-                log.info("We are same a gerant user and Agence also {}", saveAgenceUpdate);
+
                 AgenceImmobilierDTO agenceImmobilierDTO = gestimoWebMapperImpl.fromAgenceImmobilier(saveAgenceUpdate);
                 return agenceImmobilierDTO;
 
@@ -310,7 +303,6 @@ public class AgenceImmobiliereServiceImpl implements AgenceImmobilierService {
                         ErrorCodes.UTILISATEUR_ALREADY_IN_USE);
             }
         } else {
-            log.info("WE ARE GOING TO MAKE A UDPDATE OF AGENCE");
             AgenceImmobiliere agenceImmobiliere1 = agenceImmobiliereRepository.findById(dto.getId()).orElseThrow(
                     () -> new InvalidEntityException(
                             "Aucun Etage has been found with id " + dto.getId(),

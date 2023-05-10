@@ -176,6 +176,7 @@ public class BailMapperImpl {
                                 appelLoyer.getBailLocationAppelLoyer().getUtilisateurOperation().getUsername());
                 locataireEncaisDTO.setIdBail(appelLoyer.getBailLocationAppelLoyer().getId());
                 locataireEncaisDTO.setUnlock(appelLoyer.isUnLock());
+                locataireEncaisDTO.setSoldeAppelLoyer(appelLoyer.getSoldeAppelLoyer());
 
                 return locataireEncaisDTO;
         }

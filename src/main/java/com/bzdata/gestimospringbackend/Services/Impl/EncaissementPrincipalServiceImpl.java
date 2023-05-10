@@ -312,7 +312,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
         public List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(EncaissementPayloadDto dto) {
                 List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
                 Long idDeAgence = 0L;
-
+log.info("Le montant encaissé et le id{},{}", dto.getMontantEncaissement(),dto.getIdAppelLoyer());
                 if (!errors.isEmpty()) {
                     throw new InvalidEntityException("Certains attributs de l'objet site sont null.",
                             ErrorCodes.ENCAISSEMENT_NOT_VALID, errors);
