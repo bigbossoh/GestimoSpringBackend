@@ -49,7 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.java.Log;
+//import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -90,10 +90,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public List<String> save(AppelLoyerRequestDto dto) {
 
-                // log.info("We are going to create a new Appel loyer bail {}", dto);
                 List<String> errors = AppelLoyerRequestValidator.validate(dto);
                 if (!errors.isEmpty()) {
-                        // log.error("L'appel du loyer n'est pas valide {}", errors);
+
                         throw new InvalidEntityException("Certain attributs de l'object appelloyer sont null.",
                                         ErrorCodes.APPELLOYER_NOT_VALID, errors);
                 }
@@ -140,7 +139,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                         .filter(MontantLoyerBail::isStatusLoyer)
                                         .map(MontantLoyerBail::getNouveauMontantLoyer)
                                         .findFirst().orElse(0.0);
-                        // log.info("montantBail {}", montantBail);
+
                         appelLoyer.setMontantLoyerBailLPeriode(montantBail);
                         appelLoyer.setBailLocationAppelLoyer(bailLocation);
                         appelLoyerList.add(appelLoyer);
@@ -241,7 +240,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         public AppelLoyersFactureDto findById(Long id) {
 
                 if (id == null) {
-                        // log.error("you are not provided a good Id of AppelLoyersFacture.");
+
                         return null;
                 }
                 return appelLoyerRepository.findById(id)
@@ -283,7 +282,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 .comparing(AppelLoyer::getDateDebutMoisAppelLoyer);
                 return lesLoyers.stream()
                                 .filter(bail -> bail.getBailLocationAppelLoyer() == bailLocation
-                                                && !bail.isSolderAppelLoyer())
+                                                && bail.isSolderAppelLoyer()==false)
 
                                 .sorted(appelLoyerByDateDebutAppelLoyer)
 
@@ -372,9 +371,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         double totalMontantLoyerParPeriodeParAgence = soldeImpaye.stream()
                                         .mapToDouble(Double::doubleValue)
                                         .sum();
-                        // log.info("Total montant loyer par periode par agence {}, {}",
-                        // totalMontantLoyerParPeriodeParAgence,
-                        // impayeParPeriode(periode, idAgence, chapitre));
+
                         return totalMontantLoyerParPeriodeParAgence - impayeParPeriode(periode, idAgence, chapitre);
                 }
 
@@ -687,36 +684,32 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public boolean miseAjourDesUnlockDesBaux(Long idAgence) {
-                log.info(" Agence : {}", idAgence);
-
                 List<AppelLoyersFactureDto> findAllAgence = findAll(idAgence);
-                log.info(" SIZE : {}", findAllAgence.size());
+
                 if (findAllAgence.size() > 0) {
                         for (int i = 0; i < findAllAgence.size(); i++) {
-                                log.info(" The Appel  : {},{}", findAllAgence.get(i).getId(),
-                                                findAllAgence.get(i).getAbrvBienimmobilier());
+
                                 AppelLoyer appelLoyer = appelLoyerRepository.findById(findAllAgence.get(i).getId())
                                                 .orElse(null);
-                                                log.info(" appelLoyer: {},{}", appelLoyer.getPeriodeAppelLoyer(),i);
+
                                 if (appelLoyer != null) {
                                         appelLoyer.setUnLock(false);
                                         appelLoyerRepository.save(appelLoyer);
                                 }
                         }
-                        log.info(" *********************");
+
                         List<Long> getAllIbOperationInAppel = getAllIbOperationInAppel(idAgence);
-                        log.info(" The Size Is Bail : {}", getAllIbOperationInAppel.size());
+
                         if (getAllIbOperationInAppel.size() > 0) {
                                 for (int index = 0; index < getAllIbOperationInAppel.size(); index++) {
                                         AppelLoyersFactureDto findFirstAppelImpayerByBail = findFirstAppelImpayerByBail(
                                                         getAllIbOperationInAppel.get(index));
-                                                        log.info(" PERIODE .BAIL : {},{}", findFirstAppelImpayerByBail.getPeriodeAppelLoyer(),getAllIbOperationInAppel.get(index));
+
                                         if (findFirstAppelImpayerByBail != null) {
                                                 AppelLoyer appelLoyerUp = appelLoyerRepository
                                                                 .findById(findFirstAppelImpayerByBail.getId())
                                                                 .orElse(null);
                                                 if (appelLoyerUp != null) {
-                                                        log.info("Good {}",getAllIbOperationInAppel.get(index));
                                                         appelLoyerUp.setUnLock(true);
                                                         appelLoyerRepository.save(appelLoyerUp);
                                                 }
@@ -732,7 +725,6 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public List<Long> getAllIbOperationInAppel(Long idAgence) {
-                log.info("******* Dans le getAllIbOperationInAppel **********");
                 List<Long> collectIdBailDistinct = operationRepository
                         .findAll()
                         .stream()
@@ -741,7 +733,6 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         .distinct()
                         .sorted()
                         .collect(Collectors.toList());
-                log.info("La collection est : {}", collectIdBailDistinct.size());
                 return collectIdBailDistinct;
         }
 }
