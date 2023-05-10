@@ -161,6 +161,12 @@ public class AppelLoyersController {
             @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
         return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode, idAgence, chapitre));
     }
+    @Operation(summary = "Mise a jour des Appels pour les Unlocks", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/miseAjourDesUnlockDesBaux/{idAgence}")
+    public ResponseEntity<Boolean> impayeLoyerParMois(
+            @PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(appelLoyerService.miseAjourDesUnlockDesBaux(idAgence));
+    }
 
     @Operation(summary = "Trouver tous les appels loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/payeParMois/{periode}/{idAgence}/{chapitre}")

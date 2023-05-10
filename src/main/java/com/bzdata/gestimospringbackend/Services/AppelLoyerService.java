@@ -9,6 +9,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
+import com.bzdata.gestimospringbackend.Models.BailLocation;
 
 public interface AppelLoyerService {
 
@@ -19,6 +20,7 @@ public interface AppelLoyerService {
     List<AppelLoyersFactureDto> findAll(Long idAgence);
 
     AppelLoyersFactureDto getFirstLoyerImpayerByBien(Long bienImmobilier);
+    
 
     List<AppelLoyersFactureDto> findAllAppelLoyerByPeriode(String periodeAppelLoyer, Long idAgence);
 
@@ -26,11 +28,12 @@ public interface AppelLoyerService {
 
     public double soldeArrierer(Long idBailLocation);
 
+    boolean miseAjourDesUnlockDesBaux(Long idAgence);
     AppelLoyersFactureDto findById(Long id);
 
     List<AppelLoyerDto> findAllAppelLoyerByBailId(Long idBailLocation);
     List<AppelLoyersFactureDto> supprimerLoyerPayer(Long periode,Long idBailLocation);
-
+List<Long> getAllIbOperationInAppel(Long idAgence);
     List<Integer> listOfDistinctAnnee(Long idAgence);
 
     List<PeriodeDto> listOfPerodesByAnnee(Integer annee, Long idAgence);

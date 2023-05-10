@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
@@ -18,6 +19,7 @@ import com.bzdata.gestimospringbackend.Models.Role;
 import com.bzdata.gestimospringbackend.Models.Site;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.Ville;
+import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
@@ -96,7 +98,7 @@ public class GestimoSpringBackendApplication {
 
     @Bean
     public CommandLineRunner chargerDonnees(SiteRepository siteRepository, QuartierRepository quartierRepository,
-            RoleRepository roleRepository, SmsOrangeConfig envoiSmsOrange,
+            RoleRepository roleRepository, SmsOrangeConfig envoiSmsOrange,AppelLoyerService appelLoyerService,
             UtilisateurRepository utilisateurRepository,
             PasswordEncoder passwordEncoder, PaysRepository paysRepository, VilleRepository villeRepository,
             CommuneRepository communeRepository,
@@ -106,6 +108,9 @@ public class GestimoSpringBackendApplication {
         Utilisateur utilisateur = new Utilisateur();
         Pays pays = new Pays();
         return (args) -> {
+            boolean sauve = appelLoyerService
+                    .miseAjourDesUnlockDesBaux(1L);
+            System.out.println(sauve);
             // Creation des Constants
             // CHARGEMENT DU PAYS COTE D'IVOIRE
             Optional<Pays> oPays = paysRepository.findByAbrvPays("CI");
