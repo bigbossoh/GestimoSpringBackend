@@ -24,8 +24,10 @@ import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Bienimmobilier;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Models.MontantLoyerBail;
+import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
+import com.bzdata.gestimospringbackend.Services.OperationService;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -37,6 +39,7 @@ import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.BienImmobilierRepository;
 import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
 import com.bzdata.gestimospringbackend.repository.MontantLoyerBailRepository;
+import com.bzdata.gestimospringbackend.repository.OperationRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import com.bzdata.gestimospringbackend.validator.AppelLoyerRequestValidator;
 
@@ -46,6 +49,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Cette classe permet la creation du service
@@ -55,7 +60,7 @@ import lombok.experimental.FieldDefaults;
  * @Author Michel Bossoh
  */
 @Service
-// @Slf4j
+ @Slf4j
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -68,7 +73,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         final GestimoWebMapperImpl gestimoWebMapper;
         final BienImmobilierRepository bienImmobilierRepository;
         final SmsOrangeConfig envoiSmsOrange;
-
+        final OperationRepository operationRepository;
         final AgenceImmobiliereRepository agenceImmobiliereRepository;
 
         /**
@@ -151,10 +156,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
         @Override
         public boolean cloturerAppelDto(Long id) {
-                // log.info("We are going to set isCloture at true a AppelLoyer with the ID {}",
-                // id);
                 if (id == null) {
-                        // log.error("you are provided a null ID for the Bail");
                         return false;
                 }
                 boolean exist = appelLoyerRepository.existsById(id);
@@ -306,12 +308,13 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                 return lesLoyers.stream()
                                 .filter(bienTrouver -> bienTrouver.getBailLocationAppelLoyer()
-                                                .getBienImmobilierOperation().equals(bienImmobilier)&&bienTrouver.getSoldeAppelLoyer() > 0)
-                                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                                                .getBienImmobilierOperation().equals(bienImmobilier)
+                                                && bienTrouver.getSoldeAppelLoyer() > 0)
+                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
 
                                 .map(gestimoWebMapper::fromAppelLoyer)
                                 .findFirst().orElseThrow(null);
-             
+
         }
 
         @Override
@@ -669,16 +672,76 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         @Override
         public AppelLoyersFactureDto findFirstAppelImpayerByBail(Long idBail) {
                 List<AppelLoyersFactureDto> appelLoyerTrouver = appelLoyerRepository.findAll()
-                .stream()
-                .filter(appelLoyer -> appelLoyer.getBailLocationAppelLoyer().getId() == idBail
-                                && appelLoyer.getSoldeAppelLoyer()>=appelLoyer.getMontantLoyerBailLPeriode())
-                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
-                .map(gestimoWebMapper::fromAppelLoyer)
+                                .stream()
+                                .filter(appelLoyer -> appelLoyer.getBailLocationAppelLoyer().getId() == idBail
+                                                && appelLoyer.isSolderAppelLoyer()==false)
+                                .sorted(Comparator.comparing(AppelLoyer::getPeriodeAppelLoyer))
+                                .map(gestimoWebMapper::fromAppelLoyer)
                                 .collect(Collectors.toList());
-                if (appelLoyerTrouver.size()>0) {
+                if (appelLoyerTrouver.size() > 0) {
                         return appelLoyerTrouver.get(0);
                 } else {
                         return null;
                 }
+        }
+
+        @Override
+        public boolean miseAjourDesUnlockDesBaux(Long idAgence) {
+                log.info(" Agence : {}", idAgence);
+
+                List<AppelLoyersFactureDto> findAllAgence = findAll(idAgence);
+                log.info(" SIZE : {}", findAllAgence.size());
+                if (findAllAgence.size() > 0) {
+                        for (int i = 0; i < findAllAgence.size(); i++) {
+                                log.info(" The Appel  : {},{}", findAllAgence.get(i).getId(),
+                                                findAllAgence.get(i).getAbrvBienimmobilier());
+                                AppelLoyer appelLoyer = appelLoyerRepository.findById(findAllAgence.get(i).getId())
+                                                .orElse(null);
+                                                log.info(" appelLoyer: {},{}", appelLoyer.getPeriodeAppelLoyer(),i);
+                                if (appelLoyer != null) {
+                                        appelLoyer.setUnLock(false);
+                                        appelLoyerRepository.save(appelLoyer);
+                                }
+                        }
+                        log.info(" *********************");
+                        List<Long> getAllIbOperationInAppel = getAllIbOperationInAppel(idAgence);
+                        log.info(" The Size Is Bail : {}", getAllIbOperationInAppel.size());
+                        if (getAllIbOperationInAppel.size() > 0) {
+                                for (int index = 0; index < getAllIbOperationInAppel.size(); index++) {
+                                        AppelLoyersFactureDto findFirstAppelImpayerByBail = findFirstAppelImpayerByBail(
+                                                        getAllIbOperationInAppel.get(index));
+                                                        log.info(" PERIODE .BAIL : {},{}", findFirstAppelImpayerByBail.getPeriodeAppelLoyer(),getAllIbOperationInAppel.get(index));
+                                        if (findFirstAppelImpayerByBail != null) {
+                                                AppelLoyer appelLoyerUp = appelLoyerRepository
+                                                                .findById(findFirstAppelImpayerByBail.getId())
+                                                                .orElse(null);
+                                                if (appelLoyerUp != null) {
+                                                        log.info("Good {}",getAllIbOperationInAppel.get(index));
+                                                        appelLoyerUp.setUnLock(true);
+                                                        appelLoyerRepository.save(appelLoyerUp);
+                                                }
+                                        }
+                                }
+                        }
+
+                        return true;
+                }
+
+                return false;
+        }
+
+        @Override
+        public List<Long> getAllIbOperationInAppel(Long idAgence) {
+                log.info("******* Dans le getAllIbOperationInAppel **********");
+                List<Long> collectIdBailDistinct = operationRepository
+                        .findAll()
+                        .stream()
+                        .filter(operation -> operation.getIdAgence() == idAgence)
+                        .map(Operation::getId)
+                        .distinct()
+                        .sorted()
+                        .collect(Collectors.toList());
+                log.info("La collection est : {}", collectIdBailDistinct.size());
+                return collectIdBailDistinct;
         }
 }
