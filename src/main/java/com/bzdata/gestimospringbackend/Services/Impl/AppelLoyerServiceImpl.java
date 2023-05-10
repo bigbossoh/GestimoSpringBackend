@@ -76,6 +76,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
         final OperationRepository operationRepository;
         final AgenceImmobiliereRepository agenceImmobiliereRepository;
 
+
         /**
          * Cette methode est utilisé pour enregister tous les appels loyers
          * de l'utilisateur durant la periode de contrat
@@ -663,6 +664,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                 }
                         }
                 }
+                boolean sauve = miseAjourDesUnlockDesBaux(1L);
                 return findAllAppelLoyerImpayerByBailId(idBailLocation);
         }
 
