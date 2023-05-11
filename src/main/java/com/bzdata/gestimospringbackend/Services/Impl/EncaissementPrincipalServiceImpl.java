@@ -411,24 +411,24 @@ log.info("Le montant encaissé et le id{},{}", dto.getMontantEncaissement(),dto.
                     log.info("Bail Id Mauvais ::: {}", idDeAgence);
                 }
 
-                // String nomString;
-                // if ("magiser".equals(agenceFound.getNomAgence())) {
-                //     nomString = "MAGISER";
-                // } else {
-                //     nomString = "MAGISER";
-                // }
+                String nomString;
+                if ("magiser".equals(agenceFound.getNomAgence())) {
+                    nomString = "MAGISER";
+                } else {
+                    nomString = "MAGISER";
+                }
 
-                // try {
-                //     String leTok = envoiSmsOrange.getTokenSmsOrange();
+                try {
+                    String leTok = envoiSmsOrange.getTokenSmsOrange();
 
-                //     String message = "L'Agence " + nomString + " accuse bonne réception de la somme de " + dto.getMontantEncaissement()
-                //             + " F CFA pour le règlement de votre loyer du bail : "
-                //             + bailLocation.getDesignationBail().toUpperCase() + ".";
-                //     envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                //             bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                // } catch (Exception e) {
-                //     System.err.println(e.getMessage());
-                // }
+                    String message = "L'Agence " + nomString + " accuse bonne réception de la somme de " + dto.getMontantEncaissement()
+                            + " F CFA pour le règlement de votre loyer du bail : "
+                            + bailLocation.getDesignationBail().toUpperCase() + ".";
+                    envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                            bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
 
                 return encaissementPrincipalRepository.findAll()
                         .stream()
