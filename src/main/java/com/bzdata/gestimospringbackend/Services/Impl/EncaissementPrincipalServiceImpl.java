@@ -629,20 +629,20 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 EncaissementPrincipal encaissementPrincipal;
                 log.info("Le montant versé groupe  et le id {} , {}", dto.getMontantEncaissement(),
                                 dto.getIdAppelLoyer());
-                encaissementPrincipal = new EncaissementPrincipal();
+
                 double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(
                                 appelLoyer.getId());
                 double montantAPayerLeMois = appelLoyer.getMontantLoyerBailLPeriode()
                                 - totalEncaissementByIdAppelLoyer;
-                                idDeAgence = appelLoyer.getIdAgence();
+                idDeAgence = appelLoyer.getIdAgence();
                 appelLoyer.setTypePaiement(dto.getTypePaiement());
                 appelLoyer.setStatusAppelLoyer("Soldé");
                 appelLoyer.setSolderAppelLoyer(true);
                 appelLoyer.setSoldeAppelLoyer(0);
-                appelLoyer.setUnLock(false);
-                appelLoyerRepository.saveAndFlush(appelLoyer);
-                log.info("THE APPEL SAVE IS id , appel , appel save {}, {} , {}", dto.getIdAppelLoyer(), appelLoyer,
-                                appelLoyerRepository.saveAndFlush(appelLoyer));               
+                appelLoyer.setUnLock(false);               
+                appelLoyerRepository.saveAndFlush(appelLoyer);            
+                // SAVE L"ENCAISSEMENT POUR LES APPELS
+                encaissementPrincipal = new EncaissementPrincipal();
                 encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
                 encaissementPrincipal.setModePaiement(dto.getModePaiement());
                 encaissementPrincipal.setOperationType(dto.getOperationType());
@@ -653,9 +653,11 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                encaissementPrincipalRepository.save(encaissementPrincipal);               
-                boolean sauve = appelLoyerService.miseAjourDesUnlockDesBaux(idDeAgence);
-                // System.out.println(sauve);                // String nomString;
+                encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);
+              //  boolean sauve = appelLoyerService.miseAjourDesUnlockDesBaux(idDeAgence);
+                log.info("THE APPEL SAVE IS id , appel , appel save, flux {},  {}, {} , {} ",idDeAgence, appelLoyer,
+                appelLoyerRepository.save(appelLoyer),appelLoyerRepository.saveAndFlush(appelLoyer));
+                // System.out.println(sauve); // String nomString;
                 // if ("magiser".equals(agenceFound.getNomAgence())) {
                 // nomString = "MAGISER";
                 // } else {
