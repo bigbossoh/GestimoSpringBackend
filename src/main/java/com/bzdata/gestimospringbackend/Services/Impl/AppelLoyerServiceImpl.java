@@ -696,7 +696,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
 
                                 if (appelLoyer != null) {
                                         appelLoyer.setUnLock(false);
-                                        appelLoyerRepository.save(appelLoyer);
+                                        appelLoyerRepository.saveAndFlush(appelLoyer);
                                 }
                         }
 
@@ -713,7 +713,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                                                                 .orElse(null);
                                                 if (appelLoyerUp != null) {
                                                         appelLoyerUp.setUnLock(true);
-                                                        appelLoyerRepository.save(appelLoyerUp);
+                                                        appelLoyerRepository.saveAndFlush(appelLoyerUp);
                                                 }
                                         }
                                 }
