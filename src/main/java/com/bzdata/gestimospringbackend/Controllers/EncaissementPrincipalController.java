@@ -54,6 +54,12 @@ public class EncaissementPrincipalController {
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementAvecRetourDeList(dto));
     }
 
+    @PostMapping("/saveencaissementmasseavecretour")
+    @Operation(summary = "Creation et encaissement en masse", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<List<LocataireEncaisDTO>> saveEncaissementMasseAvecretourDeListe(
+            @RequestBody EncaissementPayloadDto dto) {     
+        return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementGrouperAvecRetourDeList(dto));
+    }
     @PostMapping("/saveencaissementmasse")
     @Operation(summary = "Creation d'un encaissement e masse", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Boolean> saveEncaissementMasse(@RequestBody List<EncaissementPayloadDto> dtos) {
@@ -64,15 +70,13 @@ public class EncaissementPrincipalController {
     @Operation(summary = "Listés tous les envaissements de lae BD", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllEncaissementPrincipal/{idAgence}")
     public ResponseEntity<List<EncaissementPrincipalDTO>> listTousEncaissementsPrincipal(
-            @PathVariable("idAgence") Long idAgence) {
-        // log.info("Liste de tous les envaissements");
+            @PathVariable("idAgence") Long idAgence) {   
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissement(idAgence));
     }
 
     @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/totalencaissement/{id}")
-    public ResponseEntity<Double> totalencaissementParIdAppelLoyer(@PathVariable("id") Long id) {
-        // log.info("Find totalencaissement by ID AppelLoyer {}", id);
+    public ResponseEntity<Double> totalencaissementParIdAppelLoyer(@PathVariable("id") Long id) {       
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementByIdAppelLoyer(id));
     }
 
