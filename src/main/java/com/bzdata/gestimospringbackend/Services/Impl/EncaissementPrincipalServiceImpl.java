@@ -615,71 +615,88 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                 List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
                 Long idDeAgence = 0L;
                 String laPeriode = "";
-                log.info("Le montant encaissé et le id{},{}", dto.getMontantEncaissement(), dto.getIdAppelLoyer());
+
                 if (!errors.isEmpty()) {
                         throw new InvalidEntityException("Certains attributs de l'objet site sont null.",
                                         ErrorCodes.ENCAISSEMENT_NOT_VALID, errors);
                 }
+                if (dto.getMontantEncaissement() > 0) {
+                        log.info("Le dto {}",
+                                        dto);
+                        AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer())
+                                        .orElseThrow(() -> new EntityNotFoundException(
+                                                        "AppelLoyer from GestimoMapper not found",
+                                                        ErrorCodes.APPELLOYER_NOT_FOUND));
+                        laPeriode = appelLoyer.getPeriodeAppelLoyer();
+                        List<EncaissementPrincipal> lesEncaii = encaissementPrincipalRepository
+                                        .findByAppelLoyerEncaissement(appelLoyer);
+                                        log.info(" THE SIZE OFF ENCAISSEMENT : : : : : ", lesEncaii.size());
+                        if (lesEncaii.size() ==0) {
+                                EncaissementPrincipal encaissementPrincipal;
+                                log.info("Le montant versé groupe  et le id {} , {}", dto.getMontantEncaissement(),
+                                                dto.getIdAppelLoyer());
 
-                AppelLoyer appelLoyer = appelLoyerRepository.findById(dto.getIdAppelLoyer())
-                                .orElseThrow(() -> new EntityNotFoundException(
-                                                "AppelLoyer from GestimoMapper not found",
-                                                ErrorCodes.APPELLOYER_NOT_FOUND));
-                laPeriode = appelLoyer.getPeriodeAppelLoyer();
-                EncaissementPrincipal encaissementPrincipal;
-                log.info("Le montant versé groupe  et le id {} , {}", dto.getMontantEncaissement(),
-                                dto.getIdAppelLoyer());
+                                double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(
+                                                appelLoyer.getId());
+                                double montantAPayerLeMois = appelLoyer.getMontantLoyerBailLPeriode()
+                                                - totalEncaissementByIdAppelLoyer;
+                                idDeAgence = appelLoyer.getIdAgence();
 
-                double totalEncaissementByIdAppelLoyer = getTotalEncaissementByIdAppelLoyer(
-                                appelLoyer.getId());
-                double montantAPayerLeMois = appelLoyer.getMontantLoyerBailLPeriode()
-                                - totalEncaissementByIdAppelLoyer;
-                idDeAgence = appelLoyer.getIdAgence();
-                appelLoyer.setTypePaiement(dto.getTypePaiement());
-                appelLoyer.setStatusAppelLoyer("Soldé");
-                appelLoyer.setSolderAppelLoyer(true);
-                appelLoyer.setSoldeAppelLoyer(0);
-                appelLoyer.setUnLock(false);               
-                appelLoyerRepository.saveAndFlush(appelLoyer);            
-                // SAVE L"ENCAISSEMENT POUR LES APPELS
-                encaissementPrincipal = new EncaissementPrincipal();
-                encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
-                encaissementPrincipal.setModePaiement(dto.getModePaiement());
-                encaissementPrincipal.setOperationType(dto.getOperationType());
-                encaissementPrincipal.setIdAgence(dto.getIdAgence());
-                encaissementPrincipal.setSoldeEncaissement(0);
-                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
-                encaissementPrincipal.setDateEncaissement(LocalDate.now());
-                encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
-                encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
-                encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);
-              //  boolean sauve = appelLoyerService.miseAjourDesUnlockDesBaux(idDeAgence);
-                log.info("THE APPEL SAVE IS id , appel , appel save, flux {},  {}, {} , {} ",idDeAgence, appelLoyer,
-                appelLoyerRepository.save(appelLoyer),appelLoyerRepository.saveAndFlush(appelLoyer));
-                // System.out.println(sauve); // String nomString;
-                // if ("magiser".equals(agenceFound.getNomAgence())) {
-                // nomString = "MAGISER";
-                // } else {
-                // nomString = "MAGISER";
-                // }
+                                appelLoyer.setTypePaiement(dto.getTypePaiement());
+                                appelLoyer.setStatusAppelLoyer("Soldé");
+                                appelLoyer.setSolderAppelLoyer(true);
+                                appelLoyer.setSoldeAppelLoyer(0);
+                                appelLoyer.setUnLock(false);
+                                appelLoyerRepository.saveAndFlush(appelLoyer);
+                                // SAVE L"ENCAISSEMENT POUR LES APPELS
 
-                // try {
-                // String leTok = envoiSmsOrange.getTokenSmsOrange();
+                                encaissementPrincipal = new EncaissementPrincipal();
+                                encaissementPrincipal.setAppelLoyerEncaissement(appelLoyer);
+                                encaissementPrincipal.setModePaiement(dto.getModePaiement());
+                                encaissementPrincipal.setOperationType(dto.getOperationType());
+                                encaissementPrincipal.setIdAgence(dto.getIdAgence());
+                                encaissementPrincipal.setSoldeEncaissement(0);
+                                encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
+                                encaissementPrincipal.setDateEncaissement(LocalDate.now());
+                                encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
+                                encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
+                                encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
+                                encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);
+                                // boolean sauve = appelLoyerService.miseAjourDesUnlockDesBaux(idDeAgence);
+                                log.info("THE APPEL SAVE IS id , appel , appel save, flux {},  {}, {} , {} ",
+                                                idDeAgence,
+                                                appelLoyer,
+                                                appelLoyerRepository.save(appelLoyer),
+                                                appelLoyerRepository.saveAndFlush(appelLoyer));
+                        }
 
-                // String message = "L'Agence " + nomString + " accuse bonne réception de la
-                // somme de "
-                // + dto.getMontantEncaissement()
-                // + " F CFA pour le règlement de votre loyer du bail : "
-                // + bailLocation.getDesignationBail().toUpperCase() + ".";
-                // envoiSmsOrange.sendSms(leTok, message, "+2250000",
-                // bailLocation.getUtilisateurOperation().getUsername(), nomString);
-                // } catch (Exception e) {
-                // System.err.println(e.getMessage());
-                // }
-                // log.info("Le retour est le suivant {}",
-                // listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode));
-                return listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode);
+                        // System.out.println(sauve); // String nomString;
+                        // if ("magiser".equals(agenceFound.getNomAgence())) {
+                        // nomString = "MAGISER";
+                        // } else {
+                        // nomString = "MAGISER";
+                        // }
+
+                        // try {
+                        // String leTok = envoiSmsOrange.getTokenSmsOrange();
+
+                        // String message = "L'Agence " + nomString + " accuse bonne réception de la
+                        // somme de "
+                        // + dto.getMontantEncaissement()
+                        // + " F CFA pour le règlement de votre loyer du bail : "
+                        // + bailLocation.getDesignationBail().toUpperCase() + ".";
+                        // envoiSmsOrange.sendSms(leTok, message, "+2250000",
+                        // bailLocation.getUtilisateurOperation().getUsername(), nomString);
+                        // } catch (Exception e) {
+                        // System.err.println(e.getMessage());
+                        // }
+                        // log.info("Le retour est le suivant {}",
+                        // listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode));
+                        return listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode);
+                } else {
+                        return null;
+                }
+
         }
 
 }
