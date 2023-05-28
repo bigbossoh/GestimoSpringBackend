@@ -661,13 +661,31 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                 encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
                                 encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
                                 encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-                                encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);
-                                // boolean sauve = appelLoyerService.miseAjourDesUnlockDesBaux(idDeAgence);
+                                encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);                                 
                                 log.info("THE APPEL SAVE IS id , appel , appel save, flux {},  {}, {} , {} ",
                                                 idDeAgence,
                                                 appelLoyer,
                                                 appelLoyerRepository.save(appelLoyer),
                                                 appelLoyerRepository.saveAndFlush(appelLoyer));
+
+                                                List<Long> getAllIbOperationInAppel = appelLoyerService.getAllIbOperationInAppel(idDeAgence);
+
+                                                if (getAllIbOperationInAppel.size() > 0) {
+                                                        for (int index = 0; index < getAllIbOperationInAppel.size(); index++) {
+                                                                AppelLoyersFactureDto findFirstAppelImpayerByBail = appelLoyerService.findFirstAppelImpayerByBail(
+                                                                                getAllIbOperationInAppel.get(index));
+                        
+                                                                if (findFirstAppelImpayerByBail != null) {
+                                                                        AppelLoyer appelLoyerUp = appelLoyerRepository
+                                                                                        .findById(findFirstAppelImpayerByBail.getId())
+                                                                                        .orElse(null);
+                                                                        if (appelLoyerUp != null) {
+                                                                                appelLoyerUp.setUnLock(true);
+                                                                                appelLoyerRepository.saveAndFlush(appelLoyerUp);
+                                                                        }
+                                                                }
+                                                        }
+                                                }
                         }
 
                         // System.out.println(sauve); // String nomString;
