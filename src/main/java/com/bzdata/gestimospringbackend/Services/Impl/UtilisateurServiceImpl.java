@@ -293,7 +293,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return bailrepository.findAll().stream()
                 .filter(agence -> agence.getIdAgence() == idAgence)
                 .filter(bailActif -> bailActif.isEnCoursBail() == true)
+                
                 .map(bailMapper::fromOperationBailLocation)
+                .sorted(Comparator.comparing(LocataireEncaisDTO::getCodeDescBail))
                 .collect(Collectors.toList());
     }
 
