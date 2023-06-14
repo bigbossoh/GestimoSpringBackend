@@ -57,14 +57,7 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittancePeriode(String periode, String proprio, Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
 
-        // try {
-        // String path = "src/main/resources/templates";
-        // // InputStream logoMagiser =
-        // resourceLoader.getResource(path+"/print/magiser.jpeg").getInputStream();
-        // } catch (IOException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
+  
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
@@ -99,12 +92,6 @@ public class PrintServiceImpl implements PrintService {
             JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
             JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
             log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-           // ENVOI DE MESSAGCE DE QUITTANCE
-            // boolean sms_envoyer = appelLoyerService.sendSmsAppelLoyerGroupe(periode,
-            // idAgence);
-            // if (sms_envoyer) {
-            // log.info("Sms Envoye {}", sms_envoyer);
-            // }
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -146,5 +133,29 @@ public class PrintServiceImpl implements PrintService {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public byte[] printQuittancePeriodeString(String periode, Long idAgence, String proprio)
+            throws FileNotFoundException, JRException, SQLException {
+                try {
+                    String path = "src/main/resources/templates";
+                           File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
+                    Map<String, Object> parameters = new HashMap<>();
+                    parameters.put("PARAMETER_PERIODE", periode);
+                    parameters.put("PARAMETER_AGENCE", idAgence);
+                    parameters.put("NOM_PROPRIO", proprio);
+        
+                    JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+                    File di = new File(path + "/depot_etat");
+                    boolean di1 = di.mkdirs();
+                    JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+                    JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+                    log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+                    return JasperExportManager.exportReportToPdf(print);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                    return null;
+                }
     }
 }
