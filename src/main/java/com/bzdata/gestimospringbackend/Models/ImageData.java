@@ -3,6 +3,8 @@ package com.bzdata.gestimospringbackend.Models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -22,10 +24,9 @@ public class ImageData extends AbstractEntity{
     private String nameImage;
     private String typeImage;
     private String profileAgenceImageUrl;
-    @Lob
-    @Column(name = "imagedata",length = 1500)
-    private String imageData;
-    // @OneToOne(mappedBy = "imageData")
-    // private AgenceImmobiliere agenceImmobiliere;
+    @Lob  
+    private byte[] imageData;
+     @ManyToOne
+     private Bienimmobilier bienimmobilier;
 
 }
