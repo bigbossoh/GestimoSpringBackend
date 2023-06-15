@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +45,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       if (dto.getId() != null) {
          SuivieDepense suivieDepense = new SuivieDepense();
          suivieDepense.setCodeTransaction(UUID.randomUUID().toString());
-         suivieDepense.setDateEncaissement(LocalDate.now());
+         suivieDepense.setDateEncaissement(dto.getDateEncaissement());
          suivieDepense.setDesignation(dto.getDesignation());
          suivieDepense.setMontantDepense(dto.getMontantDepense());
          suivieDepense.setIdAgence(dto.getIdAgence());
@@ -60,7 +61,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
                      "Aucune Depense has been found with id " + dto.getId(),
                      ErrorCodes.SUIVIEDEPENSE_NOT_FOUND));
 
-         suivieDepense.setDateEncaissement(LocalDate.now());
+         suivieDepense.setDateEncaissement(dto.getDateEncaissement());
          suivieDepense.setDesignation(dto.getDesignation());
          suivieDepense.setMontantDepense(dto.getMontantDepense());
          suivieDepense.setIdAgence(dto.getIdAgence());
@@ -120,7 +121,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
    @Override
    public List<SuivieDepenseDto> findByDateEncaissement(SuivieDepenseEncaissementDto suivieDepenseEncaissementDto) {
       
-      return suivieDepenseRepository.findAll().stream()
+      return suivieDepenseRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
                                     .filter(agence->agence.getIdAgence()==suivieDepenseEncaissementDto.getIdAgence())
                                     .filter(dateEncaissement->dateEncaissement.getDateEncaissement()==suivieDepenseEncaissementDto.getDateEncaissement())
                                     .map(bailMapperImpl::fromSuivieDepense)
@@ -129,7 +130,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
    @Override
    public List<SuivieDepenseDto> findByAllEncaissementByPeriode(SuivieDepenseEncaisPeriodeDto suivieDepenseEncaisPeriodeDto) {
-      return suivieDepenseRepository.findAll().stream()
+      return suivieDepenseRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
       .filter(agence->agence.getIdAgence()==suivieDepenseEncaisPeriodeDto.getIdAgence())
       .filter(dates -> dates.getDateEncaissement().isAfter(suivieDepenseEncaisPeriodeDto.getDateDebutEncaissement()) 
       && dates.getDateEncaissement().isBefore(suivieDepenseEncaisPeriodeDto.getDateFinEncaissement()))
@@ -139,7 +140,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
    @Override
    public List<SuivieDepenseDto> findAlEncaissementParAgence(Long idAgence) {
-      return suivieDepenseRepository.findAll().stream()
+      return suivieDepenseRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
       .filter(agence->agence.getIdAgence()==idAgence)
       .map(bailMapperImpl::fromSuivieDepense)
       .collect(Collectors.toList());

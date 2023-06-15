@@ -9,6 +9,7 @@ import com.bzdata.gestimospringbackend.Models.hotel.PrestationAdditionnelReserva
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
+import com.lowagie.text.html.simpleparser.Img;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -352,7 +353,12 @@ public class GestimoWebMapperImpl {
         BeanUtils.copyProperties(use, usr);
         return usr;
     }
-
+public ImageDataDto fromImageData(ImageData imageData   ){
+    ImageDataDto imageDataDto=new ImageDataDto();
+    BeanUtils.copyProperties(imageData, imageDataDto);
+    
+    return imageDataDto;
+}
     public static PrestationAdditionnelReservationSaveOrrUpdate fromPrestationAdditionnelReservation(
             PrestationAdditionnelReservation prestationAdditionnelReservation) {
         PrestationAdditionnelReservationSaveOrrUpdate prestationAdditionnelReservationSaveOrrUpdate = new PrestationAdditionnelReservationSaveOrrUpdate();

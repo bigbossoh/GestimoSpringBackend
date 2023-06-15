@@ -1,11 +1,14 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -41,5 +44,7 @@ public abstract class Bienimmobilier extends AbstractEntity {
     int nombrePieceBien;
     @ManyToOne
     Chapitre chapitre;
+    @OneToMany(mappedBy = "bienimmobilier")
+    List<ImageData>imageDatas;
 
 }
