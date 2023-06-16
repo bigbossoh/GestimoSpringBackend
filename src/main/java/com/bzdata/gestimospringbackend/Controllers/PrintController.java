@@ -61,4 +61,19 @@ public class PrintController {
                                 .contentType(MediaType.APPLICATION_PDF)
                                 .body(new InputStreamResource(bis));
         }
+                @GetMapping(path = "/recupaiment/{idEncaissement}", produces = MediaType.APPLICATION_PDF_VALUE)
+        public ResponseEntity<InputStreamResource> recuPaiment(@PathVariable("idEncaissement") Long idEncaissement)
+                        throws FileNotFoundException, JRException, SQLException, IOException {
+                // byte[] bytes = this.printService.quittancePeriodeString(periode, idAgence,
+                // proprio);
+                ByteArrayInputStream bis = new ByteArrayInputStream(
+                                this.printService.printRecuPaiement(idEncaissement));
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Content-Disposition", "inline; filename=Recu-" + idEncaissement + ".pdf");
+                return ResponseEntity.ok()
+                                // CONTENT-DISPOSITION
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_PDF)
+                                .body(new InputStreamResource(bis));
+        }
 }
