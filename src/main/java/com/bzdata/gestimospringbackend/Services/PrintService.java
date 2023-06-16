@@ -13,6 +13,7 @@ public interface PrintService {
     byte[] quittancePeriodeString(String periode,Long idAgence,String proprio) throws FileNotFoundException, JRException, SQLException;
 
     byte[] printQuittancePeriodeString(String periode,Long idAgence,String proprio) throws FileNotFoundException, JRException, SQLException;
+    byte[] printRecuPaiement(Long idEncaissemnt) throws FileNotFoundException, JRException, SQLException;
     byte[] quittancePeriodeById(String periode, Long id, String proprio)
             throws FileNotFoundException, JRException, SQLException;
 

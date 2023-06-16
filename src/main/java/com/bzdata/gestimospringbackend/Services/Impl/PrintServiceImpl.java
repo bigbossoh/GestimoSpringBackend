@@ -36,7 +36,6 @@ import net.sf.jasperreports.engine.JasperReport;
 public class PrintServiceImpl implements PrintService {
     ResourceLoader resourceLoader;
     final DataSource dataSourceSQL;
-    final AppelLoyerService appelLoyerService;
 
     @Override
     public byte[] quittanceLoyer(Long id) throws FileNotFoundException, JRException, SQLException {
@@ -57,7 +56,6 @@ public class PrintServiceImpl implements PrintService {
     public byte[] quittancePeriode(String periode, String proprio, Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
 
-  
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
@@ -76,7 +74,7 @@ public class PrintServiceImpl implements PrintService {
 
         try {
             String path = "src/main/resources/templates";
-                   File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
+            File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("PARAMETER_PERIODE", periode);
             parameters.put("PARAMETER_AGENCE", idAgence);
@@ -138,24 +136,50 @@ public class PrintServiceImpl implements PrintService {
     @Override
     public byte[] printQuittancePeriodeString(String periode, Long idAgence, String proprio)
             throws FileNotFoundException, JRException, SQLException {
-                try {
-                    String path = "src/main/resources/templates";
-                           File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
-                    Map<String, Object> parameters = new HashMap<>();
-                    parameters.put("PARAMETER_PERIODE", periode);
-                    parameters.put("PARAMETER_AGENCE", idAgence);
-                    parameters.put("NOM_PROPRIO", proprio);
+        try {
+            String path = "src/main/resources/templates";
+            File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("PARAMETER_PERIODE", periode);
+            parameters.put("PARAMETER_AGENCE", idAgence);
+            parameters.put("NOM_PROPRIO", proprio);
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            File di = new File(path + "/depot_etat");
+            boolean di1 = di.mkdirs();
+            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+            JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+            log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
+            return JasperExportManager.exportReportToPdf(print);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] printRecuPaiement(Long idEncaissemnt) throws FileNotFoundException, JRException, SQLException {
+        try {
+            String path = "src/main/resources/templates";
+            File file = ResourceUtils.getFile(path + "/print/recupaiementappelloyer.jrxml");
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("PARAMETER_ENCAISSEMENT", idEncaissemnt);
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            File di = new File(path + "/depot_etat");
+            boolean di1 = di.mkdirs();
+            if (di1) {
+                System.out.println("Folder is created successfully");
+
+            }
+            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+            JasperExportManager.exportReportToPdfFile(print,
+                    path + "/depot_etat/recu_paiement_du" + idEncaissemnt + ".pdf");
         
-                    JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-                    File di = new File(path + "/depot_etat");
-                    boolean di1 = di.mkdirs();
-                    JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
-                    JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-                    log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + periode + ".pdf");
-                    return JasperExportManager.exportReportToPdf(print);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    return null;
-                }
+            return JasperExportManager.exportReportToPdf(print);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 }
