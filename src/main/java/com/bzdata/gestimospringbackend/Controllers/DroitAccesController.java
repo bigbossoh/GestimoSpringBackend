@@ -30,24 +30,24 @@ public class DroitAccesController {
 
   @PostMapping("/save")
   @Operation(summary = "Creation  d'un groupe droit", security = @SecurityRequirement(name="bearerAuth"))
-  public ResponseEntity<Long> save(@RequestBody DroitAccesPayloadDTO dto) {
+  public ResponseEntity<Long> saveDroitAccess(@RequestBody DroitAccesPayloadDTO dto) {
 
     log.info("We are going to save  a new Droit Access {}", dto);
     return ResponseEntity.ok(service.save(dto));
   }
 
   @GetMapping("/")
-  public ResponseEntity<List<DroitAccesDTO>> findAll() {
+  public ResponseEntity<List<DroitAccesDTO>> findAllDroitAccess() {
     return ResponseEntity.ok(service.findAllDroit());
   }
 
   @GetMapping("/{droitAccessid}")
-  public ResponseEntity<DroitAccesDTO> findById( @PathVariable("droitAccessid") Long droitAccessid ) {
+  public ResponseEntity<DroitAccesDTO> findByIdDroitAccess( @PathVariable("droitAccessid") Long droitAccessid ) {
     return ResponseEntity.ok(service.findByDroitAccesDTOId(droitAccessid));
   }
 
   @DeleteMapping("/{droitAccessid}")
-  public ResponseEntity<Void> delete(
+  public ResponseEntity<Void> deleteDroitAccess(
       @PathVariable("droitAccessid") Long droitAccessid
   ) {
     service.delete(droitAccessid);

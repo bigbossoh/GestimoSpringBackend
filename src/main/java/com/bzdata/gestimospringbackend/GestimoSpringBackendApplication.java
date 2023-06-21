@@ -294,7 +294,7 @@ public class GestimoSpringBackendApplication {
                     utilisateur.setNumeroPieceIdentite("1236544");
                     utilisateur.setDateFinPiece(LocalDate.parse("2022-01-08"));
                     utilisateur.setDateDebutPiece(LocalDate.parse("2016-01-08"));
-                    utilisateur.setNationalité("Ivoirienne");
+                    utilisateur.setNationalite("Ivoirienne");
                     utilisateur.setGenre("M");
                     utilisateur.setActivated(true);
                     utilisateur.setUsername("0103833350");

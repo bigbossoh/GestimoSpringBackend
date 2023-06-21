@@ -18,6 +18,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
+import com.bzdata.gestimospringbackend.DTOs.StatistiquePeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -736,5 +737,19 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                         .sorted()
                         .collect(Collectors.toList());
                 return collectIdBailDistinct;
+        }
+
+        @Override
+        public StatistiquePeriodeDto statistiquePeriode(String periode, Long idAgence, Long chapitre) {
+                double recou=0;
+                if ((impayeParPeriode(periode,idAgence,chapitre)+payeParPeriode(periode,idAgence,chapitre)) > 0) {
+                      recou=payeParPeriode(periode,idAgence,chapitre)/ (impayeParPeriode(periode,idAgence,chapitre)+payeParPeriode(periode,idAgence,chapitre))*100 ;
+                }
+                StatistiquePeriodeDto statistiquePeriodeDto =new StatistiquePeriodeDto();
+                statistiquePeriodeDto.setImpayer(impayeParPeriode(periode,idAgence,chapitre));
+                statistiquePeriodeDto.setPayer(payeParPeriode(periode,idAgence,chapitre));              
+                statistiquePeriodeDto.setPeriode(periode);
+                statistiquePeriodeDto.setRecouvrement(recou);
+               return statistiquePeriodeDto;
         }
 }

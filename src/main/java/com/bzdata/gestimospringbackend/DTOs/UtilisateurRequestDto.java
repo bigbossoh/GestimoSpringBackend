@@ -29,7 +29,7 @@ public class UtilisateurRequestDto {
     private String numeroPieceIdentite;
     private LocalDate dateDebutPiece;
     private LocalDate dateFinPiece;
-    private String nationalité;
+    private String nationalite;
     private String genre;
     private boolean isActivated;
 
@@ -67,7 +67,7 @@ public class UtilisateurRequestDto {
                 .numeroPieceIdentite(utilisateur.getNumeroPieceIdentite())
                 .dateDebutPiece(utilisateur.getDateDebutPiece())
                 .dateFinPiece(utilisateur.getDateFinPiece())
-                .nationalité(utilisateur.getNationalité())
+                .nationalite(utilisateur.getNationalite())
                 .genre(utilisateur.getGenre())
                 .isActivated(utilisateur.isActivated())
                 .username(utilisateur.getUsername())
@@ -105,7 +105,7 @@ public class UtilisateurRequestDto {
         newUtilisateur.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
         newUtilisateur.setDateFinPiece(dto.getDateFinPiece());
         newUtilisateur.setDateDebutPiece(dto.getDateDebutPiece());
-        newUtilisateur.setNationalité(dto.getNationalité());
+        newUtilisateur.setNationalite(dto.getNationalite());
         newUtilisateur.setGenre(dto.getGenre());
         newUtilisateur.setActivated(dto.isActivated());
         newUtilisateur.setUsername(dto.getUsername());

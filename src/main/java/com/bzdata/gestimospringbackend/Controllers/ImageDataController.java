@@ -31,7 +31,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
-@Api(tags = "Image controlleur")
 public class ImageDataController {
     final ImageDataService imageDataService;
     @PostMapping("/upload/{id}/{name}/")

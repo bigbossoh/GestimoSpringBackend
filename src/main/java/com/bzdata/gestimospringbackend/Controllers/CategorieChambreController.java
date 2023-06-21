@@ -33,7 +33,7 @@ public class CategorieChambreController {
     final CategoryChambreService categoryChambreService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Categorie de Chambre", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<CategoryChambreSaveOrUpdateDto> saveorupdate(
+    public ResponseEntity<CategoryChambreSaveOrUpdateDto> saveorupdateCategoryChambre(
             @RequestBody CategoryChambreSaveOrUpdateDto dto) {
         log.info("We are going to save a new Commune {}", dto);
         return ResponseEntity.ok(categoryChambreService.saveOrUpdate(dto));
@@ -42,7 +42,7 @@ public class CategorieChambreController {
       // SUPPRESSION D'UNE COMMUNE
       @Operation(summary = "Suppression d'une Categorie Chambre avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
       @DeleteMapping("/delete/{id}")
-      public ResponseEntity<Void> deleteCommune(@PathVariable("id") Long id) {
+      public ResponseEntity<Void> deleteCategoryChambre(@PathVariable("id") Long id) {
           log.info("We are going to delete a Ville {}", id);
           categoryChambreService.delete(id);
           return ResponseEntity.ok().build();

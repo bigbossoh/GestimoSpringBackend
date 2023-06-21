@@ -33,7 +33,7 @@ public class Utilisateur extends AbstractEntity {
     private String numeroPieceIdentite;
     private LocalDate dateDebutPiece;
     private LocalDate dateFinPiece;
-    private String nationalité;
+    private String nationalite;
     private String genre;
     private boolean isActivated;
     @Column(unique = true)

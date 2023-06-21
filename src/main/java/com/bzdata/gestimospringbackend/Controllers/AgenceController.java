@@ -9,8 +9,6 @@ import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;
-import com.bzdata.gestimospringbackend.Services.ImagesService;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +28,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
+
 public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
-    private final ImagesService imagesService;
+    // private final ImagesService imagesService;
 
     @PostMapping("/signup")
     public ResponseEntity<AgenceImmobilierDTO> authenticateAgence(@RequestBody AgenceRequestDto request) {
@@ -40,29 +39,10 @@ public class AgenceController {
         return ResponseEntity.ok(agenceImmobilierService.saveUneAgence(request));
     }
 
-    @PostMapping("/savelogo")
-    public ResponseEntity<byte[]> saveLogo(@RequestBody AgenceRequestDto request) throws IOException {
-        log.info("We are going to save a logo {}", request);
-        return ResponseEntity.ok(imagesService.saveLogo(request));
-    }
-
-    // @PostMapping("/saveagencelogo")
-    // public ResponseEntity<ImageModel> saveAgenceLogo(@PathVariable("idAgence") Long idAgence,
-    //         @PathVariable("imageFile") MultipartFile imageFile) throws IOException {
-    //     log.info("We are going to save a logo {}", imageFile.getBytes().length);
-    //     return ResponseEntity.ok(imagesService.saveAgenceLogo(idAgence, imageFile));
-    // }
-
     @GetMapping("/getagencebyid/{id}")
     public ResponseEntity<AgenceResponseDto> getAgenceByIDAgence(@PathVariable("id") Long id) {
         log.info("We are going to get back one agence by ID {}", id);
         return ResponseEntity.ok(agenceImmobilierService.findAgenceById(id));
-    }
-
-    @GetMapping("/getlogo/{id}")
-    public ResponseEntity<byte[]> getlogo(@PathVariable("id") Long id) {
-        log.info("We are going to get back one agence by ID {}", id);
-        return ResponseEntity.ok(imagesService.getLogo(id));
     }
 
     @GetMapping("/getagencebyemail/{email}")

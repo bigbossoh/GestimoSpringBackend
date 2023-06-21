@@ -19,6 +19,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.MessageEnvoyerDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
+import com.bzdata.gestimospringbackend.DTOs.StatistiquePeriodeDto;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Services.MessageEnvoyerService;
 
@@ -157,13 +158,13 @@ public class AppelLoyersController {
 
     @Operation(summary = "Trouver tous les appels loyers impayé par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/impayeParMois/{periode}/{idAgence}/{chapitre}")
-    public ResponseEntity<Double> impayeLoyerParMois(@PathVariable("periode") String periode,
+    public ResponseEntity<Double> impayeLoyerParMoisAppelLoyer(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
         return ResponseEntity.ok(appelLoyerService.impayeParPeriode(periode, idAgence, chapitre));
     }
     @Operation(summary = "Mise a jour des Appels pour les Unlocks", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/miseAjourDesUnlockDesBaux/{idAgence}")
-    public ResponseEntity<Boolean> impayeLoyerParMois(
+    public ResponseEntity<Boolean> miseAjourDesUnlockDesBaux(
             @PathVariable("idAgence") Long idAgence) {
         return ResponseEntity.ok(appelLoyerService.miseAjourDesUnlockDesBaux(idAgence));
     }
@@ -174,6 +175,14 @@ public class AppelLoyersController {
             @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
         // log.info("Find Appel by loy {}", periode);
         return ResponseEntity.ok(appelLoyerService.payeParPeriode(periode, idAgence, chapitre));
+    }
+
+     @Operation(summary = "Trouver tous les appels loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/staisiqueLoyerParMois/{periode}/{idAgence}/{chapitre}")
+    public ResponseEntity<StatistiquePeriodeDto> staisiqueLoyerParMois(@PathVariable("periode") String periode,
+            @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
+        // log.info("Find Appel by loy {}", periode);
+        return ResponseEntity.ok(appelLoyerService.statistiquePeriode(periode, idAgence, chapitre));
     }
 
     @Operation(summary = "Trouver tous les appels loyers payé par Année", security = @SecurityRequirement(name = "bearerAuth"))

@@ -9,6 +9,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.PeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.PourcentageAppelDto;
+import com.bzdata.gestimospringbackend.DTOs.StatistiquePeriodeDto;
 
 public interface AppelLoyerService {
 
@@ -53,7 +54,7 @@ public interface AppelLoyerService {
     double impayeParAnnee(int annee, Long idAgence, Long chapitre);
 
     double payeParAnnee(int annee, Long idAgence, Long chapitre);
-
+StatistiquePeriodeDto statistiquePeriode(String periode, Long idAgence, Long chapitre);
     Long nombreBauxImpaye(String periode, Long idAgence, Long chapitre);
 
     Long nombreBauxPaye(String periode, Long idAgence, Long chapitre);
