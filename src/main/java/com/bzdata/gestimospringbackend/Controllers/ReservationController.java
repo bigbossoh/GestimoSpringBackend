@@ -32,7 +32,7 @@ public class ReservationController {
     final ReservationService reservationService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Reservation", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdate(
+    public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdateReservation(
             @RequestBody ReservationSaveOrUpdateDto dto) {
 
         return ResponseEntity.ok(reservationService.saveOrUpdate(dto));
@@ -49,21 +49,21 @@ public class ReservationController {
       // SUPPRESSION D'UNE COMMUNE
       @Operation(summary = "Suppression d'une Reservation avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
       @DeleteMapping("/delete/{id}")
-      public ResponseEntity<Void> deleteCommune(@PathVariable("id") Long id) {
+      public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
 
           reservationService.delete(id);
           return ResponseEntity.ok().build();
       }
       @Operation(summary = "Trouver une Reservation par son ID", security = @SecurityRequirement(name = "bearerAuth"))
       @GetMapping("/findById/{id}")
-      public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByID(@PathVariable("id") Long id) {
+      public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByIDReservation(@PathVariable("id") Long id) {
 
           return ResponseEntity.ok(reservationService.findById(id));
       }
       // TOUTES LES RESERVATION
     @Operation(summary = "Liste de toutes les Reservation", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<ReservationSaveOrUpdateDto>> findAllCategorieChambre() {
+    public ResponseEntity<List<ReservationSaveOrUpdateDto>> findAllCategorieChambreReservation() {
         return ResponseEntity.ok(reservationService.findAll());
     }
 }

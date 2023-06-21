@@ -35,7 +35,7 @@ public class SiteController {
     @PostMapping("/save")
     @Operation(summary = "Creation et mise à jour d'un Site", security = @SecurityRequirement(name = "bearerAuth"))
 
-    public ResponseEntity<Boolean> save(@RequestBody SiteRequestDto dto) {
+    public ResponseEntity<Boolean> saveSites(@RequestBody SiteRequestDto dto) {
 
         log.info("We are going to save a new Site {}", dto);
         return ResponseEntity.ok(siteService.save(dto));

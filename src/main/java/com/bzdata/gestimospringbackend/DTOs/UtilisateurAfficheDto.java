@@ -28,7 +28,7 @@ public class  UtilisateurAfficheDto {
     String numeroPieceIdentite;
     LocalDate dateDebutPiece;
     LocalDate dateFinPiece;
-    String nationalité;
+    String nationalite;
     String genre;
     boolean isActivated;
 

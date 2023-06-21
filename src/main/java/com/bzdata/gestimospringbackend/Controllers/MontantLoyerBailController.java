@@ -31,7 +31,7 @@ public class MontantLoyerBailController {
 
     @Operation(summary = "Trouver un Quartier par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findMontantByBail/{id}")
-    public ResponseEntity<List<MontantLoyerBailDto>> findByIDQuartiers(@PathVariable("id") Long id) {
+    public ResponseEntity<List<MontantLoyerBailDto>> findByIDMontantLoyerBail(@PathVariable("id") Long id) {
         log.info("Find Commune by ID{}", id);
         return ResponseEntity.ok(montantLoyerBailService.findAllMontantLoyerBailByBailId(id));
     }

@@ -34,7 +34,7 @@ public class GroupeDroitController {
 
   @PostMapping("/save")
   @Operation(summary = "Creation  d'un groupe droit", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<Long> save(@RequestBody GroupeDroitDto dto) {
+  public ResponseEntity<Long> saveGroupeDroit(@RequestBody GroupeDroitDto dto) {
 
     log.info("We are going to save  a new groupeDroit {}", dto);
     return ResponseEntity.ok(service.save(dto));
@@ -42,19 +42,19 @@ public class GroupeDroitController {
 
   @GetMapping("/")
   @Operation(summary = "Liste des groupes droits", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<List<GroupeDroitDto>> findAll() {
+  public ResponseEntity<List<GroupeDroitDto>> findAllGroupeDroit() {
     return ResponseEntity.ok(service.findAll());
   }
 
   @GetMapping("/{groupedroitid}")
   @Operation(summary = "Groupes droitspar id", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<GroupeDroitDto> findById( @PathVariable("groupedroitid") Long groupedroitid ) {
+  public ResponseEntity<GroupeDroitDto> findByIdGroupeDroit( @PathVariable("groupedroitid") Long groupedroitid ) {
     return ResponseEntity.ok(service.findById(groupedroitid));
   }
 
   @DeleteMapping("/{groupedroitid}")
   @Operation(summary = "delete groupe droit par id", security = @SecurityRequirement(name = "bearerAuth"))
-  public ResponseEntity<Void> delete(
+  public ResponseEntity<Void> deleteGroupeDroit(
       @PathVariable("groupedroitid") Long groupedroitid
   ) {
     service.delete(groupedroitid);

@@ -83,11 +83,9 @@ public class EncaissementPrincipalController {
     // GET Encaissement BY ID
     @Operation(summary = "Trouver un encaissement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdEncaissement/{id}")
-    public ResponseEntity<EncaissementPrincipalDTO> findByIdEncaissement(@PathVariable("id") Long id) {
-        // log.info("Find by ID{}", id);
+    public ResponseEntity<EncaissementPrincipalDTO> findByIdEncaissement(@PathVariable("id") Long id) {    
         return ResponseEntity.ok(encaissementPrincipalService.findEncaissementById(id));
     }
-
     // GET ALL ENCAISSEMENTS BY IDLOCATAIRE
     @Operation(summary = "Trouver tous les encaissements par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allEncaissementByIdLocatire/{idLocatire}")

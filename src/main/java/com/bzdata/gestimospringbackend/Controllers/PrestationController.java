@@ -33,7 +33,7 @@ public class PrestationController {
     final PrestaionService serviceAdditionnelService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<PrestationSaveOrUpdateDto> saveorupdate(
+    public ResponseEntity<PrestationSaveOrUpdateDto> saveorupdatePrestation(
             @RequestBody PrestationSaveOrUpdateDto dto) {
         log.info("We are going to save a new ServiceAdditionnel {}", dto);
         return ResponseEntity.ok(serviceAdditionnelService.saveOrUpdate(dto));
@@ -42,21 +42,21 @@ public class PrestationController {
       // SUPPRESSION D'UNE COMMUNE
       @Operation(summary = "Suppression d'un Service Additionnel avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
       @DeleteMapping("/delete/{id}")
-      public ResponseEntity<Void> deleteServiceAdditionnel(@PathVariable("id") Long id) {
+      public ResponseEntity<Void> deleteServiceAdditionnelPrestation(@PathVariable("id") Long id) {
           log.info("We are going to delete a Service Additionnel {}", id);
           serviceAdditionnelService.delete(id);
           return ResponseEntity.ok().build();
       }
       @Operation(summary = "Trouver une CateroryChambre par son ID", security = @SecurityRequirement(name = "bearerAuth"))
       @GetMapping("/findById/{id}")
-      public ResponseEntity<PrestationSaveOrUpdateDto> findServiceAdditionnelByID(@PathVariable("id") Long id) {
+      public ResponseEntity<PrestationSaveOrUpdateDto> findServiceAdditionnelByIDPrestation(@PathVariable("id") Long id) {
           log.info("Find Commune by ID{}", id);
           return ResponseEntity.ok(serviceAdditionnelService.findById(id));
       }
       // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<PrestationSaveOrUpdateDto>> findAllServiceAdditionnel() {
+    public ResponseEntity<List<PrestationSaveOrUpdateDto>> findAllServiceAdditionnelPrestation() {
         return ResponseEntity.ok(serviceAdditionnelService.findAll());
     }
 

@@ -32,7 +32,7 @@ public class PrestationAdditionnelReservationController {
     final PrestationAdditionnelReseravtionService prestationAdditionnelReseravtionService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<PrestationAdditionnelReservationSaveOrrUpdate> saveorupdate(
+    public ResponseEntity<PrestationAdditionnelReservationSaveOrrUpdate> saveorupdatePrestationAdditionnel(
             @RequestBody PrestationAdditionnelReservationSaveOrrUpdate dto) {
         log.info("We are going to save a new ServiceAdditionnel {}", dto);
         return ResponseEntity.ok(prestationAdditionnelReseravtionService.saveOrUpdate(dto));
@@ -41,21 +41,21 @@ public class PrestationAdditionnelReservationController {
       // SUPPRESSION D'UNE COMMUNE
       @Operation(summary = "Suppression d'un Service Additionnel avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
       @DeleteMapping("/delete/{id}")
-      public ResponseEntity<Void> deleteServiceAdditionnel(@PathVariable("id") Long id) {
+      public ResponseEntity<Void> deleteServiceAdditionnelPrestationAdditionnel(@PathVariable("id") Long id) {
           log.info("We are going to delete a Service Additionnel {}", id);
           prestationAdditionnelReseravtionService.delete(id);
           return ResponseEntity.ok().build();
       }
       @Operation(summary = "Trouver une CateroryChambre par son ID", security = @SecurityRequirement(name = "bearerAuth"))
       @GetMapping("/findById/{id}")
-      public ResponseEntity<PrestationAdditionnelReservationSaveOrrUpdate> findServiceAdditionnelByID(@PathVariable("id") Long id) {
+      public ResponseEntity<PrestationAdditionnelReservationSaveOrrUpdate> findServiceAdditionnelByIDPrestationAdditionnel(@PathVariable("id") Long id) {
           log.info("Find Commune by ID{}", id);
           return ResponseEntity.ok(prestationAdditionnelReseravtionService.findById(id));
       }
       // TOUTES LES COMMUES
     @Operation(summary = "Liste de toutes les Service Additionnel", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
-    public ResponseEntity<List<PrestationAdditionnelReservationSaveOrrUpdate>> findAllServiceAdditionnel() {
+    public ResponseEntity<List<PrestationAdditionnelReservationSaveOrrUpdate>> findAllServiceAdditionnelPrestationAdditionnel() {
         return ResponseEntity.ok(prestationAdditionnelReseravtionService.findAll());
     }
 }

@@ -109,7 +109,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             newUser.setTypePieceIdentite(dto.getTypePieceIdentite());
             newUser.setJoinDate(new Date());
             newUser.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
-            newUser.setNationalité(dto.getNationalité());
+            newUser.setNationalite(dto.getNationalite());
             newUser.setLieuNaissance(dto.getLieuNaissance());
             newUser.setGenre(dto.getGenre());
             newUser.setDateFinPiece(dto.getDateFinPiece());
@@ -137,7 +137,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             utilisateurUpdate.setProfileImageUrl(dto.getProfileImageUrl());
             utilisateurUpdate.setTypePieceIdentite(dto.getTypePieceIdentite());
             utilisateurUpdate.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
-            utilisateurUpdate.setNationalité(dto.getNationalité());
+            utilisateurUpdate.setNationalite(dto.getNationalite());
             utilisateurUpdate.setLieuNaissance(dto.getLieuNaissance());
             utilisateurUpdate.setGenre(dto.getGenre());
             utilisateurUpdate.setDateFinPiece(dto.getDateFinPiece());
