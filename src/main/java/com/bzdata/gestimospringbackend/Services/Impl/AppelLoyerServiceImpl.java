@@ -61,7 +61,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Author Michel Bossoh
  */
 @Service
- @Slf4j
+ 
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -749,6 +749,20 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 statistiquePeriodeDto.setImpayer(impayeParPeriode(periode,idAgence,chapitre));
                 statistiquePeriodeDto.setPayer(payeParPeriode(periode,idAgence,chapitre));              
                 statistiquePeriodeDto.setPeriode(periode);
+                statistiquePeriodeDto.setRecouvrement(recou);
+               return statistiquePeriodeDto;
+        }
+
+        @Override
+        public StatistiquePeriodeDto statistiqueAnnee(int annee, Long idAgence, Long chapitre) {
+                  double recou=0;
+                if ((impayeParAnnee(annee,idAgence,chapitre)+payeParAnnee(annee,idAgence,chapitre)) > 0) {
+                      recou=payeParAnnee(annee,idAgence,chapitre)/ (impayeParAnnee(annee,idAgence,chapitre)+payeParAnnee(annee,idAgence,chapitre))*100 ;
+                }
+                StatistiquePeriodeDto statistiquePeriodeDto =new StatistiquePeriodeDto();
+                statistiquePeriodeDto.setImpayer(impayeParAnnee(annee,idAgence,chapitre));
+                statistiquePeriodeDto.setPayer(payeParAnnee(annee,idAgence,chapitre));              
+                statistiquePeriodeDto.setPeriode(""+annee);
                 statistiquePeriodeDto.setRecouvrement(recou);
                return statistiquePeriodeDto;
         }

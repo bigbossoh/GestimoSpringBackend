@@ -33,7 +33,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
    private final BailMapperImpl bailMapperImpl;
 
    @Override
-   public SuivieDepenseDto saveNewDepense(SuivieDepenseDto dto) {
+   public List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto) {
 
       log.info("We are going to create  a new Depense depuis service Implementation {}", dto);
       List<String> errors = SuivieDepenseValidator.validate(dto);
@@ -54,7 +54,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
          suivieDepense.setOperationType(dto.getOperationType());
          SuivieDepense suivieDepenseSaved = suivieDepenseRepository.save(suivieDepense);
          SuivieDepenseDto suivieDepenseDtoSaved = bailMapperImpl.fromSuivieDepense(suivieDepenseSaved);
-         return suivieDepenseDtoSaved;
+           return findAlEncaissementParAgence(dto.getIdAgence());
       } else {
          SuivieDepense suivieDepense = suivieDepenseRepository.findById(dto.getId()).orElseThrow(
                () -> new InvalidEntityException(
@@ -70,7 +70,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
          suivieDepense.setOperationType(dto.getOperationType());
          SuivieDepense suivieDepenseSaved = suivieDepenseRepository.save(suivieDepense);
          SuivieDepenseDto suivieDepenseDtoSaved = bailMapperImpl.fromSuivieDepense(suivieDepenseSaved);
-         return suivieDepenseDtoSaved;
+         return findAlEncaissementParAgence(dto.getIdAgence());
 
       }
 

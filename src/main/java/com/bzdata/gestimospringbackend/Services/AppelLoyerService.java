@@ -55,6 +55,7 @@ public interface AppelLoyerService {
 
     double payeParAnnee(int annee, Long idAgence, Long chapitre);
 StatistiquePeriodeDto statistiquePeriode(String periode, Long idAgence, Long chapitre);
+StatistiquePeriodeDto statistiqueAnnee(int annee, Long idAgence, Long chapitre);
     Long nombreBauxImpaye(String periode, Long idAgence, Long chapitre);
 
     Long nombreBauxPaye(String periode, Long idAgence, Long chapitre);

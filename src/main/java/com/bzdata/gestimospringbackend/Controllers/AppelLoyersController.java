@@ -177,14 +177,20 @@ public class AppelLoyersController {
         return ResponseEntity.ok(appelLoyerService.payeParPeriode(periode, idAgence, chapitre));
     }
 
-     @Operation(summary = "Trouver tous les appels loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
+     @Operation(summary = "Trouver tous les statistiques periodes loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/staisiqueLoyerParMois/{periode}/{idAgence}/{chapitre}")
     public ResponseEntity<StatistiquePeriodeDto> staisiqueLoyerParMois(@PathVariable("periode") String periode,
             @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
         // log.info("Find Appel by loy {}", periode);
         return ResponseEntity.ok(appelLoyerService.statistiquePeriode(periode, idAgence, chapitre));
     }
-
+ @Operation(summary = "Trouver tous les statistiques annee loyers payé par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/statistiqueLoyerParAnnee/{annee}/{idAgence}/{chapitre}")
+    public ResponseEntity<StatistiquePeriodeDto> statistiqueLoyerParAnnee(@PathVariable("annee") int annee,
+            @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
+        // log.info("Find Appel by loy {}", periode);
+        return ResponseEntity.ok(appelLoyerService.statistiqueAnnee(annee, idAgence, chapitre));
+    }
     @Operation(summary = "Trouver tous les appels loyers payé par Année", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/payeParAnnee/{annee}/{idAgence}/{chapitre}")
     public ResponseEntity<Double> payeLoyerParAnnee(@PathVariable("annee") int annee,
