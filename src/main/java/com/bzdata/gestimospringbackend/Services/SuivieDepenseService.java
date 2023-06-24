@@ -8,7 +8,7 @@ import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaissementDto;
 
 
 public interface SuivieDepenseService {
-   SuivieDepenseDto saveNewDepense(SuivieDepenseDto dto);
+   List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto);
    boolean annulerTransactionByCodeTransaction(String codeTransation);
    boolean annulerTransactionById(String Id);
    boolean SupprimerUneEcritureById(String Id);
