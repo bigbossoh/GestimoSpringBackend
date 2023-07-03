@@ -37,5 +37,5 @@ public interface EncaissementPrincipalService {
     double sommeImpayerParAgenceEtParPeriode(Long agence, String dateDebut,String dateFin );
     Map<YearMonth, Double> getTotalEncaissementsParMois( Long idAgence,LocalDate debut, LocalDate fin);
     Map<YearMonth, Double[]> getTotalEncaissementsEtMontantsDeLoyerParMois(Long idAgence,LocalDate debut, LocalDate fin);
-    List<EncaissementPrincipalDTO> listeEncaissementParPeriode(Long agence, String dateDebut,String dateFin );
+    List<EncaissementPrincipalDTO> listeEncaissementParPeriode(Long agence, LocalDate dateDebut,LocalDate dateFin );
 }

@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(APP_ROOT + "/encaissement")
 @RequiredArgsConstructor
- @Slf4j
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 public class EncaissementPrincipalController {
@@ -50,16 +50,17 @@ public class EncaissementPrincipalController {
     @Operation(summary = "Creation et encaissement", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<EncaissementPrincipalDTO>> saveEncaissementAvecretourDeListe(
             @RequestBody EncaissementPayloadDto dto) {
-        //  log.info("We are going to save a new encaissement groupé : : : {}", dto);
+        // log.info("We are going to save a new encaissement groupé : : : {}", dto);
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementAvecRetourDeList(dto));
     }
 
     @PostMapping("/saveencaissementmasseavecretour")
     @Operation(summary = "Creation et encaissement en masse", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<LocataireEncaisDTO>> saveEncaissementMasseAvecretourDeListe(
-            @RequestBody EncaissementPayloadDto dto) {     
+            @RequestBody EncaissementPayloadDto dto) {
         return ResponseEntity.ok(encaissementPrincipalService.saveEncaissementGrouperAvecRetourDeList(dto));
     }
+
     @PostMapping("/saveencaissementmasse")
     @Operation(summary = "Creation d'un encaissement e masse", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Boolean> saveEncaissementMasse(@RequestBody List<EncaissementPayloadDto> dtos) {
@@ -70,22 +71,23 @@ public class EncaissementPrincipalController {
     @Operation(summary = "Listés tous les envaissements de lae BD", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findAllEncaissementPrincipal/{idAgence}")
     public ResponseEntity<List<EncaissementPrincipalDTO>> listTousEncaissementsPrincipal(
-            @PathVariable("idAgence") Long idAgence) {   
+            @PathVariable("idAgence") Long idAgence) {
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissement(idAgence));
     }
 
     @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/totalencaissement/{id}")
-    public ResponseEntity<Double> totalencaissementParIdAppelLoyer(@PathVariable("id") Long id) {       
+    public ResponseEntity<Double> totalencaissementParIdAppelLoyer(@PathVariable("id") Long id) {
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementByIdAppelLoyer(id));
     }
 
     // GET Encaissement BY ID
     @Operation(summary = "Trouver un encaissement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByIdEncaissement/{id}")
-    public ResponseEntity<EncaissementPrincipalDTO> findByIdEncaissement(@PathVariable("id") Long id) {    
+    public ResponseEntity<EncaissementPrincipalDTO> findByIdEncaissement(@PathVariable("id") Long id) {
         return ResponseEntity.ok(encaissementPrincipalService.findEncaissementById(id));
     }
+
     // GET ALL ENCAISSEMENTS BY IDLOCATAIRE
     @Operation(summary = "Trouver tous les encaissements par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allEncaissementByIdLocatire/{idLocatire}")
@@ -100,48 +102,70 @@ public class EncaissementPrincipalController {
     @GetMapping("/allencaissementByIdBien/{id}")
     public ResponseEntity<List<EncaissementPrincipalDTO>> findAllEncaissementByIdBienImmobilier(
             @PathVariable("id") Long id) {
-        // log.info(" find All Encaissement By IdBienImmobilier  {}", id);
+        // log.info(" find All Encaissement By IdBienImmobilier {}", id);
         return ResponseEntity.ok(encaissementPrincipalService.findAllEncaissementByIdBienImmobilier(id));
     }
 
     @Operation(summary = "Total des encaissements par Id d'appel de loyer", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/totalencaissementjournalier/{jour}/{idAgence}/{chapitre}")
     public ResponseEntity<Double> totalEncaissementParJour(@PathVariable("jour") String jour,
-            @PathVariable("idAgence") Long idAgence,@PathVariable("chapitre") Long chapitre) {
+            @PathVariable("idAgence") Long idAgence, @PathVariable("chapitre") Long chapitre) {
         // log.info("Find totalencaissement by ID AppelLoyer {}", jour);
-        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour, idAgence,chapitre));
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaisserParJour(jour, idAgence, chapitre));
     }
+
     @Operation(summary = "Total des encaissements par agence et par periode", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/sommeEncaissementParAgenceEtParPeriode/{idAgence}/{datedebut}/{datefin}")
-     public ResponseEntity<Double> sommeEncaissementParAgenceEtParPeriode(     
-                                                            @PathVariable Long idAgence,
-                                                            @PathVariable("datedebut") String datedebut,
-                                                            @PathVariable("datefin") String datefin) {
-    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
-        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+    public ResponseEntity<Double> sommeEncaissementParAgenceEtParPeriode(
+            @PathVariable Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {
+        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
+                datefin);
+        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaissementParAgenceEtParPeriode(idAgence, dateDebutLocalDate,dateFinLocalDate));
-}
-@GetMapping("/getTotalEncaissementsParMois/{idAgence}/{datedebut}/{datefin}")
-     public ResponseEntity<Map<YearMonth, Double>> getTotalEncaissementsParMois(     
-                                                            @PathVariable Long idAgence,
-                                                            @PathVariable("datedebut") String datedebut,
-                                                            @PathVariable("datefin") String datefin) {
-    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
-        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.sommeEncaissementParAgenceEtParPeriode(idAgence,
+                dateDebutLocalDate, dateFinLocalDate));
+    }
+
+    @GetMapping("/getTotalEncaissementsParMois/{idAgence}/{datedebut}/{datefin}")
+    public ResponseEntity<Map<YearMonth, Double>> getTotalEncaissementsParMois(
+            @PathVariable Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {
+        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
+                datefin);
+        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsParMois(idAgence, dateDebutLocalDate,dateFinLocalDate));
-}
-@GetMapping("/getTotalEncaissementsEtMontantsDeLoyerParMois/{idAgence}/{datedebut}/{datefin}")
-     public ResponseEntity<Map<YearMonth, Double[]>> getTotalEncaissementsEtMontantsDeLoyerParMois(     
-                                                            @PathVariable Long idAgence,
-                                                            @PathVariable("datedebut") String datedebut,
-                                                            @PathVariable("datefin") String datefin) {
-    log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence,datedebut,datefin);
-        LocalDate dateDebutLocalDate= LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsParMois(idAgence, dateDebutLocalDate,
+                dateFinLocalDate));
+    }
+
+    @GetMapping("/getTotalEncaissementparPeriode/{idAgence}/{datedebut}/{datefin}")
+    public ResponseEntity<List<EncaissementPrincipalDTO>> getTotalEncaissementparPeriode(
+            @PathVariable("idAgence") Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {
+        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
+                datefin);
+        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
-        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsEtMontantsDeLoyerParMois(idAgence, dateDebutLocalDate,dateFinLocalDate));
-}
+        return ResponseEntity.ok(encaissementPrincipalService.listeEncaissementParPeriode(idAgence, dateDebutLocalDate,
+                dateFinLocalDate));
+    }
+
+    @GetMapping("/getTotalEncaissementsEtMontantsDeLoyerParMois/{idAgence}/{datedebut}/{datefin}")
+    public ResponseEntity<Map<YearMonth, Double[]>> getTotalEncaissementsEtMontantsDeLoyerParMois(
+            @PathVariable Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {
+        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
+                datefin);
+        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsEtMontantsDeLoyerParMois(idAgence,
+                dateDebutLocalDate, dateFinLocalDate));
+    }
 
     @GetMapping("/listeLocataireImpayerParAgenceEtPeriode/{agence}/{periode}")
     public ResponseEntity<List<LocataireEncaisDTO>> listeLocataireImpayerParAgenceEtPeriode(
