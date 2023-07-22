@@ -34,8 +34,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
    @Override
    public List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto) {
-
-      log.info("We are going to create  a new Depense depuis service Implementation {}", dto);
+    
       List<String> errors = SuivieDepenseValidator.validate(dto);
       if (!errors.isEmpty()) {
          log.error("l'objet suivie de depense n'est pas valide {}", errors);
@@ -84,14 +83,21 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
    @Override
    public boolean annulerTransactionById(String Id) {
-      // TODO Auto-generated method stub
       return false;
    }
 
    @Override
-   public boolean SupprimerUneEcritureById(String Id) {
-      // TODO Auto-generated method stub
-      return false;
+   public List<SuivieDepenseDto> supprimerUneEcritureById(Long id,Long idAgence) {
+     SuivieDepense suivitrouver=suivieDepenseRepository.findById(id).orElseThrow(null);
+      try {
+      if (suivitrouver!=null) {
+         suivieDepenseRepository.delete(suivitrouver);
+         return findAlEncaissementParAgence(idAgence);
+      }
+     } catch (Exception e) {
+      System.out.println(e.toString());
+     }
+      return null;
    }
 
    @Override

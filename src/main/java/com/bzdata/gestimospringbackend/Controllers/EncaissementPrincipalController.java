@@ -119,9 +119,7 @@ public class EncaissementPrincipalController {
     public ResponseEntity<Double> sommeEncaissementParAgenceEtParPeriode(
             @PathVariable Long idAgence,
             @PathVariable("datedebut") String datedebut,
-            @PathVariable("datefin") String datefin) {
-        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
-                datefin);
+            @PathVariable("datefin") String datefin) {      
         LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         return ResponseEntity.ok(encaissementPrincipalService.sommeEncaissementParAgenceEtParPeriode(idAgence,
@@ -132,9 +130,7 @@ public class EncaissementPrincipalController {
     public ResponseEntity<Map<YearMonth, Double>> getTotalEncaissementsParMois(
             @PathVariable Long idAgence,
             @PathVariable("datedebut") String datedebut,
-            @PathVariable("datefin") String datefin) {
-        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
-                datefin);
+            @PathVariable("datefin") String datefin) {        
         LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsParMois(idAgence, dateDebutLocalDate,
@@ -146,9 +142,7 @@ public class EncaissementPrincipalController {
             @PathVariable("idAgence") Long idAgence,
             @PathVariable("datedebut") String datedebut,
             @PathVariable("datefin") String datefin) {
-        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
-                datefin);
-        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+             LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         return ResponseEntity.ok(encaissementPrincipalService.listeEncaissementParPeriode(idAgence, dateDebutLocalDate,
                 dateFinLocalDate));
@@ -159,9 +153,7 @@ public class EncaissementPrincipalController {
             @PathVariable Long idAgence,
             @PathVariable("datedebut") String datedebut,
             @PathVariable("datefin") String datefin) {
-        log.info("les payload pour la liste des encaissement par periode sont : {}, {},{}", idAgence, datedebut,
-                datefin);
-        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+              LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsEtMontantsDeLoyerParMois(idAgence,
                 dateDebutLocalDate, dateFinLocalDate));
@@ -170,7 +162,6 @@ public class EncaissementPrincipalController {
     @GetMapping("/listeLocataireImpayerParAgenceEtPeriode/{agence}/{periode}")
     public ResponseEntity<List<LocataireEncaisDTO>> listeLocataireImpayerParAgenceEtPeriode(
             @PathVariable("agence") Long agence, @PathVariable("periode") String periode) {
-        // log.info("Find totalencaissement by ID AppelLoyer {}", periode);
-        return ResponseEntity.ok(encaissementPrincipalService.listeLocataireImpayerParAgenceEtPeriode(agence, periode));
+               return ResponseEntity.ok(encaissementPrincipalService.listeLocataireImpayerParAgenceEtPeriode(agence, periode));
     }
 }

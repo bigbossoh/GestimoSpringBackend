@@ -11,7 +11,7 @@ public interface SuivieDepenseService {
    List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto);
    boolean annulerTransactionByCodeTransaction(String codeTransation);
    boolean annulerTransactionById(String Id);
-   boolean SupprimerUneEcritureById(String Id);
+   List<SuivieDepenseDto> supprimerUneEcritureById(Long Id,Long idAgence);
    SuivieDepenseDto findById(Long id);
    SuivieDepenseDto findByCodeTransaction(String codeTransation);
    List<SuivieDepenseDto> findByDateEncaissement(SuivieDepenseEncaissementDto suivieDepenseEncaissementDto);
