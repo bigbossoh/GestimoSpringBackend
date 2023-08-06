@@ -130,6 +130,7 @@ public class AppartementServiceImpl implements AppartementService {
             unAppartementTrouve.get().setBienMeublerResidence(dto.isBienMeublerResidence());
             unAppartementTrouve.get().setDescription(dto.getDescription());
             unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
+            log.info("dto.isBienMeublerResidence() {}",dto.isBienMeublerResidence());
             // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
             Appartement appartementSave = appartementRepository.save(unAppartementTrouve.get());
             return gestimoWebMapperImpl.fromAppartement(appartementSave);
@@ -192,7 +193,7 @@ public class AppartementServiceImpl implements AppartementService {
     @Override
     public List<AppartementDto> findAllMeuble(Long idAgence) {
         return appartementRepository.findAll().stream()
-        .filter(appa->appa.getIdAgence()==idAgence&& appa.isBienMeublerResidence()==true)
+        .filter(appa->appa.getIdAgence()==idAgence && appa.isBienMeublerResidence()==true)
                 .map(gestimoWebMapperImpl::fromAppartement)
                 .collect(Collectors.toList());
     }

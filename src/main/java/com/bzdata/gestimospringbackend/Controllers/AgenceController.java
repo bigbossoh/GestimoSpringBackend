@@ -2,7 +2,6 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
-import java.io.IOException;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
@@ -28,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
-
 public class AgenceController {
     private final AgenceImmobilierService agenceImmobilierService;
     // private final ImagesService imagesService;
