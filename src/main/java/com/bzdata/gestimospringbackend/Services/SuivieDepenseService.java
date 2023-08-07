@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
@@ -17,4 +18,5 @@ public interface SuivieDepenseService {
    List<SuivieDepenseDto> findByDateEncaissement(SuivieDepenseEncaissementDto suivieDepenseEncaissementDto);
    List<SuivieDepenseDto> findByAllEncaissementByPeriode(SuivieDepenseEncaisPeriodeDto suivieDepenseEncaisPeriodeDto);
    List<SuivieDepenseDto> findAlEncaissementParAgence(Long idAgence);
+   SuivieDepenseEncaisPeriodeDto totalSuiviDepenseEntreDeuxDate(Long idAgence,LocalDate debut,LocalDate fin);
 }

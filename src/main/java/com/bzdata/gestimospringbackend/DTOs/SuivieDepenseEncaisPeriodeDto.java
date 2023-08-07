@@ -17,4 +17,5 @@ public class SuivieDepenseEncaisPeriodeDto {
    LocalDate dateFinEncaissement;
    String designation;
    String codeTransaction;
+   double totalMontantDepense;
 }
