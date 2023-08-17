@@ -19,7 +19,7 @@ public class SecurityConstant {
             "/**/envoimail/**","**/bail/**","/actuator/**",
             "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login",
             "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**",
-             "/**/bienImmobilier/**","/**/suiviedepense/**","/**/droitAccess/**","/**/appartement/**"
+             "/**/bienImmobilier/**","/**/suiviedepense/**","/**/droitAccess/**","/**/appartement/**","/**/image/**"
     };
     // public static final String[] PUBLIC_URLS = { "**" };
     // "/**/utilisateurs/singup",

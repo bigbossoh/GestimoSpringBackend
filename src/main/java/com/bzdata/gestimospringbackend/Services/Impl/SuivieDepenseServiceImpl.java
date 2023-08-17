@@ -219,14 +219,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
     double totalEncaisse = listSuivieDepenseDtos
       .stream()
       .mapToDouble(Double::doubleValue)
-      .sum();
-        log.info(
-      " Les valeurs qui sont entrées sont les suivantes : : : {} {} {} {}",
-      idAgence,
-      debut,
-      fin,
-      totalEncaisse
-    );
+      .sum();    
     SuivieDepenseEncaisPeriodeDto newDepenseEncaisPeriodeDto = new SuivieDepenseEncaisPeriodeDto();
     newDepenseEncaisPeriodeDto.setDateDebutEncaissement(debut);
     newDepenseEncaisPeriodeDto.setDateFinEncaissement(fin);
