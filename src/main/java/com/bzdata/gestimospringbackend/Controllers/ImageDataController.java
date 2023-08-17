@@ -35,7 +35,7 @@ public class ImageDataController {
     @PostMapping("/upload/{id}/{name}")
     @ApiOperation("Téléchargder une image")
     public ResponseEntity<Boolean>uploadImage( @PathVariable("id")Long id, @PathVariable("name")String name,@RequestParam("file") MultipartFile file) throws IOException{
-        log.info("multipart {},{}", id, file);
+       
         return ResponseEntity.ok().body(imageDataService.saveImageAppartement(id, name, file));
     }
     @GetMapping("/imagesbybien/{id}") 
