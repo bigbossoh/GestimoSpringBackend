@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-//@SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
 public class ImageDataController {
     final ImageDataService imageDataService;
