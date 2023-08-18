@@ -19,7 +19,6 @@ import com.bzdata.gestimospringbackend.DTOs.ImageDataDto;
 import com.bzdata.gestimospringbackend.Services.ImageDataService;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -58,7 +58,6 @@ public class SuivieDepenseController {
       fin,
       DateTimeFormatter.ofPattern("dd-MM-yyyy")
     );
-    log.info("Les Data sont suis : : :  {} {} {}", idAgence, dateDebutLocalDate, dateFinLocalDate);
     return ResponseEntity.ok(
       suivieDepenseService.totalSuiviDepenseEntreDeuxDate(
         idAgence,
@@ -67,7 +66,30 @@ public class SuivieDepenseController {
       )
     );
   }
-
+ @GetMapping("/listSortieDeuxDate/{idAgence}/{debut}/{fin}")
+  public ResponseEntity<List<SuivieDepenseDto>> listSortieDeuxDate(
+    @PathVariable("idAgence") Long idAgence,
+    @PathVariable("debut") String debut,
+    @PathVariable("fin") String fin
+  ) {
+    LocalDate dateDebutLocalDate = LocalDate.parse(
+      debut,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+    LocalDate dateFinLocalDate = LocalDate.parse(
+      fin,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+      log.info("les dates sont controller beffor: {},{}", debut, fin);
+    log.info("les dates sont controller: {},{}", dateDebutLocalDate, dateFinLocalDate);
+    return ResponseEntity.ok(
+      suivieDepenseService.listSuiviDepenseEntreDeuxDate(
+        idAgence,
+        dateDebutLocalDate,
+        dateFinLocalDate
+      )
+    );
+  }
   @GetMapping("/getSuivieDepenseByCodeTransaction/{codeTransaction}")
   public ResponseEntity<SuivieDepenseDto> getSuivieDepenseByCodeTransaction(
     @PathVariable("codeTransaction") String codeTransaction

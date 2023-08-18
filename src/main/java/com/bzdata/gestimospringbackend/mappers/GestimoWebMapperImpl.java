@@ -9,8 +9,6 @@ import com.bzdata.gestimospringbackend.Models.hotel.PrestationAdditionnelReserva
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
-import com.lowagie.text.html.simpleparser.Img;
-
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
