@@ -205,7 +205,6 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
     LocalDate debut,
     LocalDate fin
   ) {
-  
     List<Double> listSuivieDepenseDtos = suivieDepenseRepository
       .findAll()
       .stream()
@@ -219,7 +218,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
     double totalEncaisse = listSuivieDepenseDtos
       .stream()
       .mapToDouble(Double::doubleValue)
-      .sum();    
+      .sum();
     SuivieDepenseEncaisPeriodeDto newDepenseEncaisPeriodeDto = new SuivieDepenseEncaisPeriodeDto();
     newDepenseEncaisPeriodeDto.setDateDebutEncaissement(debut);
     newDepenseEncaisPeriodeDto.setDateFinEncaissement(fin);
@@ -231,5 +230,25 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       "Sortie de caisse de " + debut + " à " + fin
     );
     return newDepenseEncaisPeriodeDto;
+  }
+
+  @Override
+  public List<SuivieDepenseDto> listSuiviDepenseEntreDeuxDate(
+    Long idAgence,
+    LocalDate debut,
+    LocalDate fin
+  ) {
+    log.info("les dates sont : {},{}", debut, fin);
+    return suivieDepenseRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(agence ->
+        agence.getIdAgence() == idAgence &&
+        agence.getDateEncaissement().isAfter(debut) &&
+        agence.getDateEncaissement().isBefore(fin) 
+       
+      )
+      .map(bailMapperImpl::fromSuivieDepense)
+      .collect(Collectors.toList());
   }
 }

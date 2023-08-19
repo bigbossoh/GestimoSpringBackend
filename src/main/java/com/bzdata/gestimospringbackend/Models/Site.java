@@ -1,7 +1,10 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +21,6 @@ public class Site extends AbstractEntity {
     String nomSite;
     @ManyToOne
     Quartier quartier;
-//    @OneToMany(mappedBy = "site")
-//    List<Bienimmobilier> bienImmobiliers;
+   @OneToMany(mappedBy = "site")
+   List<Bienimmobilier> bienImmobiliers;
 }

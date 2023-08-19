@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerEncaissDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
@@ -158,7 +159,16 @@ public class EncaissementPrincipalController {
         return ResponseEntity.ok(encaissementPrincipalService.getTotalEncaissementsEtMontantsDeLoyerParMois(idAgence,
                 dateDebutLocalDate, dateFinLocalDate));
     }
-
+    @GetMapping("/listeEncaisseLoyerEntreDeuxDate/{idAgence}/{datedebut}/{datefin}")
+    public ResponseEntity<List<AppelLoyerEncaissDto>> listeEncaisseLoyerEntreDeuxDate(
+            @PathVariable Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {
+              LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.listeEncaisseLoyerEntreDeuxDate(idAgence,
+                dateDebutLocalDate, dateFinLocalDate));
+    }
     @GetMapping("/listeLocataireImpayerParAgenceEtPeriode/{agence}/{periode}")
     public ResponseEntity<List<LocataireEncaisDTO>> listeLocataireImpayerParAgenceEtPeriode(
             @PathVariable("agence") Long agence, @PathVariable("periode") String periode) {
