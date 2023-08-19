@@ -45,5 +45,7 @@ public abstract class Bienimmobilier extends AbstractEntity {
     Chapitre chapitre;
     @OneToMany(mappedBy = "bienimmobilier")
     List<ImageData>imageDatas;
+      @ManyToOne
+    Site site;
 
 }

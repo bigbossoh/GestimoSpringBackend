@@ -79,9 +79,7 @@ public class SuivieDepenseController {
     LocalDate dateFinLocalDate = LocalDate.parse(
       fin,
       DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    );
-      log.info("les dates sont controller beffor: {},{}", debut, fin);
-    log.info("les dates sont controller: {},{}", dateDebutLocalDate, dateFinLocalDate);
+    ); 
     return ResponseEntity.ok(
       suivieDepenseService.listSuiviDepenseEntreDeuxDate(
         idAgence,

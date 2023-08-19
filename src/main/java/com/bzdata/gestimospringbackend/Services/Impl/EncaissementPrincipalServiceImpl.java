@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.bzdata.gestimospringbackend.DTOs.AppelLoyerEncaissDto;
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
@@ -600,9 +601,7 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                                 && encaissement.getDateEncaissement().isAfter(dateDebut) &&
                                                 encaissement.getDateEncaissement().isBefore(dateFin))
                                  .map(gestimoWebMapper::fromEncaissementPrincipal)
-                                .collect(Collectors.toList());
-
-                
+                                .collect(Collectors.toList());                
         }
 
         @Override
@@ -708,13 +707,22 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                         } catch (Exception e) {
                                 System.err.println(e.getMessage());
                         }
-                        log.info("Le retour est le suivant {}",
-                                        listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode));
                         return listeLocataireImpayerParAgenceEtPeriode(idDeAgence, laPeriode);
                 } else {
                         return null;
                 }
 
+        }
+
+        @Override
+        public List<AppelLoyerEncaissDto> listeEncaisseLoyerEntreDeuxDate(Long agence, LocalDate dateDebut,
+                        LocalDate dateFin) {
+                   return  encaissementPrincipalRepository.findAll().stream()
+                                .filter(encaissement -> encaissement.getIdAgence() == agence
+                                                && encaissement.getDateEncaissement().isAfter(dateDebut) &&
+                                                encaissement.getDateEncaissement().isBefore(dateFin))
+                                 .map(gestimoWebMapper::fromEncaissementPrincipalAppelLoyerEncaissDto)
+                                .collect(Collectors.toList());  
         }
 
 }
