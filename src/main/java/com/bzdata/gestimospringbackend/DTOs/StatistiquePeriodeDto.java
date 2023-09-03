@@ -15,4 +15,6 @@ public class StatistiquePeriodeDto {
     double payer;
     double recouvrement;
     String periode;
+    String periodeFin;
+    double totalLoyer;
 }

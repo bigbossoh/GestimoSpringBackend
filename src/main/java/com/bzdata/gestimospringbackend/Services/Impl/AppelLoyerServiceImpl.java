@@ -746,6 +746,7 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 statistiquePeriodeDto.setImpayer(impayeParPeriode(periode,idAgence,chapitre));
                 statistiquePeriodeDto.setPayer(payeParPeriode(periode,idAgence,chapitre));              
                 statistiquePeriodeDto.setPeriode(periode);
+                statistiquePeriodeDto.setPeriodeFin(periode);
                 statistiquePeriodeDto.setRecouvrement(recou);
                return statistiquePeriodeDto;
         }
@@ -760,7 +761,9 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
                 statistiquePeriodeDto.setImpayer(impayeParAnnee(annee,idAgence,chapitre));
                 statistiquePeriodeDto.setPayer(payeParAnnee(annee,idAgence,chapitre));              
                 statistiquePeriodeDto.setPeriode(""+annee);
+                statistiquePeriodeDto.setPeriodeFin(""+annee);
                 statistiquePeriodeDto.setRecouvrement(recou);
                return statistiquePeriodeDto;
         }
+
 }
