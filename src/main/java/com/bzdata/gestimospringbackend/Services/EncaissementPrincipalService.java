@@ -4,6 +4,8 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyerEncaissDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
+import com.bzdata.gestimospringbackend.DTOs.StatistiquePeriodeDto;
+
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
@@ -79,5 +81,21 @@ public interface EncaissementPrincipalService {
     Long agence,
     LocalDate dateDebut,
     LocalDate dateFin
+  );
+    // ENTRE DEUX DATES
+double sommeLoyerEntreDeuxPeriode(  Long agence, LocalDate dateDebut,
+LocalDate dateFin);
+
+   StatistiquePeriodeDto statistiquePeriodeEntreDeuxDate(
+    String periodeDebut,
+     String periodeDFin,
+    Long idAgence,
+    Long chapitre
+  );
+  StatistiquePeriodeDto statistiqueAnneeEntreDeuxDate(
+    int anneeDebut,
+    int anneeFin,
+    Long idAgence,
+    Long chapitre
   );
 }

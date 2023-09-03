@@ -16,6 +16,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPayloadDto;
 import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
+import com.bzdata.gestimospringbackend.DTOs.StatistiquePeriodeDto;
 import com.bzdata.gestimospringbackend.Models.AgenceImmobiliere;
 import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
@@ -724,5 +725,47 @@ public class EncaissementPrincipalServiceImpl implements EncaissementPrincipalSe
                                  .map(gestimoWebMapper::fromEncaissementPrincipalAppelLoyerEncaissDto)
                                 .collect(Collectors.toList());  
         }
+
+        @Override
+        public StatistiquePeriodeDto statistiquePeriodeEntreDeuxDate(String periodeDebut, String periodeDFin,
+                        Long idAgence, Long chapitre) {
+                
+                throw new UnsupportedOperationException("Unimplemented method 'statistiquePeriodeEntreDeuxDate'");
+        }
+
+        @Override
+        public StatistiquePeriodeDto statistiqueAnneeEntreDeuxDate(int anneeDebut, int anneeFin, Long idAgence,
+                        Long chapitre) {
+                
+                throw new UnsupportedOperationException("Unimplemented method 'statistiqueAnneeEntreDeuxDate'");
+        }
+
+        @Override
+        public double sommeLoyerEntreDeuxPeriode(Long agence, LocalDate dateDebut,
+                        LocalDate dateFin) {
+                      List<Double> listeDesMontantLoyerParPeriode = encaissementPrincipalRepository.findAll()
+                                .stream()
+                                .filter(encaissement -> encaissement.getIdAgence() == agence &&
+                                                encaissement.getDateEncaissement().isAfter(dateDebut) &&
+                                                encaissement.getDateEncaissement().isBefore(dateFin))
+                                .map(EncaissementPrincipal::getMontantEncaissement)
+                                .collect(Collectors.toList());
+                             //LISTE DES SOLDES   
+                                        List<Double> listeSoldLoyerParPeriode = encaissementPrincipalRepository.findAll()
+                                .stream()
+                                .filter(encaissement -> encaissement.getIdAgence() == agence &&
+                                                encaissement.getDateEncaissement().isAfter(dateDebut) &&
+                                                encaissement.getDateEncaissement().isBefore(dateFin))
+                                .map(EncaissementPrincipal::getSoldeEncaissement)
+                                .collect(Collectors.toList());
+             //   Double totalEncaissement = listeDesMontantLoyerParPeriode.stream().mapToDouble(Double::doubleValue).sum();
+               
+                Double totalEncaissement =listeSoldLoyerParPeriode.stream().mapToDouble(Double::doubleValue).sum()+ listeDesMontantLoyerParPeriode.stream().mapToDouble(Double::doubleValue).sum();
+               
+
+                return totalEncaissement;
+        }
+
+        
 
 }

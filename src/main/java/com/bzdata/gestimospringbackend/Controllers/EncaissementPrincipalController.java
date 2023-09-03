@@ -126,7 +126,17 @@ public class EncaissementPrincipalController {
         return ResponseEntity.ok(encaissementPrincipalService.sommeEncaissementParAgenceEtParPeriode(idAgence,
                 dateDebutLocalDate, dateFinLocalDate));
     }
-
+ @Operation(summary = "Total des encaissements par agence et par periode", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/sommeLoyerParAgenceEtParPeriode/{idAgence}/{datedebut}/{datefin}")
+    public ResponseEntity<Double> sommeLoyerParAgenceEtParPeriode(
+            @PathVariable Long idAgence,
+            @PathVariable("datedebut") String datedebut,
+            @PathVariable("datefin") String datefin) {      
+        LocalDate dateDebutLocalDate = LocalDate.parse(datedebut, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        LocalDate dateFinLocalDate = LocalDate.parse(datefin, DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        return ResponseEntity.ok(encaissementPrincipalService.sommeLoyerEntreDeuxPeriode(idAgence,
+                dateDebutLocalDate, dateFinLocalDate));
+    }
     @GetMapping("/getTotalEncaissementsParMois/{idAgence}/{datedebut}/{datefin}")
     public ResponseEntity<Map<YearMonth, Double>> getTotalEncaissementsParMois(
             @PathVariable Long idAgence,

@@ -310,6 +310,7 @@ public class GestimoWebMapperImpl {
     encaissementPrincipalDTO.setMontantPaye(
       encaissementPrincipal.getMontantEncaissement()
     );
+    encaissementPrincipalDTO.setDateEncaissement(encaissementPrincipal.getDateEncaissement());
     encaissementPrincipalDTO.setSoldeAppelLoyer(
       encaissementPrincipal.getSoldeEncaissement()
     );
@@ -591,7 +592,7 @@ return encaissementPrincipalDTO;
   public ImageDataDto fromImageData(ImageData imageData) {
     ImageDataDto imageDataDto = new ImageDataDto();
     BeanUtils.copyProperties(imageData, imageDataDto);
-
+imageDataDto.setBienimmobilier(imageData.getBienimmobilier().getId());
     return imageDataDto;
   }
 

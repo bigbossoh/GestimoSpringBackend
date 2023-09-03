@@ -32,6 +32,8 @@ public class AppelLoyerEncaissDto {
   boolean isSolderAppelLoyer;
   boolean isCloturer;
   boolean isUnLock;
+  //ENCAISSEMENT
+  LocalDate dateEncaissement;
   // Locataire
   String nomLocataire;
   String prenomLocataire;
