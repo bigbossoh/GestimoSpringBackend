@@ -43,4 +43,6 @@ public class ReservationSaveOrUpdateDto {
     int nmbreHomme;
     int nmbreFemme;
     int nmbrEnfant;
+    public void setUtilisateurRequestDto(String string) {
+    }
 }
