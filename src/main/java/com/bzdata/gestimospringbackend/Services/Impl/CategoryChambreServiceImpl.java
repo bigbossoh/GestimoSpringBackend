@@ -17,18 +17,19 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class CategoryChambreServiceImpl implements CategoryChambreService {
     final CategoryChambreRepository categoryChambreRepository;
     private final ObjectsValidator<CategoryChambreSaveOrUpdateDto> validator;
 
     @Override
-    public Long save(CategoryChambreSaveOrUpdateDto dto) {
-        // TODO Auto-generated method stub
+    public Long save(CategoryChambreSaveOrUpdateDto dto) {        
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
@@ -86,6 +87,28 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
             return GestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
         }
 
+    }
+
+    @Override
+    public CategoryChambreSaveOrUpdateDto saveOrUpdateCategoryChambre(CategoryChambreSaveOrUpdateDto dto) {
+       log.info("Info sur le dto est : {}",dto);
+        CategorieChambre categorieChambre=categoryChambreRepository.findById(dto.getId()).orElse(null);
+     if (categorieChambre!=null) {
+        categorieChambre.setDescription(dto.getDescription());
+        categorieChambre.setName(dto.getName());
+        categorieChambre.setPrice(dto.getPrice());
+        categoryChambreRepository.save(categorieChambre);
+         return GestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
+      
+     }
+     CategorieChambre newCategite= new CategorieChambre();
+     newCategite.setIdCreateur(dto.getIdCreateur());
+     newCategite.setIdAgence(dto.getIdAgence());
+       newCategite.setDescription(dto.getDescription());
+        newCategite.setName(dto.getName());
+        newCategite.setPrice(dto.getPrice());
+        categoryChambreRepository.save(newCategite);
+        return GestimoWebMapperImpl.fromCategoryChambre(newCategite);
     }
 
 }
