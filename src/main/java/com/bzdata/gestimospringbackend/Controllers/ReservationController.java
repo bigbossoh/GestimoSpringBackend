@@ -5,6 +5,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
+import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.Services.ReservationService;
 
@@ -32,10 +33,16 @@ public class ReservationController {
     final ReservationService reservationService;
     @PostMapping("/saveorupdate")
     @Operation(summary = "Creation et mise à jour d'une Reservation", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdateReservation(
+    public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdateRes(
             @RequestBody ReservationSaveOrUpdateDto dto) {
 
         return ResponseEntity.ok(reservationService.saveOrUpdate(dto));
+    }
+@PostMapping("/saveorupdatereservation")
+    @Operation(summary = "Creation et mise à jour d'une Reservation avec le bon dto", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ReservationAfficheDto> saveorupdatereservation(
+            @RequestBody ReservationRequestDto dto) {
+        return ResponseEntity.ok(reservationService.saveOrUpdateReservation(dto));
     }
 
     @PostMapping("/saveorupdategood")

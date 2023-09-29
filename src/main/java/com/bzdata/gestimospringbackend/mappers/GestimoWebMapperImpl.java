@@ -5,6 +5,7 @@ import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Models.hotel.Prestation;
 import com.bzdata.gestimospringbackend.Models.hotel.PrestationAdditionnelReservation;
+import com.bzdata.gestimospringbackend.Models.hotel.PrixParCategorieChambre;
 import com.bzdata.gestimospringbackend.Models.hotel.Reservation;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
@@ -310,7 +311,9 @@ public class GestimoWebMapperImpl {
     encaissementPrincipalDTO.setMontantPaye(
       encaissementPrincipal.getMontantEncaissement()
     );
-    encaissementPrincipalDTO.setDateEncaissement(encaissementPrincipal.getDateEncaissement());
+    encaissementPrincipalDTO.setDateEncaissement(
+      encaissementPrincipal.getDateEncaissement()
+    );
     encaissementPrincipalDTO.setSoldeAppelLoyer(
       encaissementPrincipal.getSoldeEncaissement()
     );
@@ -363,17 +366,55 @@ public class GestimoWebMapperImpl {
         .getBienImmobilierOperation()
         .getCodeAbrvBienImmobilier()
     );
-    if (encaissementPrincipal.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getSite()!=null) {
-            encaissementPrincipalDTO.setCommune(encaissementPrincipal.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getSite().getQuartier().getCommune().getNomCommune());
+    if (
+      encaissementPrincipal
+        .getAppelLoyerEncaissement()
+        .getBailLocationAppelLoyer()
+        .getBienImmobilierOperation()
+        .getSite() !=
+      null
+    ) {
+      encaissementPrincipalDTO.setCommune(
+        encaissementPrincipal
+          .getAppelLoyerEncaissement()
+          .getBailLocationAppelLoyer()
+          .getBienImmobilierOperation()
+          .getSite()
+          .getQuartier()
+          .getCommune()
+          .getNomCommune()
+      );
     }
-  encaissementPrincipalDTO.setChapitre(encaissementPrincipal.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getBienImmobilierOperation().getChapitre().getLibelleChapitre());
-    encaissementPrincipalDTO.setIdBailLocation(encaissementPrincipal.getAppelLoyerEncaissement().getId());
-    encaissementPrincipalDTO.setAbrvCodeBail(encaissementPrincipal.getAppelLoyerEncaissement().getBailLocationAppelLoyer().getAbrvCodeBail());
-    encaissementPrincipalDTO.setTypePaiement(encaissementPrincipal.getTypePaiement());
-    encaissementPrincipalDTO.setCloturer(encaissementPrincipal.getAppelLoyerEncaissement().isCloturer());
-    encaissementPrincipalDTO.setSolderAppelLoyer(encaissementPrincipal.getAppelLoyerEncaissement().isSolderAppelLoyer());
-    encaissementPrincipalDTO.setUnLock(encaissementPrincipal.getAppelLoyerEncaissement().isUnLock());
-return encaissementPrincipalDTO;
+    encaissementPrincipalDTO.setChapitre(
+      encaissementPrincipal
+        .getAppelLoyerEncaissement()
+        .getBailLocationAppelLoyer()
+        .getBienImmobilierOperation()
+        .getChapitre()
+        .getLibelleChapitre()
+    );
+    encaissementPrincipalDTO.setIdBailLocation(
+      encaissementPrincipal.getAppelLoyerEncaissement().getId()
+    );
+    encaissementPrincipalDTO.setAbrvCodeBail(
+      encaissementPrincipal
+        .getAppelLoyerEncaissement()
+        .getBailLocationAppelLoyer()
+        .getAbrvCodeBail()
+    );
+    encaissementPrincipalDTO.setTypePaiement(
+      encaissementPrincipal.getTypePaiement()
+    );
+    encaissementPrincipalDTO.setCloturer(
+      encaissementPrincipal.getAppelLoyerEncaissement().isCloturer()
+    );
+    encaissementPrincipalDTO.setSolderAppelLoyer(
+      encaissementPrincipal.getAppelLoyerEncaissement().isSolderAppelLoyer()
+    );
+    encaissementPrincipalDTO.setUnLock(
+      encaissementPrincipal.getAppelLoyerEncaissement().isUnLock()
+    );
+    return encaissementPrincipalDTO;
   }
 
   // MAPPER DES ETAGES
@@ -592,8 +633,17 @@ return encaissementPrincipalDTO;
   public ImageDataDto fromImageData(ImageData imageData) {
     ImageDataDto imageDataDto = new ImageDataDto();
     BeanUtils.copyProperties(imageData, imageDataDto);
-imageDataDto.setBienimmobilier(imageData.getBienimmobilier().getId());
+    imageDataDto.setBienimmobilier(imageData.getBienimmobilier().getId());
     return imageDataDto;
+  }
+
+  public PrixParCategorieChambreDto fromPrixParCategorieChambreDto(
+    PrixParCategorieChambre prixParCategorieChambre
+  ) {
+    PrixParCategorieChambreDto prixParCategorieChambreDto = new PrixParCategorieChambreDto();
+    BeanUtils.copyProperties(prixParCategorieChambre, prixParCategorieChambreDto);    
+    prixParCategorieChambreDto.setIdCategorieChambre(prixParCategorieChambre.getId());
+    return prixParCategorieChambreDto;
   }
 
   public static PrestationAdditionnelReservationSaveOrrUpdate fromPrestationAdditionnelReservation(
