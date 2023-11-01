@@ -19,6 +19,7 @@ public interface SuivieDepenseService {
   List<SuivieDepenseDto> findByAllEncaissementByPeriode(
     SuivieDepenseEncaisPeriodeDto suivieDepenseEncaisPeriodeDto
   );
+  int countSuiviNonCloturerAvantDate(LocalDate dateEncaii,Long idCreateur);
   List<SuivieDepenseDto> findAlEncaissementParAgence(Long idAgence);
   SuivieDepenseEncaisPeriodeDto totalSuiviDepenseEntreDeuxDate(
     Long idAgence,

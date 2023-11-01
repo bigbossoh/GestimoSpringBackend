@@ -23,6 +23,7 @@ public class PrixParCategorieChambre extends AbstractEntity{
     int intervalPrix;
     String description;
     int nbrDiffJour;
+    double pourcentReduc;
     @ManyToOne
     CategorieChambre categorieChambre;
 

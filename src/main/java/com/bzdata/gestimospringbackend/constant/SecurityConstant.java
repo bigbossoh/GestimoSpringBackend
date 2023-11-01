@@ -16,10 +16,10 @@ public class SecurityConstant {
     public static final String ACCESS_DENIED_MESSAGE = "You do not have permission to access this page";
     public static final String OPTIONS_HTTP_METHOD = "OPTIONS";
     public static final String[] PUBLIC_URLS = {
-            "/**/envoimail/**","**/bail/**","/actuator/**","/**/categoriechambre/**",
+            "/**/envoimail/**","/gestimoweb/api/v1/image","**/bail/**","/actuator/**","/**/categoriechambre/**",
             "/gestimoweb/api/v1/auth/login", "/**/accountVerification/**", "/login","/**/prixparcategorie/**",
             "/swagger-ui/**", "/v3/api-docs/**", "/**/print/**", "/**/magasin/**",
-             "/**/bienImmobilier/**","/**/suiviedepense/**","/**/droitAccess/**","/**/appartement/**","/**/image/**"
+             "/**/bienImmobilier/**","/**/suiviedepense/**","/**/droitAccess/**","/**/appartement/**","/**/image/**","/**/cloturecaisse/**","/**/reservation/**"
     };
     // public static final String[] PUBLIC_URLS = { "**" };
     // "/**/utilisateurs/singup",

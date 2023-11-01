@@ -1,9 +1,11 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaisPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaissementDto;
 import com.bzdata.gestimospringbackend.Models.SuivieDepense;
+
 import com.bzdata.gestimospringbackend.Services.SuivieDepenseService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
@@ -31,6 +33,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
   @Override
   public List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto) {
+ 
     List<String> errors = SuivieDepenseValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("l'objet suivie de depense n'est pas valide {}", errors);
@@ -53,6 +56,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       SuivieDepense suivieDepenseSaved = suivieDepenseRepository.save(
         suivieDepense
       );
+  
       bailMapperImpl.fromSuivieDepense(suivieDepenseSaved);
       return findAlEncaissementParAgence(dto.getIdAgence());
     } else {
@@ -250,5 +254,21 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       )
       .map(bailMapperImpl::fromSuivieDepense)
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public int countSuiviNonCloturerAvantDate(LocalDate dateEncai,Long idCreateur) {
+    List<SuivieDepenseDto> suivieDepenseDto= suivieDepenseRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(agence ->
+        agence.getIdAgence() == idCreateur &&
+        agence.isCloturerSuivi()==false&&
+        agence.getDateEncaissement().isBefore(dateEncai) 
+       
+      )
+      .map(bailMapperImpl::fromSuivieDepense)
+      .collect(Collectors.toList());
+   return suivieDepenseDto.size();
   }
 }

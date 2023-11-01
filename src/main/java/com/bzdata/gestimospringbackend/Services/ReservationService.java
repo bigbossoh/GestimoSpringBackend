@@ -9,7 +9,7 @@ public interface ReservationService
   extends AbstractService<ReservationSaveOrUpdateDto> {
   public ReservationAfficheDto saveOrUpdateGood(ReservationSaveOrUpdateDto dto);
 
-  public List<ReservationAfficheDto> findAlGood();
+  List<ReservationAfficheDto> findAlGood();
 
   public ReservationAfficheDto findByIdGood(Long id);
 

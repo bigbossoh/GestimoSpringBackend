@@ -4,6 +4,7 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaisPeriodeDto;
+import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
 import com.bzdata.gestimospringbackend.Services.SuivieDepenseService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
 public class SuivieDepenseController {
-
+private ClotureCaisseService clotureCaisseService;
   private final SuivieDepenseService suivieDepenseService;
 
   @PostMapping("/saveSuivieDepense")

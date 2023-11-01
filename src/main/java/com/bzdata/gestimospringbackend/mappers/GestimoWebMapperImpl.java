@@ -31,6 +31,7 @@ public class GestimoWebMapperImpl {
   final UtilisateurRepository utilisateurRepository;
   final AppelLoyerRepository appelLoyerRepository;
   final EtageRepository etageRepository;
+  final AppartementRepository appartementRepository;
 
   // AppelLoyer
   public AppelLoyer fromAppelLoyerDto(
@@ -464,6 +465,25 @@ public class GestimoWebMapperImpl {
         .getUtilisateurProprietaire()
         .getPrenom()
     );
+    if (appartement.getCategorieApartement() != null) {
+      appartementDto.setNbrDiffJourCategorie(
+        appartement.getCategorieApartement().getNbrDiffJour()
+      );
+      appartementDto.setNameCategorie(
+        appartement.getCategorieApartement().getName()
+      );
+      appartementDto.setPourcentReducCategorie(
+        appartement.getCategorieApartement().getPourcentReduc()
+      );
+      appartementDto.setPriceCategorie(
+        appartement.getCategorieApartement().getPrice()
+      );
+    } else {
+      appartementDto.setNbrDiffJourCategorie(0);
+      appartementDto.setNameCategorie("");
+      appartementDto.setPourcentReducCategorie(0);
+      appartementDto.setPriceCategorie(0);
+    }
     return appartementDto;
   }
 
@@ -603,8 +623,11 @@ public class GestimoWebMapperImpl {
     return serviceAditionnelSaveOrUpdateDto;
   }
 
-  public static ReservationAfficheDto fromReservation(Reservation reservation) {
+  public ReservationAfficheDto fromReservation(Reservation reservation) {
     ReservationAfficheDto reservationSaveOrUpdateDto = new ReservationAfficheDto();
+    Appartement appartement = appartementRepository
+      .findById(reservation.getBienImmobilierOperation().getId())
+      .orElse(null);
     BeanUtils.copyProperties(reservation, reservationSaveOrUpdateDto);
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
@@ -614,7 +637,21 @@ public class GestimoWebMapperImpl {
       " " +
       reservation.getUtilisateurOperation().getPrenom()
     );
-
+    reservationSaveOrUpdateDto.setEmail(
+      reservation.getUtilisateurOperation().getEmail()
+    );
+    reservationSaveOrUpdateDto.setUsername(
+      reservation.getUtilisateurOperation().getUsername()
+    );
+    if (appartement != null) {
+      reservationSaveOrUpdateDto.setDescriptionCategori(
+        appartement.getCategorieApartement().getDescription()
+      );
+      reservationSaveOrUpdateDto.setNbrDiffJourCategori(
+        appartement.getCategorieApartement().getNbrDiffJour()
+      );
+    }
+    //reservationSaveOrUpdateDto.setCreationDate(reservation.getCreationDate());
     return reservationSaveOrUpdateDto;
   }
 
@@ -641,8 +678,13 @@ public class GestimoWebMapperImpl {
     PrixParCategorieChambre prixParCategorieChambre
   ) {
     PrixParCategorieChambreDto prixParCategorieChambreDto = new PrixParCategorieChambreDto();
-    BeanUtils.copyProperties(prixParCategorieChambre, prixParCategorieChambreDto);    
-    prixParCategorieChambreDto.setIdCategorieChambre(prixParCategorieChambre.getId());
+    BeanUtils.copyProperties(
+      prixParCategorieChambre,
+      prixParCategorieChambreDto
+    );
+    prixParCategorieChambreDto.setIdCategorieChambre(
+      prixParCategorieChambre.getId()
+    );
     return prixParCategorieChambreDto;
   }
 
@@ -661,5 +703,17 @@ public class GestimoWebMapperImpl {
       prestationAdditionnelReservation.getServiceAdditionnelle().getAmount()
     );
     return prestationAdditionnelReservationSaveOrrUpdate;
+  }
+
+  public ClotureCaisseDto fromClotureCaisse(ClotureCaisse cloture) {
+    ClotureCaisseDto clotureCaisseDto = new ClotureCaisseDto();
+    BeanUtils.copyProperties(cloture, clotureCaisseDto);
+    return clotureCaisseDto;
+  }
+
+  public ClotureCaisse toClotureCaisse(ClotureCaisseDto dto) {
+    ClotureCaisse clotureCaisse = new ClotureCaisse();
+    BeanUtils.copyProperties(dto, clotureCaisse);
+    return clotureCaisse;
   }
 }

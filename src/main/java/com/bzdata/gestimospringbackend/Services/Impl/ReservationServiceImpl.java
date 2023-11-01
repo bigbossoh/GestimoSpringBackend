@@ -1,18 +1,24 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
+import static com.bzdata.gestimospringbackend.enumeration.Role.*;
+
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.UtilisateurRequestDto;
+import com.bzdata.gestimospringbackend.Models.Appartement;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Models.hotel.Reservation;
 import com.bzdata.gestimospringbackend.Services.AppartementService;
+import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
 import com.bzdata.gestimospringbackend.Services.ReservationService;
 import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
+import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.ReservationRepository;
+import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -25,9 +31,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 @Transactional
-@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReservationServiceImpl implements ReservationService {
 
@@ -35,10 +41,11 @@ public class ReservationServiceImpl implements ReservationService {
   final AppartementService appartementService;
   final ReservationRepository reservationRepository;
   final GestimoWebMapperImpl gestimoWebMapperImpl;
+  final UtilisateurRepository utilisateurRepository;
+  final AppartementRepository appartementRepository;
 
   @Override
   public Long save(ReservationSaveOrUpdateDto dto) {
-    // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'save'");
   }
 
@@ -47,8 +54,8 @@ public class ReservationServiceImpl implements ReservationService {
     return reservationRepository
       .findAll()
       .stream()
-      .sorted(Comparator.comparing(Reservation::getCreationDate).reversed())
-      .map(GestimoWebMapperImpl::fromReservation)
+      .map(gestimoWebMapperImpl::fromReservation)
+      .filter(res -> res.getIdAgence() == 1)
       .collect(Collectors.toList());
   }
 
@@ -56,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
   public ReservationAfficheDto findByIdGood(Long id) {
     Reservation reservation = reservationRepository.findById(id).orElse(null);
     if (reservation != null) {
-      return GestimoWebMapperImpl.fromReservation(reservation);
+      return gestimoWebMapperImpl.fromReservation(reservation);
     } else {
       return null;
     }
@@ -175,7 +182,13 @@ public class ReservationServiceImpl implements ReservationService {
     AppartementDto appartementDto = appartementService.findById(
       dto.getIdAppartementdDto()
     );
-
+    Appartement saveApp = appartementRepository
+      .findById(dto.getIdAppartementdDto())
+      .orElse(null);
+    if (saveApp != null) {
+      saveApp.setOccupied(true);
+      appartementRepository.save(saveApp);
+    }
     UtilisateurRequestDto utilisateurRequestDto = dto.getUtilisateurRequestDto();
     Objects.requireNonNull(
       utilisateurRequestDto,
@@ -222,7 +235,7 @@ public class ReservationServiceImpl implements ReservationService {
     );
 
     Reservation saveReservation = reservationRepository.save(reservation);
-    return GestimoWebMapperImpl.fromReservation(saveReservation);
+    return gestimoWebMapperImpl.fromReservation(saveReservation);
   }
 
   @Override
@@ -240,6 +253,7 @@ public class ReservationServiceImpl implements ReservationService {
   public ReservationAfficheDto saveOrUpdateReservation(
     ReservationRequestDto dto
   ) {
+    log.info("DTO {}", dto);
     Objects.requireNonNull(dto, "Le paramètre dto ne doit pas être nul");
 
     AppartementDto appartementDto = appartementService.findById(
@@ -249,17 +263,22 @@ public class ReservationServiceImpl implements ReservationService {
     UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findUtilisateurByUsername(
       dto.getUsername()
     );
-    Utilisateur utilisateur;
-
-    if (utilisateurRequestDto.getId() == 0) {
-      utilisateur =
-        gestimoWebMapperImpl.fromUtilisateurRequestDto(
-          utilisateurService.findUtilisateurByUsername(
-            utilisateurRequestDto.getUsername()
-          )
-        );
+    Utilisateur utilisateur = new Utilisateur();
+    Utilisateur utilisateurSave;
+    if (utilisateurRequestDto == null) {
+      utilisateur.setUsername(dto.getUsername());
+      utilisateur.setNom(dto.getNom());
+      utilisateur.setPrenom(dto.getPrenom());
+      utilisateur.setEmail(dto.getEmail());
+      utilisateur.setIdAgence(dto.getIdAgence());
+      utilisateur.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
+      utilisateur.setDateDeNaissance(dto.getDateDeNaissance());
+      utilisateur.setMobile(dto.getMobile());
+      utilisateur.setRoleUsed(ROLE_CLIENT_HOTEL.name());
+      utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
+      utilisateurSave = utilisateurRepository.save(utilisateur);
     } else {
-      utilisateur =
+      utilisateurSave =
         gestimoWebMapperImpl.toUtilisateur(
           utilisateurService.saveUtilisateur(utilisateurRequestDto)
         );
@@ -272,8 +291,12 @@ public class ReservationServiceImpl implements ReservationService {
     } else {
       reservation = reservationRepository.getById(dto.getId());
     }
-
-    reservation.setUtilisateurOperation(utilisateur);
+    log.info(
+      "THE ID UTILISATEUR IS THE NEXT EP {}",
+      utilisateurSave.getUsername()
+    );
+    log.info("Local date {}", dto.getDateDebut());
+    reservation.setUtilisateurOperation(utilisateurSave);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
     reservation.setAdvancePayment(dto.getAdvancePayment());
@@ -289,6 +312,11 @@ public class ReservationServiceImpl implements ReservationService {
     );
 
     Reservation saveReservation = reservationRepository.save(reservation);
-    return GestimoWebMapperImpl.fromReservation(saveReservation);
+    log.info(
+      "THE ID UTILISATEUR IS THE NEXT EP en THE SAVE {},  {}",
+      reservationRepository,
+      saveReservation
+    );
+    return gestimoWebMapperImpl.fromReservation(saveReservation);
   }
 }

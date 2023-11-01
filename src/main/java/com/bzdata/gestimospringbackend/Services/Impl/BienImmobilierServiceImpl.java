@@ -30,12 +30,15 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
 
   @Override
   public List<BienImmobilierAffiheDto> findAll(Long idAgence, Long chapitre) {
-    if (chapitre == 0) {
+    if (chapitre == 0) {     
       return bienImmobilierRepository
         .findAll()
         .stream()
+         .filter(agence -> agence.getIdAgence() == idAgence
+         &&
+          agence.getChapitre().getId() == 1)
         .map(gestimoWebMapperImpl::fromBienImmobilier)
-        .filter(agence -> agence.getIdAgence() == idAgence)
+       
         .collect(Collectors.toList());
     } else {
       return bienImmobilierRepository
@@ -81,7 +84,7 @@ public class BienImmobilierServiceImpl implements BienImmobilierService {
   public Bienimmobilier findBienByBailEnCours(Long idBail) {
     BailLocation bailLocation = bailLocationRepository
       .findById(idBail)
-      .filter(bail -> bail.isEnCoursBail() == true)
+      .filter(bail -> bail.isEnCoursBail() == true&&bail.getBienImmobilierOperation().isBienMeublerResidence()==false)
       .orElse(null);
     if (bailLocation != null) {
       Bienimmobilier bienimmobilier = bienImmobilierRepository
