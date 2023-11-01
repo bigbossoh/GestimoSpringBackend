@@ -60,7 +60,7 @@ public class MagasinServiceImpl implements MagasinService {
     public Long maxOfNumBienMagasin(Long idAgence) {
         LongSummaryStatistics collectMaxNumBien = magasinRepository.findAll()
                 .stream()
-                .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .collect(Collectors.summarizingLong(Magasin::getNumMagasin));
         return collectMaxNumBien.getMax();
     }
@@ -70,7 +70,7 @@ public class MagasinServiceImpl implements MagasinService {
         log.info("All Magasin 21 {}", magasinRepository.findAll().toArray());
         return magasinRepository.findAll().stream()
                 .map(MagasinResponseDto::fromEntity)
-                .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .collect(Collectors.toList());
     }
 
@@ -101,7 +101,7 @@ public class MagasinServiceImpl implements MagasinService {
     public List<MagasinDto> findAllBySite(SiteRequestDto siteRequestDto) {
 
         return magasinRepository.findAll().stream()
-                .filter(magasin -> magasin.getSite().equals(siteRequestDto))
+                .filter(magasin -> magasin.getSite().equals(siteRequestDto)&&magasin.isBienMeublerResidence()==false)
                 .map(gestimoWebMapperImpl::fromMagasin)
                 .collect(Collectors.toList());
     }
@@ -110,7 +110,7 @@ public class MagasinServiceImpl implements MagasinService {
     public List<MagasinDto> findAllByIdSite(Long id) {
 
         return magasinRepository.findAll().stream()
-                .filter(magasin -> magasin.getSite().getId().equals(id))
+                .filter(magasin -> magasin.getSite().getId().equals(id)&&magasin.isBienMeublerResidence()==false)
                 .map(gestimoWebMapperImpl::fromMagasin)
                 .collect(Collectors.toList());
     }
@@ -119,7 +119,7 @@ public class MagasinServiceImpl implements MagasinService {
     public List<MagasinDto> findAllByIdEtage(Long id) {
 
         return magasinRepository.findAll().stream()
-                .filter(magasin -> magasin.getEtageMagasin().getId().equals(id))
+                .filter(magasin -> magasin.getEtageMagasin().getId().equals(id)&&magasin.isBienMeublerResidence()==false)
                 .map(gestimoWebMapperImpl::fromMagasin)
                 .collect(Collectors.toList());
     }
@@ -129,7 +129,7 @@ public class MagasinServiceImpl implements MagasinService {
         return magasinRepository.findAll().stream()
                 .map(MagasinResponseDto::fromEntity)
                 .filter((mag) -> !mag.isOccupied())
-                .filter(agence->agence.getIdAgence()==idAgence)
+                .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .collect(Collectors.toList());
     }
 
@@ -291,7 +291,7 @@ public class MagasinServiceImpl implements MagasinService {
     private Long nombreVillaByIdSite(Site site) {
         Map<Site, Long> numbreVillabySite = magasinRepository.findAll()
                 .stream()
-                .filter(e -> e.getSite().equals(site))
+                .filter(e -> e.getSite().equals(site)&&e.isBienMeublerResidence()==false)
                 .collect(Collectors.groupingBy(Magasin::getSite, Collectors.counting()));
 
         for (Map.Entry m : numbreVillabySite.entrySet()) {

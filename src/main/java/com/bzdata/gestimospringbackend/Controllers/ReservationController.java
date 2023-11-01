@@ -2,13 +2,16 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
-import java.util.List;
-
 import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.Services.ReservationService;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,59 +21,81 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @RestController
 @RequestMapping(APP_ROOT + "/reservation")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@SecurityRequirement(name = "gestimoapi")
+//@SecurityRequirement(name = "gestimoapi")
 public class ReservationController {
-    final ReservationService reservationService;
-    @PostMapping("/saveorupdate")
-    @Operation(summary = "Creation et mise à jour d'une Reservation", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdateRes(
-            @RequestBody ReservationSaveOrUpdateDto dto) {
 
-        return ResponseEntity.ok(reservationService.saveOrUpdate(dto));
-    }
-@PostMapping("/saveorupdatereservation")
-    @Operation(summary = "Creation et mise à jour d'une Reservation avec le bon dto", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ReservationAfficheDto> saveorupdatereservation(
-            @RequestBody ReservationRequestDto dto) {
-        return ResponseEntity.ok(reservationService.saveOrUpdateReservation(dto));
-    }
+  final ReservationService reservationService;
 
-    @PostMapping("/saveorupdategood")
-    @Operation(summary = "Creation et mise à jour d'une Reservation bon", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<ReservationAfficheDto> saveorupdategood(
-            @RequestBody ReservationSaveOrUpdateDto dto) {
+  @PostMapping("/saveorupdate")
+  @Operation(
+    summary = "Creation et mise à jour d'une Reservation",
+    security = @SecurityRequirement(name = "bearerAuth")
+  )
+  public ResponseEntity<ReservationSaveOrUpdateDto> saveorupdateRes(
+    @RequestBody ReservationSaveOrUpdateDto dto
+  ) {
+    return ResponseEntity.ok(reservationService.saveOrUpdate(dto));
+  }
 
-        return ResponseEntity.ok(reservationService.saveOrUpdateGood(dto));
-    }
+  @PostMapping("/saveorupdatereservation")
+  @Operation(
+    summary = "Creation et mise à jour d'une Reservation avec le bon dto"
+  )
+  public ResponseEntity<ReservationAfficheDto> saveorupdatereservation(
+    @RequestBody ReservationRequestDto dto
+  ) {
+    //System.out.println("" + dto.getNom());
+    return ResponseEntity.ok(reservationService.saveOrUpdateReservation(dto));
+  }
 
-      // SUPPRESSION D'UNE COMMUNE
-      @Operation(summary = "Suppression d'une Reservation avec l'ID en paramètre", security = @SecurityRequirement(name = "bearerAuth"))
-      @DeleteMapping("/delete/{id}")
-      public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
+  @PostMapping("/saveorupdategood")
+  @Operation(
+    summary = "Creation et mise à jour d'une Reservation bon"
+    // ,
+    // security = @SecurityRequirement(name = "bearerAuth")
+  )
+  public ResponseEntity<ReservationAfficheDto> saveorupdategood(
+    @RequestBody ReservationSaveOrUpdateDto dto
+  ) {
+    return ResponseEntity.ok(reservationService.saveOrUpdateGood(dto));
+  }
 
-          reservationService.delete(id);
-          return ResponseEntity.ok().build();
-      }
-      @Operation(summary = "Trouver une Reservation par son ID", security = @SecurityRequirement(name = "bearerAuth"))
-      @GetMapping("/findById/{id}")
-      public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByIDReservation(@PathVariable("id") Long id) {
+  // SUPPRESSION D'UNE COMMUNE
+  @Operation(
+    summary = "Suppression d'une Reservation avec l'ID en paramètre"
+    // ,
+    // security = @SecurityRequirement(name = "bearerAuth")
+  )
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<Void> deleteReservation(@PathVariable("id") Long id) {
+    reservationService.delete(id);
+    return ResponseEntity.ok().build();
+  }
 
-          return ResponseEntity.ok(reservationService.findById(id));
-      }
-      // TOUTES LES RESERVATION
-    @Operation(summary = "Liste de toutes les Reservation", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/all")
-    public ResponseEntity<List<ReservationSaveOrUpdateDto>> findAllCategorieChambreReservation() {
-        return ResponseEntity.ok(reservationService.findAll());
-    }
+  @Operation(
+    summary = "Trouver une Reservation par son ID"
+    // ,
+    // security = @SecurityRequirement(name = "bearerAuth")
+  )
+  @GetMapping("/findById/{id}")
+  public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByIDReservation(
+    @PathVariable("id") Long id
+  ) {
+    return ResponseEntity.ok(reservationService.findById(id));
+  }
+
+  // TOUTES LES RESERVATION
+  @Operation(
+    summary = "Liste de toutes les Reservations"
+    // ,
+    // security = @SecurityRequirement(name = "bearerAuth")
+  )
+  @GetMapping("/allreservation")
+  public ResponseEntity<List<ReservationAfficheDto>> allreservation() {
+    return ResponseEntity.ok(reservationService.findAlGood());
+  }
 }

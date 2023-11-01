@@ -49,7 +49,7 @@ public class BailVillaServiceImpl implements BailVillaService {
     @Override
     public OperationDto saveNewBailVilla(BailVillaDto dto) {
         BailLocation bailLocationVilla = new BailLocation();
-        log.info("We are going to create  a new Bail Villa SERVICE {}", dto);
+    //    log.info("We are going to create  a new Bail Villa SERVICE {}", dto);
         List<String> errors = BailVillaDtoValidator.validate(dto);
         if (!errors.isEmpty()) {
             log.error("le Villa n'est pas valide {}", errors);
