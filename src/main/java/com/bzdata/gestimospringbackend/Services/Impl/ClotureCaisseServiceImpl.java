@@ -5,7 +5,6 @@ import com.bzdata.gestimospringbackend.Models.ClotureCaisse;
 import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ClotureCaisseRepository;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -81,38 +80,81 @@ public class ClotureCaisseServiceImpl implements ClotureCaisseService {
     return caisseRepository
       .findAll()
       .stream()
-      .filter(cai -> cai.getCreationDate().isBefore(dateEnCours))
+      .filter(cai ->
+        cai.getCreationDate().isBefore(dateEnCours) &&
+        !cai.getStatutCloture().equals("cloturer")
+      )
       .map(gestimoWebMapper::fromClotureCaisse)
       .collect(Collectors.toList());
   }
 
   @Override
-  public List<ClotureCaisseDto> findNonCloturerByDate(
+  public List<ClotureCaisseDto> findNonCloturerByDateAndCaisseAndChapitre(
     Instant dateEnCours,
-    Long idCaisse
+    Long idCaisse,
+    String idChapitre
   ) {
-    throw new UnsupportedOperationException(
-      "Unimplemented method 'findNonCloturerByDate'"
-    );
-  }
-
-  @Override
-  public List<ClotureCaisseDto> findNAllClotureCaisseByDate(
-    Instant dateEnCours,
-    Long idCaisse
-  ) {
-    throw new UnsupportedOperationException(
-      "Unimplemented method 'findNAllClotureCaisseByDate'"
-    );
-  }
-
-  @Override
-  public List<ClotureCaisseDto> findAllByCaissier(Long idCaisse) {
     return caisseRepository
       .findAll()
       .stream()
-      .filter(cai -> cai.getIdCreateur() == idCaisse)
+      .filter(cai ->
+        cai.getCreationDate().isBefore(dateEnCours) &&
+        !cai.getStatutCloture().equals("cloturer") &&
+        cai.getChapitreCloture().equals(idChapitre)
+      )
       .map(gestimoWebMapper::fromClotureCaisse)
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<ClotureCaisseDto> findAllCloturerCaisseByDateAndChapitre(
+    Instant dateEnCours,
+    Long idCaisse,
+    String idChapitre
+  ) {
+    return caisseRepository
+      .findAll()
+      .stream()
+      .filter(cai ->
+        cai.getIdCreateur() == idCaisse &&
+        cai.getChapitreCloture().equals(idChapitre) &&
+        cai.getStatutCloture().equals("cloturer") &&
+        cai.getCreationDate().isBefore(dateEnCours)
+      )
+      .map(gestimoWebMapper::fromClotureCaisse)
+      .collect(Collectors.toList());
+  }
+
+  @Override
+  public List<ClotureCaisseDto> findAllByCaissierAndChapitre(
+    Long idCaisse,
+    String idChapitre
+  ) {
+    return caisseRepository
+      .findAll()
+      .stream()
+      .filter(cai ->
+        cai.getIdCreateur() == idCaisse &&
+        cai.getChapitreCloture().equals(idChapitre)
+      )
+      .map(gestimoWebMapper::fromClotureCaisse)
+      .collect(Collectors.toList());
+  }
+
+  @Override
+  public int countInitClotureByCaissiaireAndChampitre(
+    Long idCaissiaire,
+    String chapitre
+  ) {
+    List<ClotureCaisseDto> find = caisseRepository
+      .findAll()
+      .stream()
+      .filter(cai ->
+        cai.getIdCreateur() == idCaissiaire &&
+        cai.getChapitreCloture().equals(chapitre)
+      )
+      .map(gestimoWebMapper::fromClotureCaisse)
+      .collect(Collectors.toList());
+    return find.size();
   }
 }

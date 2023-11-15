@@ -4,8 +4,9 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import com.bzdata.gestimospringbackend.DTOs.ClotureCaisseDto;
 import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import java.time.Instant;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,10 +33,53 @@ public class ClotureCaisseController {
     return ResponseEntity.ok(clotureCaisseService.saveClotureCaisse(dto));
   }
 
-  @GetMapping("/countcloturecaisse/{idCaisse}")
-  public ResponseEntity<Integer> countClotureCaisse(
-    @PathVariable("idCaisse") Long idCaisse
+  @GetMapping("/countInitClotureByCaissiaireAndChampitre/{idCaisse}/{chapitre}")
+  public ResponseEntity<Integer> countInitClotureByCaissiaireAndChampitre(
+    @PathVariable("idCaisse") Long idCaisse,
+    @PathVariable("chapitre") String chapitre
   ) {
-    return ResponseEntity.ok(clotureCaisseService.countClotureCaisse(idCaisse));
+    return ResponseEntity.ok(
+      clotureCaisseService.countInitClotureByCaissiaireAndChampitre(
+        idCaisse,
+        chapitre
+      )
+    );
+  }
+
+  @PostMapping(
+    "/countInitClotureByCaissiaireAndChampitre/{idCaisse}/{chapitre}"
+  )
+  public ResponseEntity<List<ClotureCaisseDto>> findAllByCaissierAndChapitre(
+    @PathVariable("idCaisse") Long idCaisse,
+    @PathVariable("chapitre") String chapitre
+  ) {
+    return ResponseEntity.ok(
+      clotureCaisseService.findAllByCaissierAndChapitre(idCaisse, chapitre)
+    );
+  }
+  @GetMapping(
+    "/findAllCloturerCaisseByDateAndChapitre/{idCaisse}/{chapitre}/{dateDuJoure}"
+  )
+  public ResponseEntity<List<ClotureCaisseDto>> findAllCloturerCaisseByDateAndChapitre(
+     @PathVariable("dateDuJoure") Instant dateDuJoure,
+    @PathVariable("idCaisse") Long idCaisse,
+    @PathVariable("chapitre") String chapitre
+  ) {
+    return ResponseEntity.ok(
+      clotureCaisseService.findAllCloturerCaisseByDateAndChapitre(dateDuJoure,idCaisse, chapitre)
+    );
+  }
+
+   @GetMapping(
+    "/findNonCloturerByDateAndCaisseAndChapitre/{idCaisse}/{chapitre}/{dateDuJoure}"
+  )
+  public ResponseEntity<List<ClotureCaisseDto>>  findNonCloturerByDateAndCaisseAndChapitre(
+       @PathVariable("dateDuJoure") Instant dateDuJoure,
+    @PathVariable("idCaisse") Long idCaisse,
+    @PathVariable("chapitre") String chapitre
+  ){
+       return ResponseEntity.ok(
+      clotureCaisseService.findNonCloturerByDateAndCaisseAndChapitre(dateDuJoure,idCaisse, chapitre)
+    );
   }
 }

@@ -1,8 +1,10 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import java.util.List;
+
 import com.bzdata.gestimospringbackend.DTOs.PrixParCategorieChambreDto;
 
 public interface PrixParCategorieChambreService extends AbstractService<PrixParCategorieChambreDto>{
     PrixParCategorieChambreDto saveOrUpDatePrixPArCategoryChambre(PrixParCategorieChambreDto dto);
-    PrixParCategorieChambreDto categoriParPrix(Long idCategori);
+    List<PrixParCategorieChambreDto> listPrixParIdCateogori(Long idCategori);
 }

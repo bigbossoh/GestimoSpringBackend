@@ -21,11 +21,13 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
-public class Chapitre {
+public class Chapitre  {
     @Id
     @GeneratedValue
     Long id;
     String libelleChapitre;
     @OneToMany(mappedBy = "chapitre")
     List<Bienimmobilier> biens;
+    @OneToMany(mappedBy="chapitre")
+    List<ChapitreUser>chapitreUsers;
 }

@@ -674,7 +674,7 @@ public class GestimoWebMapperImpl {
     return imageDataDto;
   }
 
-  public PrixParCategorieChambreDto fromPrixParCategorieChambreDto(
+  public PrixParCategorieChambreDto fromPrixParCategorieChambre(
     PrixParCategorieChambre prixParCategorieChambre
   ) {
     PrixParCategorieChambreDto prixParCategorieChambreDto = new PrixParCategorieChambreDto();
@@ -715,5 +715,12 @@ public class GestimoWebMapperImpl {
     ClotureCaisse clotureCaisse = new ClotureCaisse();
     BeanUtils.copyProperties(dto, clotureCaisse);
     return clotureCaisse;
+  }
+  public ChapitreUserDto fromChapitreUser(ChapitreUser chapitreUser){
+    ChapitreUserDto chapitreUserDto= new ChapitreUserDto();
+    chapitreUserDto.setChapite(chapitreUser.getChapitre().getId());
+    chapitreUserDto.setUtilisateur(chapitreUser.getUtilisateurChapitre().getId());
+    chapitreUserDto.setDefaultChapite(chapitreUser.isChapitreDefault());
+    return chapitreUserDto;
   }
 }
