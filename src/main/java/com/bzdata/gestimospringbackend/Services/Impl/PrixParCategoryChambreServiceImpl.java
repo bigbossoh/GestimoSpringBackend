@@ -8,6 +8,7 @@ import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.CategoryChambreRepository;
 import com.bzdata.gestimospringbackend.repository.PrixParCategorieChambreRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -81,7 +82,7 @@ public class PrixParCategoryChambreServiceImpl
       PrixParCategorieChambre saveParCategorieChambre = prixParCategorieChambreService.save(
         parCategorieChambre
       );
-      return gestimoWebMapperImpl.fromPrixParCategorieChambreDto(
+      return gestimoWebMapperImpl.fromPrixParCategorieChambre(
         saveParCategorieChambre
       );
     }
@@ -96,16 +97,20 @@ public class PrixParCategoryChambreServiceImpl
       newPrixParCategorieChambre
     );
 
-    return gestimoWebMapperImpl.fromPrixParCategorieChambreDto(
+    return gestimoWebMapperImpl.fromPrixParCategorieChambre(
       saveParCategorieChambre
     );
   }
 
   @Override
-  public PrixParCategorieChambreDto categoriParPrix(Long idCategori) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException(
-      "Unimplemented method 'categoriParPrix'"
-    );
+  public List<PrixParCategorieChambreDto> listPrixParIdCateogori(
+    Long idCategori
+  ) {
+    return prixParCategorieChambreService
+      .findAll()
+      .stream()
+      .filter(cate -> cate.getCategorieChambre().getId() == idCategori)
+      .map(m->gestimoWebMapperImpl.fromPrixParCategorieChambre(m))
+      .collect(Collectors.toList());
   }
 }

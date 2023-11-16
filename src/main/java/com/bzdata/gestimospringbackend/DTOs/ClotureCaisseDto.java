@@ -24,4 +24,5 @@ public class ClotureCaisseDto {
   double totalEncaisse;
   String clientCloture;
   String statutCloture;
+  String chapitreCloture;
 }

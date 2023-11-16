@@ -131,5 +131,13 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
     return GestimoWebMapperImpl.fromCategoryChambre(newCategite);
   }
 
-
+  @Override
+  public List<CategoryChambreSaveOrUpdateDto> findAllCategorie(Long idAgnce) {
+    return categoryChambreRepository
+      .findAll()
+      .stream()
+      .filter(t->t.getIdAgence()==idAgnce)
+      .map(GestimoWebMapperImpl::fromCategoryChambre)
+      .collect(Collectors.toList());
+  }
 }

@@ -1,7 +1,8 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
 import javax.persistence.Entity;
-
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,15 +16,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ClotureCaisse extends AbstractEntity {
-
-  String entiteCloturer;
-  double montantEncaissement;
-  double soldeEncaissement;
-  double encienSoldReservation;
-  double nvoSoldeReservation;
-  double totalEncaisse;
-  String clientCloture;
-  String statutCloture;
-  String chapitreCloture;
+public class DefaultChapitre extends AbstractEntity {
+  Long idChapitre;
+  String libChapitre;
+  @OneToMany(mappedBy = "defaultChapitre")
+  List<ChapitreUser> chapitreUsers;
 }

@@ -86,8 +86,8 @@ public class CategorieChambreController {
     summary = "Liste de toutes les Communes",
     security = @SecurityRequirement(name = "bearerAuth")
   )
-  @GetMapping("/all")
-  public ResponseEntity<List<CategoryChambreSaveOrUpdateDto>> findAllCategorieChambre() {
-    return ResponseEntity.ok(categoryChambreService.findAll());
+  @GetMapping("/all/{idAgence}")
+  public ResponseEntity<List<CategoryChambreSaveOrUpdateDto>> findAllCategorieChambre(@PathVariable("idAgence")Long idAgence) {
+    return ResponseEntity.ok(categoryChambreService.findAllCategorie(idAgence));
   }
 }
