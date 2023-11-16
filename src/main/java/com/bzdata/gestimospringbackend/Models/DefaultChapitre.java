@@ -1,8 +1,8 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.util.List;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +16,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChapitreUser extends AbstractEntity {
-    boolean chapitreDefault;
-    @ManyToOne
-    DefaultChapitre defaultChapitre;
-    @ManyToOne
-    Utilisateur utilisateurChapitre;
+public class DefaultChapitre extends AbstractEntity {
+  Long idChapitre;
+  String libChapitre;
+  @OneToMany(mappedBy = "defaultChapitre")
+  List<ChapitreUser> chapitreUsers;
 }

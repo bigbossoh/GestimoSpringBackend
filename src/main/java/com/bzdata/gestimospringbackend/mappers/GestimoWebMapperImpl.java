@@ -718,9 +718,16 @@ public class GestimoWebMapperImpl {
   }
   public ChapitreUserDto fromChapitreUser(ChapitreUser chapitreUser){
     ChapitreUserDto chapitreUserDto= new ChapitreUserDto();
-    chapitreUserDto.setChapite(chapitreUser.getChapitre().getId());
+    chapitreUserDto.setChapite(chapitreUser.getDefaultChapitre().getId());
     chapitreUserDto.setUtilisateur(chapitreUser.getUtilisateurChapitre().getId());
     chapitreUserDto.setDefaultChapite(chapitreUser.isChapitreDefault());
+    return chapitreUserDto;
+  }
+    public DefaultChapitreDto fromDefaultChapitre(DefaultChapitre chapitreUser){
+    DefaultChapitreDto chapitreUserDto= new DefaultChapitreDto();
+    chapitreUserDto.setIdChapite(chapitreUser.getIdChapitre());
+    chapitreUserDto.setLibChapitre(chapitreUser.getLibChapitre());
+  
     return chapitreUserDto;
   }
 }

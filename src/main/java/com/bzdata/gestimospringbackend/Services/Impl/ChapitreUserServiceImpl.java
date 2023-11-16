@@ -3,11 +3,13 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.DTOs.ChapitreUserDto;
 import com.bzdata.gestimospringbackend.Models.Chapitre;
 import com.bzdata.gestimospringbackend.Models.ChapitreUser;
+import com.bzdata.gestimospringbackend.Models.DefaultChapitre;
 import com.bzdata.gestimospringbackend.Models.Utilisateur;
 import com.bzdata.gestimospringbackend.Services.ChapitreUserService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreUserRepository;
+import com.bzdata.gestimospringbackend.repository.DefaultChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import java.util.List;
 import lombok.AccessLevel;
@@ -24,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ChapitreUserServiceImpl implements ChapitreUserService {
 
-  final ChapitreRepository chapitreRepository;
+  final DefaultChapitreRepository chapitreRepository;
   final ChapitreUserRepository chapitreUserRepository;
   final UtilisateurRepository utilisateurRepository;
   final GestimoWebMapperImpl gestimoWebMapperImpl;
@@ -70,9 +72,9 @@ ChapitreUserDto chapitreUserDto
     Utilisateur findUser = utilisateurRepository
       .findById(chapitreUserDto.getUtilisateur())
       .orElse(null);
-    Chapitre findChapitre = chapitreRepository.findById(chapitreUserDto.getChapite()).orElse(null);
+    DefaultChapitre findChapitre = chapitreRepository.findById(chapitreUserDto.getChapite()).orElse(null);
     if (findUser != null && findChapitre != null) {
-        chapitreUser.setChapitre(findChapitre);
+        chapitreUser.setDefaultChapitre(findChapitre);
         chapitreUser.setUtilisateurChapitre(findUser);
         chapitreUser.setChapitreDefault(chapitreUserDto.isDefaultChapite());
       ChapitreUser chapitreSave=  chapitreUserRepository.save(chapitreUser);

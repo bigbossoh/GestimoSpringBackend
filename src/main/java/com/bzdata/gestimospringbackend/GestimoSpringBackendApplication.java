@@ -6,6 +6,7 @@ import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERV
 import com.bzdata.gestimospringbackend.Models.Chapitre;
 import com.bzdata.gestimospringbackend.Models.ChapitreUser;
 import com.bzdata.gestimospringbackend.Models.Commune;
+import com.bzdata.gestimospringbackend.Models.DefaultChapitre;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import com.bzdata.gestimospringbackend.Models.Role;
@@ -18,6 +19,7 @@ import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreUserRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
+import com.bzdata.gestimospringbackend.repository.DefaultChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
 import com.bzdata.gestimospringbackend.repository.PaysRepository;
 import com.bzdata.gestimospringbackend.repository.QuartierRepository;
@@ -151,7 +153,8 @@ public class GestimoSpringBackendApplication {
     AgenceImmobiliereRepository agenceImmobiliereRepository,
     MagasinRepository magasinRepository,
     ChapitreRepository chapitreRepository,
-    ChapitreUserRepository chapitreUserRepository
+    ChapitreUserRepository chapitreUserRepository,
+    DefaultChapitreRepository defaultChapitreRepository
   ) {
     String mdp = passwordEncoder.encode("superviseur");
     Utilisateur utilisateur = new Utilisateur();
@@ -167,12 +170,26 @@ public class GestimoSpringBackendApplication {
         pays.setNomPays("Côte d'Ivoire");
         paysRepository.save(pays);
       }
+      Long couchDefaultChapitre = defaultChapitreRepository.count();
+      if (couchDefaultChapitre == 0) {
+        Chapitre chapitre1 = chapitreRepository.findById(1L).orElse(null);
+        DefaultChapitre def1 = new DefaultChapitre();
+        def1.setIdChapitre(chapitre1.getId());
+        def1.setLibChapitre(chapitre1.getLibelleChapitre());
+        defaultChapitreRepository.save(def1);
+
+          Chapitre chapitre2 = chapitreRepository.findById(2L).orElse(null);
+        DefaultChapitre def2 = new DefaultChapitre();
+        def2.setIdChapitre(chapitre2.getId());
+        def2.setLibChapitre(chapitre2.getLibelleChapitre());
+        defaultChapitreRepository.save(def2);
+      }
       ChapitreUser chapitreUser = chapitreUserRepository
         .findById(1L)
         .orElse(null);
       if (chapitreUser == null) {
         Utilisateur userFind = utilisateurRepository.findById(2L).orElse(null);
-        Chapitre chapitre1 = chapitreRepository.findById(1L).orElse(null);
+        DefaultChapitre chapitre1 = defaultChapitreRepository.findById(1L).orElse(null);
         ChapitreUser chapitreUser1 = new ChapitreUser(
           true,
           chapitre1,
@@ -180,7 +197,7 @@ public class GestimoSpringBackendApplication {
         );
         chapitreUserRepository.save(chapitreUser1);
 
-         Chapitre chapitre2 = chapitreRepository.findById(2L).orElse(null);
+        DefaultChapitre chapitre2 = defaultChapitreRepository.findById(2L).orElse(null);
         ChapitreUser chapitreUser2 = new ChapitreUser(
           false,
           chapitre2,

@@ -28,6 +28,5 @@ public class Chapitre  {
     String libelleChapitre;
     @OneToMany(mappedBy = "chapitre")
     List<Bienimmobilier> biens;
-    @OneToMany(mappedBy="chapitre")
-    List<ChapitreUser>chapitreUsers;
+ 
 }
