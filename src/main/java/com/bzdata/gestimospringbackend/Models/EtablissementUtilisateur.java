@@ -1,8 +1,9 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,10 +17,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChapitreUser extends AbstractEntity {
-    boolean chapitreDefault;
-    @ManyToOne
-    DefaultChapitre defaultChapitre;
-    @ManyToOne
-    Utilisateur utilisateurChapitre;
+public class EtablissementUtilisateur extends AbstractEntity {
+
+  boolean chapitreDefault;
+
+  @ManyToOne
+  Etablissement defaultChapitre;
+
+  @ManyToOne
+  Utilisateur utilisateurChapitre;
 }

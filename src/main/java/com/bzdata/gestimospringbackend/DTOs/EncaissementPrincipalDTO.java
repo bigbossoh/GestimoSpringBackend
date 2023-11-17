@@ -28,4 +28,5 @@ public class EncaissementPrincipalDTO {
     private EntiteOperation entiteOperation;
     private AppelLoyersFactureDto appelLoyersFactureDto;
     private String typePaiement;
+    private  String statureCloture;
 }

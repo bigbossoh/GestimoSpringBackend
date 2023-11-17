@@ -1,15 +1,15 @@
 package com.bzdata.gestimospringbackend.Services.Impl;
 
-
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaisPeriodeDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaissementDto;
+import com.bzdata.gestimospringbackend.Models.Chapitre;
 import com.bzdata.gestimospringbackend.Models.SuivieDepense;
-
 import com.bzdata.gestimospringbackend.Services.SuivieDepenseService;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.mappers.BailMapperImpl;
+import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.SuivieDepenseRepository;
 import com.bzdata.gestimospringbackend.validator.SuivieDepenseValidator;
 import java.time.LocalDate;
@@ -30,10 +30,10 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
   private final SuivieDepenseRepository suivieDepenseRepository;
   private final BailMapperImpl bailMapperImpl;
+  private final ChapitreRepository chapitreRepository;
 
   @Override
   public List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto) {
- 
     List<String> errors = SuivieDepenseValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("l'objet suivie de depense n'est pas valide {}", errors);
@@ -43,6 +43,9 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
         errors
       );
     }
+    Chapitre chapitreFind = chapitreRepository
+      .findById(dto.getIdChapitre())
+      .orElse(null);
     if (dto.getId() != null) {
       SuivieDepense suivieDepense = new SuivieDepense();
       suivieDepense.setCodeTransaction(UUID.randomUUID().toString());
@@ -53,10 +56,12 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       suivieDepense.setIdCreateur(dto.getIdCreateur());
       suivieDepense.setModePaiement(dto.getModePaiement());
       suivieDepense.setOperationType(dto.getOperationType());
+      suivieDepense.setCloturerSuivi("non cloturer");
+      suivieDepense.setChapitreSuivis(chapitreFind);
       SuivieDepense suivieDepenseSaved = suivieDepenseRepository.save(
         suivieDepense
       );
-  
+
       bailMapperImpl.fromSuivieDepense(suivieDepenseSaved);
       return findAlEncaissementParAgence(dto.getIdAgence());
     } else {
@@ -68,7 +73,8 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
             ErrorCodes.SUIVIEDEPENSE_NOT_FOUND
           )
         );
-
+      suivieDepense.setCloturerSuivi("cloturer");
+      suivieDepense.setChapitreSuivis(chapitreFind);
       suivieDepense.setDateEncaissement(dto.getDateEncaissement());
       suivieDepense.setDesignation(dto.getDesignation());
       suivieDepense.setMontantDepense(dto.getMontantDepense());
@@ -249,26 +255,81 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       .filter(agence ->
         agence.getIdAgence() == idAgence &&
         agence.getDateEncaissement().isAfter(debut) &&
-        agence.getDateEncaissement().isBefore(fin) 
-       
+        agence.getDateEncaissement().isBefore(fin)
       )
       .map(bailMapperImpl::fromSuivieDepense)
       .collect(Collectors.toList());
   }
 
   @Override
-  public int countSuiviNonCloturerAvantDate(LocalDate dateEncai,Long idCreateur) {
-    List<SuivieDepenseDto> suivieDepenseDto= suivieDepenseRepository
+  public int countSuiviNonCloturerAvantDate(
+    LocalDate dateEncai,
+    Long idCreateur
+  ) {
+    List<SuivieDepenseDto> suivieDepenseDto = suivieDepenseRepository
       .findAll(Sort.by(Sort.Direction.DESC, "id"))
       .stream()
       .filter(agence ->
         agence.getIdAgence() == idCreateur &&
-        agence.isCloturerSuivi()==false&&
-        agence.getDateEncaissement().isBefore(dateEncai) 
-       
+        agence.getCloturerSuivi() == "non cloturer" &&
+        agence.getDateEncaissement().isBefore(dateEncai)
       )
       .map(bailMapperImpl::fromSuivieDepense)
       .collect(Collectors.toList());
-   return suivieDepenseDto.size();
+    return suivieDepenseDto.size();
   }
+
+  @Override
+  public List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitrAvantDate(
+    Long idcaisse,
+    LocalDate dateDepriseEnCompte,
+    Long idChapitre
+  ) {
+    return suivieDepenseRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(agence ->
+        agence.getIdCreateur() == idcaisse &&
+        agence.getCloturerSuivi() == "non cloturer" &&
+        agence.getDateEncaissement().isBefore(dateDepriseEnCompte) &&
+        agence.getChapitreSuivis().getId() == idChapitre
+      )
+      .map(bailMapperImpl::fromSuivieDepense)
+      .collect(Collectors.toList());
+  }
+
+  @Override
+  public int countSuiviNonCloturerParCaisseEtChapitreAvantDate(
+    LocalDate datePriseEnCompteEncaii,
+    Long idCaiss,
+    Long idChapitre
+  ) {
+    List<SuivieDepenseDto> suivieDepenseDto = suivieDepenseRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(agence ->
+        agence.getIdCreateur() == idCaiss &&
+        agence.getCloturerSuivi() == "non cloturer" &&
+        agence.getDateEncaissement().isBefore(datePriseEnCompteEncaii) &&
+        agence.getChapitreSuivis().getId() == idChapitre
+      )
+      .map(bailMapperImpl::fromSuivieDepense)
+      .collect(Collectors.toList());
+    return suivieDepenseDto.size();
+  }
+
+  @Override
+  public List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(Long idcaisse,
+      LocalDate dateDebut, LocalDate dateFin, Long idChapitre) {
+  return suivieDepenseRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(agence ->
+        agence.getIdCreateur() == idcaisse &&
+        agence.getDateEncaissement().isAfter(dateDebut) &&
+        agence.getDateEncaissement().isBefore(dateFin) &&
+        agence.getChapitreSuivis().getId() == idChapitre
+      )
+      .map(bailMapperImpl::fromSuivieDepense)
+      .collect(Collectors.toList()); }
 }

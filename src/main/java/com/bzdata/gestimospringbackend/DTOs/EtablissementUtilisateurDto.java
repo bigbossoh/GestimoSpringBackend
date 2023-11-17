@@ -10,8 +10,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ChapitreUserDto {
+public class EtablissementUtilisateurDto {
     Long chapite;
     Long utilisateur;
     boolean defaultChapite;
+    String nomEtabless;
 }

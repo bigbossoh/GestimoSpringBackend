@@ -4,9 +4,9 @@ import static com.bzdata.gestimospringbackend.constant.FileConstant.FOLDER_PATH;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
 import com.bzdata.gestimospringbackend.Models.Chapitre;
-import com.bzdata.gestimospringbackend.Models.ChapitreUser;
+import com.bzdata.gestimospringbackend.Models.EtablissementUtilisateur;
 import com.bzdata.gestimospringbackend.Models.Commune;
-import com.bzdata.gestimospringbackend.Models.DefaultChapitre;
+import com.bzdata.gestimospringbackend.Models.Etablissement;
 import com.bzdata.gestimospringbackend.Models.Pays;
 import com.bzdata.gestimospringbackend.Models.Quartier;
 import com.bzdata.gestimospringbackend.Models.Role;
@@ -173,32 +173,32 @@ public class GestimoSpringBackendApplication {
       Long couchDefaultChapitre = defaultChapitreRepository.count();
       if (couchDefaultChapitre == 0) {
         Chapitre chapitre1 = chapitreRepository.findById(1L).orElse(null);
-        DefaultChapitre def1 = new DefaultChapitre();
+        Etablissement def1 = new Etablissement();
         def1.setIdChapitre(chapitre1.getId());
         def1.setLibChapitre(chapitre1.getLibelleChapitre());
         defaultChapitreRepository.save(def1);
 
           Chapitre chapitre2 = chapitreRepository.findById(2L).orElse(null);
-        DefaultChapitre def2 = new DefaultChapitre();
+        Etablissement def2 = new Etablissement();
         def2.setIdChapitre(chapitre2.getId());
         def2.setLibChapitre(chapitre2.getLibelleChapitre());
         defaultChapitreRepository.save(def2);
       }
-      ChapitreUser chapitreUser = chapitreUserRepository
+      EtablissementUtilisateur chapitreUser = chapitreUserRepository
         .findById(1L)
         .orElse(null);
       if (chapitreUser == null) {
         Utilisateur userFind = utilisateurRepository.findById(2L).orElse(null);
-        DefaultChapitre chapitre1 = defaultChapitreRepository.findById(1L).orElse(null);
-        ChapitreUser chapitreUser1 = new ChapitreUser(
+        Etablissement chapitre1 = defaultChapitreRepository.findById(1L).orElse(null);
+        EtablissementUtilisateur chapitreUser1 = new EtablissementUtilisateur(
           true,
           chapitre1,
           userFind
         );
         chapitreUserRepository.save(chapitreUser1);
 
-        DefaultChapitre chapitre2 = defaultChapitreRepository.findById(2L).orElse(null);
-        ChapitreUser chapitreUser2 = new ChapitreUser(
+        Etablissement chapitre2 = defaultChapitreRepository.findById(2L).orElse(null);
+        EtablissementUtilisateur chapitreUser2 = new EtablissementUtilisateur(
           false,
           chapitre2,
           userFind

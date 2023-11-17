@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,4 +26,7 @@ public class ClotureCaisseDto {
   String clientCloture;
   String statutCloture;
   String chapitreCloture;
+  LocalDate dateDeDCloture;
+  int intervalNextCloture;
+  LocalDate dateFinCloture;
 }

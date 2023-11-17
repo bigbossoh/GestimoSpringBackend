@@ -16,9 +16,9 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Entity
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DefaultChapitre extends AbstractEntity {
+public class Etablissement extends AbstractEntity {
   Long idChapitre;
   String libChapitre;
   @OneToMany(mappedBy = "defaultChapitre")
-  List<ChapitreUser> chapitreUsers;
+  List<EtablissementUtilisateur> chapitreUsers;
 }

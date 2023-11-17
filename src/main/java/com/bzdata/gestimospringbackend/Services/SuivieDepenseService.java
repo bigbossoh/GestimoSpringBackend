@@ -31,4 +31,16 @@ public interface SuivieDepenseService {
     LocalDate debut,
     LocalDate fin
   );
+   List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitrAvantDate(
+    Long idcaisse,
+    LocalDate dateDepriseEnCompte,
+    Long idChapitre
+  );
+   int countSuiviNonCloturerParCaisseEtChapitreAvantDate(LocalDate datePriseEnCompteEncaii,Long idCaiss,Long idChapitre);
+  List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(
+    Long idcaisse,
+    LocalDate dateDebut,
+    LocalDate dateFin,
+    Long idChapitre
+  );
 }
