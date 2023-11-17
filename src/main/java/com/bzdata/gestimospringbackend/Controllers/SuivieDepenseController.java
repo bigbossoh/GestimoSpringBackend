@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
 public class SuivieDepenseController {
-private ClotureCaisseService clotureCaisseService;
+
   private final SuivieDepenseService suivieDepenseService;
 
   @PostMapping("/saveSuivieDepense")
@@ -67,7 +67,8 @@ private ClotureCaisseService clotureCaisseService;
       )
     );
   }
- @GetMapping("/listSortieDeuxDate/{idAgence}/{debut}/{fin}")
+
+  @GetMapping("/listSortieDeuxDate/{idAgence}/{debut}/{fin}")
   public ResponseEntity<List<SuivieDepenseDto>> listSortieDeuxDate(
     @PathVariable("idAgence") Long idAgence,
     @PathVariable("debut") String debut,
@@ -80,7 +81,7 @@ private ClotureCaisseService clotureCaisseService;
     LocalDate dateFinLocalDate = LocalDate.parse(
       fin,
       DateTimeFormatter.ofPattern("dd-MM-yyyy")
-    ); 
+    );
     return ResponseEntity.ok(
       suivieDepenseService.listSuiviDepenseEntreDeuxDate(
         idAgence,
@@ -89,6 +90,7 @@ private ClotureCaisseService clotureCaisseService;
       )
     );
   }
+
   @GetMapping("/getSuivieDepenseByCodeTransaction/{codeTransaction}")
   public ResponseEntity<SuivieDepenseDto> getSuivieDepenseByCodeTransaction(
     @PathVariable("codeTransaction") String codeTransaction
@@ -119,4 +121,56 @@ private ClotureCaisseService clotureCaisseService;
       suivieDepenseService.findAlEncaissementParAgence(idAgence)
     );
   }
+@GetMapping("/countSuiviNonCloturerParCaisseEtChapitreAvantDate/{datePriseEnCompteEncaii}/{idCaiss}/{idChapitre}")
+  public ResponseEntity<Integer> countSuiviNonCloturerParCaisseEtChapitreAvantDate(
+    @PathVariable("datePriseEnCompteEncaii") String datePriseEnCompteEncaii,
+    @PathVariable("idCaiss") Long idCaiss,
+   @PathVariable("idChapitre")  Long idChapitre
+  ) {
+    LocalDate datePriseEnCompte = LocalDate.parse(
+      datePriseEnCompteEncaii,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+    return ResponseEntity.ok(
+      suivieDepenseService.countSuiviNonCloturerParCaisseEtChapitreAvantDate(
+        datePriseEnCompte,
+        idCaiss,
+        idChapitre
+      )
+    );
+  }
+  @GetMapping("/listSuiviDepenseNonCloturerParCaisseEtChapitrAvantDate/{idcaisse}/{dateDepriseEnCompte}/{idChapitre}")
+ public ResponseEntity< List<SuivieDepenseDto>> listSuiviDepenseNonCloturerParCaisseEtChapitrAvantDate(
+  @PathVariable("idcaisse")   Long idcaisse,
+  @PathVariable("dateDepriseEnCompte")   String dateDepriseEnCompte,
+   @PathVariable("idChapitre")  Long idChapitre
+  ){
+     LocalDate datePriseEnCompte = LocalDate.parse(
+      dateDepriseEnCompte,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+      return ResponseEntity.ok(
+      suivieDepenseService.listSuiviDepenseNonCloturerParCaisseEtChapitrAvantDate(idcaisse,datePriseEnCompte,idChapitre)
+    );
+  }
+   @GetMapping("/listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate/{idcaisse}/{dateDebut}/{dateFin}/{idChapitre}")
+ public ResponseEntity< List<SuivieDepenseDto>> listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(
+  @PathVariable("idcaisse")   Long idcaisse,
+  @PathVariable("dateDebut")   String dateDebut,
+   @PathVariable("dateFin")   String dateFin,
+   @PathVariable("idChapitre")  Long idChapitre
+  ){
+     LocalDate dateDebutCompte = LocalDate.parse(
+      dateDebut,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+      LocalDate dateFinCompte = LocalDate.parse(
+      dateFin,
+      DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    );
+      return ResponseEntity.ok(
+      suivieDepenseService.listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(idcaisse, dateDebutCompte, dateFinCompte, idChapitre)
+    );
+  }
+  
 }

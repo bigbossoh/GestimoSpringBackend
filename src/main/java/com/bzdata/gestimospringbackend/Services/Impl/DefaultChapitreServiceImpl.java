@@ -2,7 +2,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import com.bzdata.gestimospringbackend.DTOs.DefaultChapitreDto;
 import com.bzdata.gestimospringbackend.Models.Chapitre;
-import com.bzdata.gestimospringbackend.Models.DefaultChapitre;
+import com.bzdata.gestimospringbackend.Models.Etablissement;
 import com.bzdata.gestimospringbackend.Services.DefaultChapitreService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
@@ -61,10 +61,10 @@ public class DefaultChapitreServiceImpl implements DefaultChapitreService {
     Chapitre chapitre = chapitreRepository .findById(dto.getIdChapite()).orElse(null);
 
     if (chapitre != null) {
-      DefaultChapitre defaultChapitre = new DefaultChapitre();
+      Etablissement defaultChapitre = new Etablissement();
     defaultChapitre.setIdChapitre(dto.getIdChapite());
     defaultChapitre.setLibChapitre(dto.getLibChapitre());
-  DefaultChapitre defaultChapitreSave=  defaultChapitreRepository.save(defaultChapitre);
+  Etablissement defaultChapitreSave=  defaultChapitreRepository.save(defaultChapitre);
       return gestimoWebMapperImpl.fromDefaultChapitre(defaultChapitreSave);
     }
     return null;

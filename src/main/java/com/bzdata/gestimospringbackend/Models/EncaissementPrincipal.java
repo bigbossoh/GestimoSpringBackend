@@ -42,4 +42,5 @@ public class EncaissementPrincipal extends AbstractEntity {
   private AppelLoyer appelLoyerEncaissement;
 
   String typePaiement;
+  String statureCloture;
 }

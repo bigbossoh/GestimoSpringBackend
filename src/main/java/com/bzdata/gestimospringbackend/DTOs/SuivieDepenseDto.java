@@ -25,5 +25,7 @@ public class SuivieDepenseDto {
    double montantDepense;
    ModePaiement modePaiement;  
    OperationType operationType;
+   String cloturerSuivi;
+   Long idChapitre;
 
 }

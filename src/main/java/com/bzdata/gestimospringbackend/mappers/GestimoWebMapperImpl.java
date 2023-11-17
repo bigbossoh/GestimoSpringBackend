@@ -716,14 +716,15 @@ public class GestimoWebMapperImpl {
     BeanUtils.copyProperties(dto, clotureCaisse);
     return clotureCaisse;
   }
-  public ChapitreUserDto fromChapitreUser(ChapitreUser chapitreUser){
-    ChapitreUserDto chapitreUserDto= new ChapitreUserDto();
+  public EtablissementUtilisateurDto fromEtablissementUtilisateur(EtablissementUtilisateur chapitreUser){
+    EtablissementUtilisateurDto chapitreUserDto= new EtablissementUtilisateurDto();
     chapitreUserDto.setChapite(chapitreUser.getDefaultChapitre().getId());
     chapitreUserDto.setUtilisateur(chapitreUser.getUtilisateurChapitre().getId());
     chapitreUserDto.setDefaultChapite(chapitreUser.isChapitreDefault());
+    chapitreUserDto.setNomEtabless(chapitreUser.getDefaultChapitre().getLibChapitre());
     return chapitreUserDto;
   }
-    public DefaultChapitreDto fromDefaultChapitre(DefaultChapitre chapitreUser){
+    public DefaultChapitreDto fromDefaultChapitre(Etablissement chapitreUser){
     DefaultChapitreDto chapitreUserDto= new DefaultChapitreDto();
     chapitreUserDto.setIdChapite(chapitreUser.getIdChapitre());
     chapitreUserDto.setLibChapitre(chapitreUser.getLibChapitre());

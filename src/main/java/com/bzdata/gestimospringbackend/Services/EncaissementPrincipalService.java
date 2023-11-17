@@ -100,4 +100,14 @@ public interface EncaissementPrincipalService {
     Long idAgence,
     Long chapitre
   );
-}
+   List<EncaissementPrincipalDTO> listDesEnacaissementNonCloturerParCaissiaireEtParChapitreDate(Long idCaisse,Long idChapitre,LocalDate datePrisEnCompte);
+
+boolean miseAJourEncaissementCloturer(Long idEncaisse);
+
+ List<EncaissementPrincipalDTO> listeEncaissementEntreDeuxDateParChapitreEtCaisse(
+    Long idCaisse,
+    Long idChapitre,
+    LocalDate dateDebut,
+    LocalDate dateFin
+  );
+  }

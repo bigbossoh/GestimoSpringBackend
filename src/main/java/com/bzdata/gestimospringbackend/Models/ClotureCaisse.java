@@ -1,7 +1,7 @@
 package com.bzdata.gestimospringbackend.Models;
 
+import java.time.LocalDate;
 import javax.persistence.Entity;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,13 +17,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ClotureCaisse extends AbstractEntity {
 
-  String entiteCloturer;
-  double montantEncaissement;
-  double soldeEncaissement;
-  double encienSoldReservation;
-  double nvoSoldeReservation;
   double totalEncaisse;
-  String clientCloture;
   String statutCloture;
   String chapitreCloture;
+  LocalDate dateDeDCloture;
+  int intervalNextCloture;
+  LocalDate dateFinCloture;
 }
