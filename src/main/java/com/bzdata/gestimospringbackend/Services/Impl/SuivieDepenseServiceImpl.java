@@ -250,7 +250,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
   ) {
     log.info("les dates sont : {},{}", debut, fin);
     return suivieDepenseRepository
-      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .findAll()
       .stream()
       .filter(agence ->
         agence.getIdAgence() == idAgence &&
@@ -286,7 +286,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
     Long idChapitre
   ) {
     return suivieDepenseRepository
-      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .findAll()
       .stream()
       .filter(agence ->
         agence.getIdCreateur() == idcaisse &&
@@ -319,10 +319,15 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
   }
 
   @Override
-  public List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(Long idcaisse,
-      LocalDate dateDebut, LocalDate dateFin, Long idChapitre) {
-  return suivieDepenseRepository
-      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+  public List<SuivieDepenseDto> listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(
+    Long idcaisse,
+    LocalDate dateDebut,
+    LocalDate dateFin,
+    Long idChapitre
+  ) {
+ 
+    return suivieDepenseRepository
+      .findAll()
       .stream()
       .filter(agence ->
         agence.getIdCreateur() == idcaisse &&
@@ -331,5 +336,6 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
         agence.getChapitreSuivis().getId() == idChapitre
       )
       .map(bailMapperImpl::fromSuivieDepense)
-      .collect(Collectors.toList()); }
+      .collect(Collectors.toList());
+  }
 }

@@ -4,7 +4,6 @@ import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT
 
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseDto;
 import com.bzdata.gestimospringbackend.DTOs.SuivieDepenseEncaisPeriodeDto;
-import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
 import com.bzdata.gestimospringbackend.Services.SuivieDepenseService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.time.LocalDate;
@@ -168,6 +167,7 @@ public class SuivieDepenseController {
       dateFin,
       DateTimeFormatter.ofPattern("dd-MM-yyyy")
     );
+     log.info("le date avant de inserer est le suivant :{},{} " ,dateDebutCompte,dateFinCompte);
       return ResponseEntity.ok(
       suivieDepenseService.listSuiviDepenseNonCloturerParCaisseEtChapitreEntreDeuxDate(idcaisse, dateDebutCompte, dateFinCompte, idChapitre)
     );

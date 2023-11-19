@@ -132,8 +132,11 @@ public class BailMapperImpl {
 
         // SUIVIE DEPENSE DTO MAPPER
         public SuivieDepenseDto fromSuivieDepense(SuivieDepense suivieDepense) {
+             
                 SuivieDepenseDto suivieDepenseDto = new SuivieDepenseDto();
                 BeanUtils.copyProperties(suivieDepense, suivieDepenseDto);
+                suivieDepenseDto.setCloturerSuivi(suivieDepense.getChapitreSuivis().getLibelleChapitre());
+                suivieDepenseDto.setIdChapitre(suivieDepense.getChapitreSuivis().getId());
                 return suivieDepenseDto;
         }
 
