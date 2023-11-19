@@ -12,7 +12,6 @@ import com.bzdata.gestimospringbackend.Models.AppelLoyer;
 import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
-import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
 import com.bzdata.gestimospringbackend.Services.EncaissementPrincipalService;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
@@ -123,7 +122,7 @@ public class EncaissementPrincipalServiceImpl
         encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
         encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
         encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-         encaissementPrincipal.setStatureCloture("non cloturer");
+        encaissementPrincipal.setStatureCloture("non cloturer");
         encaissementPrincipalRepository.save(encaissementPrincipal);
 
         if (montantVerser <= 0) {
@@ -169,7 +168,7 @@ public class EncaissementPrincipalServiceImpl
         encaissementPrincipal.setMontantEncaissement(montantVerser);
         encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
         encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-         encaissementPrincipal.setStatureCloture("non cloturer");
+        encaissementPrincipal.setStatureCloture("non cloturer");
         encaissementPrincipalRepository.save(encaissementPrincipal);
         break;
       }
@@ -231,7 +230,7 @@ public class EncaissementPrincipalServiceImpl
           encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
           encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
           encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-           encaissementPrincipal.setStatureCloture("non cloturer");
+          encaissementPrincipal.setStatureCloture("non cloturer");
           encaissementPrincipalRepository.save(encaissementPrincipal);
           if (montantVerser <= 0) {
             break;
@@ -263,7 +262,7 @@ public class EncaissementPrincipalServiceImpl
           encaissementPrincipal.setMontantEncaissement(montantVerser);
           encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
           encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-           encaissementPrincipal.setStatureCloture("non cloturer");
+          encaissementPrincipal.setStatureCloture("non cloturer");
           encaissementPrincipalRepository.save(encaissementPrincipal);
           break;
         }
@@ -873,7 +872,7 @@ public class EncaissementPrincipalServiceImpl
         encaissementPrincipal.setMontantEncaissement(montantAPayerLeMois);
         encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
         encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-         encaissementPrincipal.setStatureCloture("non cloturer");
+        encaissementPrincipal.setStatureCloture("non cloturer");
         encaissementPrincipalRepository.saveAndFlush(encaissementPrincipal);
         List<Long> getAllIbOperationInAppel = appelLoyerService.getAllIbOperationInAppel(
           idDeAgence
@@ -1078,13 +1077,17 @@ public class EncaissementPrincipalServiceImpl
   }
 
   @Override
-  public List<EncaissementPrincipalDTO> listeEncaissementEntreDeuxDateParChapitreEtCaisse(Long idCaisse,
-      Long idChapitre, LocalDate dateDebut, LocalDate dateFin) {
-        return encaissementPrincipalRepository
+  public List<EncaissementPrincipalDTO> listeEncaissementEntreDeuxDateParChapitreEtCaisse(
+    Long idCaisse,
+    Long idChapitre,
+    LocalDate dateDebut,
+    LocalDate dateFin
+  ) {
+    return encaissementPrincipalRepository
       .findAll()
       .stream()
       .filter(encaiss ->
-        encaiss.getDateEncaissement().isAfter(dateDebut)&&
+        encaiss.getDateEncaissement().isAfter(dateDebut) &&
         encaiss.getIdCreateur() == idCaisse &&
         encaiss
           .getAppelLoyerEncaissement()
@@ -1096,5 +1099,6 @@ public class EncaissementPrincipalServiceImpl
         encaiss.getDateEncaissement().isBefore(dateFin)
       )
       .map(gestimoWebMapper::fromEncaissementPrincipal)
-      .collect(Collectors.toList());  }
+      .collect(Collectors.toList());
+  }
 }
