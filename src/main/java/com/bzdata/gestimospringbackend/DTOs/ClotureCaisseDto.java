@@ -17,16 +17,19 @@ public class ClotureCaisseDto {
   Long idAgence;
   Long idCreateur;
 
-  String entiteCloturer;
-  double montantEncaissement;
-  double soldeEncaissement;
-  double encienSoldReservation;
-  double nvoSoldeReservation;
+
   double totalEncaisse;
-  String clientCloture;
-  String statutCloture;
   String chapitreCloture;
   LocalDate dateDeDCloture;
   int intervalNextCloture;
   LocalDate dateFinCloture;
 }
+/** 
+ *  idAgence: number;
+  idCreateur: number;
+  totalEncaisse: number;
+  chapitreCloture: string;
+  dateDeDCloture: string;
+  intervalNextCloture: 3;
+  dateFinCloture: string;
+*/

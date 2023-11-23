@@ -29,9 +29,11 @@ public class AppartementDto {
     boolean bienMeublerResidence;
     boolean isOccupied;
 
+    Long idCategorie;
     String nameCategorie;
     double priceCategorie;
     int nbrDiffJourCategorie;
     double pourcentReducCategorie;
+    CategoryChambreSaveOrUpdateDto categorieChambre;
 
 }

@@ -4,6 +4,7 @@ import com.bzdata.gestimospringbackend.DTOs.CategoryChambreSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Services.CategoryChambreService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
+
 import com.bzdata.gestimospringbackend.repository.CategoryChambreRepository;
 import com.bzdata.gestimospringbackend.validator.ObjectsValidator;
 import java.util.Comparator;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class CategoryChambreServiceImpl implements CategoryChambreService {
-
+final GestimoWebMapperImpl gestimoWebMapperImpl;
   final CategoryChambreRepository categoryChambreRepository;
   private final ObjectsValidator<CategoryChambreSaveOrUpdateDto> validator;
 
@@ -37,7 +38,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       .findAll()
       .stream()
       .sorted(Comparator.comparing(CategorieChambre::getName))
-      .map(GestimoWebMapperImpl::fromCategoryChambre)
+      .map(gestimoWebMapperImpl::fromCategoryChambre)
       .collect(Collectors.toList());
   }
 
@@ -47,7 +48,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       .findById(id)
       .orElse(null);
     if (categorieChambre != null) {
-      return GestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
+      return gestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
     } else {
       return null;
     }
@@ -85,7 +86,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         categorieChambre
       );
-      return GestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
+      return gestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
     } else {
       CategorieChambre newCategorieChambre = new CategorieChambre();
       newCategorieChambre.setDescription(dto.getDescription());
@@ -98,7 +99,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         newCategorieChambre
       );
-      return GestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
+      return gestimoWebMapperImpl.fromCategoryChambre(savCategorieChambre);
     }
   }
 
@@ -117,7 +118,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       categorieChambre.setPourcentReduc(dto.getPourcentReduc());
       categorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
       categoryChambreRepository.save(categorieChambre);
-      return GestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
+      return gestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
     }
     CategorieChambre newCategite = new CategorieChambre();
     newCategite.setIdCreateur(dto.getIdCreateur());
@@ -128,7 +129,7 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
     newCategite.setPourcentReduc(dto.getPourcentReduc());
     newCategite.setNbrDiffJour(dto.getNbrDiffJour());
     categoryChambreRepository.save(newCategite);
-    return GestimoWebMapperImpl.fromCategoryChambre(newCategite);
+    return gestimoWebMapperImpl.fromCategoryChambre(newCategite);
   }
 
   @Override
@@ -137,7 +138,23 @@ public class CategoryChambreServiceImpl implements CategoryChambreService {
       .findAll()
       .stream()
       .filter(t->t.getIdAgence()==idAgnce)
-      .map(GestimoWebMapperImpl::fromCategoryChambre)
+      .map(gestimoWebMapperImpl::fromCategoryChambre)
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public CategoryChambreSaveOrUpdateDto findCategorieByIdAppartement(Long idBien) {
+ List<CategoryChambreSaveOrUpdateDto> findCat=categoryChambreRepository
+      .findAll()
+      .stream()
+      .filter(t->t.getAppartements().get(0).getId()==idBien)
+      .map(gestimoWebMapperImpl::fromCategoryChambre).collect(Collectors.toList());
+      if (findCat.size()>0) {
+        log.info("Info sur le dto est : {}", findCat);
+        return findCat.get(0);
+      }
+ 
+    return null;
+      //
   }
 }

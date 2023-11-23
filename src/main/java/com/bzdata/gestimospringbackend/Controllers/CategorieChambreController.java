@@ -90,4 +90,12 @@ public class CategorieChambreController {
   public ResponseEntity<List<CategoryChambreSaveOrUpdateDto>> findAllCategorieChambre(@PathVariable("idAgence")Long idAgence) {
     return ResponseEntity.ok(categoryChambreService.findAllCategorie(idAgence));
   }
+   @Operation(
+    summary = "Liste de toutes les Communes",
+    security = @SecurityRequirement(name = "bearerAuth")
+  )
+  @GetMapping("/findCategorieByIdAppartement/{idAppart}")
+  public ResponseEntity<CategoryChambreSaveOrUpdateDto> findCategorieByIdAppartement(@PathVariable("idAppart")Long idAppart) {
+    return ResponseEntity.ok(categoryChambreService.findCategorieByIdAppartement(idAppart));
+  }
 }

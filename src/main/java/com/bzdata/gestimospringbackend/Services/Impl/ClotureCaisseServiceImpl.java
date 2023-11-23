@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class ClotureCaisseServiceImpl implements ClotureCaisseService {
 
   final ClotureCaisseRepository caisseRepository;
@@ -62,9 +65,16 @@ public class ClotureCaisseServiceImpl implements ClotureCaisseService {
 
   @Override
   public boolean saveClotureCaisse(ClotureCaisseDto dto) {
-    ClotureCaisse clotureCaisse = caisseRepository.save(
-      gestimoWebMapper.toClotureCaisse(dto)
-    );
+    log.info(" test des dto {}",dto);
+    ClotureCaisse newClotureCaisse = new ClotureCaisse();
+    newClotureCaisse.setChapitreCloture(dto.getChapitreCloture());
+    newClotureCaisse.setIdAgence(dto.getIdAgence());
+    newClotureCaisse.setIdCreateur(dto.getIdCreateur());
+    newClotureCaisse.setDateDeDCloture(dto.getDateDeDCloture());
+    newClotureCaisse.setDateFinCloture(dto.getDateFinCloture());
+    newClotureCaisse.setIntervalNextCloture(dto.getIntervalNextCloture());
+    newClotureCaisse.setTotalEncaisse(dto.getTotalEncaisse());
+    ClotureCaisse clotureCaisse = caisseRepository.save(newClotureCaisse);
     if (clotureCaisse != null) {
       return true;
     } else {

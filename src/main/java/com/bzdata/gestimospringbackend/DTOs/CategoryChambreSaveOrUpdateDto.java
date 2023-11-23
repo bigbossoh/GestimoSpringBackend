@@ -1,8 +1,14 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import com.bzdata.gestimospringbackend.Models.Appartement;
+import com.bzdata.gestimospringbackend.Models.hotel.PrixParCategorieChambre;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,4 +37,6 @@ public class CategoryChambreSaveOrUpdateDto {
   double price;
   int nbrDiffJour;
   double pourcentReduc;
+   List<PrixParCategorieChambreDto> prixGategorieDto;
+   List<AppartementDto> appartements;
 }
