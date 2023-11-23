@@ -10,9 +10,12 @@ import com.bzdata.gestimospringbackend.Models.hotel.Reservation;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.repository.*;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.jfree.util.Log;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class GestimoWebMapperImpl {
 
   final AgenceImmobiliereRepository agenceImmobiliereRepository;
@@ -32,6 +36,8 @@ public class GestimoWebMapperImpl {
   final AppelLoyerRepository appelLoyerRepository;
   final EtageRepository etageRepository;
   final AppartementRepository appartementRepository;
+  final PrixParCategorieChambreRepository prixParCategorieChambreRepository;
+  final CategoryChambreRepository categoryChambreRepository;
 
   // AppelLoyer
   public AppelLoyer fromAppelLoyerDto(
@@ -451,6 +457,10 @@ public class GestimoWebMapperImpl {
 
   public AppartementDto fromAppartement(Appartement appartement) {
     AppartementDto appartementDto = new AppartementDto();
+    CategoryChambreSaveOrUpdateDto categoryChambreSaveOrUpdateDto = categoryChambreRepository
+      .findById(appartement.getCategorieApartement().getId())
+      .map(xt -> fromCategoryChambre(xt))
+      .orElse(null);
     BeanUtils.copyProperties(appartement, appartementDto);
     appartementDto.setFullNameProprio(
       appartement
@@ -466,6 +476,10 @@ public class GestimoWebMapperImpl {
         .getPrenom()
     );
     if (appartement.getCategorieApartement() != null) {
+      appartementDto.setCategorieChambre(categoryChambreSaveOrUpdateDto);
+      appartementDto.setIdCategorie(
+        appartement.getCategorieApartement().getId()
+      );
       appartementDto.setNbrDiffJourCategorie(
         appartement.getCategorieApartement().getNbrDiffJour()
       );
@@ -596,11 +610,53 @@ public class GestimoWebMapperImpl {
     return categorieChambre;
   }
 
-  public static CategoryChambreSaveOrUpdateDto fromCategoryChambre(
+  public CategoryChambreSaveOrUpdateDto fromCategoryChambre(
     CategorieChambre categorieChambre
   ) {
+    // List<AppartementDto> appDto = appartementRepository
+    //   .findAll()
+    //   .stream()
+    //   .filter(ca ->
+    //     ca.getCategorieApartement().getId() == categorieChambre.getId()
+    //   )
+    //   .map(xx -> fromAppartement(xx))
+    //   .collect(Collectors.toList());
+    List<PrixParCategorieChambreDto> prixCat = prixParCategorieChambreRepository
+      .findAll()
+      .stream()
+      .filter(ca -> ca.getCategorieChambre().getId() == categorieChambre.getId()
+      )
+      .map(xx -> fromPrixParCategorieChambre(xx))
+      .collect(Collectors.toList());
     CategoryChambreSaveOrUpdateDto dto = new CategoryChambreSaveOrUpdateDto();
     BeanUtils.copyProperties(categorieChambre, dto);
+    // if (appDto.size()>0) {
+    //      dto.setAppartements(appDto);
+    // }
+     if (prixCat.size()>0) {
+        dto.setPrixGategorieDto(prixCat);
+    }
+    // dto.setPrixGategorieDto(prixCat);
+ 
+    // log.info("Appartement : , {}", appDto);
+    // log.info("Prix ca : , {}", prixCat);
+    // if (categorieChambre.getAppartements().size() > 0) {
+    //   for (Appartement app : categorieChambre.getAppartements()) {
+    //     log.info("Appartement : , {}", app);
+    //     appDto.add(fromAppartement(app));
+    //   }
+    //   if (appDto.size() > 0) {
+    //     dto.setAppartements(appDto);
+    //   }
+    // }
+
+    // for (PrixParCategorieChambre prixC : categorieChambre.getPrixGategories()) {
+    //   log.info("Appartement : , {}", prixC);
+    //   prixCat.add(fromPrixParCategorieChambre(prixC));
+    // }
+    // if (prixCat.size() > 0) {
+    //   dto.setPrixGategorieDto(prixCat);
+    // }
     return dto;
   }
 
@@ -674,7 +730,7 @@ public class GestimoWebMapperImpl {
     return imageDataDto;
   }
 
-  public PrixParCategorieChambreDto fromPrixParCategorieChambre(
+  public static PrixParCategorieChambreDto fromPrixParCategorieChambre(
     PrixParCategorieChambre prixParCategorieChambre
   ) {
     PrixParCategorieChambreDto prixParCategorieChambreDto = new PrixParCategorieChambreDto();
@@ -716,19 +772,27 @@ public class GestimoWebMapperImpl {
     BeanUtils.copyProperties(dto, clotureCaisse);
     return clotureCaisse;
   }
-  public EtablissementUtilisateurDto fromEtablissementUtilisateur(EtablissementUtilisateur chapitreUser){
-    EtablissementUtilisateurDto chapitreUserDto= new EtablissementUtilisateurDto();
+
+  public EtablissementUtilisateurDto fromEtablissementUtilisateur(
+    EtablissementUtilisateur chapitreUser
+  ) {
+    EtablissementUtilisateurDto chapitreUserDto = new EtablissementUtilisateurDto();
     chapitreUserDto.setChapite(chapitreUser.getDefaultChapitre().getId());
-    chapitreUserDto.setUtilisateur(chapitreUser.getUtilisateurChapitre().getId());
+    chapitreUserDto.setUtilisateur(
+      chapitreUser.getUtilisateurChapitre().getId()
+    );
     chapitreUserDto.setDefaultChapite(chapitreUser.isChapitreDefault());
-    chapitreUserDto.setNomEtabless(chapitreUser.getDefaultChapitre().getLibChapitre());
+    chapitreUserDto.setNomEtabless(
+      chapitreUser.getDefaultChapitre().getLibChapitre()
+    );
     return chapitreUserDto;
   }
-    public DefaultChapitreDto fromDefaultChapitre(Etablissement chapitreUser){
-    DefaultChapitreDto chapitreUserDto= new DefaultChapitreDto();
+
+  public DefaultChapitreDto fromDefaultChapitre(Etablissement chapitreUser) {
+    DefaultChapitreDto chapitreUserDto = new DefaultChapitreDto();
     chapitreUserDto.setIdChapite(chapitreUser.getIdChapitre());
     chapitreUserDto.setLibChapitre(chapitreUser.getLibChapitre());
-  
+
     return chapitreUserDto;
   }
 }

@@ -30,6 +30,7 @@ public class ClotureCaisseController {
   public ResponseEntity<Boolean> saveClotureCaisse(
     @RequestBody ClotureCaisseDto dto
   ) {
+    
     return ResponseEntity.ok(clotureCaisseService.saveClotureCaisse(dto));
   }
 
