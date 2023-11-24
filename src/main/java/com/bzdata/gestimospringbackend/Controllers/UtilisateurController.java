@@ -69,6 +69,10 @@ public class UtilisateurController {
     public ResponseEntity<List<UtilisateurAfficheDto>> getAllProprietaireByOrder(@PathVariable("idAgence") Long idAgence) {
         return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurProprietaireOrderbyName(idAgence));
     }
+    @GetMapping("/clienthotel/all/{idAgence}")
+    public ResponseEntity<List<UtilisateurAfficheDto>> listOfAllUtilisateurClientHotelOrderbyNameByAgence(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(utilisateurService.listOfAllUtilisateurClientHotelOrderbyNameByAgence(idAgence));
+    }
 
     @GetMapping("/gerants/all/{idAgence}")
     public ResponseEntity<List<UtilisateurAfficheDto>> getAllGerantsByOrder(@PathVariable("idAgence") Long idAgence) {

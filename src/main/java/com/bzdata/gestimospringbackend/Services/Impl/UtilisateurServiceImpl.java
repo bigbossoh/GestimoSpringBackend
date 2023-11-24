@@ -299,4 +299,13 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UtilisateurAfficheDto> listOfAllUtilisateurClientHotelOrderbyNameByAgence(Long idAgence) {
+           return utilisateurRepository.findAll().stream()
+                .filter(agence -> agence.getIdAgence() == idAgence)
+                .filter(user -> user.getUrole().getRoleName().equals("CLIENT HOTEL"))
+                .sorted(Comparator.comparing(Utilisateur::getNom))
+                .map(gestimoWebMapperImpl::fromUtilisateur)
+                .collect(Collectors.toList());   }
+
 }

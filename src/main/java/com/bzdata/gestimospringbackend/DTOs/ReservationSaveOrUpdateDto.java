@@ -21,7 +21,7 @@ public class ReservationSaveOrUpdateDto {
 
     UtilisateurRequestDto utilisateurRequestDto;
     Long idAppartementdDto;
-
+Long idUtilisateur;
     LocalDate dateDebut;
     LocalDate dateFin;
    // UtilisateurAfficheDto utilisateurOperation;

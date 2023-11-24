@@ -24,10 +24,10 @@ public class ReservationAfficheDto {
 
   Instant creationDate;
   Instant lastModifiedDate;
-
+  Long idUtilisateur;
   String email;
   String mobile;
-String username;
+  String username;
   Long idAppartementdDto;
 
   LocalDate dateDebut;
@@ -51,11 +51,10 @@ String username;
   int nmbreHomme;
   int nmbreFemme;
   int nmbrEnfant;
-  
+
   String descriptionCategori;
   String nameCategori;
   double priceCategori;
   int nbrDiffJourCategori;
   double pourcentReducCategori;
-
 }
