@@ -27,34 +27,17 @@ public class ReservationRequestDto {
   Long idClient;
   Long idBien;
 
-   String utilisateurIdApp;
+  
    Long idUtilisateur;
    String nom;
    String prenom;
-   String email;
-   String username;
 
-  @Column(unique = true)
-   String mobile;
 
-   LocalDate dateDeNaissance;
-   String lieuNaissance;
-   String typePieceIdentite;
-   String numeroPieceIdentite;
-   LocalDate dateDebutPiece;
-   LocalDate dateFinPiece;
-   String nationalite;
-   String genre;
-
-  double montantCautionBail;
-  int nbreMoisCautionBail;
-  double nouveauMontantLoyer;
-  Long idBienImmobilier;
-
-  double advancePayment;
-  double remainingPayment;
-  double soldReservation;
-  int nmbreHomme;
-  int nmbreFemme;
-  int nmbrEnfant;
+   double pourcentageReduction;
+   double montantReduction;
+   double soldReservation;
+   double montantPaye;
+   int nmbreAdulte;
+   
+   int nmbrEnfant;
 }

@@ -23,11 +23,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation extends Operation {
 
-  double advancePayment;
-  double remainingPayment;
+  double pourcentageReduction;
+  double montantReduction;
   double soldReservation;
-  int nmbreHomme;
-  int nmbreFemme;
+  double montantPaye;
+  int nmbreAdulte;
+  
   int nmbrEnfant;
   String statutReservation;
 

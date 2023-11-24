@@ -22,6 +22,7 @@ import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -119,17 +120,18 @@ public class ReservationServiceImpl implements ReservationService {
           )
         );
       }
+      
       nReservation.setIdAgence(dto.getIdAgence());
-      nReservation.setIdCreateur(dto.getIdCreateur());
-      nReservation.setAdvancePayment(dto.getAdvancePayment());
-      nReservation.setDateDebut(dto.getDateDebut());
-      nReservation.setDateFin(dto.getDateFin());
-      nReservation.setNmbrEnfant(dto.getNmbrEnfant());
-      nReservation.setNmbreFemme(dto.getNmbreFemme());
-      nReservation.setNmbreHomme(dto.getNmbreHomme());
-      nReservation.setRemainingPayment(dto.getRemainingPayment());
-      nReservation.setSoldReservation(dto.getSoldReservation());
-      nReservation.setAdvancePayment(dto.getAdvancePayment());
+      // nReservation.setIdCreateur(dto.getIdCreateur());
+      // nReservation.setAdvancePayment(dto.getmo());
+      // nReservation.setDateDebut(dto.getDateDebut());
+      // nReservation.setDateFin(dto.getDateFin());
+      // nReservation.setNmbrEnfant(dto.getNmbrEnfant());
+      // nReservation.setNmbreFemme(dto.getNmbreFemme());
+      // nReservation.setNmbreHomme(dto.getNmbreHomme());
+      // nReservation.setRemainingPayment(dto.getRemainingPayment());
+      // nReservation.setSoldReservation(dto.getSoldReservation());
+      // nReservation.setAdvancePayment(dto.getAdvancePayment());
       nReservation.setBienImmobilierOperation(
         gestimoWebMapperImpl.fromAppartementDto(appartementDto)
       );
@@ -154,15 +156,15 @@ public class ReservationServiceImpl implements ReservationService {
       }
       reservationTrouver.setIdAgence(dto.getIdAgence());
       reservationTrouver.setIdCreateur(dto.getIdCreateur());
-      reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
-      reservationTrouver.setDateDebut(dto.getDateDebut());
-      reservationTrouver.setDateFin(dto.getDateFin());
-      reservationTrouver.setNmbrEnfant(dto.getNmbrEnfant());
-      reservationTrouver.setNmbreFemme(dto.getNmbreFemme());
-      reservationTrouver.setNmbreHomme(dto.getNmbreHomme());
-      reservationTrouver.setRemainingPayment(dto.getRemainingPayment());
-      reservationTrouver.setSoldReservation(dto.getSoldReservation());
-      reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
+      // reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
+      // reservationTrouver.setDateDebut(dto.getDateDebut());
+      // reservationTrouver.setDateFin(dto.getDateFin());
+      // reservationTrouver.setNmbrEnfant(dto.getNmbrEnfant());
+      // reservationTrouver.setNmbreFemme(dto.getNmbreFemme());
+      // reservationTrouver.setNmbreHomme(dto.getNmbreHomme());
+      // reservationTrouver.setRemainingPayment(dto.getRemainingPayment());
+      // reservationTrouver.setSoldReservation(dto.getSoldReservation());
+      // reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
       reservationTrouver.setBienImmobilierOperation(
         gestimoWebMapperImpl.fromAppartementDto(appartementDto)
       );
@@ -175,7 +177,7 @@ public class ReservationServiceImpl implements ReservationService {
 
   @Override
   public ReservationAfficheDto saveOrUpdateGood(
-    ReservationSaveOrUpdateDto dto
+    ReservationRequestDto dto
   ) {
     Objects.requireNonNull(dto, "Le paramètre dto ne doit pas être nul");
 
@@ -189,7 +191,7 @@ public class ReservationServiceImpl implements ReservationService {
       saveApp.setOccupied(true);
       appartementRepository.save(saveApp);
     }
-    UtilisateurRequestDto utilisateurRequestDto = dto.getUtilisateurRequestDto();
+    UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdUtilisateur());
     Objects.requireNonNull(
       utilisateurRequestDto,
       "Le paramètre utilisateurRequestDto ne doit pas être nul"
@@ -222,13 +224,15 @@ public class ReservationServiceImpl implements ReservationService {
     reservation.setUtilisateurOperation(utilisateur);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
-    reservation.setAdvancePayment(dto.getAdvancePayment());
+    reservation.setMontantPaye(dto.getMontantPaye());
     reservation.setDateDebut(dto.getDateDebut());
     reservation.setDateFin(dto.getDateFin());
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
-    reservation.setNmbreFemme(dto.getNmbreFemme());
-    reservation.setNmbreHomme(dto.getNmbreHomme());
-    reservation.setRemainingPayment(dto.getRemainingPayment());
+    reservation.setNmbreAdulte(dto.getNmbreAdulte());
+   // reservation.setNmbreHomme(dto.getNmbreHomme());
+    reservation.setMontantReduction(dto.getMontantReduction());
+    reservation.setPourcentageReduction(dto.getPourcentageReduction());
+   // reservation.setst
     reservation.setSoldReservation(dto.getSoldReservation());
     reservation.setBienImmobilierOperation(
       gestimoWebMapperImpl.fromAppartementDto(appartementDto)
@@ -259,21 +263,19 @@ public class ReservationServiceImpl implements ReservationService {
     AppartementDto appartementDto = appartementService.findById(
       dto.getIdAppartementdDto()
     );
-
-    UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findUtilisateurByUsername(
-      dto.getUsername()
-    );
+    Random random = new Random();
+    UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdUtilisateur());
     Utilisateur utilisateur = new Utilisateur();
     Utilisateur utilisateurSave;
     if (utilisateurRequestDto == null) {
-      utilisateur.setUsername(dto.getUsername());
-      utilisateur.setNom(dto.getNom());
-      utilisateur.setPrenom(dto.getPrenom());
-      utilisateur.setEmail(dto.getEmail());
+      utilisateur.setUsername("0"+random.nextInt(1,20000));
+      utilisateur.setNom("XXX");
+      utilisateur.setPrenom("XXXX");
+      //utilisateur.setEmail(dto.getEmail());
       utilisateur.setIdAgence(dto.getIdAgence());
-      utilisateur.setNumeroPieceIdentite(dto.getNumeroPieceIdentite());
-      utilisateur.setDateDeNaissance(dto.getDateDeNaissance());
-      utilisateur.setMobile(dto.getMobile());
+      utilisateur.setNumeroPieceIdentite("xxxxx");
+     // utilisateur.setDateDeNaissance(dto.getDateDeNaissance());
+      utilisateur.setMobile("0"+random.nextInt(1,20000));
       utilisateur.setRoleUsed(ROLE_CLIENT_HOTEL.name());
       utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
       utilisateurSave = utilisateurRepository.save(utilisateur);
@@ -299,13 +301,14 @@ public class ReservationServiceImpl implements ReservationService {
     reservation.setUtilisateurOperation(utilisateurSave);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
-    reservation.setAdvancePayment(dto.getAdvancePayment());
+    reservation.setMontantPaye(dto.getMontantPaye());
     reservation.setDateDebut(dto.getDateDebut());
     reservation.setDateFin(dto.getDateFin());
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
-    reservation.setNmbreFemme(dto.getNmbreFemme());
-    reservation.setNmbreHomme(dto.getNmbreHomme());
-    reservation.setRemainingPayment(dto.getRemainingPayment());
+    //reservation.setNmbreFemme(dto.getNmbreFemme());
+    //reservation.setNmbreHomme(dto.getNmbreHomme());
+    reservation.setMontantReduction(dto.getMontantReduction());
+    reservation.setPourcentageReduction(dto.getPourcentageReduction());
     reservation.setSoldReservation(dto.getSoldReservation());
     reservation.setBienImmobilierOperation(
       gestimoWebMapperImpl.fromAppartementDto(appartementDto)

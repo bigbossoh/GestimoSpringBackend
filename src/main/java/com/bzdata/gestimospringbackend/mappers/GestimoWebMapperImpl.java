@@ -613,7 +613,14 @@ public class GestimoWebMapperImpl {
   public CategoryChambreSaveOrUpdateDto fromCategoryChambre(
     CategorieChambre categorieChambre
   ) {
- 
+    // List<AppartementDto> appDto = appartementRepository
+    //   .findAll()
+    //   .stream()
+    //   .filter(ca ->
+    //     ca.getCategorieApartement().getId() == categorieChambre.getId()
+    //   )
+    //   .map(xx -> fromAppartement(xx))
+    //   .collect(Collectors.toList());
     List<PrixParCategorieChambreDto> prixCat = prixParCategorieChambreRepository
       .findAll()
       .stream()
@@ -678,7 +685,6 @@ public class GestimoWebMapperImpl {
       .findById(reservation.getBienImmobilierOperation().getId())
       .orElse(null);
     BeanUtils.copyProperties(reservation, reservationSaveOrUpdateDto);
-    reservationSaveOrUpdateDto.setIdUtilisateur(reservation.getUtilisateurOperation().getId());
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
     );
@@ -714,7 +720,6 @@ public class GestimoWebMapperImpl {
   public Utilisateur fromUtilisateurRequestDto(UtilisateurRequestDto use) {
     Utilisateur usr = new Utilisateur();
     BeanUtils.copyProperties(use, usr);
-
     return usr;
   }
 

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ReservationService
   extends AbstractService<ReservationSaveOrUpdateDto> {
-  public ReservationAfficheDto saveOrUpdateGood(ReservationSaveOrUpdateDto dto);
+  public ReservationAfficheDto saveOrUpdateGood(ReservationRequestDto dto);
 
   List<ReservationAfficheDto> findAlGood();
 

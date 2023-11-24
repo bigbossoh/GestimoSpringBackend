@@ -59,7 +59,7 @@ public class ReservationController {
     // security = @SecurityRequirement(name = "bearerAuth")
   )
   public ResponseEntity<ReservationAfficheDto> saveorupdategood(
-    @RequestBody ReservationSaveOrUpdateDto dto
+    @RequestBody ReservationRequestDto dto
   ) {
     return ResponseEntity.ok(reservationService.saveOrUpdateGood(dto));
   }

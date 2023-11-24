@@ -374,7 +374,7 @@ public class EncaissementPrincipalServiceImpl
   public List<EncaissementPrincipalDTO> saveEncaissementAvecRetourDeList(
     EncaissementPayloadDto dto
   ) {
-    ClotureCaisseDto clotureCaisseDto = new ClotureCaisseDto();
+   // ClotureCaisseDto clotureCaisseDto = new ClotureCaisseDto();
     List<String> errors = EncaissementPayloadDtoValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("L'encaissement n'est pas valide {}", errors);
