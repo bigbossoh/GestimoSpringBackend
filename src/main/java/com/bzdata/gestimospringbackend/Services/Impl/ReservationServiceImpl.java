@@ -19,6 +19,9 @@ import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.ReservationRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -191,11 +194,11 @@ public class ReservationServiceImpl implements ReservationService {
       saveApp.setOccupied(true);
       appartementRepository.save(saveApp);
     }
-    UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdUtilisateur());
-    Objects.requireNonNull(
-      utilisateurRequestDto,
-      "Le paramètre utilisateurRequestDto ne doit pas être nul"
-    );
+    Utilisateur utilisateurRequestDto = utilisateurRepository.findById(dto.getIdUtilisateur()).orElse(null);
+    // Objects.requireNonNull(
+    //   utilisateurRequestDto,
+    //   "Le paramètre utilisateurRequestDto ne doit pas être nul"
+    // );
 
     Utilisateur utilisateur;
 
@@ -207,10 +210,7 @@ public class ReservationServiceImpl implements ReservationService {
           )
         );
     } else {
-      utilisateur =
-        gestimoWebMapperImpl.toUtilisateur(
-          utilisateurService.saveUtilisateur(utilisateurRequestDto)
-        );
+      utilisateur = utilisateurRepository.save(utilisateurRequestDto);
     }
 
     Reservation reservation;
@@ -220,13 +220,20 @@ public class ReservationServiceImpl implements ReservationService {
     } else {
       reservation = reservationRepository.getById(dto.getId());
     }
-
+ LocalDate dateDebutLocalDate = LocalDate.parse(
+      dto.getDateDebut(),
+      DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    );
+     LocalDate dateFinLocalDate = LocalDate.parse(
+     dto.getDateFin(),
+      DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    );
     reservation.setUtilisateurOperation(utilisateur);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
     reservation.setMontantPaye(dto.getMontantPaye());
-    reservation.setDateDebut(dto.getDateDebut());
-    reservation.setDateFin(dto.getDateFin());
+    reservation.setDateDebut(dateDebutLocalDate);
+    reservation.setDateFin(dateFinLocalDate);
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
     reservation.setNmbreAdulte(dto.getNmbreAdulte());
    // reservation.setNmbreHomme(dto.getNmbreHomme());
@@ -254,20 +261,26 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public ReservationAfficheDto saveOrUpdateReservation(
+  public boolean saveOrUpdateReservation(
     ReservationRequestDto dto
   ) {
-    log.info("DTO {}", dto);
+    log.info("DTO de reservation {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
     Objects.requireNonNull(dto, "Le paramètre dto ne doit pas être nul");
 
     AppartementDto appartementDto = appartementService.findById(
       dto.getIdAppartementdDto()
     );
+       
     Random random = new Random();
-    UtilisateurRequestDto utilisateurRequestDto = utilisateurService.findById(dto.getIdUtilisateur());
+     log.info("DTO de IIV {},{},{}", dto.getIdAppartementdDto(),dto.getDateDebut(),dto.getIdUtilisateur());
+    Utilisateur utilisateurRequestDto = utilisateurRepository.findById(dto.getIdUtilisateur()).orElse(null);
     Utilisateur utilisateur = new Utilisateur();
     Utilisateur utilisateurSave;
-    if (utilisateurRequestDto == null) {
+        log.info("DTO de reservation II {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
+    if (utilisateurRequestDto== null) {
+          log.info("DTO de reservation III {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
+      utilisateur.setRoleUsed("CLIENT HOTEL");
+                    utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
       utilisateur.setUsername("0"+random.nextInt(1,20000));
       utilisateur.setNom("XXX");
       utilisateur.setPrenom("XXXX");
@@ -278,14 +291,12 @@ public class ReservationServiceImpl implements ReservationService {
       utilisateur.setMobile("0"+random.nextInt(1,20000));
       utilisateur.setRoleUsed(ROLE_CLIENT_HOTEL.name());
       utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
+        log.info("DTO de user save {},{}", utilisateur,"0"+random.nextInt(1,20000));
       utilisateurSave = utilisateurRepository.save(utilisateur);
     } else {
-      utilisateurSave =
-        gestimoWebMapperImpl.toUtilisateur(
-          utilisateurService.saveUtilisateur(utilisateurRequestDto)
-        );
+      utilisateurSave =utilisateurRepository.save(utilisateurRequestDto);
     }
-
+    log.info("DTO de IV {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
     Reservation reservation;
 
     if (dto.getId() == 0) {
@@ -297,14 +308,23 @@ public class ReservationServiceImpl implements ReservationService {
       "THE ID UTILISATEUR IS THE NEXT EP {}",
       utilisateurSave.getUsername()
     );
+     LocalDate dateDebutLocalDate = LocalDate.parse(
+      dto.getDateDebut(),
+      DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    );
+     LocalDate dateFinLocalDate = LocalDate.parse(
+     dto.getDateFin(),
+      DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    );
     log.info("Local date {}", dto.getDateDebut());
     reservation.setUtilisateurOperation(utilisateurSave);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
     reservation.setMontantPaye(dto.getMontantPaye());
-    reservation.setDateDebut(dto.getDateDebut());
-    reservation.setDateFin(dto.getDateFin());
+    reservation.setDateDebut(dateDebutLocalDate);
+    reservation.setDateFin(dateFinLocalDate);
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
+    reservation.setMontantReservion(dto.getMontantReservation());
     //reservation.setNmbreFemme(dto.getNmbreFemme());
     //reservation.setNmbreHomme(dto.getNmbreHomme());
     reservation.setMontantReduction(dto.getMontantReduction());
@@ -320,6 +340,6 @@ public class ReservationServiceImpl implements ReservationService {
       reservationRepository,
       saveReservation
     );
-    return gestimoWebMapperImpl.fromReservation(saveReservation);
+    return true;
   }
 }

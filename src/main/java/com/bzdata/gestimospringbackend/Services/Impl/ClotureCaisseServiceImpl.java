@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import com.bzdata.gestimospringbackend.DTOs.ClotureCaisseDto;
 import com.bzdata.gestimospringbackend.Models.ClotureCaisse;
 import com.bzdata.gestimospringbackend.Services.ClotureCaisseService;
+import com.bzdata.gestimospringbackend.Services.EmailService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ClotureCaisseRepository;
 import java.time.Instant;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class ClotureCaisseServiceImpl implements ClotureCaisseService {
-
+final EmailService emailService;
   final ClotureCaisseRepository caisseRepository;
   final GestimoWebMapperImpl gestimoWebMapper;
 
@@ -75,6 +76,9 @@ public class ClotureCaisseServiceImpl implements ClotureCaisseService {
     newClotureCaisse.setIntervalNextCloture(dto.getIntervalNextCloture());
     newClotureCaisse.setTotalEncaisse(dto.getTotalEncaisse());
     ClotureCaisse clotureCaisse = caisseRepository.save(newClotureCaisse);
+    // String body="Veuiller recevoire l'état de la caisse du "+clotureCaisse.getCreationDate()+" Sur la période de : "+clotureCaisse.getDateDeDCloture()+" - "+clotureCaisse.getDateFinCloture()+" Total Encaissé :"+clotureCaisse.getTotalEncaisse();
+    // String subject="Point de caisse du "+clotureCaisse.getCreationDate();
+    // emailService.sendMailWithAttachment("", "astairenazaire@gmail.com", subject, body, null);
     if (clotureCaisse != null) {
       return true;
     } else {

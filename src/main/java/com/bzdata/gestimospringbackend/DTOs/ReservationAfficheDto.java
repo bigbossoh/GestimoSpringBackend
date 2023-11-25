@@ -45,13 +45,13 @@ public class ReservationAfficheDto {
   Long idBienImmobilier;
   long idLocataire;
   String codeAbrvBienImmobilier;
-  double advancePayment;
-  double remainingPayment;
+  double pourcentageReduction;
+  double montantReduction;
   double soldReservation;
-  int nmbreHomme;
-  int nmbreFemme;
+  double montantPaye;
+  int nmbreAdulte;
+  double montantReservation;
   int nmbrEnfant;
-
   String descriptionCategori;
   String nameCategori;
   double priceCategori;

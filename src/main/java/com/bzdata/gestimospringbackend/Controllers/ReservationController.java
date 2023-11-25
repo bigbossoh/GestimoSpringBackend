@@ -12,6 +12,8 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 //@SecurityRequirement(name = "gestimoapi")
+@Slf4j
 public class ReservationController {
 
   final ReservationService reservationService;
@@ -45,10 +48,10 @@ public class ReservationController {
   @Operation(
     summary = "Creation et mise à jour d'une Reservation avec le bon dto"
   )
-  public ResponseEntity<ReservationAfficheDto> saveorupdatereservation(
+  public ResponseEntity<Boolean> saveorupdatereservation(
     @RequestBody ReservationRequestDto dto
   ) {
-    //System.out.println("" + dto.getNom());
+   log.info(" Reserrr ; {}", dto);
     return ResponseEntity.ok(reservationService.saveOrUpdateReservation(dto));
   }
 

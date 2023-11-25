@@ -28,7 +28,7 @@ public class Reservation extends Operation {
   double soldReservation;
   double montantPaye;
   int nmbreAdulte;
-  
+  double montantReservion;
   int nmbrEnfant;
   String statutReservation;
 

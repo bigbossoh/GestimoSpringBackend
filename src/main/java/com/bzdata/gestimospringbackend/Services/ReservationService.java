@@ -13,7 +13,7 @@ public interface ReservationService
 
   public ReservationAfficheDto findByIdGood(Long id);
 
-  public ReservationAfficheDto saveOrUpdateReservation(
+  public boolean saveOrUpdateReservation(
     ReservationRequestDto dto
   );
 }

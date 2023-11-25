@@ -688,6 +688,9 @@ public class GestimoWebMapperImpl {
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
     );
+    reservationSaveOrUpdateDto.setMontantReservation(reservation.getMontantReservion());
+     reservationSaveOrUpdateDto.setMontantReduction(reservation.getMontantReduction());
+  
     reservationSaveOrUpdateDto.setUtilisateurOperation(
       reservation.getUtilisateurOperation().getNom() +
       " " +
@@ -699,6 +702,7 @@ public class GestimoWebMapperImpl {
     reservationSaveOrUpdateDto.setUsername(
       reservation.getUtilisateurOperation().getUsername()
     );
+   // reservationSaveOrUpdateDto.setMontantReservation(reservation.getMontantReservion().dou);
     if (appartement != null) {
       reservationSaveOrUpdateDto.setDescriptionCategori(
         appartement.getCategorieApartement().getDescription()
@@ -706,7 +710,7 @@ public class GestimoWebMapperImpl {
       reservationSaveOrUpdateDto.setNbrDiffJourCategori(
         appartement.getCategorieApartement().getNbrDiffJour()
       );
-    }
+    }  
     //reservationSaveOrUpdateDto.setCreationDate(reservation.getCreationDate());
     return reservationSaveOrUpdateDto;
   }

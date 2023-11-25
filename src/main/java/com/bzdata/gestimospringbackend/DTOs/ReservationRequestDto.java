@@ -22,8 +22,8 @@ public class ReservationRequestDto {
 
   Long idAppartementdDto;
 
-  LocalDate dateDebut;
-  LocalDate dateFin;
+  String dateDebut;
+  String dateFin;
   Long idClient;
   Long idBien;
 
@@ -37,6 +37,7 @@ public class ReservationRequestDto {
    double montantReduction;
    double soldReservation;
    double montantPaye;
+  double montantReservation;
    int nmbreAdulte;
    
    int nmbrEnfant;
