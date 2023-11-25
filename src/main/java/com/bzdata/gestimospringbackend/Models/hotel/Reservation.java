@@ -3,6 +3,8 @@ package com.bzdata.gestimospringbackend.Models.hotel;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Models.Operation;
 import java.util.List;
+
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -28,7 +30,6 @@ public class Reservation extends Operation {
   double soldReservation;
   double montantPaye;
   int nmbreAdulte;
-  double montantReservion;
   int nmbrEnfant;
   String statutReservation;
 

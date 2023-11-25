@@ -19,7 +19,7 @@ import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreUserRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
-import com.bzdata.gestimospringbackend.repository.DefaultChapitreRepository;
+import com.bzdata.gestimospringbackend.repository.EtablissementRepository;
 import com.bzdata.gestimospringbackend.repository.MagasinRepository;
 import com.bzdata.gestimospringbackend.repository.PaysRepository;
 import com.bzdata.gestimospringbackend.repository.QuartierRepository;
@@ -154,7 +154,7 @@ public class GestimoSpringBackendApplication {
     MagasinRepository magasinRepository,
     ChapitreRepository chapitreRepository,
     ChapitreUserRepository chapitreUserRepository,
-    DefaultChapitreRepository defaultChapitreRepository
+    EtablissementRepository defaultChapitreRepository
   ) {
     String mdp = passwordEncoder.encode("superviseur");
     Utilisateur utilisateur = new Utilisateur();
@@ -171,6 +171,7 @@ public class GestimoSpringBackendApplication {
         paysRepository.save(pays);
       }
       Long couchDefaultChapitre = defaultChapitreRepository.count();
+      System.out.println(couchDefaultChapitre);
       if (couchDefaultChapitre == 0) {
         Chapitre chapitre1 = chapitreRepository.findById(1L).orElse(null);
         Etablissement def1 = new Etablissement();

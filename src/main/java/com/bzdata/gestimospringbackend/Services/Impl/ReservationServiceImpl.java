@@ -324,7 +324,7 @@ public class ReservationServiceImpl implements ReservationService {
     reservation.setDateDebut(dateDebutLocalDate);
     reservation.setDateFin(dateFinLocalDate);
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
-    reservation.setMontantReservion(dto.getMontantReservation());
+    
     //reservation.setNmbreFemme(dto.getNmbreFemme());
     //reservation.setNmbreHomme(dto.getNmbreHomme());
     reservation.setMontantReduction(dto.getMontantReduction());

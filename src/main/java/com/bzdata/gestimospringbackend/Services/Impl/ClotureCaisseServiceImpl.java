@@ -8,6 +8,8 @@ import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ClotureCaisseRepository;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
@@ -76,9 +78,14 @@ final EmailService emailService;
     newClotureCaisse.setIntervalNextCloture(dto.getIntervalNextCloture());
     newClotureCaisse.setTotalEncaisse(dto.getTotalEncaisse());
     ClotureCaisse clotureCaisse = caisseRepository.save(newClotureCaisse);
-    // String body="Veuiller recevoire l'état de la caisse du "+clotureCaisse.getCreationDate()+" Sur la période de : "+clotureCaisse.getDateDeDCloture()+" - "+clotureCaisse.getDateFinCloture()+" Total Encaissé :"+clotureCaisse.getTotalEncaisse();
-    // String subject="Point de caisse du "+clotureCaisse.getCreationDate();
-    // emailService.sendMailWithAttachment("", "astairenazaire@gmail.com", subject, body, null);
+     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+            .withZone(ZoneId.systemDefault());
+
+
+        String formattedInstant = formatter.format(clotureCaisse.getCreationDate());
+    String body="Veuiller recevoire l'état de la caisse du "+formattedInstant+" Sur la période de : "+clotureCaisse.getDateDeDCloture()+" - "+clotureCaisse.getDateFinCloture()+" Total Encaissé :"+clotureCaisse.getTotalEncaisse()+" F CFA ";
+    String subject="Point de caisse du "+formattedInstant;
+    emailService.sendMailWithAttachment("18-1155", "michel.bossoh@outlook.fr", subject, body, null);
     if (clotureCaisse != null) {
       return true;
     } else {

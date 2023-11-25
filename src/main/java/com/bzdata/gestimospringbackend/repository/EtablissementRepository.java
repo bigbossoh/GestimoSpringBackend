@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.bzdata.gestimospringbackend.Models.Etablissement;
 
-public interface DefaultChapitreRepository extends JpaRepository<Etablissement,Long>{
+public interface EtablissementRepository extends JpaRepository<Etablissement,Long>{
     
 }

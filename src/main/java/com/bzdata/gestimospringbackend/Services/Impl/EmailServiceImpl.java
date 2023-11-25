@@ -53,21 +53,26 @@ public class EmailServiceImpl implements EmailService {
                 mimeMessage.setFrom(new InternetAddress("seve_investissment@outlook.fr"));
                 mimeMessage.setSubject(subject);
                 // mimeMessage.setText(body);
-                File file = new File(fileToAttache);
-                log.info("****** Le fichier a envoyer ***** {}", file);
+              
                 Multipart multipart = new MimeMultipart();
                 MimeBodyPart textBodyPart = new MimeBodyPart();
                 textBodyPart.setText(body);
                 MimeBodyPart attachementBodyPart = new MimeBodyPart();
+                if (fileToAttache!=null) {
+                      File file = new File(fileToAttache);
+                log.info("****** Le fichier a envoyer ***** {}", file);
                 DataSource source = new FileDataSource(file);
                 attachementBodyPart.setDataHandler(new DataHandler(source));
-                attachementBodyPart.setFileName("Quittance du mois de " + periode + ".pdf");
+                   attachementBodyPart.setFileName("Quittance du mois de " + periode + ".pdf");
+                     multipart.addBodyPart(attachementBodyPart);
+                }      
                 multipart.addBodyPart(textBodyPart);
-                multipart.addBodyPart(attachementBodyPart);
+              
                 mimeMessage.setContent(multipart);
             }
         };
         try {
+            
             System.out.println("*************** send mails for Test **********");
             mailSender.send(preparator);
             log.info("Le send mail {}", preparator);

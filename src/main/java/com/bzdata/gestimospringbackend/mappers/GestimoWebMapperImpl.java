@@ -688,7 +688,7 @@ public class GestimoWebMapperImpl {
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
     );
-    reservationSaveOrUpdateDto.setMontantReservation(reservation.getMontantReservion());
+    reservationSaveOrUpdateDto.setMontantReservation(reservation.getSoldReservation()+reservation.getMontantPaye());
      reservationSaveOrUpdateDto.setMontantReduction(reservation.getMontantReduction());
   
     reservationSaveOrUpdateDto.setUtilisateurOperation(

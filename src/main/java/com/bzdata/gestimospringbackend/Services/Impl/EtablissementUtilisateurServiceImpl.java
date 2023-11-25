@@ -9,7 +9,7 @@ import com.bzdata.gestimospringbackend.Services.EtablissementUtilsateurService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreUserRepository;
-import com.bzdata.gestimospringbackend.repository.DefaultChapitreRepository;
+import com.bzdata.gestimospringbackend.repository.EtablissementRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import java.util.List;
 import lombok.AccessLevel;
@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class EtablissementUtilisateurServiceImpl implements EtablissementUtilsateurService {
 
-  final DefaultChapitreRepository chapitreRepository;
+  final EtablissementRepository chapitreRepository;
   final ChapitreUserRepository chapitreUserRepository;
   final UtilisateurRepository utilisateurRepository;
   final GestimoWebMapperImpl gestimoWebMapperImpl;

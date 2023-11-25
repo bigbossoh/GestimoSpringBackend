@@ -6,7 +6,7 @@ import com.bzdata.gestimospringbackend.Models.Etablissement;
 import com.bzdata.gestimospringbackend.Services.DefaultChapitreService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
-import com.bzdata.gestimospringbackend.repository.DefaultChapitreRepository;
+import com.bzdata.gestimospringbackend.repository.EtablissementRepository;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DefaultChapitreServiceImpl implements DefaultChapitreService {
 
-  final DefaultChapitreRepository defaultChapitreRepository;
+  final EtablissementRepository defaultChapitreRepository;
   final ChapitreRepository chapitreRepository;
   final GestimoWebMapperImpl gestimoWebMapperImpl;
 
