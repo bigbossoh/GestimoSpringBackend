@@ -11,29 +11,30 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppartementDto {
-    Long id;
-    Long idAgence;
-    Long idCreateur;
-    int nbrPieceApp;
-    int nbreChambreApp;
-    int nbreSalonApp;
-    int nbreSalleEauApp;
-    Long numApp;
-    Long idEtageAppartement;
-    String fullNameProprio;
-    String codeAbrvBienImmobilier;
-    String nomCompletBienImmobilier;
-    String nomBaptiserBienImmobilier;
-    String description;
-    double superficieBien;
-    boolean bienMeublerResidence;
-    boolean isOccupied;
 
-    Long idCategorie;
-    String nameCategorie;
-    double priceCategorie;
-    int nbrDiffJourCategorie;
-    double pourcentReducCategorie;
-    CategoryChambreSaveOrUpdateDto categorieChambre;
+  Long id;
+  Long idAgence;
+  Long idCreateur;
+  int nbrPieceApp;
+  int nbreChambreApp;
+  int nbreSalonApp;
+  int nbreSalleEauApp;
+  Long numApp;
+  Long idEtageAppartement;
+  String fullNameProprio;
+  String codeAbrvBienImmobilier;
+  String nomCompletBienImmobilier;
+  String nomBaptiserBienImmobilier;
+  String description;
+  double superficieBien;
+  boolean bienMeublerResidence;
+  boolean isOccupied;
 
+  Long idCategorie;
+  String nameCategorie;
+  double priceCategorie;
+  int nbrDiffJourCategorie;
+  double pourcentReducCategorie;
+  Long idCategorieChambre;
+  Long idChapitre;
 }

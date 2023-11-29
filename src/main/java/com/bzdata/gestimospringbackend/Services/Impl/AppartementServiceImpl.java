@@ -2,14 +2,18 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 import com.bzdata.gestimospringbackend.Models.Appartement;
+import com.bzdata.gestimospringbackend.Models.Chapitre;
 import com.bzdata.gestimospringbackend.Models.Etage;
 import com.bzdata.gestimospringbackend.Models.Site;
+import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Services.AppartementService;
 import com.bzdata.gestimospringbackend.exceptions.EntityNotFoundException;
 import com.bzdata.gestimospringbackend.exceptions.ErrorCodes;
 import com.bzdata.gestimospringbackend.exceptions.InvalidEntityException;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
+import com.bzdata.gestimospringbackend.repository.CategoryChambreRepository;
+import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.EtageRepository;
 import com.bzdata.gestimospringbackend.validator.AppartementDtoValidator;
 import java.util.List;
@@ -35,9 +39,9 @@ public class AppartementServiceImpl implements AppartementService {
 
   final GestimoWebMapperImpl gestimoWebMapperImpl;
   final AppartementRepository appartementRepository;
-
+final CategoryChambreRepository categoryChambreRepository;
   final EtageRepository etageRepository;
-
+final ChapitreRepository chapitreRepository;
   @Override
   public boolean delete(Long id) {
     log.info("We are going to delete a Appartement with the ID {}", id);
@@ -143,10 +147,25 @@ public class AppartementServiceImpl implements AppartementService {
         errors
       );
     }
+    Chapitre chapitre;
+    if (dto.getIdChapitre()!=null && dto.getIdChapitre()!=0 ) {
+      chapitre=chapitreRepository.findById(dto.getIdChapitre()).orElse(null);
+    } else {
+      chapitre=chapitreRepository.findById(1L).orElse(null);
+    }
     Optional<Appartement> unAppartementTrouve = appartementRepository.findById(
       dto.getId()
     );
+
+   CategorieChambre categorieChambre;
+    if (dto.getIdCategorieChambre()!=null) {
+        categorieChambre=categoryChambreRepository.findById(dto.getIdCategorieChambre()).orElse(null);
+      
+    }else{
+        categorieChambre=categoryChambreRepository.findById(1L).orElse(null);
+    }
     if (unAppartementTrouve.isPresent()) {
+      unAppartementTrouve.get().setChapitre(chapitre);
       unAppartementTrouve.get().setNbrPieceApp(dto.getNbrPieceApp());
       unAppartementTrouve.get().setNbreChambreApp(dto.getNbreChambreApp());
       unAppartementTrouve.get().setNbreSalleEauApp(dto.getNbreSalleEauApp());
@@ -163,7 +182,9 @@ public class AppartementServiceImpl implements AppartementService {
         .setBienMeublerResidence(dto.isBienMeublerResidence());
       unAppartementTrouve.get().setDescription(dto.getDescription());
       unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
-      log.info("dto.isBienMeublerResidence() {}", dto.isBienMeublerResidence());
+   if (categorieChambre!=null) {
+         unAppartementTrouve.get().setCategorieApartement(categorieChambre);
+      }
       // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
       Appartement appartementSave = appartementRepository.save(
         unAppartementTrouve.get()
@@ -180,7 +201,12 @@ public class AppartementServiceImpl implements AppartementService {
       appartement.setNbreSalonApp(dto.getNbreSalonApp());
       appartement.setIdAgence(dto.getIdAgence());
       appartement.setIdCreateur(dto.getIdCreateur());
+      appartement.setChapitre(chapitre);
       appartement.setNumApp(numApp);
+      if (categorieChambre!=null) {
+         appartement.setCategorieApartement(categorieChambre);
+      }
+     
       appartement.setCodeAbrvBienImmobilier(
         (etage.getCodeAbrvEtage() + "-APPT-" + numApp).toUpperCase()
       );
