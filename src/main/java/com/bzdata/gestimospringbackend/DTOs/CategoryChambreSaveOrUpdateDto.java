@@ -28,15 +28,14 @@ public class CategoryChambreSaveOrUpdateDto {
   @NotNull(message = "La Description ne doit pas etre null")
   @NotEmpty(message = "La Description ne doit pas etre vide")
   @NotBlank(message = "La Description ne doit pas etre vide")
-  String description;
+  String name;
+  
 
   @NotNull(message = "Le Nom ne doit pas etre null")
   @NotEmpty(message = "Le Nom ne doit pas etre vide")
   @NotBlank(message = "Le Nom ne doit pas etre vide")
-  String name;
-  double price;
-  int nbrDiffJour;
-  double pourcentReduc;
+ String description;
+
    List<PrixParCategorieChambreDto> prixGategorieDto;
    List<AppartementDto> appartements;
 }

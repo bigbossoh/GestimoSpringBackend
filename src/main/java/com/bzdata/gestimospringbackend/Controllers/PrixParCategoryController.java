@@ -2,12 +2,11 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
-import java.util.List;
-
 import com.bzdata.gestimospringbackend.DTOs.PrixParCategorieChambreDto;
 import com.bzdata.gestimospringbackend.Services.PrixParCategorieChambreService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-//@SecurityRequirement(name = "gestimoapi")
+@SecurityRequirement(name = "gestimoapi")
 @CrossOrigin(origins = "*")
 public class PrixParCategoryController {
 
@@ -45,8 +44,14 @@ public class PrixParCategoryController {
       parCategorieChambreService.saveOrUpDatePrixPArCategoryChambre(dto)
     );
   }
+
   @GetMapping("/listDesPrixParCategori/{idCategorie}")
-public ResponseEntity<List<PrixParCategorieChambreDto>>listDesPrixParCategori(@PathVariable("idCategorie")Long idCategorie){
-  return ResponseEntity.ok(parCategorieChambreService.listPrixParIdCateogori(idCategorie));
-}
+  public ResponseEntity<List<PrixParCategorieChambreDto>> listDesPrixParCategori(
+    @PathVariable("idCategorie") Long idCategorie
+  ) {
+    log.info("THE PAYLOAD IS {}", idCategorie);
+    return ResponseEntity.ok(
+      parCategorieChambreService.listPrixParIdCateogori(idCategorie)
+    );
+  }
 }

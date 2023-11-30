@@ -106,11 +106,17 @@ public class PrixParCategoryChambreServiceImpl
   public List<PrixParCategorieChambreDto> listPrixParIdCateogori(
     Long idCategori
   ) {
+    log.info("THE RETURN IS {}", prixParCategorieChambreService
+      .findAll()
+      .stream()
+      .filter(cate -> cate.getCategorieChambre().getId() == idCategori)
+      .map(GestimoWebMapperImpl::fromPrixParCategorieChambre)
+      .collect(Collectors.toList()));
     return prixParCategorieChambreService
       .findAll()
       .stream()
       .filter(cate -> cate.getCategorieChambre().getId() == idCategori)
-      .map(m->gestimoWebMapperImpl.fromPrixParCategorieChambre(m))
+      .map(GestimoWebMapperImpl::fromPrixParCategorieChambre)
       .collect(Collectors.toList());
   }
 }

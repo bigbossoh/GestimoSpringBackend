@@ -1,5 +1,7 @@
 package com.bzdata.gestimospringbackend.DTOs;
 
+import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,4 +39,6 @@ public class AppartementDto {
   double pourcentReducCategorie;
   Long idCategorieChambre;
   Long idChapitre;
+  CategoryChambreSaveOrUpdateDto categorieChambre;
+  ;
 }
