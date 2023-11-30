@@ -33,5 +33,4 @@ public class Appartement extends Bienimmobilier {
     Etage etageAppartement;
     @ManyToOne(fetch = FetchType.LAZY)
      CategorieChambre categorieApartement;
-
 }
