@@ -137,7 +137,7 @@ final ChapitreRepository chapitreRepository;
 
   @Override
   public AppartementDto save(AppartementDto dto) {
-    log.info("We are going to create  a new Appartement {}", dto);
+    log.info("We are going to create  a new Appartement {}", dto.isBienMeublerResidence());
     List<String> errors = AppartementDtoValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("l'Appartement n'est pas valide {}", errors);
@@ -203,6 +203,7 @@ final ChapitreRepository chapitreRepository;
       appartement.setIdCreateur(dto.getIdCreateur());
       appartement.setChapitre(chapitre);
       appartement.setNumApp(numApp);
+     
       if (categorieChambre!=null) {
          appartement.setCategorieApartement(categorieChambre);
       }
