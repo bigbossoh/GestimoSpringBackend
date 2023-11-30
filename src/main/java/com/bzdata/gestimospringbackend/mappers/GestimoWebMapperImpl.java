@@ -494,18 +494,11 @@ public class GestimoWebMapperImpl {
         appartement.getCategorieApartement().getId()
       );
 
-      appartementDto.setNbrDiffJourCategorie(
-        appartement.getCategorieApartement().getNbrDiffJour()
-      );
+   
       appartementDto.setNameCategorie(
         appartement.getCategorieApartement().getName()
       );
-      appartementDto.setPourcentReducCategorie(
-        appartement.getCategorieApartement().getPourcentReduc()
-      );
-      appartementDto.setPriceCategorie(
-        appartement.getCategorieApartement().getPrice()
-      );
+
     } else {
       appartementDto.setIdCategorie(0L);
       appartementDto.setNbrDiffJourCategorie(0);
@@ -515,6 +508,7 @@ public class GestimoWebMapperImpl {
     }
     if (categoryChambreSaveOrUpdateDto != null) {
       appartementDto.setIdCategorie(categoryChambreSaveOrUpdateDto.getId());
+      appartementDto.setCategorieChambre(categoryChambreSaveOrUpdateDto);
     } else {
       appartementDto.setIdCategorie(0L);
     }
@@ -736,9 +730,7 @@ public class GestimoWebMapperImpl {
       reservationSaveOrUpdateDto.setDescriptionCategori(
         appartement.getCategorieApartement().getDescription()
       );
-      reservationSaveOrUpdateDto.setNbrDiffJourCategori(
-        appartement.getCategorieApartement().getNbrDiffJour()
-      );
+
     }
     //reservationSaveOrUpdateDto.setCreationDate(reservation.getCreationDate());
     return reservationSaveOrUpdateDto;

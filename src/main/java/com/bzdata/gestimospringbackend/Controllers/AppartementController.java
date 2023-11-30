@@ -96,4 +96,11 @@ public class AppartementController {
         log.info("Find Appartement By Id Pays {}", id);
         return ResponseEntity.ok(appartementService.findAllByIdEtage(id));
     }
+
+     @Operation(summary = "Trouver un Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findallappartementbyidcategorie/{id}")
+    public ResponseEntity<List<AppartementDto>> findAllAppartementByIdCategorie(@PathVariable("id") Long id) {
+        log.info("Find Appartement by ID{}", id);
+        return ResponseEntity.ok(appartementService.findAllAppartementByIdCategorie(id));
+    }
 }

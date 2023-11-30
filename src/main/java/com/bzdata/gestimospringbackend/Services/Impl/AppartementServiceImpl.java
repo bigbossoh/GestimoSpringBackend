@@ -283,4 +283,15 @@ final ChapitreRepository chapitreRepository;
       .map(gestimoWebMapperImpl::fromAppartement)
       .collect(Collectors.toList());
   }
+
+  @Override
+  public List<AppartementDto> findAllAppartementByIdCategorie(Long idCategorie) {
+  return appartementRepository
+      .findAll()
+      .stream()
+      .filter(appa ->appa.isBienMeublerResidence() == true&& appa.getCategorieApartement().getId()==idCategorie
+      )
+      .map(gestimoWebMapperImpl::fromAppartement)
+      .collect(Collectors.toList());
+  }
 }

@@ -78,11 +78,10 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     if (categorieChambre != null) {
       categorieChambre.setDescription(dto.getDescription());
       categorieChambre.setName(dto.getName());
-      categorieChambre.setPrice(dto.getPrice());
+      
       categorieChambre.setIdAgence(dto.getIdAgence());
       categorieChambre.setIdCreateur(dto.getIdCreateur());
-      categorieChambre.setPourcentReduc(dto.getPourcentReduc());
-      categorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
+     
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         categorieChambre
       );
@@ -91,11 +90,10 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
       CategorieChambre newCategorieChambre = new CategorieChambre();
       newCategorieChambre.setDescription(dto.getDescription());
       newCategorieChambre.setName(dto.getName());
-      newCategorieChambre.setPrice(dto.getPrice());
+   
       newCategorieChambre.setIdCreateur(dto.getIdCreateur());
       newCategorieChambre.setIdAgence(dto.getIdAgence());
-      newCategorieChambre.setPourcentReduc(dto.getPourcentReduc());
-      newCategorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
+     
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         newCategorieChambre
       );
@@ -114,9 +112,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     if (categorieChambre != null) {
       categorieChambre.setDescription(dto.getDescription());
       categorieChambre.setName(dto.getName());
-      categorieChambre.setPrice(dto.getPrice());
-      categorieChambre.setPourcentReduc(dto.getPourcentReduc());
-      categorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
+   
       categoryChambreRepository.save(categorieChambre);
       return gestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
     }
@@ -125,9 +121,7 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     newCategite.setIdAgence(dto.getIdAgence());
     newCategite.setDescription(dto.getDescription());
     newCategite.setName(dto.getName());
-    newCategite.setPrice(dto.getPrice());
-    newCategite.setPourcentReduc(dto.getPourcentReduc());
-    newCategite.setNbrDiffJour(dto.getNbrDiffJour());
+
     categoryChambreRepository.save(newCategite);
     return gestimoWebMapperImpl.fromCategoryChambre(newCategite);
   }

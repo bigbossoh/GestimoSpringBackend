@@ -26,9 +26,7 @@ import lombok.experimental.FieldDefaults;
 public class CategorieChambre extends AbstractEntity {
     String description;
     String name;
-    double price;
-    int nbrDiffJour;
-    double pourcentReduc;
+
     @OneToMany
     @JoinColumn(name = "categorieApartement")
     List<Appartement> appartements;
