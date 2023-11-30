@@ -33,4 +33,5 @@ public class VillaDto {
     Long idSite;
     Long idUtilisateur;
     String proprietaire;
+    Long idChapitre;
 }

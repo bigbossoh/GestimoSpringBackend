@@ -19,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,5 +45,7 @@ public abstract class Bienimmobilier extends AbstractEntity {
     Chapitre chapitre;
     @OneToMany(mappedBy = "bienimmobilier")
     List<ImageData>imageDatas;
+      @ManyToOne
+    Site site;
 
 }

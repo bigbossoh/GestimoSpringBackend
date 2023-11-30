@@ -21,7 +21,7 @@ public class ReservationSaveOrUpdateDto {
 
     UtilisateurRequestDto utilisateurRequestDto;
     Long idAppartementdDto;
-
+Long idUtilisateur;
     LocalDate dateDebut;
     LocalDate dateFin;
    // UtilisateurAfficheDto utilisateurOperation;
@@ -37,10 +37,13 @@ public class ReservationSaveOrUpdateDto {
     Long idBienImmobilier;
     long idLocataire;
     String codeAbrvBienImmobilier;
-    double advancePayment;
-    double remainingPayment;
+    double pourcentageReduction;
+    double montantReduction;
     double soldReservation;
-    int nmbreHomme;
-    int nmbreFemme;
+    double montantPaye;
+    int nmbreAdulte;
+    double montantReservation;
     int nmbrEnfant;
+    public void setUtilisateurRequestDto(String string) {
+    }
 }

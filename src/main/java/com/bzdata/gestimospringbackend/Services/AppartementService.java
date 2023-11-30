@@ -17,4 +17,6 @@ public interface AppartementService {
     AppartementDto findByName(String nom);
 
     List<AppartementDto> findAllByIdEtage(Long id);
+
+    List<AppartementDto> findAllAppartementByIdCategorie(Long idCategorie);
 }

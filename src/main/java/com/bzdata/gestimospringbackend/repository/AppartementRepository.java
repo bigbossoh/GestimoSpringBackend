@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AppartementRepository extends JpaRepository<Appartement, Long> {
     Optional<Appartement> findByNomCompletBienImmobilier(String nom);
-
     List<Appartement> findByEtageAppartement(Etage entity);
 
 }

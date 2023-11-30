@@ -29,6 +29,7 @@ final BienImmobilierRepository bienImmobilierRepository;
 final GestimoWebMapperImpl gestimoWebMapperImpl;
     @Override
     public boolean saveImageAppartement(Long idBien, String fileName, MultipartFile imageData) throws IOException{
+       log.info("THE DATA UN BACKEND IS  {} : {} : {}", fileName, fileName, imageData);
         Bienimmobilier bienimmobilier=bienImmobilierRepository.findById(idBien).orElse(null);
         if (bienimmobilier==null){
             return false;

@@ -1,14 +1,19 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
+import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
+import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
-import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
+public interface ReservationService
+  extends AbstractService<ReservationSaveOrUpdateDto> {
+  public ReservationAfficheDto saveOrUpdateGood(ReservationRequestDto dto);
 
-public interface ReservationService extends AbstractService<ReservationSaveOrUpdateDto> {
-    public ReservationAfficheDto saveOrUpdateGood(ReservationSaveOrUpdateDto dto);
+  List<ReservationAfficheDto> findAlGood();
 
-    public List<ReservationAfficheDto> findAlGood();
+  public ReservationAfficheDto findByIdGood(Long id);
 
-    public ReservationAfficheDto findByIdGood(Long id);
+  public boolean saveOrUpdateReservation(
+    ReservationRequestDto dto
+  );
 }

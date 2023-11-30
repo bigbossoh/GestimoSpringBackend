@@ -9,6 +9,7 @@ import java.util.List;
 import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@SecurityRequirement(name = "gestimoapi")
+//@SecurityRequirement(name = "gestimoapi")
+@CrossOrigin(origins = "*")
 public class AppartementController {
     final AppartementService appartementService;
 
@@ -47,19 +49,25 @@ public class AppartementController {
         return ResponseEntity.ok(appartementService.save(dto));
     }
 
-    @Operation(summary = "Liste de toutes les Appartement", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Liste de toutes les Appartement"
+    // , security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/all/{id}")
     public ResponseEntity<List<AppartementDto>> findAllAppartement(@PathVariable("id") Long id) {
         return ResponseEntity.ok(appartementService.findAll(id));
     }
 
-    @Operation(summary = "Liste de toutes les Appartements meublés", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Liste de toutes les Appartements meublés"
+    // , security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/allmeuble/{id}")
     public ResponseEntity<List<AppartementDto>> findAllAppartementMeuble(@PathVariable("id") Long id) {
         return ResponseEntity.ok(appartementService.findAllMeuble(id));
     }
 
-    @Operation(summary = "Liste de toutes les Appartements Libres", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Liste de toutes les Appartements Libres"
+    // , security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/alllibre/{id}")
     public ResponseEntity<List<AppartementDto>> findAllAppartementLibre(@PathVariable("id") Long id) {
         return ResponseEntity.ok(appartementService.findAllLibre(id));
@@ -71,17 +79,28 @@ public class AppartementController {
         return ResponseEntity.ok(appartementService.findById(id));
     }
 
-    @Operation(summary = "Trouver un Apparte,ent par son nom", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Trouver un Apparte,ent par son nom"
+    // , security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/findByName/{name}")
     public ResponseEntity<AppartementDto> findByNameAppartement(@PathVariable("name") String name) {
         log.info("Find Appartement By nom {}", name);
         return ResponseEntity.ok(appartementService.findByName(name));
     }
 
-    @Operation(summary = "Trouver une Appartement par l'Id de l'étage", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Trouver une Appartement par l'Id de l'étage"
+    // , security = @SecurityRequirement(name = "bearerAuth")
+    )
     @GetMapping("/findByIdEtage/{id}")
     public ResponseEntity<List<AppartementDto>> findByIdEtageAppartement(@PathVariable("id") Long id) {
         log.info("Find Appartement By Id Pays {}", id);
         return ResponseEntity.ok(appartementService.findAllByIdEtage(id));
+    }
+
+     @Operation(summary = "Trouver un Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/findallappartementbyidcategorie/{id}")
+    public ResponseEntity<List<AppartementDto>> findAllAppartementByIdCategorie(@PathVariable("id") Long id) {
+        log.info("Find Appartement by ID{}", id);
+        return ResponseEntity.ok(appartementService.findAllAppartementByIdCategorie(id));
     }
 }

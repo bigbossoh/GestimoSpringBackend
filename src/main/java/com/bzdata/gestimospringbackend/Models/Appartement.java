@@ -4,6 +4,9 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+
+import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,5 +31,7 @@ public class Appartement extends Bienimmobilier {
     Long numApp;
     @ManyToOne(fetch = FetchType.LAZY)
     Etage etageAppartement;
+    @ManyToOne(fetch = FetchType.LAZY)
+     CategorieChambre categorieApartement;
 
 }

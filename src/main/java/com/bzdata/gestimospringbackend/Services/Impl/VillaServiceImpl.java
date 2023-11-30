@@ -169,7 +169,7 @@ public class VillaServiceImpl implements VillaService {
     public Long maxOfNumBien(Long idAgence) {
 
         LongSummaryStatistics collectMaxNumBien = villaRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+        .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .collect(Collectors.summarizingLong(Villa::getNumVilla));
         log.info(" countNberOfRecordVilla {}", collectMaxNumBien.getMax());
         return collectMaxNumBien.getMax();
@@ -178,7 +178,7 @@ public class VillaServiceImpl implements VillaService {
     @Override
     public List<VillaDto> findAll(Long idAgence) {
         return villaRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+        .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .map(gestimoWebMapperImpl::fromVilla)
                 .collect(Collectors.toList());
     }
@@ -215,7 +215,7 @@ public class VillaServiceImpl implements VillaService {
     @Override
     public List<VillaDto> findAllLibre(Long idAgence) {
         return villaRepository.findAll().stream()
-        .filter(agence->agence.getIdAgence()==idAgence)
+        .filter(agence->agence.getIdAgence()==idAgence&&agence.isBienMeublerResidence()==false)
                 .map(gestimoWebMapperImpl::fromVilla)
                 .filter((vil) -> vil.isOccupied() == false)
                 .collect(Collectors.toList());
@@ -224,7 +224,7 @@ public class VillaServiceImpl implements VillaService {
     private Long nombreVillaByIdSite(Site site) {
         Map<Site, Long> numbreVillabySite = villaRepository.findAll()
                 .stream()
-                .filter(e -> e.getSite().equals(site))
+                .filter(e -> e.getSite().equals(site)&&e.isBienMeublerResidence()==false)
               //  .filter(proprio->proprio)
                 .collect(Collectors.groupingBy(Villa::getSite, Collectors.counting()));
 

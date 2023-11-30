@@ -29,4 +29,5 @@ public class MagasinDto {
     Long idUtilisateur;
     String proprietaire;
     Long idmmeuble;
+    Long idChapitre;
 }

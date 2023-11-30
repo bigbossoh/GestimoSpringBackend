@@ -64,14 +64,14 @@ public class BailAppartementController {
     @Operation(summary = "Trouver un Bail Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")
     public ResponseEntity<BailAppartementDto> findByIDBailAppartement(@PathVariable("id") Long id) {
-        log.info("Find Bail Appartement by ID{}", id);
+     //   log.info("Find Bail Appartement by ID{}", id);
         return ResponseEntity.ok(bailAppartementService.findById(id));
     }
 
     @Operation(summary = "Trouver un Bail par son nom", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findByName/{name}")
     public ResponseEntity<BailAppartementDto> findByNameBailAppartement(@PathVariable("name") String name) {
-        log.info("Find Bail Magain By nom {}", name);
+      //  log.info("Find Bail Magain By nom {}", name);
         return ResponseEntity.ok(bailAppartementService.findByName(name));
     }
 }

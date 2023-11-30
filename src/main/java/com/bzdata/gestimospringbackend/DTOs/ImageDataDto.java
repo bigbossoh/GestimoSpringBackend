@@ -17,5 +17,5 @@ public class ImageDataDto {
     private String typeImage;
     private String profileAgenceImageUrl;
     private byte[] imageData;  
-     private Bienimmobilier bienimmobilier;
+     private Long bienimmobilier;
 }

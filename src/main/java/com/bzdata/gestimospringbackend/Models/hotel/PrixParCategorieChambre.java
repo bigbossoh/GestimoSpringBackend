@@ -1,6 +1,7 @@
 package com.bzdata.gestimospringbackend.Models.hotel;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 import com.bzdata.gestimospringbackend.Models.AbstractEntity;
 
@@ -22,5 +23,8 @@ public class PrixParCategorieChambre extends AbstractEntity{
     int intervalPrix;
     String description;
     int nbrDiffJour;
+    double pourcentReduc;
+    @ManyToOne
+    CategorieChambre categorieChambre;
 
 }
