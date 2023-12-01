@@ -3,7 +3,6 @@ package com.bzdata.gestimospringbackend.Models.hotel;
 import com.bzdata.gestimospringbackend.Models.EncaissementPrincipal;
 import com.bzdata.gestimospringbackend.Models.Operation;
 import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -25,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Reservation extends Operation {
 
+  double montantDeReservation;
   double pourcentageReduction;
   double montantReduction;
   double soldReservation;

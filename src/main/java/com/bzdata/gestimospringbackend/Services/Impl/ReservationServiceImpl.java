@@ -264,39 +264,16 @@ public class ReservationServiceImpl implements ReservationService {
   public boolean saveOrUpdateReservation(
     ReservationRequestDto dto
   ) {
-    log.info("DTO de reservation {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
     Objects.requireNonNull(dto, "Le paramètre dto ne doit pas être nul");
 
     AppartementDto appartementDto = appartementService.findById(
       dto.getIdAppartementdDto()
     );
-       
-    Random random = new Random();
-     log.info("DTO de IIV {},{},{}", dto.getIdAppartementdDto(),dto.getDateDebut(),dto.getIdUtilisateur());
-    Utilisateur utilisateurRequestDto = utilisateurRepository.findById(dto.getIdUtilisateur()).orElse(null);
-    Utilisateur utilisateur = new Utilisateur();
-    Utilisateur utilisateurSave;
-        log.info("DTO de reservation II {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
-    if (utilisateurRequestDto== null) {
-          log.info("DTO de reservation III {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
-      utilisateur.setRoleUsed("CLIENT HOTEL");
-                    utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
-      utilisateur.setUsername("0"+random.nextInt(1,20000));
-      utilisateur.setNom("XXX");
-      utilisateur.setPrenom("XXXX");
-      //utilisateur.setEmail(dto.getEmail());
-      utilisateur.setIdAgence(dto.getIdAgence());
-      utilisateur.setNumeroPieceIdentite("xxxxx");
-     // utilisateur.setDateDeNaissance(dto.getDateDeNaissance());
-      utilisateur.setMobile("0"+random.nextInt(1,20000));
-      utilisateur.setRoleUsed(ROLE_CLIENT_HOTEL.name());
-      utilisateur.setAuthorities(ROLE_CLIENT_HOTEL.getAuthorities());
-        log.info("DTO de user save {},{}", utilisateur,"0"+random.nextInt(1,20000));
-      utilisateurSave = utilisateurRepository.save(utilisateur);
-    } else {
-      utilisateurSave =utilisateurRepository.save(utilisateurRequestDto);
-    }
-    log.info("DTO de IV {},{}", dto.getIdAppartementdDto(),dto.getDateDebut());
+         log.info("DTO de USER NAME II {}", dto.getUsername());   
+  
+    Utilisateur utilisateurSave=utilisateurRepository.findUtilisateurByMobile(dto.getUsername());
+        log.info("DTO de reservation II {}", utilisateurSave.getNom());   
+   
     Reservation reservation;
 
     if (dto.getId() == 0) {
@@ -304,10 +281,7 @@ public class ReservationServiceImpl implements ReservationService {
     } else {
       reservation = reservationRepository.getById(dto.getId());
     }
-    log.info(
-      "THE ID UTILISATEUR IS THE NEXT EP {}",
-      utilisateurSave.getUsername()
-    );
+  
      LocalDate dateDebutLocalDate = LocalDate.parse(
       dto.getDateDebut(),
       DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -324,7 +298,8 @@ public class ReservationServiceImpl implements ReservationService {
     reservation.setDateDebut(dateDebutLocalDate);
     reservation.setDateFin(dateFinLocalDate);
     reservation.setNmbrEnfant(dto.getNmbrEnfant());
-    
+     reservation.setNmbreAdulte(dto.getNmbreAdulte());
+    reservation.setMontantDeReservation(dto.getMontantDeReservation());
     //reservation.setNmbreFemme(dto.getNmbreFemme());
     //reservation.setNmbreHomme(dto.getNmbreHomme());
     reservation.setMontantReduction(dto.getMontantReduction());
