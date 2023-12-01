@@ -16,4 +16,5 @@ public interface ClotureCaisseService
   List<ClotureCaisseDto> findAllCloturerCaisseByDateAndChapitre(Instant dateEnCours,Long idCaisse,String idChapitre);
   List<ClotureCaisseDto>findAllByCaissierAndChapitre(Long idCaisse,String idChapitre);
   int countInitClotureByCaissiaireAndChampitre(Long idCaissiaire,String idChapitre);
+   List<ClotureCaisseDto> findAllCloturerCaisseAgence();
 }

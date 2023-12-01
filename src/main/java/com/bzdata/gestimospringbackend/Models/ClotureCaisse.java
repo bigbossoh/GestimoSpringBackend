@@ -23,4 +23,5 @@ public class ClotureCaisse extends AbstractEntity {
   LocalDate dateDeDCloture;
   int intervalNextCloture;
   LocalDate dateFinCloture;
+  LocalDate dateNextCloture;
 }

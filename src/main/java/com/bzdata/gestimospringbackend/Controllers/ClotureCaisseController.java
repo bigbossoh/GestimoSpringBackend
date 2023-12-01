@@ -72,6 +72,16 @@ public class ClotureCaisseController {
   }
 
    @GetMapping(
+    "/findAllCloturerCaisseAgence"
+  )
+  public ResponseEntity<List<ClotureCaisseDto>> findAllCloturerCaisseAgence(
+  ) {
+    return ResponseEntity.ok(
+      clotureCaisseService.findAllCloturerCaisseAgence()
+    );
+  }
+  
+   @GetMapping(
     "/findNonCloturerByDateAndCaisseAndChapitre/{idCaisse}/{chapitre}/{dateDuJoure}"
   )
   public ResponseEntity<List<ClotureCaisseDto>>  findNonCloturerByDateAndCaisseAndChapitre(

@@ -786,8 +786,13 @@ public class GestimoWebMapperImpl {
   }
 
   public ClotureCaisseDto fromClotureCaisse(ClotureCaisse cloture) {
+    Utilisateur userTest=utilisateurRepository.findById(cloture.getIdCreateur()).orElse(null);
+   
     ClotureCaisseDto clotureCaisseDto = new ClotureCaisseDto();
     BeanUtils.copyProperties(cloture, clotureCaisseDto);
+     if (userTest!=null) {
+      clotureCaisseDto.setCaissiere(userTest.getNom()+" "+userTest.getPrenom());
+    }
     return clotureCaisseDto;
   }
 
