@@ -302,7 +302,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     @Override
     public List<UtilisateurAfficheDto> listOfAllUtilisateurClientHotelOrderbyNameByAgence(Long idAgence) {
            return utilisateurRepository.findAll().stream()
-                .filter(agence -> agence.getIdAgence() == idAgence && agence.getUrole().getRoleName().equals("CLIENT HOTEL")&& !agence.getNom().contains("XXX"))
+                .filter(agence -> agence.getIdAgence() == idAgence && agence.getUrole().getRoleName().equals("CLIENT HOTEL")&& !agence.getUsername().contains("1234567890"))
              
                 .sorted(Comparator.comparing(Utilisateur::getNom))
                 .map(gestimoWebMapperImpl::fromUtilisateur)

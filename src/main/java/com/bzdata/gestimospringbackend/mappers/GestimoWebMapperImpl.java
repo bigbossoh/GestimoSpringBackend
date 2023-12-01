@@ -704,12 +704,11 @@ public class GestimoWebMapperImpl {
       .findById(reservation.getBienImmobilierOperation().getId())
       .orElse(null);
     BeanUtils.copyProperties(reservation, reservationSaveOrUpdateDto);
+    reservationSaveOrUpdateDto.setMontantReservation(reservation.getMontantDeReservation());
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
     );
-    reservationSaveOrUpdateDto.setMontantReservation(
-      reservation.getSoldReservation() + reservation.getMontantPaye()
-    );
+  
     reservationSaveOrUpdateDto.setMontantReduction(
       reservation.getMontantReduction()
     );

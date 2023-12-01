@@ -27,18 +27,17 @@ public class ReservationRequestDto {
   Long idClient;
   Long idBien;
 
-  
-   Long idUtilisateur;
-   String nom;
-   String prenom;
-
-
-   double pourcentageReduction;
-   double montantReduction;
-   double soldReservation;
-   double montantPaye;
+  Long idUtilisateur;
+  String nom;
+  String prenom;
+  String username;
+  double pourcentageReduction;
+  double montantReduction;
+  double soldReservation;
+  double montantPaye;
   double montantReservation;
-   int nmbreAdulte;
-   
-   int nmbrEnfant;
+  double montantDeReservation;
+
+  int nmbreAdulte;
+  int nmbrEnfant;
 }
