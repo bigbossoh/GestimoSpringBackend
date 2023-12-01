@@ -17,12 +17,13 @@ public class ClotureCaisseDto {
   Long idAgence;
   Long idCreateur;
 
-
   double totalEncaisse;
   String chapitreCloture;
   LocalDate dateDeDCloture;
   int intervalNextCloture;
   LocalDate dateFinCloture;
+  String caissiere;
+  LocalDate dateNextCloture;
 }
 /** 
  *  idAgence: number;

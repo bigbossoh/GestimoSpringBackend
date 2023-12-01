@@ -77,6 +77,7 @@ final EmailService emailService;
     newClotureCaisse.setDateFinCloture(dto.getDateFinCloture());
     newClotureCaisse.setIntervalNextCloture(dto.getIntervalNextCloture());
     newClotureCaisse.setTotalEncaisse(dto.getTotalEncaisse());
+    newClotureCaisse.setDateNextCloture(dto.getDateNextCloture());
     ClotureCaisse clotureCaisse = caisseRepository.save(newClotureCaisse);
      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
             .withZone(ZoneId.systemDefault());
@@ -177,5 +178,14 @@ final EmailService emailService;
       .map(gestimoWebMapper::fromClotureCaisse)
       .collect(Collectors.toList());
     return find.size();
+  }
+
+  @Override
+  public List<ClotureCaisseDto> findAllCloturerCaisseAgence() {
+   return caisseRepository
+      .findAll()
+      .stream()      
+      .map(gestimoWebMapper::fromClotureCaisse)
+      .collect(Collectors.toList());
   }
 }
