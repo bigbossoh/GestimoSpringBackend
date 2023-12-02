@@ -6,7 +6,7 @@ import com.bzdata.gestimospringbackend.DTOs.AppartementDto;
 
 public interface AppartementService {
     AppartementDto save(AppartementDto dto);
-
+ AppartementDto saveForCategorie(AppartementDto dto);
     boolean delete(Long id);
 
     List<AppartementDto> findAll(Long idAgence);
