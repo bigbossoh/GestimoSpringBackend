@@ -48,7 +48,13 @@ public class AppartementController {
         log.info("We are going to save a new Appartement {}", dto);
         return ResponseEntity.ok(appartementService.save(dto));
     }
-
+    
+     @PostMapping("/saveForCategorie")
+    @Operation(summary = "Creation et mise à jour d'un Appartement Categorie", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<AppartementDto> saveForCategorie(@RequestBody AppartementDto dto) {
+        log.info("We are going to save a new Appartement {}", dto);
+        return ResponseEntity.ok(appartementService.saveForCategorie(dto));
+    }
     @Operation(summary = "Liste de toutes les Appartement"
     // , security = @SecurityRequirement(name = "bearerAuth")
     )

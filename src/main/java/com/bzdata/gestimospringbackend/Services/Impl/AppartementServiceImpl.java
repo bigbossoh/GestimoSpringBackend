@@ -39,9 +39,10 @@ public class AppartementServiceImpl implements AppartementService {
 
   final GestimoWebMapperImpl gestimoWebMapperImpl;
   final AppartementRepository appartementRepository;
-final CategoryChambreRepository categoryChambreRepository;
+  final CategoryChambreRepository categoryChambreRepository;
   final EtageRepository etageRepository;
-final ChapitreRepository chapitreRepository;
+  final ChapitreRepository chapitreRepository;
+
   @Override
   public boolean delete(Long id) {
     log.info("We are going to delete a Appartement with the ID {}", id);
@@ -137,7 +138,10 @@ final ChapitreRepository chapitreRepository;
 
   @Override
   public AppartementDto save(AppartementDto dto) {
-    log.info("We are going to create  a new Appartement {}", dto.isBienMeublerResidence());
+    log.info(
+      "We are going to create  a new Appartement {}",
+      dto.isBienMeublerResidence()
+    );
     List<String> errors = AppartementDtoValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("l'Appartement n'est pas valide {}", errors);
@@ -148,21 +152,23 @@ final ChapitreRepository chapitreRepository;
       );
     }
     Chapitre chapitre;
-    if (dto.getIdChapitre()!=null && dto.getIdChapitre()!=0 ) {
-      chapitre=chapitreRepository.findById(dto.getIdChapitre()).orElse(null);
+    if (dto.getIdChapitre() != null && dto.getIdChapitre() != 0) {
+      chapitre = chapitreRepository.findById(dto.getIdChapitre()).orElse(null);
     } else {
-      chapitre=chapitreRepository.findById(1L).orElse(null);
+      chapitre = chapitreRepository.findById(1L).orElse(null);
     }
     Optional<Appartement> unAppartementTrouve = appartementRepository.findById(
       dto.getId()
     );
 
-   CategorieChambre categorieChambre;
-    if (dto.getIdCategorieChambre()!=null) {
-        categorieChambre=categoryChambreRepository.findById(dto.getIdCategorieChambre()).orElse(null);
-      
-    }else{
-        categorieChambre=categoryChambreRepository.findById(1L).orElse(null);
+    CategorieChambre categorieChambre;
+    if (dto.getIdCategorieChambre() != null) {
+      categorieChambre =
+        categoryChambreRepository
+          .findById(dto.getIdCategorieChambre())
+          .orElse(null);
+    } else {
+      categorieChambre = categoryChambreRepository.findById(1L).orElse(null);
     }
     if (unAppartementTrouve.isPresent()) {
       unAppartementTrouve.get().setChapitre(chapitre);
@@ -182,8 +188,8 @@ final ChapitreRepository chapitreRepository;
         .setBienMeublerResidence(dto.isBienMeublerResidence());
       unAppartementTrouve.get().setDescription(dto.getDescription());
       unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
-   if (categorieChambre!=null) {
-         unAppartementTrouve.get().setCategorieApartement(categorieChambre);
+      if (categorieChambre != null) {
+        unAppartementTrouve.get().setCategorieApartement(categorieChambre);
       }
       // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
       Appartement appartementSave = appartementRepository.save(
@@ -203,11 +209,11 @@ final ChapitreRepository chapitreRepository;
       appartement.setIdCreateur(dto.getIdCreateur());
       appartement.setChapitre(chapitre);
       appartement.setNumApp(numApp);
-     
-      if (categorieChambre!=null) {
-         appartement.setCategorieApartement(categorieChambre);
+
+      if (categorieChambre != null) {
+        appartement.setCategorieApartement(categorieChambre);
       }
-     
+
       appartement.setCodeAbrvBienImmobilier(
         (etage.getCodeAbrvEtage() + "-APPT-" + numApp).toUpperCase()
       );
@@ -246,7 +252,7 @@ final ChapitreRepository chapitreRepository;
       .findAll(Sort.by(Direction.ASC, "codeAbrvBienImmobilier"))
       .stream()
       .map(gestimoWebMapperImpl::fromAppartement)
-      .filter(app -> !app.isOccupied() )
+      .filter(app -> !app.isOccupied())
       .filter(agence -> agence.getIdAgence() == idAgence)
       .collect(Collectors.toList());
   }
@@ -255,9 +261,7 @@ final ChapitreRepository chapitreRepository;
     Map<Site, Long> numbreVillabySite = appartementRepository
       .findAll()
       .stream()
-      .filter(e ->
-        e.getEtageAppartement().getImmeuble().getSite().equals(site)
-      )
+      .filter(e -> e.getEtageAppartement().getImmeuble().getSite().equals(site))
       .collect(
         Collectors.groupingBy(
           e -> e.getEtageAppartement().getImmeuble().getSite(),
@@ -286,13 +290,52 @@ final ChapitreRepository chapitreRepository;
   }
 
   @Override
-  public List<AppartementDto> findAllAppartementByIdCategorie(Long idCategorie) {
-  return appartementRepository
+  public List<AppartementDto> findAllAppartementByIdCategorie(
+    Long idCategorie
+  ) {
+    return appartementRepository
       .findAll()
       .stream()
-      .filter(appa ->appa.isBienMeublerResidence() == true&& appa.getCategorieApartement().getId()==idCategorie
+      .filter(appa ->
+        appa.isBienMeublerResidence() == true &&
+        appa.getCategorieApartement().getId() == idCategorie
       )
       .map(gestimoWebMapperImpl::fromAppartement)
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public AppartementDto saveForCategorie(AppartementDto dto) {
+
+   
+   
+    Optional<Appartement> unAppartementTrouve = appartementRepository.findById(
+      dto.getId()
+    );
+
+    CategorieChambre categorieChambre;
+    if (dto.getIdCategorieChambre() != null) {
+      categorieChambre =
+        categoryChambreRepository
+          .findById(dto.getIdCategorieChambre())
+          .orElse(null);
+    } else {
+      categorieChambre = categoryChambreRepository.findById(1L).orElse(null);
+    }
+    if (unAppartementTrouve.isPresent()) {
+          unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
+      if (categorieChambre != null) {
+        unAppartementTrouve.get().setCategorieApartement(categorieChambre);
+      }
+      // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
+      Appartement appartementSave = appartementRepository.save(
+        unAppartementTrouve.get()
+      );
+      return gestimoWebMapperImpl.fromAppartement(appartementSave);
+    } else {
+     
+      return null;
+    }
+  
   }
 }

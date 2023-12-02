@@ -81,8 +81,6 @@ final EmailService emailService;
     ClotureCaisse clotureCaisse = caisseRepository.save(newClotureCaisse);
      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
             .withZone(ZoneId.systemDefault());
-
-
         String formattedInstant = formatter.format(clotureCaisse.getCreationDate());
     String body="Veuiller recevoire l'état de la caisse du "+formattedInstant+" Sur la période de : "+clotureCaisse.getDateDeDCloture()+" - "+clotureCaisse.getDateFinCloture()+" Total Encaissé :"+clotureCaisse.getTotalEncaisse()+" F CFA ";
     String subject="Point de caisse du "+formattedInstant;
