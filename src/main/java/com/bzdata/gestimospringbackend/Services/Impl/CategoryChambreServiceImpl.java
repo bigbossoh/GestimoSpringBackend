@@ -4,7 +4,6 @@ import com.bzdata.gestimospringbackend.DTOs.CategoryChambreSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
 import com.bzdata.gestimospringbackend.Services.CategoryChambreService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
-
 import com.bzdata.gestimospringbackend.repository.CategoryChambreRepository;
 import com.bzdata.gestimospringbackend.validator.ObjectsValidator;
 import java.util.Comparator;
@@ -23,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 public class CategoryChambreServiceImpl implements CategoryChambreService {
-final GestimoWebMapperImpl gestimoWebMapperImpl;
+
+  final GestimoWebMapperImpl gestimoWebMapperImpl;
   final CategoryChambreRepository categoryChambreRepository;
   private final ObjectsValidator<CategoryChambreSaveOrUpdateDto> validator;
 
@@ -78,10 +78,10 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     if (categorieChambre != null) {
       categorieChambre.setDescription(dto.getDescription());
       categorieChambre.setName(dto.getName());
-      
+
       categorieChambre.setIdAgence(dto.getIdAgence());
       categorieChambre.setIdCreateur(dto.getIdCreateur());
-     
+
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         categorieChambre
       );
@@ -90,10 +90,10 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
       CategorieChambre newCategorieChambre = new CategorieChambre();
       newCategorieChambre.setDescription(dto.getDescription());
       newCategorieChambre.setName(dto.getName());
-   
+
       newCategorieChambre.setIdCreateur(dto.getIdCreateur());
       newCategorieChambre.setIdAgence(dto.getIdAgence());
-     
+
       CategorieChambre savCategorieChambre = categoryChambreRepository.save(
         newCategorieChambre
       );
@@ -112,7 +112,9 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     if (categorieChambre != null) {
       categorieChambre.setDescription(dto.getDescription());
       categorieChambre.setName(dto.getName());
-   
+categorieChambre.setPourcentReduc(0L);
+    categorieChambre.setPrice(0L);
+    categorieChambre.setNbrDiffJour(0);
       categoryChambreRepository.save(categorieChambre);
       return gestimoWebMapperImpl.fromCategoryChambre(categorieChambre);
     }
@@ -121,7 +123,9 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     newCategite.setIdAgence(dto.getIdAgence());
     newCategite.setDescription(dto.getDescription());
     newCategite.setName(dto.getName());
-
+    newCategite.setPourcentReduc(0L);
+    newCategite.setPrice(0L);
+    newCategite.setNbrDiffJour(0);
     categoryChambreRepository.save(newCategite);
     return gestimoWebMapperImpl.fromCategoryChambre(newCategite);
   }
@@ -131,24 +135,27 @@ final GestimoWebMapperImpl gestimoWebMapperImpl;
     return categoryChambreRepository
       .findAll()
       .stream()
-      .filter(t->t.getIdAgence()==idAgnce)
+      .filter(t -> t.getIdAgence() == idAgnce)
       .map(gestimoWebMapperImpl::fromCategoryChambre)
       .collect(Collectors.toList());
   }
 
   @Override
-  public CategoryChambreSaveOrUpdateDto findCategorieByIdAppartement(Long idBien) {
- List<CategoryChambreSaveOrUpdateDto> findCat=categoryChambreRepository
+  public CategoryChambreSaveOrUpdateDto findCategorieByIdAppartement(
+    Long idBien
+  ) {
+    List<CategoryChambreSaveOrUpdateDto> findCat = categoryChambreRepository
       .findAll()
       .stream()
-      .filter(t->t.getAppartements().get(0).getId()==idBien)
-      .map(gestimoWebMapperImpl::fromCategoryChambre).collect(Collectors.toList());
-      if (findCat.size()>0) {
-        log.info("Info sur le dto est : {}", findCat);
-        return findCat.get(0);
-      }
- 
+      .filter(t -> t.getAppartements().get(0).getId() == idBien)
+      .map(gestimoWebMapperImpl::fromCategoryChambre)
+      .collect(Collectors.toList());
+    if (findCat.size() > 0) {
+      log.info("Info sur le dto est : {}", findCat);
+      return findCat.get(0);
+    }
+
     return null;
-      //
+    //
   }
 }
