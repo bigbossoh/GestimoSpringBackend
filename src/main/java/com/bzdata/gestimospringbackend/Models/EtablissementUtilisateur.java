@@ -17,11 +17,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EtablissementUtilisateur extends AbstractEntity {
 
-  boolean chapitreDefault;
+  boolean etableDefault;
 
   @ManyToOne
-  Etablissement defaultChapitre;
+  Etablissement etabl;
 
   @ManyToOne
-  Utilisateur utilisateurChapitre;
+  Utilisateur utilisateurEtabl;
 }

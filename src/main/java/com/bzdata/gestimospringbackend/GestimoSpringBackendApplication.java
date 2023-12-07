@@ -196,6 +196,8 @@ public class GestimoSpringBackendApplication {
           chapitre1,
           userFind
         );
+         chapitreUser1.setIdAgence(1L);
+        chapitreUser1.setIdCreateur(1L);
         chapitreUserRepository.save(chapitreUser1);
 
         Etablissement chapitre2 = defaultChapitreRepository.findById(2L).orElse(null);
@@ -204,6 +206,8 @@ public class GestimoSpringBackendApplication {
           chapitre2,
           userFind
         );
+        chapitreUser2.setIdAgence(1L);
+        chapitreUser2.setIdCreateur(1L);
         chapitreUserRepository.save(chapitreUser2);
       }
       // CREATION VILLES

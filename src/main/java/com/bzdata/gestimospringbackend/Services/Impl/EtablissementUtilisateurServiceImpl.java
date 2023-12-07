@@ -74,9 +74,9 @@ EtablissementUtilisateurDto chapitreUserDto
       .orElse(null);
     Etablissement findChapitre = chapitreRepository.findById(chapitreUserDto.getChapite()).orElse(null);
     if (findUser != null && findChapitre != null) {
-        chapitreUser.setDefaultChapitre(findChapitre);
-        chapitreUser.setUtilisateurChapitre(findUser);
-        chapitreUser.setChapitreDefault(chapitreUserDto.isDefaultChapite());
+        chapitreUser.setEtabl(findChapitre);
+        chapitreUser.setUtilisateurEtabl(findUser);
+        chapitreUser.setEtableDefault(chapitreUserDto.isDefaultChapite());
       EtablissementUtilisateur chapitreSave=  chapitreUserRepository.save(chapitreUser);
       return gestimoWebMapperImpl.fromEtablissementUtilisateur(chapitreSave);
     }
@@ -86,7 +86,7 @@ EtablissementUtilisateurDto chapitreUserDto
   @Override
   public EtablissementUtilisateurDto findDefaultChapitreUserByIdUser(Long idUser) {
     EtablissementUtilisateur chapitreSave=  chapitreUserRepository
-    .findAll().stream().filter(chap->chap.getUtilisateurChapitre().getId()==idUser&& chap.isChapitreDefault()==true).findFirst().orElse(null);
+    .findAll().stream().filter(chap->chap.getUtilisateurEtabl().getId()==idUser&& chap.isEtableDefault()==true).findFirst().orElse(null);
   return gestimoWebMapperImpl.fromEtablissementUtilisateur(chapitreSave);
   }
 }

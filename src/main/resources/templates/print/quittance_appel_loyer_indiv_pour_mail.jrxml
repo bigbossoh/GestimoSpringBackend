@@ -352,7 +352,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 			</textField>
 			<image>
 				<reportElement x="2" y="3" width="87" height="48" uuid="e8ea1663-7fce-46f7-9474-926fb288195b"/>
-				<imageExpression><![CDATA["/home/astairenazaire/spring-project/GestimoSpringBackend/src/main/resources/templates/print/magiser2.jpeg"]]></imageExpression>
+				<imageExpression><![CDATA["/home/zrango-gonquet-astaire-nazaire/spring-project/GestimoSpringBackend/src/main/resources/templates/print/magiser.jpeg"]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="0" y="293" width="554" height="46" forecolor="#FC0F17" uuid="dffc69bc-3e29-4fdd-afa3-4d438d539755"/>
