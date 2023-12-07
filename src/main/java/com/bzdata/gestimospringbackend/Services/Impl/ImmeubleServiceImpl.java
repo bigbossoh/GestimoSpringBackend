@@ -79,7 +79,7 @@ public class ImmeubleServiceImpl implements ImmeubleService {
 
         Immeuble immeuble = new Immeuble();
         immeuble.setSite(getSite(dto.getIdSite()));
-        immeuble.setUtilisateurProprietaire(getUtilisateur(dto.getIdUtilisateur()));
+        immeuble.setUtilisateurProprietaire(getUtilisateur(3L));
         int size = new ArrayList<>(immeubleRepository.findAll()).size();
         if (size == 0) {
             numBien = 1L;

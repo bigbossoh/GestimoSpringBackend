@@ -19,9 +19,9 @@ public class MagasinDtoValidator {
         if (dto.getIdAgence() == null) {
             errors.add("Veuillez renseignez l'Id de l'agence");
         }
-        if (dto.getIdUtilisateur() == null) {
-            errors.add("Veuillez selectionner un utilisateur");
-        }
+        // if (dto.getIdUtilisateur() == null) {
+        //     errors.add("Veuillez selectionner un utilisateur");
+        // }
 
         return errors;
     }

@@ -22,9 +22,9 @@ public class VillaDtoValidator {
         if (dto.getIdSite() == null) {
             errors.add("Veuillez selectionner une le site");
         }
-        if (dto.getIdUtilisateur() == null) {
-            errors.add("Veuillez selectionner un utilisateur");
-        }
+        // if (dto.getIdUtilisateur() == null) {
+        //     errors.add("Veuillez selectionner un utilisateur");
+        // }
 
         return errors;
     }

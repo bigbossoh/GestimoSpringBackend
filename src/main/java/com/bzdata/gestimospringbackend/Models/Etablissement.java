@@ -19,6 +19,6 @@ import lombok.experimental.FieldDefaults;
 public class Etablissement extends AbstractEntity {
   Long idChapitre;
   String libChapitre;
-  @OneToMany(mappedBy = "defaultChapitre")
+  @OneToMany(mappedBy = "etabl")
   List<EtablissementUtilisateur> chapitreUsers;
 }

@@ -806,13 +806,13 @@ public class GestimoWebMapperImpl {
     EtablissementUtilisateur chapitreUser
   ) {
     EtablissementUtilisateurDto chapitreUserDto = new EtablissementUtilisateurDto();
-    chapitreUserDto.setChapite(chapitreUser.getDefaultChapitre().getId());
+    chapitreUserDto.setChapite(chapitreUser.getEtabl().getId());
     chapitreUserDto.setUtilisateur(
-      chapitreUser.getUtilisateurChapitre().getId()
+      chapitreUser.getUtilisateurEtabl().getId()
     );
-    chapitreUserDto.setDefaultChapite(chapitreUser.isChapitreDefault());
+    chapitreUserDto.setDefaultChapite(chapitreUser.isEtableDefault());
     chapitreUserDto.setNomEtabless(
-      chapitreUser.getDefaultChapitre().getLibChapitre()
+      chapitreUser.getEtabl().getLibChapitre()
     );
     return chapitreUserDto;
   }
