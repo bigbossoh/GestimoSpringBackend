@@ -55,7 +55,7 @@ public class PrintServiceImpl implements PrintService {
     @Override
     public byte[] quittancePeriode(String periode, String proprio, Long idAgence)
             throws FileNotFoundException, JRException, SQLException {
-
+// ICI LE CONTROLLEUR ////
         String path = "src/main/resources/templates";
         File file = ResourceUtils.getFile(path + "/print/quittance_appel_loyer.jrxml");
         Map<String, Object> parameters = new HashMap<>();
@@ -176,6 +176,34 @@ public class PrintServiceImpl implements PrintService {
             JasperExportManager.exportReportToPdfFile(print,
                     path + "/depot_etat/recu_paiement_du" + idEncaissemnt + ".pdf");
         
+            return JasperExportManager.exportReportToPdf(print);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public byte[] recuReservation(Long idEncaisse, String proprio, Long idAgence)
+            throws FileNotFoundException, JRException, SQLException {
+ try {
+            String path = "src/main/resources/templates";
+            File file = ResourceUtils.getFile(path + "/print/quittanceappelloyer.jrxml");
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("id_encaissement", idEncaisse);
+            parameters.put("PARAMETER_AGENCE", idAgence);
+            parameters.put("NOM_PROPRIO", proprio);
+
+            JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+            File di = new File(path + "/depot_etat");
+            boolean di1 = di.mkdirs();
+            if (di1) {
+                System.out.println("Folder is created successfully");
+
+            }
+            JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSourceSQL.getConnection());
+            JasperExportManager.exportReportToPdfFile(print, path + "/depot_etat/recu_de" + idEncaisse + ".pdf");
+            log.info("Le fichier {}", path + "/depot_etat/appel_loyer_du_" + idEncaisse + ".pdf");
             return JasperExportManager.exportReportToPdf(print);
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -3,6 +3,7 @@ package com.bzdata.gestimospringbackend.mappers;
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
+import com.bzdata.gestimospringbackend.Models.hotel.EncaissementReservation;
 import com.bzdata.gestimospringbackend.Models.hotel.Prestation;
 import com.bzdata.gestimospringbackend.Models.hotel.PrestationAdditionnelReservation;
 import com.bzdata.gestimospringbackend.Models.hotel.PrixParCategorieChambre;
@@ -458,20 +459,24 @@ public class GestimoWebMapperImpl {
 
   public AppartementDto fromAppartement(Appartement appartement) {
     AppartementDto appartementDto = new AppartementDto();
-      CategoryChambreSaveOrUpdateDto categoryChambreSaveOrUpdateDto;
-    if (appartement.getCategorieApartement().getId()!=null) {
-       categoryChambreSaveOrUpdateDto = categoryChambreRepository
-      .findById(appartement.getCategorieApartement().getId())
-      .map(xt -> fromCategoryChambre(xt))
-      .orElse(null);
+    CategoryChambreSaveOrUpdateDto categoryChambreSaveOrUpdateDto;
+    if (appartement.getCategorieApartement().getId() != null) {
+      categoryChambreSaveOrUpdateDto =
+        categoryChambreRepository
+          .findById(appartement.getCategorieApartement().getId())
+          .map(xt -> fromCategoryChambre(xt))
+          .orElse(null);
     } else {
-        categoryChambreSaveOrUpdateDto = categoryChambreRepository
-      .findById(0L)
-      .map(xt -> fromCategoryChambre(xt))
-      .orElse(null);
+      categoryChambreSaveOrUpdateDto =
+        categoryChambreRepository
+          .findById(0L)
+          .map(xt -> fromCategoryChambre(xt))
+          .orElse(null);
     }
-    
-      Chapitre chapitre=chapitreRepository.findById(appartement.getChapitre().getId()).orElse(null);
+
+    Chapitre chapitre = chapitreRepository
+      .findById(appartement.getChapitre().getId())
+      .orElse(null);
     BeanUtils.copyProperties(appartement, appartementDto);
     appartementDto.setFullNameProprio(
       appartement
@@ -494,11 +499,9 @@ public class GestimoWebMapperImpl {
         appartement.getCategorieApartement().getId()
       );
 
-   
       appartementDto.setNameCategorie(
         appartement.getCategorieApartement().getName()
       );
-
     } else {
       appartementDto.setIdCategorie(0L);
       appartementDto.setNbrDiffJourCategorie(0);
@@ -512,10 +515,10 @@ public class GestimoWebMapperImpl {
     } else {
       appartementDto.setIdCategorie(0L);
     }
-    if (chapitre!=null) {
+    if (chapitre != null) {
       appartementDto.setIdChapitre(chapitre.getId());
     } else {
-       appartementDto.setIdChapitre(0L);
+      appartementDto.setIdChapitre(0L);
     }
     return appartementDto;
   }
@@ -704,11 +707,13 @@ public class GestimoWebMapperImpl {
       .findById(reservation.getBienImmobilierOperation().getId())
       .orElse(null);
     BeanUtils.copyProperties(reservation, reservationSaveOrUpdateDto);
-    reservationSaveOrUpdateDto.setMontantReservation(reservation.getMontantDeReservation());
+    reservationSaveOrUpdateDto.setMontantReservation(
+      reservation.getMontantDeReservation()
+    );
     reservationSaveOrUpdateDto.setBienImmobilierOperation(
       reservation.getBienImmobilierOperation().getNomBaptiserBienImmobilier()
     );
-  
+
     reservationSaveOrUpdateDto.setMontantReduction(
       reservation.getMontantReduction()
     );
@@ -729,8 +734,24 @@ public class GestimoWebMapperImpl {
       reservationSaveOrUpdateDto.setDescriptionCategori(
         appartement.getCategorieApartement().getDescription()
       );
-
+      reservationSaveOrUpdateDto.setNameCategori(appartement.getCategorieApartement().getName());
+      reservationSaveOrUpdateDto.setIdAppartementdDto(
+        reservation.getBienImmobilierOperation().getId()
+      );
+      reservationSaveOrUpdateDto.setIdBienImmobilier(
+        reservation.getBienImmobilierOperation().getId()
+      );
+      reservationSaveOrUpdateDto.setCodeAbrvBienImmobilier(
+        reservation.getBienImmobilierOperation().getCodeAbrvBienImmobilier()
+      );
     }
+    reservationSaveOrUpdateDto.setIdUtilisateur(
+      reservation.getUtilisateurOperation().getId()
+    );
+    reservationSaveOrUpdateDto.setMobile(
+      reservation.getUtilisateurOperation().getUsername()
+    );
+
     //reservationSaveOrUpdateDto.setCreationDate(reservation.getCreationDate());
     return reservationSaveOrUpdateDto;
   }
@@ -786,12 +807,16 @@ public class GestimoWebMapperImpl {
   }
 
   public ClotureCaisseDto fromClotureCaisse(ClotureCaisse cloture) {
-    Utilisateur userTest=utilisateurRepository.findById(cloture.getIdCreateur()).orElse(null);
-   
+    Utilisateur userTest = utilisateurRepository
+      .findById(cloture.getIdCreateur())
+      .orElse(null);
+
     ClotureCaisseDto clotureCaisseDto = new ClotureCaisseDto();
     BeanUtils.copyProperties(cloture, clotureCaisseDto);
-     if (userTest!=null) {
-      clotureCaisseDto.setCaissiere(userTest.getNom()+" "+userTest.getPrenom());
+    if (userTest != null) {
+      clotureCaisseDto.setCaissiere(
+        userTest.getNom() + " " + userTest.getPrenom()
+      );
     }
     return clotureCaisseDto;
   }
@@ -807,13 +832,9 @@ public class GestimoWebMapperImpl {
   ) {
     EtablissementUtilisateurDto chapitreUserDto = new EtablissementUtilisateurDto();
     chapitreUserDto.setChapite(chapitreUser.getEtabl().getId());
-    chapitreUserDto.setUtilisateur(
-      chapitreUser.getUtilisateurEtabl().getId()
-    );
+    chapitreUserDto.setUtilisateur(chapitreUser.getUtilisateurEtabl().getId());
     chapitreUserDto.setDefaultChapite(chapitreUser.isEtableDefault());
-    chapitreUserDto.setNomEtabless(
-      chapitreUser.getEtabl().getLibChapitre()
-    );
+    chapitreUserDto.setNomEtabless(chapitreUser.getEtabl().getLibChapitre());
     return chapitreUserDto;
   }
 
@@ -823,5 +844,19 @@ public class GestimoWebMapperImpl {
     chapitreUserDto.setLibChapitre(chapitreUser.getLibChapitre());
 
     return chapitreUserDto;
+  }
+
+  public EncaissementReservationDto fromEncaissementReservation(
+    EncaissementReservation encaissementReservation
+  ) {
+    EncaissementReservationDto encaissementReservationDto = new EncaissementReservationDto();
+    BeanUtils.copyProperties(
+      encaissementReservation,
+      encaissementReservationDto
+    );
+    encaissementReservationDto.setIdReservation(
+      encaissementReservation.getId()
+    );
+    return encaissementReservationDto;
   }
 }

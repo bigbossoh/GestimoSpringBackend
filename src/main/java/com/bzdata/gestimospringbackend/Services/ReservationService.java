@@ -1,5 +1,6 @@
 package com.bzdata.gestimospringbackend.Services;
 
+import com.bzdata.gestimospringbackend.DTOs.EncaissementPrincipalDTO;
 import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
@@ -16,4 +17,7 @@ public interface ReservationService
   public boolean saveOrUpdateReservation(
     ReservationRequestDto dto
   );
-}
+  List<EncaissementPrincipalDTO> saveEncaissementReservationAvecREsrourDeList(EncaissementPrincipalDTO dto);
+    List<ReservationAfficheDto> listeDesReservationParAgence(Long idAgence);
+      List<ReservationAfficheDto> listeDesReservationOuvertParAgence(Long idAgence);
+  }
