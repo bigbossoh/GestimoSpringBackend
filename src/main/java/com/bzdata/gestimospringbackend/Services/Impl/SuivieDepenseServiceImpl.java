@@ -34,6 +34,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
 
   @Override
   public List<SuivieDepenseDto> saveNewDepense(SuivieDepenseDto dto) {
+    log.info("Description ::::::***** {}",dto.getDesignation());
     List<String> errors = SuivieDepenseValidator.validate(dto);
     if (!errors.isEmpty()) {
       log.error("l'objet suivie de depense n'est pas valide {}", errors);
@@ -43,9 +44,21 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
         errors
       );
     }
-    Chapitre chapitreFind = chapitreRepository
+    Chapitre chapitreFind;
+    if (dto.getIdChapitre()==null ) {
+        chapitreFind = chapitreRepository
+      .findById(1L)
+      .orElse(null);
+    } else if(dto.getIdChapitre()==0){
+         chapitreFind = chapitreRepository
+      .findById(1L)
+      .orElse(null);
+    }else{
+         chapitreFind = chapitreRepository
       .findById(dto.getIdChapitre())
       .orElse(null);
+    }
+   
     if (dto.getId() != null) {
       SuivieDepense suivieDepense = new SuivieDepense();
       suivieDepense.setCodeTransaction(UUID.randomUUID().toString());
@@ -56,7 +69,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       suivieDepense.setIdCreateur(dto.getIdCreateur());
       suivieDepense.setModePaiement(dto.getModePaiement());
       suivieDepense.setOperationType(dto.getOperationType());
-      suivieDepense.setCloturerSuivi("non cloturer");
+     // suivieDepense.setCloturerSuivi("non cloturer");
       suivieDepense.setChapitreSuivis(chapitreFind);
       SuivieDepense suivieDepenseSaved = suivieDepenseRepository.save(
         suivieDepense
@@ -73,7 +86,7 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
             ErrorCodes.SUIVIEDEPENSE_NOT_FOUND
           )
         );
-      suivieDepense.setCloturerSuivi("cloturer");
+    //  suivieDepense.setCloturerSuivi("cloturer");
       suivieDepense.setChapitreSuivis(chapitreFind);
       suivieDepense.setDateEncaissement(dto.getDateEncaissement());
       suivieDepense.setDesignation(dto.getDesignation());
@@ -271,7 +284,6 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       .stream()
       .filter(agence ->
         agence.getIdAgence() == idCreateur &&
-        agence.getCloturerSuivi() == "non cloturer" &&
         agence.getDateEncaissement().isBefore(dateEncai)
       )
       .map(bailMapperImpl::fromSuivieDepense)
@@ -290,7 +302,6 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       .stream()
       .filter(agence ->
         agence.getIdCreateur() == idcaisse &&
-        agence.getCloturerSuivi() == "non cloturer" &&
         agence.getDateEncaissement().isBefore(dateDepriseEnCompte) &&
         agence.getChapitreSuivis().getId() == idChapitre
       )
@@ -309,7 +320,6 @@ public class SuivieDepenseServiceImpl implements SuivieDepenseService {
       .stream()
       .filter(agence ->
         agence.getIdCreateur() == idCaiss &&
-        agence.getCloturerSuivi() == "non cloturer" &&
         agence.getDateEncaissement().isBefore(datePriseEnCompteEncaii) &&
         agence.getChapitreSuivis().getId() == idChapitre
       )

@@ -24,7 +24,7 @@ public class SuivieDepense extends AbstractEntity {
   private String designation;
   private String codeTransaction;
   private double montantDepense;
-  String cloturerSuivi;
+ // String cloturerSuivi;
 
   @Enumerated(EnumType.STRING)
   private ModePaiement modePaiement;

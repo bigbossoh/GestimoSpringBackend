@@ -73,7 +73,7 @@ public class PrixParCategoryChambreServiceImpl
       .findById(dto.getIdCategorieChambre())
       .orElse(null);
     if (parCategorieChambre != null) {
-      parCategorieChambre.setCategorieChambre(categorieChambre);
+      parCategorieChambre.setCategorieChambrePrix(categorieChambre);
       parCategorieChambre.setDescription(dto.getDescription());
       parCategorieChambre.setIntervalPrix(dto.getIntervalPrix());
       parCategorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
@@ -87,7 +87,7 @@ public class PrixParCategoryChambreServiceImpl
       );
     }
     PrixParCategorieChambre newPrixParCategorieChambre = new PrixParCategorieChambre();
-    newPrixParCategorieChambre.setCategorieChambre(categorieChambre);
+    newPrixParCategorieChambre.setCategorieChambrePrix(categorieChambre);
     newPrixParCategorieChambre.setDescription(dto.getDescription());
     newPrixParCategorieChambre.setIntervalPrix(dto.getIntervalPrix());
     newPrixParCategorieChambre.setNbrDiffJour(dto.getNbrDiffJour());
@@ -109,13 +109,13 @@ public class PrixParCategoryChambreServiceImpl
     log.info("THE RETURN IS {}", prixParCategorieChambreService
       .findAll()
       .stream()
-      .filter(cate -> cate.getCategorieChambre().getId() == idCategori)
+      .filter(cate -> cate.getCategorieChambrePrix().getId() == idCategori)
       .map(GestimoWebMapperImpl::fromPrixParCategorieChambre)
       .collect(Collectors.toList()));
     return prixParCategorieChambreService
       .findAll()
       .stream()
-      .filter(cate -> cate.getCategorieChambre().getId() == idCategori)
+      .filter(cate -> cate.getCategorieChambrePrix().getId() == idCategori)
       .map(GestimoWebMapperImpl::fromPrixParCategorieChambre)
       .collect(Collectors.toList());
   }

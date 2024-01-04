@@ -12,7 +12,7 @@ public class SuivieDepenseValidator {
       List<String> errors = new ArrayList<>();
 
       if (dto == null) {
-         errors.add("Veuillez renseigner la raison de la depense.");
+         errors.add("L'objet est null.");
           return errors;
       }
 

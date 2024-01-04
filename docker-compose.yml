@@ -1,0 +1,39 @@
+version: '3.1'
+networks:
+    seve-network:
+        external: true
+services:
+
+  wordpress:
+    depends_on:
+      - gestimodb
+    image: wordpress
+    restart: always
+    ports:
+      - 8484:84
+    environment:
+      WORDPRESS_DB_HOST: gestimodb
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: gestimoweb
+      WORDPRESS_DB_NAME: wp_db
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - seve-network
+
+volumes:
+  wordpress:
+
+  # procedure de mise a jour du conteneur
+
+  #creation de la base de donnees :wp_db;
+# ----
+# modification des fichiers apache2 dans le conteneur pour ecouter sur docker
+# docker exec -it mon_wordpress /bin/bash
+
+# echo "ServerName 172.18.0.8" >> /etc/apache2/apache2.conf
+# modification des fichiers apache2 dans le conteneur pour ecouter sur le port 84
+# echo "Listen 84" >> /etc/apache2/ports.conf
+# service apache2 restart
+  #########################
+  #

@@ -2,10 +2,14 @@ package com.bzdata.gestimospringbackend.Controllers;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
+import com.bzdata.gestimospringbackend.DTOs.EncaissementReservationDto;
+import com.bzdata.gestimospringbackend.DTOs.EncaissementReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationAfficheDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.ReservationSaveOrUpdateDto;
 import com.bzdata.gestimospringbackend.Services.ReservationService;
+import com.bzdata.gestimospringbackend.Services.EncaissementReservationService.SaveEncaissementReservationAvecRetourDeListService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import java.util.List;
@@ -13,7 +17,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReservationController {
 
   final ReservationService reservationService;
-
+final SaveEncaissementReservationAvecRetourDeListService encaissementReservationAvecRetourDeListService;
   @PostMapping("/saveorupdate")
   @Operation(
     summary = "Creation et mise à jour d'une Reservation",
@@ -51,7 +54,7 @@ public class ReservationController {
   public ResponseEntity<Boolean> saveorupdatereservation(
     @RequestBody ReservationRequestDto dto
   ) {
-   log.info(" Reserrr ; {}", dto);
+    log.info(" Reserrr ; {}", dto);
     return ResponseEntity.ok(reservationService.saveOrUpdateReservation(dto));
   }
 
@@ -81,24 +84,60 @@ public class ReservationController {
 
   @Operation(
     summary = "Trouver une Reservation par son ID"
-    // ,
-    // security = @SecurityRequirement(name = "bearerAuth")
   )
-  @GetMapping("/findById/{id}")
-  public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByIDReservation(
+  @GetMapping("/findReservationById/{id}")
+  public ResponseEntity<ReservationAfficheDto> findCategorieChambreByIDReservation(
     @PathVariable("id") Long id
   ) {
-    return ResponseEntity.ok(reservationService.findById(id));
+    return ResponseEntity.ok(reservationService.findReservationById(id));
   }
-
+   @GetMapping("/findPeriodeReservationByIdBien/{idBien}")
+  public ResponseEntity<ReservationAfficheDto> findPeriodeReservationByIdBien(
+    @PathVariable("idBien") Long idBien
+  ) {
+    return ResponseEntity.ok(reservationService.findPeriodeReservationByIdBien(idBien));
+  }
+  
   // TOUTES LES RESERVATION
   @Operation(
     summary = "Liste de toutes les Reservations"
     // ,
     // security = @SecurityRequirement(name = "bearerAuth")
   )
+  @GetMapping("/allreservationparagence/{idAgence}")
+  public ResponseEntity<List<ReservationAfficheDto>> allreservationparagence(
+    @PathVariable("idAgence") Long idAgence
+  ) {
+    return ResponseEntity.ok(
+      reservationService.listeDesReservationParAgence(idAgence)
+    );
+  }
+
+  //
   @GetMapping("/allreservation")
   public ResponseEntity<List<ReservationAfficheDto>> allreservation() {
     return ResponseEntity.ok(reservationService.findAlGood());
+  }
+
+    @GetMapping("/listeDesReservationOuvertParAgence/{idAgence}")
+  public ResponseEntity<List<ReservationAfficheDto>> listeDesReservationOuvertParAgence(@PathVariable("idAgence") Long idAgence) {
+    return ResponseEntity.ok(reservationService.listeDesReservationOuvertParAgence(idAgence));
+  }
+
+  @GetMapping("/findAllEncaissementReservationByIdBien/{idReser}")
+  public ResponseEntity<List<EncaissementReservationDto>> findAllEncaissementReservationByIdBien(
+    @PathVariable("idReser") Long idReser
+  ) {
+    return ResponseEntity.ok(
+      encaissementReservationAvecRetourDeListService.findAllEncaissementByReservation(idReser)
+    );
+  }
+  
+    @PostMapping("/saveencaissementreservation")
+
+  public ResponseEntity<List<EncaissementReservationDto>> saveencaissementreservation(
+    @RequestBody EncaissementReservationRequestDto dto
+  ) {
+    return ResponseEntity.ok(encaissementReservationAvecRetourDeListService.saveEncaissementReservationAvecRetourDeList(dto));
   }
 }

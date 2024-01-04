@@ -32,12 +32,10 @@ public class Reservation extends Operation {
   int nmbreAdulte;
   int nmbrEnfant;
   String statutReservation;
-
   @OneToMany
   @JoinColumn(name = "idResvationServiceAdditionnel")
   List<PrestationAdditionnelReservation> serviceAdditionnelreservations;
 
-  @OneToMany
-  @JoinColumn(name = "idResvationEncaissement")
-  List<EncaissementPrincipal> encaisssementsreservation;
+  @OneToMany(mappedBy="reservation")
+  List<EncaissementReservation> encaisssementsreservation;
 }

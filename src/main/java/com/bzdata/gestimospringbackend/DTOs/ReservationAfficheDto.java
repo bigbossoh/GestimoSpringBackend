@@ -29,7 +29,7 @@ public class ReservationAfficheDto {
   String mobile;
   String username;
   Long idAppartementdDto;
-
+  Long idLastEncaissement;
   LocalDate dateDebut;
   LocalDate dateFin;
   String utilisateurOperation;

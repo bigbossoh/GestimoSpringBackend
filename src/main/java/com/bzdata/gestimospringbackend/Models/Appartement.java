@@ -27,10 +27,9 @@ public class Appartement extends Bienimmobilier {
     int nbreChambreApp;
     int nbreSalonApp;
     int nbreSalleEauApp;
-    Double prixReservation=0.0;
     Long numApp;
     @ManyToOne(fetch = FetchType.LAZY)
     Etage etageAppartement;
-    @ManyToOne(fetch = FetchType.LAZY)
-     CategorieChambre categorieApartement;
+    @ManyToOne
+     CategorieChambre categorieChambreAppartement;
 }

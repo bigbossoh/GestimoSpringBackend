@@ -17,5 +17,10 @@ public interface PrintService {
     byte[] quittancePeriodeById(String periode, Long id, String proprio)
             throws FileNotFoundException, JRException, SQLException;
 
+  byte[] recuReservation(Long idEncaisse, String proprio,Long idAgence) throws FileNotFoundException, JRException, SQLException;
+
+  byte[] recuReservationParIdReservation(Long idReservation, String proprio,Long idAgence) throws FileNotFoundException, JRException, SQLException;
+
+  
     // InputStreamSource downloadReportByPeriode(String periode,Long idAgence,String proprio) throws IOException,FileNotFoundException, JRException, SQLException;
 }
