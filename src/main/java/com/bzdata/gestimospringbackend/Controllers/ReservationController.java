@@ -84,16 +84,20 @@ final SaveEncaissementReservationAvecRetourDeListService encaissementReservation
 
   @Operation(
     summary = "Trouver une Reservation par son ID"
-    // ,
-    // security = @SecurityRequirement(name = "bearerAuth")
   )
-  @GetMapping("/findById/{id}")
-  public ResponseEntity<ReservationSaveOrUpdateDto> findCategorieChambreByIDReservation(
+  @GetMapping("/findReservationById/{id}")
+  public ResponseEntity<ReservationAfficheDto> findCategorieChambreByIDReservation(
     @PathVariable("id") Long id
   ) {
-    return ResponseEntity.ok(reservationService.findById(id));
+    return ResponseEntity.ok(reservationService.findReservationById(id));
   }
-
+   @GetMapping("/findPeriodeReservationByIdBien/{idBien}")
+  public ResponseEntity<ReservationAfficheDto> findPeriodeReservationByIdBien(
+    @PathVariable("idBien") Long idBien
+  ) {
+    return ResponseEntity.ok(reservationService.findPeriodeReservationByIdBien(idBien));
+  }
+  
   // TOUTES LES RESERVATION
   @Operation(
     summary = "Liste de toutes les Reservations"
@@ -130,15 +134,10 @@ final SaveEncaissementReservationAvecRetourDeListService encaissementReservation
   }
   
     @PostMapping("/saveencaissementreservation")
-  // @Operation(
-  //   summary = "Creation et mise à jour d'un encaissement Reservation bon"
-  //   // ,
-  //   // security = @SecurityRequirement(name = "bearerAuth")
-  // )
+
   public ResponseEntity<List<EncaissementReservationDto>> saveencaissementreservation(
     @RequestBody EncaissementReservationRequestDto dto
   ) {
-    log.info("****** request for encaisesement ****",dto);
     return ResponseEntity.ok(encaissementReservationAvecRetourDeListService.saveEncaissementReservationAvecRetourDeList(dto));
   }
 }

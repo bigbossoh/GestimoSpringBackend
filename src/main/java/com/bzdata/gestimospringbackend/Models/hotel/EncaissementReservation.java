@@ -25,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class EncaissementReservation extends AbstractEntity {
 
-  private String modePaiement;
+  String modePaiement;
   LocalDate dateEncaissement;
   double montantEncaissement;
   double encienSoldReservation;

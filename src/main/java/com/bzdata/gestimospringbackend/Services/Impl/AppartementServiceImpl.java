@@ -165,7 +165,7 @@ public class AppartementServiceImpl implements AppartementService {
     if (dto.getIdCategorieChambre() != null) {
       categorieChambre =
         categoryChambreRepository
-          .findById(dto.getIdCategorieChambre())
+          .findById(dto.getIdCategorieChambre().getId())
           .orElse(null);
     } else {
       categorieChambre = categoryChambreRepository.findById(1L).orElse(null);
@@ -189,7 +189,7 @@ public class AppartementServiceImpl implements AppartementService {
       unAppartementTrouve.get().setDescription(dto.getDescription());
       unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
       if (categorieChambre != null) {
-        unAppartementTrouve.get().setCategorieApartement(categorieChambre);
+        unAppartementTrouve.get().setCategorieChambreAppartement(categorieChambre);
       }
       // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
       Appartement appartementSave = appartementRepository.save(
@@ -211,7 +211,7 @@ public class AppartementServiceImpl implements AppartementService {
       appartement.setNumApp(numApp);
 
       if (categorieChambre != null) {
-        appartement.setCategorieApartement(categorieChambre);
+        appartement.setCategorieChambreAppartement(categorieChambre);
       }
 
       appartement.setCodeAbrvBienImmobilier(
@@ -248,12 +248,16 @@ public class AppartementServiceImpl implements AppartementService {
 
   @Override
   public List<AppartementDto> findAllLibre(Long idAgence) {
+    log.info("the id is :::::: {}", idAgence);
     return appartementRepository
-      .findAll(Sort.by(Direction.ASC, "codeAbrvBienImmobilier"))
+      .findAll()
       .stream()
+        .filter(app ->       
+        app.getIdAgence() == idAgence &&
+        app.isBienMeublerResidence() && app.getCategorieChambreAppartement()!=null
+      )
       .map(gestimoWebMapperImpl::fromAppartement)
-      .filter(app -> !app.isOccupied())
-      .filter(agence -> agence.getIdAgence() == idAgence)
+    
       .collect(Collectors.toList());
   }
 
@@ -298,7 +302,7 @@ public class AppartementServiceImpl implements AppartementService {
       .stream()
       .filter(appa ->
         appa.isBienMeublerResidence() == true &&
-        appa.getCategorieApartement().getId() == idCategorie
+        appa.getCategorieChambreAppartement().getId() == idCategorie && appa.getCategorieChambreAppartement()!=null
       )
       .map(gestimoWebMapperImpl::fromAppartement)
       .collect(Collectors.toList());
@@ -306,26 +310,23 @@ public class AppartementServiceImpl implements AppartementService {
 
   @Override
   public AppartementDto saveForCategorie(AppartementDto dto) {
-
-   
-   
     Optional<Appartement> unAppartementTrouve = appartementRepository.findById(
       dto.getId()
     );
-
+log.info(" categorie **** {} ", dto);
     CategorieChambre categorieChambre;
     if (dto.getIdCategorieChambre() != null) {
       categorieChambre =
         categoryChambreRepository
-          .findById(dto.getIdCategorieChambre())
+          .findById(dto.getIdCategorieChambre().getId())
           .orElse(null);
     } else {
       categorieChambre = categoryChambreRepository.findById(1L).orElse(null);
     }
     if (unAppartementTrouve.isPresent()) {
-          unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
+      unAppartementTrouve.get().setSuperficieBien(dto.getSuperficieBien());
       if (categorieChambre != null) {
-        unAppartementTrouve.get().setCategorieApartement(categorieChambre);
+        unAppartementTrouve.get().setCategorieChambreAppartement(categorieChambre);
       }
       // unAppartementTrouve.setUtilisateurProprietaire(etage.getImmeuble().getUtilisateurProprietaire());
       Appartement appartementSave = appartementRepository.save(
@@ -333,9 +334,7 @@ public class AppartementServiceImpl implements AppartementService {
       );
       return gestimoWebMapperImpl.fromAppartement(appartementSave);
     } else {
-     
       return null;
     }
-  
   }
 }

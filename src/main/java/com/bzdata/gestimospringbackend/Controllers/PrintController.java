@@ -68,20 +68,34 @@ public class PrintController {
                         @PathVariable("idEncaissement") Long idEncaissement, @PathVariable("idAgence") Long idAgence,
                         @PathVariable("proprio") String proprio)
                         throws FileNotFoundException, JRException, SQLException, IOException {
-                // byte[] bytes = this.printService.quittancePeriodeString(periode, idAgence,
-                // proprio);
+              
                 ByteArrayInputStream bis = new ByteArrayInputStream(
                                 this.printService.recuReservation(idEncaissement, proprio,idAgence));
                 HttpHeaders headers = new HttpHeaders();
-                headers.add("Content-Disposition", "inline; filename=Quittance-de-" + idEncaissement + ".pdf");
+                headers.add("Content-Disposition", "inline; filename=recu_de_" + idEncaissement + ".pdf");
                 return ResponseEntity.ok()
                                 // CONTENT-DISPOSITION
                                 .headers(headers)
                                 .contentType(MediaType.APPLICATION_PDF)
                                 .body(new InputStreamResource(bis));
         }
-             
-             
+           @GetMapping(path = "/recuReservationParIdReservation/{idReservation}/{idAgence}/{proprio}", produces = MediaType.APPLICATION_PDF_VALUE)
+        public ResponseEntity<InputStreamResource> recuReservationParIdReservation(
+                        @PathVariable("idReservation") Long idReservation, @PathVariable("idAgence") Long idAgence,
+                        @PathVariable("proprio") String proprio)
+                        throws FileNotFoundException, JRException, SQLException, IOException {
+              
+                ByteArrayInputStream bis = new ByteArrayInputStream(
+                                this.printService.recuReservationParIdReservation(idReservation, proprio,idAgence));
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Content-Disposition", "inline; filename=recu_de_" + idReservation + ".pdf");
+                return ResponseEntity.ok()
+                                // CONTENT-DISPOSITION
+                                .headers(headers)
+                                .contentType(MediaType.APPLICATION_PDF)
+                                .body(new InputStreamResource(bis));
+        }      
+              
         @GetMapping(path = "/recupaiment/{idEncaissement}", produces = MediaType.APPLICATION_PDF_VALUE)
         public ResponseEntity<InputStreamResource> recuPaiment(@PathVariable("idEncaissement") Long idEncaissement)
                         throws FileNotFoundException, JRException, SQLException, IOException {

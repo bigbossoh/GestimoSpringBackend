@@ -11,11 +11,11 @@ import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.EncaissementReservationRepository;
 import com.bzdata.gestimospringbackend.repository.ReservationRepository;
-import java.util.Date;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -39,35 +39,37 @@ public class SaveEncaissementReservationAvecRetourDeListImpl
   public List<EncaissementReservationDto> saveEncaissementReservationAvecRetourDeList(
     EncaissementReservationRequestDto dto
   ) {
-    log.info("THE DTO IS THE NEXT *** ",dto);
-        Appartement saveApp = appartementRepository
+    log.info("EncaissementReservationRequestDto {}",dto);
+    Appartement saveApp = appartementRepository
       .findById(dto.getIdAppartement())
       .orElse(null);
-   
+
     Reservation reservation = reservationRepository.getById(
       dto.getIdReservation()
     );
     if (reservation != null) {
       reservation.setSoldReservation(dto.getNvoSoldeReservation());
       if (dto.getNvoSoldeReservation() == 0) {
-         if (saveApp != null) {
-      saveApp.setOccupied(false);
-      appartementRepository.save(saveApp);
-    }
+        if (saveApp != null) {
+          saveApp.setOccupied(false);
+          appartementRepository.saveAndFlush(saveApp);
+        }
         reservation.setStatutReservation("Ferme");
       }
-      reservationRepository.save(reservation);
+      reservationRepository.saveAndFlush(reservation);
     }
     EncaissementReservation encaissementReservation = new EncaissementReservation();
     encaissementReservation.setIdAgence(dto.getIdAgence());
-    encaissementReservation.setCreationDate(LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC));
+    encaissementReservation.setCreationDate(
+      LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC)
+    );
     encaissementReservation.setIdCreateur(dto.getIdCreateur());
-   // encaissementReservation.setIntituleDepense(dto.getIntituleDepense());
+    encaissementReservation.setModePaiement(dto.getModePaiement());
     encaissementReservation.setDateEncaissement(dto.getDateEncaissement());
     encaissementReservation.setEncienSoldReservation(
       dto.getEncienSoldReservation()
     );
-   // encaissementReservation.setEntiteOperation(dto.getEntiteOperation());
+    // encaissementReservation.setEntiteOperation(dto.getEntiteOperation());
     //encaissementReservation.setModePaiement(dto.getModePaiement());
     encaissementReservation.setMontantEncaissement(
       dto.getMontantEncaissement()
@@ -75,7 +77,7 @@ public class SaveEncaissementReservationAvecRetourDeListImpl
     encaissementReservation.setNvoSoldeReservation(
       dto.getNvoSoldeReservation()
     );
-  
+
     encaissementReservation.setReservation(reservation);
     EncaissementReservation encaissementReservationSave = encaissementReservationRepository.save(
       encaissementReservation
@@ -94,17 +96,22 @@ public class SaveEncaissementReservationAvecRetourDeListImpl
   }
 
   @Override
-  public List<EncaissementReservationDto> findAllEncaissementByReservation(Long idBien) {
-  Comparator<EncaissementReservation> compareBydatecreation = Comparator.comparing(
+  public List<EncaissementReservationDto> findAllEncaissementByReservation(
+    Long idBien
+  ) {
+    Comparator<EncaissementReservation> compareBydatecreation = Comparator.comparing(
       EncaissementReservation::getCreationDate
     );
     return encaissementReservationRepository
-        .findAll()
-        .stream()
-        .sorted(compareBydatecreation.reversed())
-        .filter(res -> res.getReservation().getId() == idBien && res.getReservation().getStatutReservation().contains("Ouv"))
-        .map(x -> gestimoWebMapperImpl.fromEncaissementReservation(x))
-        .distinct()
-        .collect(Collectors.toList());
+      .findAll()
+      .stream()
+      .sorted(compareBydatecreation.reversed())
+      .filter(res ->
+        res.getReservation().getId() == idBien &&
+        res.getReservation().getStatutReservation().contains("Ouv")
+      )
+      .map(x -> gestimoWebMapperImpl.fromEncaissementReservation(x))
+      .distinct()
+      .collect(Collectors.toList());
   }
 }

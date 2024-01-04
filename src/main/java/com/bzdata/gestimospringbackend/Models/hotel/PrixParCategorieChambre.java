@@ -25,6 +25,6 @@ public class PrixParCategorieChambre extends AbstractEntity{
     int nbrDiffJour;
     double pourcentReduc;
     @ManyToOne
-    CategorieChambre categorieChambre;
+    CategorieChambre categorieChambrePrix;
 
 }

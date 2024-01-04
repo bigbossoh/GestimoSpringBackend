@@ -24,6 +24,7 @@ import com.bzdata.gestimospringbackend.Services.UtilisateurService;
 import com.bzdata.gestimospringbackend.mappers.GestimoWebMapperImpl;
 import com.bzdata.gestimospringbackend.repository.AppartementRepository;
 import com.bzdata.gestimospringbackend.repository.EncaissementPrincipalRepository;
+import com.bzdata.gestimospringbackend.repository.EncaissementReservationRepository;
 import com.bzdata.gestimospringbackend.repository.ReservationRepository;
 import com.bzdata.gestimospringbackend.repository.UtilisateurRepository;
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +55,7 @@ public class ReservationServiceImpl implements ReservationService {
   final GestimoWebMapperImpl gestimoWebMapperImpl;
   final UtilisateurRepository utilisateurRepository;
   final AppartementRepository appartementRepository;
-  final EncaissementPrincipalRepository encaissementPrincipalRepository;
+  final EncaissementReservationRepository encaissementReservationRepository;
   final SaveEncaissementReservationAvecRetourDeListService saveEncaissementReservationAvecRetourDeListService;
 
   @Override
@@ -104,16 +106,10 @@ public class ReservationServiceImpl implements ReservationService {
       if (dto.getUtilisateurRequestDto().getId() == 0) {
         newUtilisateurDto =
           utilisateurService.saveUtilisateur(dto.getUtilisateurRequestDto());
-        log.info(
-          "Le nouveau user est le meme {},{}",
-          newUtilisateurDto.getId(),
-          newUtilisateurDto.getNom()
-        );
+
         nReservation.setUtilisateurOperation(
           gestimoWebMapperImpl.toUtilisateur(newUtilisateurDto)
         );
-        //UtilisateurRequestDto uDto= utilisateurService.findUtilisateurByUsername(dto.getUtilisateurOperation());
-
       } else {
         nReservation.setUtilisateurOperation(
           gestimoWebMapperImpl.toUtilisateur(
@@ -123,16 +119,7 @@ public class ReservationServiceImpl implements ReservationService {
       }
 
       nReservation.setIdAgence(dto.getIdAgence());
-      // nReservation.setIdCreateur(dto.getIdCreateur());
-      // nReservation.setAdvancePayment(dto.getmo());
-      // nReservation.setDateDebut(dto.getDateDebut());
-      // nReservation.setDateFin(dto.getDateFin());
-      // nReservation.setNmbrEnfant(dto.getNmbrEnfant());
-      // nReservation.setNmbreFemme(dto.getNmbreFemme());
-      // nReservation.setNmbreHomme(dto.getNmbreHomme());
-      // nReservation.setRemainingPayment(dto.getRemainingPayment());
-      // nReservation.setSoldReservation(dto.getSoldReservation());
-      // nReservation.setAdvancePayment(dto.getAdvancePayment());
+
       nReservation.setBienImmobilierOperation(
         gestimoWebMapperImpl.fromAppartementDto(appartementDto)
       );
@@ -157,15 +144,7 @@ public class ReservationServiceImpl implements ReservationService {
       }
       reservationTrouver.setIdAgence(dto.getIdAgence());
       reservationTrouver.setIdCreateur(dto.getIdCreateur());
-      // reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
-      // reservationTrouver.setDateDebut(dto.getDateDebut());
-      // reservationTrouver.setDateFin(dto.getDateFin());
-      // reservationTrouver.setNmbrEnfant(dto.getNmbrEnfant());
-      // reservationTrouver.setNmbreFemme(dto.getNmbreFemme());
-      // reservationTrouver.setNmbreHomme(dto.getNmbreHomme());
-      // reservationTrouver.setRemainingPayment(dto.getRemainingPayment());
-      // reservationTrouver.setSoldReservation(dto.getSoldReservation());
-      // reservationTrouver.setAdvancePayment(dto.getAdvancePayment());
+
       reservationTrouver.setBienImmobilierOperation(
         gestimoWebMapperImpl.fromAppartementDto(appartementDto)
       );
@@ -263,15 +242,16 @@ public class ReservationServiceImpl implements ReservationService {
       .findById(dto.getIdAppartementdDto())
       .orElse(null);
 
-    log.info("DTO de USER NAME II {}", dto.getUsername());
-
     Utilisateur utilisateurSave = utilisateurRepository.findUtilisateurByMobile(
       dto.getUsername()
     );
 
     Reservation reservation;
+    if (dto.getId() == null) {
+      dto.setId(0L);
+    }
 
-    if (dto.getId() == 0) {
+    if (dto.getId() == 0 || dto.getId() == null) {
       reservation = new Reservation();
     } else {
       reservation = reservationRepository.getById(dto.getId());
@@ -285,6 +265,7 @@ public class ReservationServiceImpl implements ReservationService {
       dto.getDateFin(),
       DateTimeFormatter.ofPattern("yyyy-MM-dd")
     );
+    log.info("le solde est le suivant : {}", dto.getSoldReservation());
     reservation.setUtilisateurOperation(utilisateurSave);
     reservation.setIdAgence(dto.getIdAgence());
     reservation.setIdCreateur(dto.getIdCreateur());
@@ -317,15 +298,11 @@ public class ReservationServiceImpl implements ReservationService {
     );
 
     Reservation saveReservation = reservationRepository.save(reservation);
-    log.info(
-      "Affiche DTO {}",
-      gestimoWebMapperImpl.fromReservation(saveReservation)
-    );
+
     EncaissementReservationRequestDto encaissementReservation = new EncaissementReservationRequestDto();
+    log.info("ID DTO {}", saveReservation.getId());
     encaissementReservation.setIdReservation(saveReservation.getId());
-    // encaissementReservation.setReservationAfficheDto(
-    //   gestimoWebMapperImpl.fromReservation(saveReservation)
-    // );
+
     encaissementReservation.setDateEncaissement(LocalDate.now());
     encaissementReservation.setEncienSoldReservation(
       dto.getMontantDeReservation() + dto.getSoldReservation()
@@ -338,7 +315,7 @@ public class ReservationServiceImpl implements ReservationService {
       dto.getMontantDeReservation()
     );
     encaissementReservation.setNvoSoldeReservation(dto.getSoldReservation());
-   
+    encaissementReservation.setIdAppartement(appartementDto.getId());
     List<EncaissementReservationDto> encaissements = saveEncaissementReservationAvecRetourDeListService.saveEncaissementReservationAvecRetourDeList(
       encaissementReservation
     );
@@ -346,23 +323,27 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public List<EncaissementPrincipalDTO> saveEncaissementReservationAvecREsrourDeList(
-    EncaissementPrincipalDTO dto
+  public List<EncaissementReservationDto> saveEncaissementReservationAvecREsrourDeList(
+    EncaissementReservationRequestDto dto
   ) {
-    EncaissementPrincipal encaissementPrincipal = new EncaissementPrincipal();
-    encaissementPrincipal.setModePaiement(dto.getModePaiement());
-    encaissementPrincipal.setOperationType(dto.getOperationType());
-    encaissementPrincipal.setIdAgence(dto.getIdAgence());
-    encaissementPrincipal.setSoldeEncaissement(dto.getMontantEncaissement());
-    encaissementPrincipal.setIdCreateur(dto.getIdCreateur());
-    encaissementPrincipal.setDateEncaissement(LocalDate.now());
-    encaissementPrincipal.setMontantEncaissement(dto.getMontantEncaissement());
-    encaissementPrincipal.setIntituleDepense(dto.getIntituleDepense());
-    encaissementPrincipal.setEntiteOperation(dto.getEntiteOperation());
-    encaissementPrincipal.setStatureCloture("non cloturer");
-    encaissementPrincipal.setEntiteOperation(null);
-    EncaissementPrincipal saveEncaissement = encaissementPrincipalRepository.save(
-      encaissementPrincipal
+    EncaissementReservation encaissementReservation = new EncaissementReservation();
+    encaissementReservation.setModePaiement(dto.getModePaiement());
+    // encaissementReservation.setOperationType(dto.getOperationType());
+    encaissementReservation.setIdAgence(dto.getIdAgence());
+    encaissementReservation.setEncienSoldReservation(
+      dto.getEncienSoldReservation()
+    );
+    encaissementReservation.setIdCreateur(dto.getIdCreateur());
+    encaissementReservation.setDateEncaissement(LocalDate.now());
+    encaissementReservation.setMontantEncaissement(
+      dto.getMontantEncaissement()
+    );
+    //encaissementReservation.setIntituleDepense(dto.getIntituleDepense());
+    //  encaissementReservation.setEntiteOperation(dto.getEntiteOperation());
+    // encaissementReservation.set("non cloturer");
+    // encaissementReservation.setEntiteOperation(null);
+    EncaissementReservation saveEncaissement = encaissementReservationRepository.save(
+      encaissementReservation
     );
     throw new UnsupportedOperationException(
       "Unimplemented method 'saveEncaissementReservationAvecREsrourDeList'"
@@ -374,20 +355,81 @@ public class ReservationServiceImpl implements ReservationService {
     Long idAgence
   ) {
     return reservationRepository
-      .findAll()
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
       .stream()
       .filter(reser -> reser.getIdAgence() == idAgence)
-      .map(x->gestimoWebMapperImpl.fromReservation(x))
+      .map(x -> gestimoWebMapperImpl.fromReservation(x))
       .collect(Collectors.toList());
   }
 
   @Override
-  public List<ReservationAfficheDto> listeDesReservationOuvertParAgence(Long idAgence) {
+  public List<ReservationAfficheDto> listeDesReservationOuvertParAgence(
+    Long idAgence
+  ) {
+    return reservationRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(reser ->
+        reser.getIdAgence() == idAgence &&
+        reser.getStatutReservation().contains("Ouv")
+      )
+      .map(x -> gestimoWebMapperImpl.fromReservation(x))
+      .collect(Collectors.toList());
+  }
+
+  @Override
+  public ReservationAfficheDto findReservationById(Long idReservation) {
+    log.info("***  the ti reservatin is : ::  {}", idReservation);
     return reservationRepository
       .findAll()
       .stream()
-      .filter(reser -> reser.getIdAgence() == idAgence && reser.getStatutReservation().contains("Ouv"))
-      .map(x->gestimoWebMapperImpl.fromReservation(x))
+      .filter(reser -> reser.getId() == idReservation)
+      .map(x -> gestimoWebMapperImpl.fromReservation(x))
+      .findFirst()
+      .orElse(null);
+  }
+
+  @Override
+  public List<EncaissementReservationDto> listeDesEncaissementReservationeEntreDeuxDateParAgence(
+    Long agence,
+    LocalDate dateDebut,
+    LocalDate dateFin
+  ) {
+    return encaissementReservationRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(encaissement ->
+        encaissement.getIdAgence() == agence &&
+        encaissement.getDateEncaissement().isAfter(dateDebut) &&
+        encaissement.getDateEncaissement().isBefore(dateFin)
+      )
+      .map(x -> gestimoWebMapperImpl.fromEncaissementReservation(x))
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public double sommeEncaissementReservationEntreDeuxPeriode(
+    Long agence,
+    LocalDate dateDebut,
+    LocalDate dateFin
+  ) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException(
+      "Unimplemented method 'sommeEncaissementReservationEntreDeuxPeriode'"
+    );
+  }
+
+  @Override
+  public ReservationAfficheDto findPeriodeReservationByIdBien(Long idBien) {
+    return reservationRepository
+      .findAll(Sort.by(Sort.Direction.DESC, "id"))
+      .stream()
+      .filter(reser ->
+        reser.getBienImmobilierOperation().getId() == idBien &&
+        reser.getStatutReservation().contains("Ouv")
+      )
+      .map(x -> gestimoWebMapperImpl.fromReservation(x))
+      .findFirst()
+      .orElse(null);
   }
 }

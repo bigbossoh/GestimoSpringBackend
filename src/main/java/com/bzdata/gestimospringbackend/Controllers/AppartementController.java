@@ -74,9 +74,9 @@ public class AppartementController {
     @Operation(summary = "Liste de toutes les Appartements Libres"
     // , security = @SecurityRequirement(name = "bearerAuth")
     )
-    @GetMapping("/alllibre/{id}")
-    public ResponseEntity<List<AppartementDto>> findAllAppartementLibre(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(appartementService.findAllLibre(id));
+    @GetMapping("/alllmeublelibre/{idAgence}")
+    public ResponseEntity<List<AppartementDto>> findAllAppartementLibre(@PathVariable("idAgence") Long idAgence) {
+        return ResponseEntity.ok(appartementService.findAllLibre(idAgence));
     }
     @Operation(summary = "Trouver un Appartement par son ID", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/findById/{id}")

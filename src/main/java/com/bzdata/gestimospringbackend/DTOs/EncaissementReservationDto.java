@@ -20,17 +20,17 @@ public class EncaissementReservationDto {
   private Long idCreateur;
   private Instant creationDate;
 
-  private ModePaiement modePaiement;
+  private String modePaiement;
 
-  private OperationType operationType;
+  private String operationType;
 
   LocalDate dateEncaissement;
-
+  Long idLastEncaissement;
   double montantEncaissement;
   double soldeEncaissement;
   double encienSoldReservation;
   double nvoSoldeReservation;
- 
+
   String intituleDepense;
 
   EntiteOperation entiteOperation;

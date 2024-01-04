@@ -29,10 +29,10 @@ public class CategorieChambre extends AbstractEntity {
   double pourcentReduc;
 
   @OneToMany
-  @JoinColumn(name = "categorieApartement")
+  @JoinColumn(name = "categorieChambreAppartement")
   List<Appartement> appartements;
 
   @OneToMany
-  @JoinColumn(name = "categorieChambre")
+  @JoinColumn(name = "categorieChambrePrix")
   List<PrixParCategorieChambre> prixGategories;
 }
