@@ -383,7 +383,7 @@ ORDER BY dbgestimoweb.utilisateur.nom ASC , dbgestimoweb.utilisateur.prenom ASC,
 					forecolor="#FA071C" backcolor="#FFFFFF"
 					uuid="b5ca87f5-a666-41e7-952d-d0815e88f5f8" />
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
-					<font fontName="Arial" size="14" isBold="true" />
+					<font fontName="Century Schoolbook L" size="14" isBold="true" />
 				</textElement>
 				<textFieldExpression><![CDATA[$F{message_reduction}]]></textFieldExpression>
 			</textField>
