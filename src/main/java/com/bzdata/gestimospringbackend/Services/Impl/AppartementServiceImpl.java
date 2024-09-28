@@ -253,8 +253,7 @@ public class AppartementServiceImpl implements AppartementService {
       .findAll()
       .stream()
         .filter(app ->       
-        app.getIdAgence() == idAgence &&
-        app.isBienMeublerResidence() && app.getCategorieChambreAppartement()!=null
+        app.getIdAgence() == idAgence && app.getCategorieChambreAppartement()!=null && app.isOccupied()==false
       )
       .map(gestimoWebMapperImpl::fromAppartement)
     
