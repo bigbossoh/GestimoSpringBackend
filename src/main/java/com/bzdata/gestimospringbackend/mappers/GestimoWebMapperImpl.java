@@ -1,6 +1,5 @@
 package com.bzdata.gestimospringbackend.mappers;
 
-import com.bzdata.gestimospringbackend.Agence.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.*;
 import com.bzdata.gestimospringbackend.Models.*;
 import com.bzdata.gestimospringbackend.Models.hotel.CategorieChambre;
