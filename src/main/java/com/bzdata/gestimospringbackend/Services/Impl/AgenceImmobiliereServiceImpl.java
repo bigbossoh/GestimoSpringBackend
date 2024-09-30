@@ -3,7 +3,7 @@ package com.bzdata.gestimospringbackend.Services.Impl;
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.ACTIVATION_EMAIL;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_GERANT;
 
-import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
+import com.bzdata.gestimospringbackend.Agence.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.DTOs.ImageLogoDto;

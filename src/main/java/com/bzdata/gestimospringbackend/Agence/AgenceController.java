@@ -1,10 +1,9 @@
-package com.bzdata.gestimospringbackend.Controllers;
+package com.bzdata.gestimospringbackend.Agence;
 
 import static com.bzdata.gestimospringbackend.constant.SecurityConstant.APP_ROOT;
 
 import java.util.List;
 
-import com.bzdata.gestimospringbackend.DTOs.AgenceImmobilierDTO;
 import com.bzdata.gestimospringbackend.DTOs.AgenceRequestDto;
 import com.bzdata.gestimospringbackend.DTOs.AgenceResponseDto;
 import com.bzdata.gestimospringbackend.Services.AgenceImmobilierService;

@@ -1,4 +1,4 @@
-package com.bzdata.gestimospringbackend.DTOs;
+package com.bzdata.gestimospringbackend.Agence;
 
 import org.springframework.web.multipart.MultipartFile;
 
