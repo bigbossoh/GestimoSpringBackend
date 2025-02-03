@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
+import com.bzdata.gestimospringbackend.DTOs.BailProlongeDto;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 
 public interface BailService {
     List<OperationDto>  closeBail(Long id);
-
+OperationDto prolongerUnBail(BailProlongeDto dto);
     OperationDto modifierUnBail(BailModifDto dto);
 
     int nombreBauxActifs(Long idAgence);

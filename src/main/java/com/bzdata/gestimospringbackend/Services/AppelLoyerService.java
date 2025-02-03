@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface AppelLoyerService {
   List<String> save(AppelLoyerRequestDto dto);
-
+  List<String> saveProlongAppel(AppelLoyerRequestDto dto);
   boolean cloturerAppelDto(Long id);
 
   List<AppelLoyersFactureDto> findAll(Long idAgence);

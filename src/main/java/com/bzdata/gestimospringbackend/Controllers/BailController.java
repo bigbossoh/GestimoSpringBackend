@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.bzdata.gestimospringbackend.DTOs.AppelLoyersFactureDto;
 import com.bzdata.gestimospringbackend.DTOs.BailModifDto;
+import com.bzdata.gestimospringbackend.DTOs.BailProlongeDto;
 import com.bzdata.gestimospringbackend.DTOs.LocataireEncaisDTO;
 import com.bzdata.gestimospringbackend.DTOs.OperationDto;
 import com.bzdata.gestimospringbackend.Services.BailService;
@@ -23,11 +24,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(APP_ROOT + "/bail")
 @RequiredArgsConstructor
-// @Slf4j
+ @Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @SecurityRequirement(name = "gestimoapi")
 public class BailController {
@@ -92,5 +94,12 @@ public class BailController {
     public ResponseEntity<OperationDto> modifierUnBail(@RequestBody BailModifDto dto) {
         // log.info("We are going to save a new Bail Appartement {}", dto);
         return ResponseEntity.ok(bailService.modifierUnBail(dto));
+    }
+
+    @PostMapping("/prolongerUnBail")
+    @Operation(summary = "Prolonger un Bail ", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<OperationDto> prolongerUnBail(@RequestBody BailProlongeDto dto) {
+         log.info("We are going to prolong a new Bail {}", dto);
+        return ResponseEntity.ok(bailService.prolongerUnBail(dto));
     }
 }

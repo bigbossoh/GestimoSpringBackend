@@ -977,4 +977,88 @@ public class AppelLoyerServiceImpl implements AppelLoyerService {
     statistiquePeriodeDto.setRecouvrement(recou);
     return statistiquePeriodeDto;
   }
+
+  @Override
+  public List<String> saveProlongAppel(AppelLoyerRequestDto dto) {
+    List<String> errors = AppelLoyerRequestValidator.validate(dto);
+    if (!errors.isEmpty()) {
+      throw new InvalidEntityException(
+        "Certain attributs de l'object appelloyer sont null.",
+        ErrorCodes.APPELLOYER_NOT_VALID,
+        errors
+      );
+    }
+    BailLocation bailLocation = bailLocationRepository
+      .findById(dto.getIdBailLocation())
+      .orElseThrow(() ->
+        new InvalidEntityException(
+          "Aucun BailMagasin has been found with Code " +
+          dto.getIdBailLocation(),
+          ErrorCodes.BAILLOCATION_NOT_FOUND
+        )
+      );
+
+    LocalDate dateDebut = bailLocation.getDateDebutProlong();
+    LocalDate dateFin = bailLocation.getDateFinProlong();
+    YearMonth ym1 = YearMonth.of(dateDebut.getYear(), dateDebut.getMonth());
+    List<AppelLoyer> appelLoyerList = new ArrayList<>();
+    AppelLoyer appelLoyer;
+    for (
+      int k = 1;
+      k < (ChronoUnit.MONTHS.between(dateDebut, dateFin) + 1);
+      k++
+    ) {
+      appelLoyer = new AppelLoyer();
+      YearMonth period = ym1.plus(Period.ofMonths(k));
+      LocalDate initial = LocalDate.of(period.getYear(), period.getMonth(), 1);
+      LocalDate start = initial.withDayOfMonth(1);
+      LocalDate datePaiementPrevu = initial.withDayOfMonth(10);
+      LocalDate end = initial.withDayOfMonth(initial.lengthOfMonth());
+
+      YearMonth ym = YearMonth.from(start);
+      DateTimeFormatter f = DateTimeFormatter.ofPattern(
+        "MMMM uuuu",
+        Locale.FRANCE
+      );
+      appelLoyer.setPeriodeLettre(ym.format(f));
+      DateTimeFormatter mois = DateTimeFormatter.ofPattern(
+        "MMMM",
+        Locale.FRANCE
+      );
+      appelLoyer.setMoisUniquementLettre(ym.format(mois));
+      appelLoyer.setMessageReduction("");
+      appelLoyer.setIdAgence(dto.getIdAgence());
+      appelLoyer.setPeriodeAppelLoyer(period.toString());
+      appelLoyer.setStatusAppelLoyer("Impayé");
+      appelLoyer.setDatePaiementPrevuAppelLoyer(datePaiementPrevu);
+      appelLoyer.setDateDebutMoisAppelLoyer(start);
+      appelLoyer.setDateFinMoisAppelLoyer(end);
+      appelLoyer.setAnneeAppelLoyer(period.getYear());
+      appelLoyer.setMoisChiffreAppelLoyer(period.getMonthValue());
+      appelLoyer.setCloturer(false);
+      appelLoyer.setSolderAppelLoyer(false);
+      appelLoyer.setDescAppelLoyer("Appel groupé");
+      appelLoyer.setSoldeAppelLoyer(dto.getMontantLoyerEnCours());
+      List<MontantLoyerBail> byBailLocation = montantLoyerBailRepository.findByBailLocation(
+        bailLocation
+      );
+      Double montantBail = byBailLocation
+        .stream()
+        .filter(MontantLoyerBail::isStatusLoyer)
+        .map(MontantLoyerBail::getNouveauMontantLoyer)
+        .findFirst()
+        .orElse(0.0);
+
+      appelLoyer.setMontantLoyerBailLPeriode(montantBail);
+      appelLoyer.setBailLocationAppelLoyer(bailLocation);
+      appelLoyerList.add(appelLoyer);
+    }
+
+    appelLoyerRepository.saveAll(appelLoyerList);
+
+    return appelLoyerList
+      .stream()
+      .map(AppelLoyer::getPeriodeAppelLoyer)
+      .collect(Collectors.toList());
+  }
 }

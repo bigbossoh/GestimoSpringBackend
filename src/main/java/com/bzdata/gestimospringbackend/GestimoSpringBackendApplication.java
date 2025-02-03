@@ -3,8 +3,10 @@ package com.bzdata.gestimospringbackend;
 import static com.bzdata.gestimospringbackend.constant.FileConstant.FOLDER_PATH;
 import static com.bzdata.gestimospringbackend.enumeration.Role.ROLE_SUPER_SUPERVISEUR;
 
+import com.bzdata.gestimospringbackend.Models.BailLocation;
 import com.bzdata.gestimospringbackend.Models.Chapitre;
 import com.bzdata.gestimospringbackend.Models.EtablissementUtilisateur;
+import com.bzdata.gestimospringbackend.Models.Operation;
 import com.bzdata.gestimospringbackend.Models.Commune;
 import com.bzdata.gestimospringbackend.Models.Etablissement;
 import com.bzdata.gestimospringbackend.Models.Pays;
@@ -16,6 +18,7 @@ import com.bzdata.gestimospringbackend.Models.Ville;
 import com.bzdata.gestimospringbackend.Services.AppelLoyerService;
 import com.bzdata.gestimospringbackend.Utils.SmsOrangeConfig;
 import com.bzdata.gestimospringbackend.repository.AgenceImmobiliereRepository;
+import com.bzdata.gestimospringbackend.repository.BailLocationRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreRepository;
 import com.bzdata.gestimospringbackend.repository.ChapitreUserRepository;
 import com.bzdata.gestimospringbackend.repository.CommuneRepository;
@@ -154,7 +157,8 @@ public class GestimoSpringBackendApplication {
     MagasinRepository magasinRepository,
     ChapitreRepository chapitreRepository,
     ChapitreUserRepository chapitreUserRepository,
-    EtablissementRepository defaultChapitreRepository
+    EtablissementRepository defaultChapitreRepository,
+    BailLocationRepository bailLocationRepository
   ) {
     String mdp = passwordEncoder.encode("superviseur");
     Utilisateur utilisateur = new Utilisateur();
@@ -231,7 +235,18 @@ public class GestimoSpringBackendApplication {
             });
         }
       }
-
+// mise a jour des operatios
+List<BailLocation> bailLocations = bailLocationRepository.findAll();
+bailLocations.forEach(bailLocation -> {
+if (bailLocation.getDateFinProlong()==null) {
+   bailLocation.setDateFinProlong(bailLocation.getDateFin());
+}
+if (bailLocation.getDateDebutProlong()==null) {
+   bailLocation.setDateDebutProlong(bailLocation.getDateDebut());
+  
+}
+ bailLocationRepository.save(bailLocation);
+});
       // CREATION DES COMMUNES
       List<Ville> lesVilles = villeRepository.findAll();
       lesVilles.forEach(v -> {

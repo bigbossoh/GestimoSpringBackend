@@ -32,6 +32,8 @@ import lombok.experimental.FieldDefaults;
 public abstract class Operation extends AbstractEntity {
     LocalDate dateDebut;
     LocalDate dateFin;
+    LocalDate dateDebutProlong;
+    LocalDate dateFinProlong;
     @ManyToOne
     Utilisateur utilisateurOperation;
     @ManyToOne
